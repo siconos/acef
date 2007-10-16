@@ -1,0 +1,1 @@
+./configure --enable-debug --prefix=/home/bipop/bonnefon/installParser --with-readline=no --with-editline=no
