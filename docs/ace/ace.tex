@@ -1,0 +1,1313 @@
+\documentclass[10pt]{article}
+\input{macro.tex}
+\usepackage{psfrag}
+\usepackage{fancyhdr}
+\usepackage{subfigure}
+%\renewcommand{\baselinestretch}{1.2}
+\textheight 23cm
+\textwidth 16cm
+\topmargin 0cm
+%\evensidemargin 0cm
+\oddsidemargin 0cm
+\evensidemargin 0cm
+\usepackage{layout}
+\usepackage{mathpple}
+\makeatletter
+\renewcommand\bibsection{\paragraph{References
+     \@mkboth{\MakeUppercase{\bibname}}{\MakeUppercase{\bibname}}}}
+\makeatother
+%% style des entetes et des pieds de page
+\fancyhf{} % nettoie le entetes et les pieds
+\fancyhead[L]{Template 6 : Electrical oscillator with 4 diodes bridge full-wave rectifier - Pascal Denoyelle}
+%\fancyhead[C]{}%
+\fancyhead[R]{\thepage}
+%\fancyfoot[L]{\resizebox{!}{0.7cm}{\includegraphics[clip]{logoesm2.eps}}}%
+\fancyfoot[C]{}%
+ \begin{document}
+ \title{Automatic circuit equations formulation}
+
+\maketitle
+
+\newpage
+\tableofcontents
+ \newpage
+ \section{Notations}
+\begin{itemize}
+\item[--] C.D. : Current Defined
+\item[--] V.D. : Voltage Defined
+\item[--] M.N.A. : Modify Nodal Analysis
+\end{itemize}
+ \begin{itemize}
+\item[--] $N_{n}$ : Number of nodes.
+\item[--] $N_{b}$ : Number of branches.
+\item[--] $I_{j}$ : Current in the branch number j.
+\item[--] $V_{i}$ : Voltage on node number i. 
+\end{itemize}
+
+ \section{Non smooth model}
+Each non smooth electrical component has a physical model:
+\[\beta=B\lambda + A\alpha +a\]
+\[y=C\alpha + D\lambda +e\]
+The complementary condition:
+\[0 \leq y \, \perp \, \lambda \geq 0\]
+$\lambda$ and y are intermediate variables describing the branch's piecewise linear model.
+$\lambda$ and y are tow vectors which ave the same dimension.\\
+\newline
+$\beta$ and $\alpha$ are the physical vectors variables of the component.\\
+\newpage
+%***********************************MNA ANALYSIS
+\section{Modify Nodal Analysis and complementary conditions}
+\subsection{Hypothesis\\}
+The M.N.A. assumes smooth branches are explicit functions of current or voltage. It means each smooth
+branch is V.D. or C.D.\\
+
+With the same assumption, all branches can be divided into following classes:\\
+\begin{enumerate}
+\item The  \underline{C.D. branches} where\underline{ I is not a controlling current}: Indexes form 1 to $n_{c}$\\
+  Let $N_{ci}$=$n_{c}$
+\item The  \underline{C.D.  branches} where\underline{ I is a controlling current} (in smooth or non smooth branches!): Indexes form $N_{ci}$+1 to $N_{ci}$+$n_{ci}$\\
+  Let $N_{v}$=$N_{ci}$+$n_{ci}$
+\item The  \underline{V.D. branches}: Indexes form $N_{v}$+1 to $N_{v}$+$n_{v}$ \\
+  Let $N_{r}$=$N_{v}$+$n_{v}$
+ \item The  \underline{non smooth branches}: Indexes form $N_{r}$+1 to $N_{r}$+$n_{r}$\\
+  Let $N_{u}$=$N_{r}$+$n_{r}$
+ \item The \underline{dynamical capacitor branches}: Indexes form $N_{u}$+1 to $N_{u}$+$n_{u}$\\
+  Let $N_{i}$=$N_{u}$+$n_{u}$
+ \item The \underline{dynamical inductors branches}: Indexes form $N_{i}$+1 to $N_{b}$ \\
+\end{enumerate}
+
+
+\newpage
+\subsection{Unknowns\\}
+\begin{enumerate}
+\item Nodal voltages\\
+$V_{0}$ is the reference (=0).\\
+$V_{1}$ to $V_{N_{n}}$ : $N_{n}$ - 1 unknowns.
+\item Currents in the V.D. branches\\
+  $I_{N_{v}+1}$ to  $I_{N_{v} + n_{v}}$ : $n_{v}$ unknowns.
+\item Currents in the non smooth branches(see NB3 )\\
+  $I_{N_{r}+1}$ to  $I_{N_{r} + n_{r}}$ : $n_{r}$ unknowns.
+\item Currents in the inductor branches\\
+  $I_{N_{i}+1}$ to  $I_{N_{b} }$ : $n_{i}$ unknowns.
+
+\end{enumerate}
+Number of unknowns = $N_{I} = N_{n} - 1 + N_{b} - n_{ci} - n_{u}$\\
+Let X = $^{t}(V_{1}...V_{N_{n}},I_{N_{ci}+1}...I_{N_{ci} + n_{ci}},I_{N_{v}+1}...I_{N_{v} + n_{v}},I_{N_{r}+1}...I_{N_{r} + n_{r}},I_{N_{i}+1}...I_{N_{b}}$)\\
+Let J = \{$N_{ci}+1...N_{ci} + n_{ci},N_{v}+1...N_{v} + n_{v},N_{r}+1...N_{r} +n_{r},N_{i}+1...N_{b}$\}\\
+\underline{NB1:} $\forall a \notin J, I_{a} = \sum_{i}^{}a_{i}V_{i} + \sum_{j\in J}^{}b_{j}I_{j}
++\sum_{i}^{}c_{i}V'_{i}$\\
+\underline{NB2:} Controlling currents are optional.\\
+\underline{NB3:} Optional if the non smooth model give $I_{a} = \sum_{i}^{}a_{i}V_{i} + \sum_{j\in J}^{}b_{j}I_{j} +\sum_{i}^{}c_{i}\lambda_{i} $
+\newpage
+\subsection{Smooth equations\\}
+\begin{enumerate}
+  \item The Kirchhoff Current Law (KCL) : $N_{n}$ - 1 equations.\\
+    NB : The current in the capacitor branches is written with :
+    \[I = C*\frac{d(V_{i} - V_{j})}{dt}\]
+  \item The Controlling Current Equation (CCE) :
+
+     \[I=\sum_{i}^{}a_{i}V_{i}\ + \sum_{j \in J}^{}b_{j}I_{j}  +  \sum_{i}^{}c_{i}V'_{i} + source\]
+     This equation comes from the branch constitution, not from Kirchoff. (ex : I = $\frac{U}{R}$),
+     it uses to write the KCL laws.
+  \item The V.D. equation (VDE) : $n_{v}$ equations.\\
+    A V.D. branch give an equation :
+    \[V_{i}-V_{j} = \sum_{i}^{}a_{i}V_{i} + \sum_{j\in J}^{}b_{j}I_{j} +  \sum_{i}^{}c_{i}V'_{i} +
+    source\]
+    This equation comes from the branch constitution, not from Kirchoff. (ex : U = R*I)
+  \item The inductor law (IL) : $n_{i}$ equations.
+     \[V_{i} - V_{j} = L*\frac{dI}{dt}\]
+
+\end{enumerate}
+Number of equations = $N_{E}$ =$N_{I}$ - $n_{r}$
+\subsection{Non smooth branches}
+
+For each non smooth branch, we write a complementarity condition:\\
+\[\left(\begin{array}{c}
+H_{i}X = B_{i}l+A_{i}X + a_{i}\\
+y=C_{i}X+D_{i}l+e_{i}\\
+0 \leq y \, \perp \, l \geq 0
+\end{array}\right)\]
+
+\newpage
+\subsection{Matrices formulation}
+We obtain the Circuit Equation :
+\[CX'+AX = s\]
+or with x the dynamic variables extracted from X, and z the non dynamic variables from X:
+\[\left(\begin{array}{c}
+x'=Bx+Cz+s1\\
+0 =Dx+Ez+s2
+\end{array}\right)\]
+For each non smooth branch:
+\[\left(\begin{array}{c}
+H_{i}X = B_{i}l+A_{i}X + a_{i}\\
+y=C_{i}X+D_{i}l+e_{i}\\
+0 \leq y \, \perp \, l \geq 0
+\end{array}\right)\]
+There are $n_{r}$ complementary conditions.
+\newline
+With A :\\
+\[
+\left( \begin{array}{ccccc}
+V_{1}...V_{N_{n}} & I_{N_{ci}+1}...I_{N_{ci} + n_{ci}} & I_{N_{v}+1}...I_{N_{v} +
+  n_{v}}&I_{N_{r}+1}...I_{N_{r} + n_{r}} & I_{N_{i}+1}...I_{N_{i} + n_{i}} \\
+\hline
+KCL & 0& KCL & KCL&KCL\\
+CCE & I & CCE & CCE&CCE\\
+VDE & VDE & VDE & VDE&VDE\\
+IL&0&0&0&0
+\end{array} \right)
+\left( \begin{array}{c}
+right hand\\
+\hline
+s(current)\\
+s\\
+s(tension)\\
+0
+
+  \end{array}\right)
+\]
+And C :
+\[
+\left( \begin{array}{ccccc}
+V_{1}...V_{N_{n}} & I_{N_{ci}+1}...I_{N_{ci} + n_{ci}} & I_{N_{v}+1}...I_{N_{v} +
+  n_{v}}&I_{N_{r}+1}...I_{N_{r} + n_{r}} & I_{N_{i}+1}...I_{N_{i} + n_{i}} \\
+\hline
+KCL & 0& 0 & 0&0\\
+CCE & 0 & 0 & 0&0\\
+VDE & 0 & 0 & 0&0\\
+0&0&0&0&IL
+\end{array} \right)
+\]
+
+\subsection{conclusion}
+The number of unknowns is equal at the number of constraints(linear constraints or complementary
+constraints), so it must be possible to solve it???
+\newpage
+\section{Substitution}
+
+This section describe how modify the previous analysis to be able to solve the system.\\
+
+\subsection{Added unknowns}
+
+It consists to build a $Z_{ns}$ vector contains all variables useful to describe non smooth
+branches. X contains all useful currents (see X's def) but some tensions could be add. 
+$Z_{ns}$ is composed with new unknown tensions and some currents \underline{extracted} from X. The $Z_{ns}$ vector comes from $\beta$ only.\\
+  let dim($Z_{ns}$) = $n_{ns}$\\
+ We add the voltage Kirchoff laws for the added unkwown tensions : $U=V_{j}-V_{i}$
+
+\subsection{Non smooth model instance}
+
+\paragraph{Local formulation}
+For each non smooth branch, we write a complementarity condition:\\
+\[\left(\begin{array}{c}
+\beta = z_{i} = B_{i}l+A_{i}X + a_{i}\\
+y=C_{i}X+D_{i}l+e_{i}\\
+0 \leq y \, \perp \, l \geq 0
+\end{array}\right)\]
+Where $z_{i}$ is a voltage and currents vector.
+
+
+
+
+
+\paragraph{Global formulation}
+The global complementary condition is written from local conditions :\\
+Let $Z_{ns}$ = $^{t}(z_{1},...,z_{n_{r}}$)\\
+Let Y = $^{t}(y_{1},...,y_{n_{r}}$)\\
+Let $\lambda$ =$^{t}(l_{1},...,l_{n_{r}}$)\\
+\[\left(\begin{array}{c}
+Z_{ns} = B\lambda +AX + a\\
+Y=CX+D\lambda +e\\
+0 \leq Y \, \perp \, \lambda \geq 0
+\end{array}\right)\]
+
+\subsection{Matrices formulation}
+Before go head, we rename the variables.\\
+x contains only the dynamic variables(currents in inductor and tensions from capacitor branches)\\
+$Z_{s}$ a vector extract from X, $Z_{s}$ contains only the non dynamic variables(Voltage nodes,... ).\\
+
+We replace X by x,$Z_{s}$,$Z_{ns}$:
+\[\left(\begin{array}{c}
+x'=A_{1x}x +A_{1s}Z_{s} + A_{1ns}Z_{ns}\\
+0=B_{1x}x+B_{1s}Z_{s} + B_{1ns}Z_{ns}\\
+Z_{ns}= C_{1x}x+C_{1s}Z_{s}+C_{1\lambda}\lambda \\
+Y=D_{1x}x +D_{1s}Z_{s}+D_{1ns}Z_{ns}+D_{1\lambda}\lambda\\
+0 \leq Y \, \perp \, \lambda \geq 0
+\end{array}\right)\]
+Substitute $Z_{ns}$:
+\[\left(\begin{array}{cc}
+R=A_{1ns}C_{\lambda}\lambda &(eq1)\\
+x'=(A_{1x}+A_{1ns}C_{x})x +(A_{1s}+A_{1ns}C_{1s})Z_{s} +R=A_{2x}x +A_{2s}Z_{s} +R&(eq2)\\
+0=(B_{1x}+B_{1ns}C_{1x})x+(B_{1s}+B_{1ns}C_{1s})Z_{s} + B_{1ns}C_{1\lambda}\lambda = B_{2x}x+B_{2s}Z_{s} + C_{2\lambda}\lambda&(eq3)\\
+Y=(D_{1x}+D_{1ns}C_{1x})x+(D_{1s}+D_{1ns}C_{1s})Z_{s}+(D_{1\lambda}+D_{1ns}C_{1\lambda})\lambda = D_{2x}x+D_{2s}Z_{s}+D_{2\lambda}\lambda &(eq4)\\
+0 \leq Y \, \perp \, \lambda \geq 0&(\perp)\\
+\end{array}\right)\]
+\newpage
+
+\subsection{A time discretisation}
+
+ eq1 discretisation:
+\[x(t_{i+1}) - x(t_{i})=h\theta A_{2x}x(t_{i+1})+h(1-\theta)A_{2x}x(t_{i}) +h\theta A_{2s}Z_{s}(t_{i+1}) +h(1-\theta)A_{2s}Z_s(t_{i}) +hR(t_{i+1})\]
+We assume $(I-h\theta A_{2x})$ is regular,$W(I-h\theta A_{2x}) = I.$
+\[x(t_{i+1})=Wx_{free}+h\theta WA_{2s}Z_{s}(t_{i+1})+hWR(t_{i+1}) = Wx_{free}+h\theta
+WA_{2s}Z_{s}(t_{i+1}) 
++hWA_{ns}C_{\lambda}\lambda(t_{i+1}) (eq5)\]
+eq3 discretisation:
+\[0 = B_{2x}x(t_{i+1})+B_{2s}Z_{s}(t_{i+1}) + C_{2\lambda}\lambda(t_{i+1})\]
+With eq5:
+\[0 = B_{2x}Wx_{free}+(h\theta B_{2x} WA_{2s}+B_{2s})
+Z_{s}(t_{i+1})+(hB_{2x}WA_{ns}C_{\lambda}+C_{2\lambda})\lambda(t_{i+1})\]
+Rename the matrices:
+\[0 = q_{free}+B_{3s} Z_{s}(t_{i+1})+B_{3\lambda}\lambda(t_{i+1})\]
+
+eq4 discretisation:
+\[Y(t_{i+1})=D_{2x}x(t_{i+1})+D_{2s}Z_{s}(t_{i+1}) +D_{2\lambda}\lambda(t_{i+1})\]
+With eq5 and rename the matrices:
+\[Y(t_{i+1})=D_{2x}Wx_{free}+D_{3s}Z_{s}(t_{i+1})+D_{3\lambda}\lambda(t_{i+1})\]
+\[0 \leq Y(t_{i+1}) \, \perp \, \lambda(t_{i+1}) \geq 0\]
+
+\paragraph{MLCP}
+description:\\
+
+\[W=\left(\begin{array}{c}W_{1}\\0\end{array}\right)\]
+\[Z=\left(\begin{array}{c}Z_{1}\\Z_{2}\end{array}\right)\]
+\[W=MZ+q\]
+\[0 \leq W_{1} \, \perp \, Z_{1} \geq 0\]
+\paragraph{MLCP instance}
+We identify a MLCP:\\
+\[W_{1} = Y(t_{i+1})\]
+\[Z_{1} = \lambda(t_{i+1})\]
+\[Z_{2} = Z_{s}(t_{i+1})\]
+\[M = \left(\begin{array}{cc}
+  WD_{2\lambda}&WD_{2s}\\
+B_{3\lambda}&B_{3s}
+\end{array}\right)\]
+\newpage
+\section{How get $x' = Ax+BZ_{s} + CZ_{ns}$?}
+\subsection{Example 1}
+\begin{figure}[h]
+\centerline{
+ \scalebox{0.5}{
+    \input{cir1.pstex_t}
+ }
+}
+\end{figure}
+\paragraph{First matrices formulation}
+X=$^{t}(V_{1},V_{2},V_{3})$\\
+\[\left(\begin{array}{c}
+  \\
+  KCL(1)\\  KCL(2)\\  KCL(3)
+  \end{array}\right)
+\left(\begin{array}{ccc}
+  V_{1}&V_{2}&V_{3}\\
+  \hline
+  \frac{1}{R}-\frac{1}{R}&  \frac{-1}{R}&0\\
+  \frac{1}{R}&  \frac{-1}{R}&0\\
+  0&0&\frac{1}{R}
+\end{array}\right)X+
+\underline{
+\left(\begin{array}{ccc}
+   V_{1}'&V_{2}'&V_{3}'\\
+  \hline
+0&0&0\\
+  0&C&-C\\
+  0&-C&C
+\end{array}\right)}X'=
+\left(\begin{array}{c}
+  \\
+  I\\
+  0\\
+  0
+  \end{array}\right)
+\]
+But, we can't extract x from X to get x'=...\\
+\newline
+\paragraph{Add current and tension from the capacitor}
+x=$(U_{32})$
+$Z_{s}=^{t}(V_{1},V_{2},V_{3},I_{32})$\\
+\[x'=CI_{32}\]
+\[\left(\begin{array}{c}
+  \\
+  KCL(1)\\
+  KCL(2)\\
+  KCL(3)\\
+  U_{32}
+  \end{array}\right)
+\left(\begin{array}{cccc}
+  V_{1}&V_{2}&V_{3}&I_{32}\\
+  \hline
+  \frac{1}{R}-\frac{1}{R}&  \frac{-1}{R}&0&0\\
+  \frac{1}{R}&  \frac{-1}{R}&0&1\\
+  0&0&\frac{1}{R}&-1\\
+  0&-1&1&0
+\end{array}\right)Z_{s}+
+\left(\begin{array}{c}
+  U_{32}\\
+  \hline
+  0\\
+  0\\
+  0\\
+  1
+  \end{array}\right)x
+=
+\left(\begin{array}{c}
+  \\
+  I\\
+  0\\
+  0\\
+  0
+  \end{array}\right)
+\]
+We obtain the matrices system\\
+\[x'=BZ_{s}\]
+\[Ax+CZ_{s}=s\]
+$N_{I}=N_{E}=5$\\
+The following examples, show we don't need to add the capacitor current. Sometime, current in
+capacitor can be replace with a KCL law.\\
+
+\paragraph{Add only tension from the capacitor}
+x=$(U_{32})$,$Z_{s}=^{t}(V_{1},V_{2},V_{3})$\\
+First get x' with \underline{KCL(3)}:
+\[x'=\frac{V_{3}}{RC}\]
+Second, the current in capacitor is $\frac{V_{3}}{R}$, and use it to write other KCL law:
+\[\left(\begin{array}{c}
+  \\
+  KCL(1)\\
+  KCL(2)\\
+  U_{32}
+  \end{array}\right)
+\left(\begin{array}{ccc}
+V_{1}&V_{2}&V_{3}\\
+  \hline
+  \frac{1}{R}+\frac{1}{R}&  \frac{-1}{R}&0\\
+  \frac{-1}{R}&  \frac{1}{R}&\frac{1}{R}\\
+  0&-1&1
+\end{array}\right)Z_{s}+
+\left(\begin{array}{c}
+U_{32}\\
+  \hline
+  0\\
+  0\\
+  0\\
+  1
+  \end{array}\right)x
+=
+\left(\begin{array}{c}
+  \\
+  I\\
+  0\\
+  0\\
+  0
+  \end{array}\right)
+\]
+$N_{I}=N_{E}=4$
+\newpage
+\subsection{Example 2}
+\begin{figure}[h]
+\centerline{
+ \scalebox{0.9}{
+    \input{cir2.pstex_t}
+ }
+}
+\end{figure}
+\paragraph{Add currents and tensions from the capacitor}
+$x=^{t}(I_{42},U_{43},U_{31},U_{50})$,
+$Z_{s}=^{t}(V_{1},V_{2},V_{3},V_{4},V_{5},I_{43},I_{31},I_{50})$
+We obtain following equation:
+\[\left(\begin{array}{cccc}
+  I_{42}'&U_{43}'&U_{31}'&U_{50}'\\
+  \hline
+L&0&0&0\\
+0&C&0&0\\
+0&0&C&0\\
+0&0&0&C
+\end{array}\right)x'=
+0x+
+\left(\begin{array}{cccccccc}
+  V_{1}&V_{2}&V_{3}&V_{4}&V_{5}&I_{43}&I_{31}&I_{50}\\
+  \hline
+  0&1&0&-1&0&0&0&0\\
+  0&0&0&0&0&-1&0&0\\
+  0&0&0&0&0&0&1&0\\
+  0&0&0&0&0&0&0&1\\
+\end{array}\right)Z_{s}
+\]
+\[\left(\begin{array}{c}
+\\KCL(1)\\KCL(2)\\KCL(3)\\KCL(4)\\KCL(5)\\U_{43}\\U_{31}\\U_{50}
+\end{array}\right)
+\left(\begin{array}{cccccccc}
+  V_{1}&V_{2}&V_{3}&V_{4}&V_{5}&I_{43}&I_{31}&I_{50}\\
+  \hline
+  -\frac{1}{R}&\frac{1}{R}&0&0&0&0&1&0\\
+  \frac{1}{R}&-\frac{1}{R}&0&0&0&0&0&0\\
+  0&0&0&0&0&-1&1&0\\
+  0&0&0&-\frac{1}{R}&\frac{1}{R}&1&0&0\\
+  0&0&0&\frac{1}{R}&-\frac{1}{R}&0&0&1\\
+  0&0&-1&1&0&0&0&0\\
+  -1&0&1&0&0&0&0&0\\
+  0&0&0&0&1&0&0&0\\
+\end{array}\right)Z_{s}+
+\left(\begin{array}{cccc}
+  I_{42}&U_{43}&U_{31}&U_{50}\\
+  \hline
+  0&0&0&0\\
+  1&0&0&0\\
+  0&0&0&0\\
+  0&0&0&0\\
+  1&0&0&0\\
+  0&1&0&0\\
+  0&0&1&0\\
+  0&0&0&1\\
+\end{array}\right)x=
+\left(\begin{array}{c}
+  \\ I\\  0\\  0\\  0\\  0\\  0\\  0\\  0
+  \end{array}\right)
+\]
+
+\[x'=BZ_{s}\]
+\[Cx+BZ_{s}=s\]
+$N_{I}=N_{E}=12$
+\paragraph{Add only tensions from the capacitor}
+$x=^{t}(I_{42},U_{43},U_{31},U_{50})$,
+$Z_{s}=^{t}(V_{1},V_{2},V_{3},V_{4},V_{5})$\\
+We obtain following equation:
+\[
+\left(\begin{array}{c}
+  \\  KCL(4)\\  KCL(3)\\  KCL(5)
+\end{array}\right)
+\underline{
+\left(\begin{array}{cccc}
+  I_{42}'&U_{43}'&U_{31}'&U_{50}'\\
+  \hline
+L&0&0&0\\
+0&C&0&0\\
+0&C&C&0\\
+0&0&0&C
+\end{array}\right)}x'=
+\left(\begin{array}{cccc}
+  I_{42}&U_{43}&U_{31}&U_{50}\\
+  \hline
+0&0&0&0\\
+1&0&0&0\\
+0&0&0&0\\
+0&0&0&0\\ 
+\end{array}\right)x+
+\left(\begin{array}{ccccc}
+V_{1}&V_{2}&V_{3}&V_{4}&V_{5}\\
+  \hline
+  0&1&0&-1&0\\
+  0&0&0&\frac{1}{R}&-\frac{1}{R}\\
+  0&0&0&0&0\\
+  0&0&0&-\frac{1}{R}&\frac{1}{R}
+\end{array}\right)Z_{s}
+\]
+So, we get $x'=Ax+BZ_{s}$. Therefore, all currents in the capacitor branch are known.\\
+$I_{43}= I_{42}+\frac{V_{4}}{R}-\frac{V_{5}}{R}$,
+$I_{31}= I_{42}+\frac{V_{4}}{R}-\frac{V_{5}}{R}$,
+$I_{50}= \frac{V_{4}}{R}-\frac{V_{5}}{R}$\\
+Use these equations to fill following matrices:
+\[\left(\begin{array}{c}
+KCL(1)\\KCL(2)\\U_{43}\\U_{31}\\U_{50}
+\end{array}\right)
+\left(\begin{array}{ccccc}
+V_{1}&V_{2}&V_{3}&V_{4}&V_{5}\\
+  \hline
+  -\frac{1}{R}&\frac{1}{R}&0&\underline{\frac{1}{R}}&\underline{-\frac{1}{R}}\\
+  \frac{1}{R}&-\frac{1}{R}&0&0&0\\
+  0&0&-1&1&0\\
+  -1&0&1&0&0\\
+  0&0&0&0&1\\
+\end{array}\right)Z_{s}+
+\left(\begin{array}{cccc}
+  I_{42}&U_{43}&U_{31}&U_{50}\\
+  \hline
+  \underline{1}&0&0&0\\
+  1&0&0&0\\0&1&0&0\\0&0&1&0\\0&0&0&1\\
+\end{array}\right)x=
+\left(\begin{array}{c}
+  I\\0\\0\\0\\0
+  \end{array}\right)
+\]
+$N_{I}=N_{E}=9$
+\subsection{Example 3}
+\begin{figure}[h]
+\centerline{
+ \scalebox{0.8}{
+    \input{cir3.pstex_t}
+ }
+}
+\end{figure}
+
+x=$(U_{12})$\\
+$Z_{s}=^{t}(V_{1},V_{2},I_{10})$\\
+\[(KCL(1))=>(C1+C2+C3)x'=I_{10}\]
+So, all capacitor's currents are known:\\
+$I_{c1}=\frac{C1}{C1+C2+C3}I_{10}$\\
+$I_{c2}=\frac{C2}{C1+C2+C3}I_{10}$\\
+$I_{c3}=\frac{C3}{C1+C2+C3}I_{10}$\\
+Use these equations to fill following matrices:\\
+\[\left(\begin{array}{c}
+  \\
+KCL(2)\\U_{21}\\VD
+\end{array}\right)
+\left(\begin{array}{c}
+U_{21}\\
+\hline
+0\\
+1\\
+0
+\end{array}\right)x+
+\left(\begin{array}{ccc}
+V_{1}&V_{2}&I_{10}\\
+\hline
+0&\frac{1}{R}&\frac{C1}{C1+C2+C3}+\frac{C2}{C1+C2+C3}+\frac{C3}{C1+C2+C3}\\
+1&-1&0\\
+1&0&0
+\end{array}\right)Z_{s}=
+\left(\begin{array}{c}
+\\0\\0\\E
+\end{array}\right)
+\]
+$N_{I}=N_{E}=4$
+\newpage
+\subsection{Example 4}
+This example shows that is not always possible to use the KCL law to get x'=...\\
+\begin{figure}[h]
+\centerline{
+ \scalebox{0.9}{
+    \input{cir4.pstex_t}
+ }
+}\end{figure}\\
+$x=^{t}(U_{21},U_{23},U_{34})$
+$Z_{s}=^{t}(V_{1},V_{2},V_{3},V_{4})$
+\paragraph{a problem}
+Start to fill the x' matrices. We use KCL(2) for $U_{21}$, and KCL(3) for $U_{34}$.
+\[\left(\begin{array}{c}
+  \\
+KCL(2)\\KCL(3)\\??
+\end{array}\right)
+\left(\begin{array}{ccc}
+  U_{21}'&U_{23}'&U_{34}'\\
+  \hline
+  C&-C&0\\
+  0&C&C\\
+  ?&?&?
+\end{array}\right)x'=0x+
+\left(\begin{array}{cccc}
+  V_{1}&V_{2}&V_{3}&V_{4}\\
+  \hline
+  0&0&0&0\\
+  0&0&0&0\\
+  ?&?&?&?\\
+\end{array}\right)Z_{s}
+ \]
+ We can't use a other KCL law to get $U_{23}$. A solution could be to add an unknown, \underline{$I_{23}$} in
+ $Z_{s}$. The system becomes:\\
+ \[\left(\begin{array}{c}
+  \\
+KCL(2)\\KCL(3)\\I_{23}
+\end{array}\right)
+\left(\begin{array}{ccc}
+  U_{21}'&U_{23}'&U_{34}'\\
+  \hline
+  C&-C&0\\
+  0&C&C\\
+  0&C&0
+\end{array}\right)x'=0x+
+\left(\begin{array}{ccccc}
+  V_{1}&V_{2}&V_{3}&V_{4}&\underline{I_{23}}\\
+  \hline
+  0&0&0&0&0\\
+  0&0&0&0&0\\
+  0&0&0&0&1\\
+\end{array}\right)Z_{s}
+ \]
+ So, we obtain $x'=AZ_{s}$. All capacitor's currents are known:
+ $I_{21}=\underline{I_{23}}=I_{34}$\\
+\[\left(\begin{array}{c}
+  \\
+KCL(4)\\KCL(1)\\U_{21}\\U_{23}\\U_{34}
+\end{array}\right)
+\left(\begin{array}{ccc}
+  U_{21}&U_{23}&U_{34}\\
+  \hline
+  0&0&0\\
+  0&0&0\\
+  1&0&0\\
+  0&1&0\\
+  0&0&1
+\end{array}\right)x+
+\left(\begin{array}{cccc}
+  V_{1}&V_{2}&V_{3}&\underline{I_{23}}\\
+  \hline
+  0&0&0&1\\
+  \frac{1}{R}&0&0&1\\
+  -1&1&0&0\\
+  0&-1&1&0\\
+  0&0&-1&1\\
+\end{array}\right)Z_{s}=
+\left(\begin{array}{c}
+\\I\\0\\0\\0\\0
+\end{array}\right)
+\]
+ $N_{I}=N_{E}=8$\\
+\paragraph{a good choice}
+\[\left(\begin{array}{c}
+  \\
+KCL(1)\\KCL(2)\\KCL(3)
+\end{array}\right)
+\left(\begin{array}{ccc}
+  U_{21}'&U_{23}'&U_{34}'\\
+  \hline
+  C&0&0\\
+  C&C&0\\
+  0&-C&C
+\end{array}\right)x'=0x+
+\left(\begin{array}{cccc}
+  V_{1}&V_{2}&V_{3}&V_{4}\\
+  \hline
+  \frac{1}{R}&-\frac{1}{R}&0&0\\
+  0&0&0&0\\
+  0&0&0&0\\
+\end{array}\right)Z_{s}
+ \]
+ So, we obtain $x'=BZ_{s}$. Therefore all capacitor's currents are known: $I_{12}=I_{23}=I_{34}=\frac{V1}{R1}$\\
+ \[\left(\begin{array}{c}
+  \\
+KCL(4)\\U_{21}\\U_{23}\\U_{34}
+\end{array}\right)
+ \left(\begin{array}{ccc}
+  U_{21}&U_{23}&U_{24}\\
+  \hline
+  0&0&0\\
+  1&0&0\\
+  0&1&0\\
+  0&0&1\\
+\end{array}\right)x+
+ \left(\begin{array}{cccc}
+  V_{1}&V_{2}&V_{3}&V_{4}\\
+  \hline
+  \frac{1}{R}&0&0&0\\
+  -1&1&0&0\\
+  0&-1&1&0\\
+  0&0&-1&1\\
+\end{array}\right)Z_{s}=
+ \left(\begin{array}{c}
+  \\I\\0\\0\\0
+\end{array}\right)
+ \]
+$N_{I}=N_{E}=7$\\
+ \newpage
+\subsection{Example 5}
+This example shows we need the Minimum Spanning Tree of the capacitor' tension graph.\\
+\begin{figure}[h]
+\centerline{
+ \scalebox{0.6}{
+    \input{cir5.pstex_t}
+ }
+}\end{figure}\\
+$x=^{t}(U_{12},U_{23},U_{34},U_{41})$$Z_{s}=(V_{1},V_{2},V_{3},V_{4},V_{5},I_{50})$\\
+Start to write Ax'=...\
+\[\left(\begin{array}{c}
+  \\
+KCL(1)\\KCL(2)\\KCL(3)\\KCL(4)
+\end{array}\right)
+\left(\begin{array}{cccc}
+  U_{12}'&U_{23}'&U_{34}'&U_{41}'\\
+  \hline
+  C&0&0&-C\\
+  -C&C&0&0\\
+  0&-C&C&0\\
+  0&0&-C&C\\  
+\end{array}\right)x'=
+\]
+This matrix is not regular because of the cycle \{1-2,2-3,3-4,4-1\}. A solution could be to use the Minimum
+Spanning Tree \{1-2,2-3,3-4\} to write the KCL law. About the last tension, $U_{41}$, there are tow
+ways:
+\begin{enumerate}
+\item add a unknown $I_{41} in Z_{S}$ and write CU'=I
+\item Find the linear relation $U_{41}'= \sum_{jk}^{}a_{jk}U_{kj}', and replace U_{ki}'$.
+\end{enumerate}
+The matrices become:\\
+Start to write Ax'=...\
+\[\left(\begin{array}{c}
+  \\
+KCL(1)\\KCL(2)\\KCL(3)\\I_{41}
+\end{array}\right)
+\left(\begin{array}{cccc}
+  U_{12}'&U_{23}'&U_{34}'&U_{41}'\\
+  \hline
+  C&0&0&-C\\
+  -C&C&0&0\\
+  0&-C&C&0\\
+  0&0&0&C\\  
+\end{array}\right)x'=0x+
+\left(\begin{array}{ccccccc}
+  V_{1}&V_{2}&V_{3}&V_{4}&V_{5}&I_{50}&I_{41}\\
+  \hline
+  -\frac{1}{R}&0&0&0&0&0&0\\
+  0&0&0&0&0&0&0\\
+  0&0&0&\frac{1}{R}&-\frac{1}{R}&0&0\\
+  0&0&0&0&0&0&1\\
+\end{array}\right)Z_{s}
+\]
+So, we obtain $x'=BZ_{s}$. Therefore all capacitor's currents are known:$I_{12}=I_{23}=I_{41}+\frac{V1}{R},I_{43}=I_{41}+\frac{V1}{R}+\frac{V5}{R}-\frac{V3}{R}$\\
+ \[\left(\begin{array}{c}
+  \\
+KCL(4)\\KCL(5)\\U_{12}\\U_{23}\\U_{34}\\U_{41}\\VD_{50}
+\end{array}\right)
+ \left(\begin{array}{cccc}
+  U_{12}&U_{23}&U_{34}&U_{41}\\
+  \hline
+  0&0&0&0\\
+  0&0&0&0\\
+  1&0&0&0\\
+  0&1&0&0\\
+  0&0&1&0\\
+  0&0&0&1\\
+  0&0&0&0\\
+
+\end{array}\right)x+
+ \left(\begin{array}{ccccccc}
+  V_{1}&V_{2}&V_{3}&V_{4}&V_{5}&I_{50}&I_{41}\\
+  \hline
+  \frac{1}{R}&0&-\frac{1}{R}&0&\frac{1}{R}&0&\underline{-1+1}\\
+  0&0&\frac{1}{R}&0&-\frac{1}{R}&-1&0\\
+  -1&1&0&0&0&0&0\\
+  0&-1&1&0&0&0&0\\
+  0&0&-1&1&0&0&0\\
+  0&0&0&-1&1&0&0\\
+  0&0&0&0&1&0&0\\
+\end{array}\right)Z_{s}=
+ \left(\begin{array}{c}
+  \\0\\0\\0\\0\\0\\0\\E
+\end{array}\right)
+ \]
+$N_{I}=N_{E}=11$\\
+ \newpage
+\subsection{conclusion}
+x contains inductor's currents and capacitor's tensions. Derivate inductor's current is equal to a
+nodal voltage difference.\\
+About the capacitor's tensions, we can use the following algorithm:\\
+
+
+\begin{algorithm}
+\caption{fill the matrices : $x'=A_{1x}x+A_{1s}Z_{s}+A_{1ns}Z_{ns}$ }
+\begin{algorithmic}
+\REQUIRE Init\_I\_in\_x : initialize internal data structure to get all I from x.
+\REQUIRE Next\_I\_in\_x : return the next available I from x. If there are not available x, return 0.\\
+\REQUIRE Minimum Spanning Tree of the capacitor' tension graph
+\REQUIRE Init\_MST : initialize internal data structure to get all u from x.
+\REQUIRE Next\_u\_in\_MST : return a available U's neighbour from MST if possible. If there are not
+available u in MST, return 0.\\
+\REQUIRE Next\_U\_in\_x : return the next available U from x. If there are not available x, return 0.\\
+
+0\\
+\COMMENT{About current}\\
+\COMMENT{get first current}
+\STATE Init\_I\_in\_x()
+\STATE $I_{kj}$ = Next\_I\_in\_x()
+\WHILE{$I_{kj}$}
+\STATE use $LI'=V_{j}-V_{k}$ to fill $I_{kj}$'s line.
+\ENDWHILE\\
+\COMMENT{About tension}\\
+\COMMENT{get a first capacitor tension}
+\STATE Init\_MST()
+\STATE $U_{kj}$ = Next\_u\_in\_MST()
+\WHILE{$U_{kj}$}
+\STATE l=j or k with KCL(k) available.
+\STATE Use CU'=I and KCL(k) to fill $U_{ki}$'s line.\\
+\STATE enable KCL(k)
+
+\STATE $U_{kj}$= Next\_u\_in\_MST ()
+\ENDWHILE
+\STATE $U_{kj}$ = Next\_U\_in\_x()
+\WHILE {$U_{kj}$}
+\STATE Add an unknown $I_{kj}$, and use it to fill the matrices. Write I=CU'.
+\STATE $U_{kj}$ = Next\_U\_in\_x()
+\ENDWHILE
+\COMMENT{reverse A : $Ax'=Bx+CZ_{s}+DZ_{ns}$\\}
+\STATE $A^{-1}$=Inv(A)
+\STATE $x'=A_{1x}x+A_{1s}Z_{s}+A_{1ns}Z_{ns}$
+\end{algorithmic}
+\end{algorithm}
+I don't prove A is regular. But each A's line comes from a independent physical laws, so I assume A
+is regular.
+\newpage
+
+\section{Buck converter}
+\begin{figure}[h]
+\centerline{
+ \scalebox{1.0}{
+    \input{buck.pstex_t}
+ }
+}\end{figure}
+$x=^{t}(U_{45},U_{67},U_{08},I_{18}) Z_{s}=^{t}(V_{1},V_{2},V_{3},V_{4},V_{5},V_{6},V_{7},V_{8},V_{9},V_{10},I_{90},I_{20},I_{30},I_{100},I_{40})
+Z_{ns}=^{t}(I_{1},I_{2},I_{3},I_{4},U_{2})$\\
+\underline{$Ax'= Bx+CZ_{s}$}
+\[\left(\begin{array}{c}
+  \\
+KCL(4)\\KCL(7)\\KCL(8)\\I_{18}
+\end{array}\right)
+\left(\begin{array}{cccc}
+  U_{45}'&U_{67}'&U_{08}'&I_{18}'\\
+  \hline
+  C21&0&0&0\\
+  0&-C11&0&0\\
+  0&0&C&0\\
+  0&0&0&L\\  
+\end{array}\right)x'=
+\left(\begin{array}{cccc}
+  U_{45}&U_{67}&U_{08}&I_{18}\\
+  \hline
+  0&0&0&0\\
+  0&0&0&0\\
+  0&0&0&1\\
+  0&0&0&0\\
+\end{array}\right)x+\]
+\[
+\left(\begin{array}{ccccccccccccccc}
+  V_{1}&V_{2}&V_{3}&V_{4}&V_{5}&V_{6}&V_{7}&V_{8}&V_{9}&V_{10}&I_{90}&I_{20}&I_{30}&I_{100}&I_{40}\\
+  \hline
+  0&0&0&0&0&0&0&0&0&0&0&0&0&0&-1\\
+  0&0&0&0&0&0&-\frac{1}{R11}&\frac{1}{R11}&0&0&0&0&0&0&0\\
+  0&0&0&0&0&\frac{1}{R12}&\frac{1}{R11}&\frac{-1}{Rload}-\frac{1}{R11}-\frac{1}{R12}&0&0&0&0&0&0&0\\
+  1&0&0&0&0&0&0&0&0&0&0&0&0&0&0
+\end{array}\right)Z_{s}+0Z_{ns}\]
+\underline{$Ex+FZ_{s}+GZ_{ns}=s$}
+\[
+\left(\begin{array}{c}
+  \\
+KCL(1)\\KCL(2)\\KCL(3)\\KCL(5)\\KCL(6)\\KCL(9)\\KCL(10)\\VD_{100}\\VD_{2}\\VD_{30}\\VD_{90}\\VD_{40}\\U_{45}\\U_{67}\\U_{08}
+\end{array}\right)
+\left(\begin{array}{cccc}
+  U_{45}&U_{67}&U_{08}&I_{18}\\
+  \hline
+  0&0&0&-1\\
+  0&0&0&0\\
+  0&0&0&0\\
+  0&0&0&0\\
+  0&0&0&0\\
+  0&0&0&0\\
+  0&0&0&0\\
+  0&0&0&0\\
+  0&0&0&0\\
+  0&0&0&0\\
+  0&0&0&0\\
+  0&0&0&0\\
+  1&0&0&0\\
+  0&1&0&0\\
+  0&0&1&0\\
+\end{array}\right)x+\]
+\[
+\left(\begin{array}{ccccccccccccccc}
+  V_{1}&V_{2}&V_{3}&V_{4}&V_{5}&V_{6}&V_{7}&V_{8}&V_{9}&V_{10}&I_{90}&I_{20}&I_{30}&I_{100}&I_{40}\\
+  \hline
+  0&0&0&0&0&0&0&0&0&0&0&0&0&0&0\\
+  0&0&0&0&0&0&0&0&0&0&0&1&0&0&0\\
+  0&0&0&0&0&0&0&0&0&0&0&0&1&0&0\\
+  0&0&0&0&-\frac{1}{R21}&\frac{1}{R21}&0&0&0&0&0&0&0&0&-1\\
+  0&0&0&0&\frac{1}{R21}&-\frac{1}{R12}-\frac{1}{R21}&\frac{1}{R11}&\frac{1}{R12}-\frac{1}{R11}&0&0&0&0&0&0&0\\
+  0&0&0&0&0&0&0&0&0&0&1&0&0&0&0\\
+  0&0&0&0&0&0&0&0&0&0&0&0&0&-1&0\\
+  0&0&0&0&0&0&0&0&0&1&0&0&0&0&0\\
+  0&1&0&0&0&0&0&0&0&0&0&0&0&0&0\\
+  0&0&1&0&0&0&0&0&0&0&0&0&0&0&0\\
+  0&0&0&0&0&0&0&0&1&0&0&0&0&0&0\\
+  0&0&0&1&0&-G2&0&0&G2&0&0&0&0&0&0\\
+  0&0&0&-1&1&0&0&0&0&0&0&0&0&0&0\\
+  0&0&0&0&0&-1&1&0&0&0&0&0&0&0&0\\
+  0&0&0&0&0&0&0&1&0&0&0&0&0&0&0\\
+\end{array}\right)Z_{s}+\]
+\[
+\left(\begin{array}{ccccc}
+  I_{1}&I_{2}&I_{3}&I_{4}&U_{2}\\
+  \hline
+  1&-1&-1&1&0\\
+  0&0&0&0&0\\
+  0&0&0&0&0\\
+  0&0&0&0&0\\
+  0&0&0&0&0\\
+  0&0&0&0&0\\
+  0&1&1&0&0\\
+  0&0&0&0&0\\
+  0&0&0&0&-1\\
+  0&0&0&0&0\\
+  0&0&0&0&0\\
+  0&0&0&0&0\\
+  0&0&0&0&0\\
+  0&0&0&0&0\\
+  0&0&0&0&0\\
+\end{array}\right)Z_{ns}=
+\left(\begin{array}{c}
+  \\
+0\\0\\0\\0\\0\\0\\0\\V1\\0\\Vramp\\Vref\\0\\0\\0\\0
+\end{array}\right)\]
+$N_{I}=N_{E}-4=24$
+\newpage
+And the non smooth equations:dim(Y)=dim($\lambda$ )=10.\\
+\underline{$Z_{ns}=B\lambda$}\\
+With B=
+\tiny
+\[
+\left(\begin{array}{cccccccccccccccccccccccc}
+l1&l2&l3&l4&l5&l6&l7&l8&l9&l10&l11&l12&l13&l14&l15&l16&l17&l18&l19&l20&l21&l22&l23&l24\\
+\hline
+0.09&0.22&0.46&1.16&2.89&-0.09&-0.22&-0.46&-1.16&-2.89&0&0&0&0&0&0&0&0&0&0&0&0&0&0\\
+0&0&0&0&0&0&0&0&0&0&1&0&0&0&0&0&0&0&0&0&0&0&0&0\\
+0&0&0&0&0&0&0&0&0&0&0&1&0&0&0&0&0&0&0&0&0&0&0&0\\
+0&0&0&0&0&0&0&0&0&0&0&0&0.09&0.22&0.46&1.16&2.89&-0.09&-0.22&-0.46&-1.16&-2.89&0&0\\
+0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&25&-25
+\end{array}\right)
+\]
+\small
+\underline{$Y=D\lambda$+Ex+s}
+\[\left(\begin{array}{c}
+  \\Y1\\Y2\\Y3\\Y4\\Y5\\Y6\\Y7\\Y8\\Y9\\Y10\\Y11\\Y12\\Y13\\Y14\\Y15\\Y16\\Y17\\Y18\\Y19\\Y20\\Y21\\Y22\\Y23\\Y24
+ \end{array}\right)=
+\left(\begin{array}{cccccccccccccccccccccccc}
+  \\
+  \hline
+1&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0\\
+0&1&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0\\
+0&0&1&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0\\
+0&0&0&1&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0\\
+0&0&0&0&1&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0\\
+0&0&0&0&0&1&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0\\
+0&0&0&0&0&0&1&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0\\
+0&0&0&0&0&0&0&1&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0\\
+0&0&0&0&0&0&0&0&1&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0\\
+0&0&0&0&0&0&0&0&0&1&0&0&0&0&0&0&0&0&0&0&0&0&0&0\\
+0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0\\
+0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0\\
+0&0&0&0&0&0&0&0&0&0&0&0&1&0&0&0&0&0&0&0&0&0&0&0\\
+0&0&0&0&0&0&0&0&0&0&0&0&0&1&0&0&0&0&0&0&0&0&0&0\\
+0&0&0&0&0&0&0&0&0&0&0&0&0&0&1&0&0&0&0&0&0&0&0&0\\
+0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&1&0&0&0&0&0&0&0&0\\
+0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&1&0&0&0&0&0&0&0\\
+0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&1&0&0&0&0&0&0\\
+0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&1&0&0&0&0&0\\
+0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&1&0&0&0&0\\
+0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&1&0&0&0\\
+0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&1&0&0\\
+0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&1&0\\
+0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&1
+\end{array}\right)\lambda+\]
+\[
+\left(\begin{array}{ccccccccccccccc}
+  V_{1}&V_{2}&V_{3}&V_{4}&V_{5}&V_{6}&V_{7}&V_{8}&V_{9}&V_{10}&I_{90}&I_{20}&I_{30}&I_{100}&I_{40}\\
+  \hline
+  0&-b&0&0&0&0&0&0&0&3&0&0&0&0&0\\
+  0&-b&0&0&0&0&0&0&0&3&0&0&0&0&0\\
+  0&-b&0&0&0&0&0&0&0&3&0&0&0&0&0\\
+  0&-b&0&0&0&0&0&0&0&3&0&0&0&0&0\\
+  0&-b&0&0&0&0&0&0&0&3&0&0&0&0&0\\
+  b&-b&0&0&0&0&0&0&0&0&0&0&0&0&0\\
+  b&-b&0&0&0&0&0&0&0&0&0&0&0&0&0\\
+  b&-b&0&0&0&0&0&0&0&0&0&0&0&0&0\\
+  b&-b&0&0&0&0&0&0&0&0&0&0&0&0&0\\
+  b&-b&0&0&0&0&0&0&0&0&0&0&0&0&0\\
+  1&0&0&0&0&0&0&0&0&0&0&0&0&0&0\\
+  -1&0&0&0&0&0&0&0&0&1&0&0&0&0&0\\
+  0&-b&0&0&0&0&0&0&0&3&0&0&0&0&0\\
+  0&-b&0&0&0&0&0&0&0&3&0&0&0&0&0\\
+  0&-b&0&0&0&0&0&0&0&3&0&0&0&0&0\\
+  0&-b&0&0&0&0&0&0&0&3&0&0&0&0&0\\
+  0&-b&0&0&0&0&0&0&0&3&0&0&0&0&0\\
+  b&-b&0&0&0&0&0&0&0&0&0&0&0&0&0\\
+  b&-b&0&0&0&0&0&0&0&0&0&0&0&0&0\\
+  b&-b&0&0&0&0&0&0&0&0&0&0&0&0&0\\
+  b&-b&0&0&0&0&0&0&0&0&0&0&0&0&0\\
+  b&-b&0&0&0&0&0&0&0&0&0&0&0&0&0\\
+  0&0&-1&1&0&0&0&0&0&0&0&0&0&0&0\\
+  0&0&-1&1&0&0&0&0&0&0&0&0&0&0&0\\
+\end{array}\right)Z_{s}=
+\left(\begin{array}{c}
+  \\h1\\h2\\h3\\h4\\h5\\h6\\h7\\h8\\h9\\h10\\0\\0\\h1\\h2\\h3\\h4\\h5\\h6\\h7\\h8\\h9\\h10\\-0.1\\0.1
+  \end{array}\right)
+  \]
+\normalsize
+\newpage
+%*************************************OTHER ANALYSIS
+
+%EXAMPLE SECTION************************************************************************************
+\section{Diodes bridge}
+
+\begin{figure}[h]
+\centerline{
+ \scalebox{0.7}{
+    \input{Bridge.pstex_t}
+ }
+}\end{figure}
+
+\subsection{Smooth Analyze}
+$N_{b} = 7 $
+$N_{n} = 4$\\
+$n_{c}$=1\\
+$n_{ci}$=0\\
+$n_{v}$=0\\
+$n_{r}$=4\\
+$n_{u}$ =1\\
+$n_{i}$=1\\
+
+
+
+
+\subsection{Unknowns}
+
+x = $^{t}(U_{1},I_{7})$,
+$Z_{ns}=^{t}(I_{2},I_{3},I_{4},I_{5}$),
+$Z_{s} = ^{t}(V_{2},V_{3})$
+\subsection{Diode non smooth model instance}
+
+\[ \beta = z_{i} = I_{i}\]
+\[ \alpha =U_{i}\]
+\[z_{i}=1l_{i}+0\alpha\]
+\[y_{i}=1\alpha+0l_{i}\]
+\[0 \leq y_{i} \, \perp \, l_{i} \geq 0\]
+
+
+\subsection{Global formulation}
+
+\[ \lambda =(l_{1},l_{2},l_{3},l_{4})\]
+\[Z_{ns}=0X+0Z_{s}+Id\lambda\]
+\[Y=\left(\begin{array}{cc}
+0&0\\
+0&0\\
+1&0\\
+1&0\end{array}\right) x+
+\left(\begin{array}{cc}
+1&0\\
+0&1\\
+0&-1\\
+-1&0\end{array}
+\right) Z_{s} + 0Z_{ns} +0\lambda\]
+
+\[0 \leq Y \, \perp \, \lambda \geq 0\]
+
+
+
+\subsection{Matrices formulation}
+\[
+\left(\begin{array}{c}
+  
+x'=\left(\begin{array}{cc}
+0 &\frac{-1}{C}\\
+\frac{1}{L}&0\end{array} \right)x
++\left(\begin{array}{cc}
+0&\frac{-1}{C}\\
+0&0\end{array} \right)Z_{s}
++\left(\begin{array}{cccc}
+0&0&\frac{1}{C}&\frac{-1}{C}\\
+0&0&0&0\end{array} \right)Z_{ns}
+\\
+0=\left(\begin{array}{cc}
+0 &0\\
+0 &0\\
+0 &1\end{array} \right)x
++\left(\begin{array}{cc}
+\frac{-1}{R}&\frac{1}{R}\\
+\frac{-1}{R}&\frac{1}{R}\\
+1&0\end{array} \right)Z_{s}
++\left(\begin{array}{cccc}
+1&0&0&1\\
+0&+1&1&0\\
+0&0&0&0\end{array} \right)Z_{ns}
+\\
+Z_{ns}=Dx+0Z_{s}+Id\lambda\\
+Y=\left(\begin{array}{cc}
+0&0\\
+0&0\\
+1&0\\
+1&0\end{array}\right) x+
+\left(\begin{array}{cc}
+1&0\\
+0&1\\
+0&-1\\
+-1&0\end{array}
+\right) Z_{s} + 0Z_{ns} +0\lambda\\
+
+0 \leq Y \, \perp \, \lambda \geq 0
+
+\end{array}
+\right)
+\]
+
+\subsection{AN}
+C=0.01 F\\
+L=1/120 H\\
+R=33 ohm
+
+\[
+\left(\begin{array}{c}
+  
+x'=\left(\begin{array}{cc}
+0 &-100\\
+120&0\end{array} \right)x
++\left(\begin{array}{cc}
+0&-100\\
+0&0\end{array} \right)Z_{s}
++\left(\begin{array}{cccc}
+0&0&-100&-100\\
+0&0&0&0\end{array} \right)Z_{ns}
+\\
+0=\left(\begin{array}{cc}
+0 &0\\
+0 &0\\
+0 &1\end{array} \right)x
++\left(\begin{array}{cc}
+-0.03&0.03\\
+-0.03&0.03\\
+1 &0\end{array} \right)Z_{s}
++\left(\begin{array}{cccc}
+1&0&0&1\\
+0&+1&1&0\\
+0&0&0&0\end{array} \right)Z_{ns}
+\\
+Z_{ns}=0x+0Z_{s}+Id\lambda\\
+Y=\left(\begin{array}{cc}
+0&0\\
+0&0\\
+1&0\\
+1&0\end{array}\right) x+
+\left(\begin{array}{cc}
+1&0\\
+0&1\\
+0&-1\\
+-1&0\end{array}
+\right) Z_{s} + 0Z_{ns} +0\lambda\\
+
+0 \leq Y \, \perp \, \lambda \geq 0
+
+\end{array}
+\right)
+\]
+ie
+\[
+\left(\begin{array}{c}
+R=\left(\begin{array}{cccc}
+0&0&-100&-100\\
+0&0&0&0\end{array} \right) \lambda\\
+  
+x'=\left(\begin{array}{cc}
+0 &-100\\
+120&0\end{array} \right)x
++\left(\begin{array}{cc}
+0&-100\\
+0&0\end{array} \right)Z_{s}+R\\
+0=\left(\begin{array}{cc}
+0 &0\\
+0 &0\\
+0 &1\\\end{array} \right)x
++\left(\begin{array}{cc}
+-0.03&0.03\\
+-0.03&0.03\\
+1&0\end{array} \right)Z_{s}
++\left(\begin{array}{cccc}
+1&0&0&1\\
+0&-1&-1&0\\
+0&0&0&0\end{array} \right)\lambda\\
+Y=\left(\begin{array}{cc}
+0&0\\
+0&0\\
+1&0\\
+1&0\end{array}\right) x+
+\left(\begin{array}{cc}
+1&0\\
+0&1\\
+0&-1\\
+-1&0\end{array}
+\right) Z_{s} +0\lambda\\
+
+0 \leq Y \, \perp \, \lambda \geq 0
+
+\end{array}
+\right)
+\]
+\newpage
+\section{Algorithm}
+We assume circuit topology is known.
+\subsection{Unknown vectors construction}
+\paragraph{Get x}:
+
+\begin{algorithm}
+\caption{x construction}
+\begin{algorithmic}
+\REQUIRE unknown structure
+\COMMENT{About current\\}
+\FORALL {inductor}
+\STATE u=new unknown(I,j,k,inductor)
+\STATE x.append(u)
+\ENDFOR
+\COMMENT{About tension\\}
+\FORALL {capacitor}
+\IF {$U_{jk}$ is not an unknown}
+\STATE u=new unknown(U,j,k,capacitor)
+\STATE x.append(u)
+\ENDIF
+\ENDFOR
+\end{algorithmic}
+\end{algorithm}
+\paragraph{Get $Z_{ns}$}:
+
+\begin{algorithm}
+\caption{$Z_{ns}$ construction}
+\begin{algorithmic}
+\REQUIRE unknown structure
+\FORALL {non smooth component}
+\STATE getBetaUnknown from the model
+\STATE u=new unknown(type,j,k,l,m,NS component)
+\STATE $Z_{ns}$.append(u)
+\ENDFOR
+\end{algorithmic}
+\end{algorithm}
+
+\paragraph{Get $Z_{s}$}:
+
+\begin{algorithm}
+\caption{$Z_{s}$ construction}
+\begin{algorithmic}
+\REQUIRE unknown structure
+\COMMENT{Add $V_{j}$\\}
+\FORALL {node j}
+\STATE u=new unknown(V,j)
+\STATE $Z_{s}$.append(u)
+\ENDFOR
+\COMMENT{non smooth current\\}
+\FORALL {non smooth component}
+\FORALL{component connexion j}
+\STATE u=new unknown(I,j,NS component)
+\STATE $Z_{s}$.append(u)
+\ENDFOR
+\ENDFOR
+\COMMENT{Voltage Defined}
+\FORALL {Voltage Defined component}
+\STATE u=new unknown(I,j,k,component)
+\STATE $Z_{s}$.append(u)
+\ENDFOR
+
+\end{algorithmic}
+\end{algorithm}
+\newpage
+\section{Parser API}
+The library cirParser.so is a C library contains the .cir parser. it exports the parser API.\\
+
+\subsection{cirParser API}
+
+\begin{enumerate}
+  \item bool readFile(char * file) : read a .cir file\\
+  \item int initComponentList(char *typeName); :initialize internal data structure to get component of type \textit{typeName}.\\
+  \item int nextComponent(void * data): fill the data structure \textit{data}.\\
+\end{enumerate}
+
+Possible values for \textit{typeName} : Resitor,Capacitor,Inductor,Vsource,Isource,Diode,...
+
+\subsection{Ddata structures}
+Each \textit{typeName} has a data structure contains all useful informations about the component.\\
+Call nextComponent to fill the data structure.\\
+
+\subsection{Algorithm}
+A adapted stamp method is used to fill matrices.
+
+
+ \end{document}
