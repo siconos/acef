@@ -1,0 +1,59 @@
+ace.o: ace.cpp extern.h includes/parser.h ace.h
+algo.o: algo.cpp algo.h ace.h extern.h includes/parser.h linearsystem.h \
+  unknown.h component.h equationkcl.h equation.h equationcap.h \
+  equationind.h equationvd.h equationten.h componentcap.h componentdyn.h \
+  componentlinear.h componentind.h componentres.h componentdio.h \
+  componentnlinear.h componentvsrc.h componentisrc.h
+componentcap.o: componentcap.cpp componentcap.h ace.h extern.h \
+  includes/parser.h componentdyn.h componentlinear.h component.h algo.h \
+  linearsystem.h unknown.h equationkcl.h equation.h equationcap.h \
+  equationind.h equationvd.h equationten.h
+componentcomp.o: componentcomp.cpp componentcomp.h ace.h extern.h \
+  includes/parser.h componentnlinear.h component.h
+component.o: component.cpp unknown.h ace.h extern.h includes/parser.h \
+  component.h equation.h
+componentdio.o: componentdio.cpp componentdio.h ace.h extern.h \
+  includes/parser.h componentnlinear.h component.h algo.h linearsystem.h \
+  unknown.h equationkcl.h equation.h equationcap.h equationind.h \
+  equationvd.h equationten.h
+componentdyn.o: componentdyn.cpp componentdyn.h ace.h extern.h \
+  includes/parser.h componentlinear.h component.h
+componentind.o: componentind.cpp componentind.h ace.h extern.h \
+  includes/parser.h componentdyn.h componentlinear.h component.h algo.h \
+  linearsystem.h unknown.h equationkcl.h equation.h equationcap.h \
+  equationind.h equationvd.h equationten.h
+componentisrc.o: componentisrc.cpp componentisrc.h ace.h extern.h \
+  includes/parser.h componentlinear.h component.h algo.h linearsystem.h \
+  unknown.h equationkcl.h equation.h equationcap.h equationind.h \
+  equationvd.h equationten.h
+componentlinear.o: componentlinear.cpp componentlinear.h component.h \
+  ace.h extern.h includes/parser.h
+componentnlinear.o: componentnlinear.cpp componentnlinear.h ace.h \
+  extern.h includes/parser.h component.h
+componentres.o: componentres.cpp componentres.h ace.h extern.h \
+  includes/parser.h componentlinear.h component.h algo.h linearsystem.h \
+  unknown.h equationkcl.h equation.h equationcap.h equationind.h \
+  equationvd.h equationten.h
+componentvsrc.o: componentvsrc.cpp componentvsrc.h componentlinear.h \
+  component.h ace.h extern.h includes/parser.h algo.h linearsystem.h \
+  unknown.h equationkcl.h equation.h equationcap.h equationind.h \
+  equationvd.h equationten.h
+equationcap.o: equationcap.cpp equationcap.h equation.h ace.h extern.h \
+  includes/parser.h
+equation.o: equation.cpp equation.h ace.h extern.h includes/parser.h
+equationind.o: equationind.cpp equationind.h equation.h ace.h extern.h \
+  includes/parser.h
+equationkcl.o: equationkcl.cpp equationkcl.h equation.h ace.h extern.h \
+  includes/parser.h
+equationten.o: equationten.cpp equationten.h equation.h ace.h extern.h \
+  includes/parser.h
+equationvd.o: equationvd.cpp equationvd.h equation.h ace.h extern.h \
+  includes/parser.h
+linearsystem.o: linearsystem.cpp linearsystem.h unknown.h ace.h extern.h \
+  includes/parser.h component.h equationkcl.h equation.h equationcap.h \
+  equationind.h equationvd.h equationten.h
+main.o: main.cpp ace.h extern.h includes/parser.h algo.h linearsystem.h \
+  unknown.h component.h equationkcl.h equation.h equationcap.h \
+  equationind.h equationvd.h equationten.h
+unknown.o: unknown.cpp unknown.h ace.h extern.h includes/parser.h \
+  component.h

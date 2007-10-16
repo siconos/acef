@@ -1,0 +1,916 @@
+#! /bin/sh
+####################################################################################
+# Fichier : makeMakefile
+# Auteur : Sebastien Varrette <Sebastien.Varrette@imag.fr>
+#          Web page : http://www-id.imag.fr/~svarrett/
+#
+# Date de création : 26 Jan 2004
+#
+# Description :Un petit script perso qui me permet de générer des fichiers makefile
+#             'generiques' pour des projets en C, C++, latex ou beamer. 
+#
+# Le terme générique à à comprendre dans le sens ou l'ajout de nouveaux fichiers 
+# sources ne suppose pas la modification du fichier makefile (comme c'est le cas en 
+# général)
+# En pratique, ce script génère non seulement un fichier Makefile mais aussi 
+# tous les répertoires permettant de structurer au mieux les projets (en tout cas 
+# de la façon dont j'ai l'habitude de programmer)
+# 
+# Détails de fonctionnement : tapez "makeMakefile -h"
+#
+# Dernière Modification : 10 aout 2005  
+#
+# TODO : beaucoup (trop) de choses; je modifie ce script régulièrement aussi 
+#        n'hésitez pas à consulter souvent mon site web pour voir quelle version
+#        est en ligne.  
+#        Toute remarque est bien entendu la bienvenue et peut m'être adressée par 
+#        mail.
+#
+# Known bugs : j'en découvre de temps en temps et j'espere ne pas trop en ajouter 
+#        à chaque nouvelle version ;-). 
+#        il s'agit d'un script perso qui n'a pas la vocation d'être particulièrement 
+#        robuste à une configuration logicielle autre que la mienne.
+#        Néanmoins, n'hésitez pas à me communiquer tout bug par mail
+#
+####################################################################################
+
+######################### --- Definition de variables --- #########################
+# Version du script
+version=1.01
+# Mode par défaut des répertoires créés
+mode=755
+command=`basename $0`
+# Fichiers/repertoires crées pour chaque type de projet
+# Projet de réalisation de documents LaTeX
+latex_Files="Makefile README"
+latex_Directories=".Trash Images Output "
+# Projet de réalisation de présentations utilisant Beamer 
+beamer_Files="Makefile README"
+beamer_Directories="Images"
+beamer_Additionnal_Files_TGZ="/home/seb/PRESENTATIONS/beamer_additionnal_files.tgz"
+# Projets de programmation en C/C++
+c_cpp_Files="Makefile .Makefile.dep README"
+c_cpp_Directories="Include Obj "
+
+################################################################################
+############## --- Fonctions d'affichage diverses et variées --- ###############
+################################################################################
+####
+# Affichage de la version du script 
+##
+print_version() {
+    echo "This is $command version $version;"
+    echo "Type '$command -h' to obtain more informations"
+}
+####
+# Affichage de l'aide
+##
+print_help() {
+    echo -e \
+	"NAME\n"                                                                 \
+        "      $command - a script that generates 'generic' Makefile\n"          \
+	"      and directory structure to handle projects in C, C++,\n"          \
+	"      LaTeX or Beamer.\n"                                               \
+        "\nSYNOPSIS\n"                                                           \
+        "      $command [-h|-v]\n"                                               \
+	"      $command [-d DIRECTORY] [-r] TYPE\n"                              \
+        "\nDESCRIPTION\n"                                                        \
+	"      The 'generic' aspect means that adding/removing new source files\n"\
+	"      in the project directory no longer requires to modify the\n"       \
+	"      Makefile as it is the case in general. Organization of each \n"   \
+	"      type of project follows my own programming style. Please note\n"  \
+	"      that this organization is assumed in the generated Makefiles\n\n" \
+        "      -h : print help and exit\n"                                       \
+        "      -v : print version and exit\n"                                    \
+        "      -d DIRECTORY: specify directory to create where to store \n"      \
+        "           and associated files/directories\n"                          \
+        "      -r : remove files/directories created for a TYPE project\n"       \
+        "      TYPE : type of project and so makefile you want to create\n"      \
+        "           Recognized values for TYPE include \n"                       \
+	"           'latex' : project to produce LaTeX/TeX documents\n"          \
+	"           'beamer': beamer is a special package of LaTeX to realize\n" \
+	"                presentations (as powerpoint). More informations on \n" \
+	"                http://latex-beamer.sourceforge.net/\n"                 \
+	"           'c'   : project in the C programming langage.\n"             \
+	"           'cpp' : project in the C++ programming langage.\n"           \
+	"\n      In all cases, when a Makefile is created, please type\n"        \
+	"      'make help' to obtain informations on the generated makefile\n"   \
+        "\nEXAMPLES\n"                                                           \
+	"     '$command latex' produces a makefile and directories\n"            \
+	"         suitable for LaTeX documents compilation (in current directory)\n"\
+	"     '$command -d Toto c' first create the 'Toto' directory \n"         \
+	"         and configure that directory to handle C compilation\n"        \
+	"     '$command -r cpp' remove makefile and directories generated \n"    \
+	"         to  manage C++ compilation in the current directoty\n"         \
+        "\nAUTHOR\n"                                                             \
+        "      Sebastien Varrette <Sebastien.Varrette@imag.fr>\n"                \
+	"      Web page :  http://www-id.imag.fr/~svarrett/\n"                   \
+        "\nREPORTING BUGS\n"                                                     \
+        "      Please report bugs to <Sebastien.Varrette@imag.fr>\n"             \
+        "\nCOPYRIGHT\n"                                                          \
+        "      This  is a free software. There is NO warranty; not even for\n"   \
+	"      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"           \
+        "\nSEE ALSO\n"                                                           \
+	"      Documentation on the GNU make utility can be found at\n"          \
+	"      http://www.gnu.org/software/make/manual/make.html\n"              \
+	"      Other scripts are also available on my web site\n"                \
+	"                http://www-id.imag.fr/~svarrett/"
+}
+####
+# Affichage d'un message d'erreur de format et exit
+# Optionnal parameter $1 : error message ('bad format' by defaut) 
+##
+print_error_and_exit() {
+    if [ -z "$1" ]; then
+	message="Bad format"
+    else
+	message="$1"
+    fi
+    echo "$message, please type '$command -h' for help"
+    exit 1
+}
+################################################################################
+###########################  --- Fonctions Toolbox --- #########################
+################################################################################
+####
+# Affiche un warning à la suppression des fichiers/répertoires pour le type $1
+# Precondition : $1 est au format correct!
+##
+WarningDelete() {
+    eval f=$(echo "\$$1_Files")
+    eval d=$(echo "\$$1_Directories")
+    echo "BE CAREFUL! Executing this command will COMPLETLY remove files $f" \
+	"together with the directories $d"
+}
+####
+# yes/no question. exit 1 if no answer
+##
+yesno() {
+    echo "Are you sure you want to continue? (yes/no)"
+    read ans
+    case $ans in 
+	n*|N*)exit 1;;
+    esac
+}
+
+################################################################################
+##### --- Gestion de l'option '-r TYPE'(suppr. des fichiers/rep crées) --- #####
+################################################################################
+####
+# suppression des fichiers/répertoires pour le type $1
+# Precondition : $1 est au format correct!
+##
+ReallyDelete() {
+    eval f=$(echo "\$$1_Files")
+    eval d=$(echo "\$$1_Directories")    
+    rm -rf $f $d
+}
+#####
+# Suppression des makefiles génériques et des fichiers/répertoires associés dans 
+# le répertoire courant pour le type $1
+###
+DeleteType() {
+    if [ $# -eq 0 ]; then
+	print_error_and_exit
+    else
+	case $1 in
+	    c|cpp)     todel=c_cpp;;
+	    latex|beamer) todel=$1;;		
+	    *) print_error_and_exit;;
+	esac 
+	WarningDelete $todel
+	yesno
+	ReallyDelete $todel
+	echo "*** Suppression correctement effectuée ***"
+    fi
+}
+################################################################################
+####################### --- Gestion de projets LaTeX --- #######################
+################################################################################
+####
+# Creer le fichier Makefile et les scripts qu'il utilise pour les projets Latex
+##
+Create_Makefile2latex() {
+    cat > Makefile << "EOF"
+####################################################################################
+# Makefile (configuration file for GNU make - see http://www.gnu.org/software/make/)
+#
+# Compilation of files written in LaTeX (version 0.5)
+#
+# Author : Sebastien Varrette <Sebastien.Varrette@imag.fr>
+#          Web page : http://www-id.imag.fr/~svarrett/
+#
+# --------------------------------------------------------------------------------
+# This is a generic makefile in the sense that it doesn't require to be 
+# modified when adding/removing new source files.
+# --------------------------------------------------------------------------------
+#
+# Documentation on the Makefile utility may be found at 
+#                  http://www.gnu.org/software/make/manual/make.html           
+# 
+# Traditionaly, the command 'latex f.tex' generates the following files :
+#     - f.dvi
+#     - f.aux
+#     - f.log
+#     - f.bbl in case of bibliography references 
+#     - etc...
+# When running make, the DVI file will stay in the current directory. 
+# PDF and Postscript files will be located in the $(OUTPUT_DIR) directory 
+# whereas all other files generated will move to $(TRASH_DIR)/. 
+#
+# Available Commands  
+# ------------------
+# make       : Compile LaTeX files, PDF/ps generated are placed in $(OUTPUT_DIR)/ 
+# make force : Force re-compilation, even if not needed 
+# make clean : Remove all generated files 
+# make html  : generate HTML files from tex in $(HTML_DIR)/ (using latex2html)
+#                  The directory is created on the first invocation
+# make help      : print help message 
+#
+############################## Variables Declarations ##############################
+# Directory where PDF, Postcript files and other generated files will be placed
+OUTPUT_DIR = Output
+TRASH_DIR  = .Trash
+HTML_DIR   = $(OUTPUT_DIR)/HTML
+# Check avalibility of source files
+TEX_SRC    = $(subst ./,,$(shell find . -name "*.tex" | xargs echo))
+ifeq ($(TEX_SRC),)
+all:
+	@echo "No source files available - I can't handle the compilation"
+	@echo "Please check the presence of source files (with .tex extension)"
+else
+# Main tex file and figures it may depend on 
+MAIN_TEX   = $(shell grep -l "[\]begin{document}" $(TEX_SRC) | xargs echo)
+FIGURES    = $(shell find . -name "*.eps" -o -name "*.fig" | xargs echo)
+ifeq ($(MAIN_TEX),)
+all:
+	@echo "I can't find any .tex file with a '\begin{document}' directive "\
+		"among $(TEX_SRC). Please define a main tex file!"
+else
+# Commands used during compilation
+LATEX      = $(shell which latex)
+LATEX2HTML = $(shell which latex2html)
+BIBTEX     = $(shell which bibtex)
+DVIPS      = $(shell which dvips)
+DVIPDF     = $(shell which dvipdf)
+GZIP       = $(shell which gzip)
+# Generated files
+DVI    	     = $(MAIN_TEX:%.tex=%.dvi)
+PS           = $(MAIN_TEX:%.tex=%.ps)
+PS_GZ        = $(MAIN_TEX:%.tex=%.ps.gz)
+PDF          = $(MAIN_TEX:%.tex=%.pdf)
+OUTPUT_PS_GZ = $(PS_GZ:%=$(OUTPUT_DIR)/%)
+OUTPUT_PDF   = $(PDF:%=$(OUTPUT_DIR)/%)
+BACKUP_FILES = $(shell find . -name "*~")
+# Files to move to $(TRASH_DIR) after compilation
+# Never add *.tex (or any reference to source files) for this variable.
+TO_MOVE      = *.aux *.log *.toc *.lof *.lot *.bbl *.blg 
+
+############################### Now starting rules ################################
+# Required rule : what's to be done each time 
+all: $(OUTPUT_PDF)
+
+# Dvi files generation
+$(DVI): $(TEX_SRC) $(FIGURES)
+	@echo "==> Now generating $(DVI)"
+	@for f in $(MAIN_TEX); do                                         \
+	 	$(LATEX) $$f;                                             \
+		bib=`grep "^[\]bibliography{" $$f|sed -e "s/^[\]bibliography{\(.*\)}/\1/"|tr "," " "`;\
+		if [ ! -z "$$bib" ]; then                                 \
+		  	echo "==> Now running BibTeX ($$bib used in $$f)";\
+			$(BIBTEX) `basename $$f .tex`;                    \
+			$(LATEX) $$f;                                     \
+		fi;                                                       \
+	 	$(LATEX) $$f;                                             \
+		trash=`ls $(TO_MOVE)2>/dev/null|xargs echo`;              \
+		if [ ! -z "$$trash" -a -d $(TRASH_DIR) ]; then            \
+			echo "==> Now moving $$trash to $(TRASH_DIR)/";   \
+			mv -f --target-directory=$(TRASH_DIR)/ $$trash;   \
+		fi;                                                       \
+	done
+	@echo "$(DVI) generated"
+
+# Postscript generation
+$(OUTPUT_PS_GZ) $(PS_GZ) $(PS): $(DVI)
+	@echo "==> Now generating $(OUTPUT_PS_GZ)"
+	@for dvi in $(DVI); do                                            \
+		ps=`basename $$dvi .dvi`.ps;                              \
+		$(DVIPS) -q -o $$ps $$dvi;                                \
+		$(GZIP) -f $$ps;                                          \
+		if [ ! -d $(OUTPUT_DIR) ]; then                           \
+			echo "$(OUTPUT_DIR)/ does not exist";             \
+			echo "==> Now creating $(OUTPUT_DIR)/";           \
+			mkdir -p ./$(OUTPUT_DIR);                         \
+		fi;                                                       \
+		mv $$ps.gz $(OUTPUT_DIR)/;                                \
+	done
+
+# PDF generation
+$(OUTPUT_PDF) $(PDF) : $(OUTPUT_PS_GZ)
+	@echo "==> Now generating $(OUTPUT_PDF)"
+	@for dvi in $(DVI); do                                            \
+		pdf=`basename $$dvi .dvi`.pdf;                            \
+		$(DVIPDF) $$dvi;                                          \
+		mv $$pdf $(OUTPUT_DIR);                                   \
+	done
+	@$(MAKE) help
+
+# Clean option
+clean:
+	rm -f *.dvi $(TO_MOVE) $(BACKUP_FILES)
+	@if [ ! -z "$(OUTPUT_DIR)" -a -d $(OUTPUT_DIR) ]; then            \
+                for f in $(MAIN_TEX); do                                  \
+                        base=`basename $$f .tex`;                         \
+                        echo "==> Now cleaning $(OUTPUT_DIR)/$$base*";    \
+                        rm -rf $(OUTPUT_DIR)/$$base*;                     \
+                done                                                      \
+	fi
+	@if [ ! -z "$(TRASH_DIR)" -a -d $(TRASH_DIR) ];   then            \
+		for f in $(MAIN_TEX); do                                  \
+			base=`basename $$f .tex`;                         \
+			echo "==> Now cleaning $(TRASH_DIR)/$$base*";     \
+			rm -rf $(TRASH_DIR)/$$base*;                      \
+		done                                                      \
+	fi
+	@if [ ! -z "$(HTML_DIR)" -a -d $(HTML_DIR) ];     then            \
+		echo "==> Now removing $(HTML_DIR)";                      \
+		rm  -rf $(HTML_DIR);                                      \
+	fi
+
+# force recompilation
+force :
+	@touch $(MAIN_TEX)
+	@$(MAKE)
+
+# Test values of variables - for debug purpose  
+test:
+	@echo "--- Directories --- "
+	@echo "OUTPUT_DIR -> $(OUTPUT_DIR)"
+	@echo "TRASH_DIR  -> $(TRASH_DIR)"
+	@echo "HTML_DIR   -> $(HTML_DIR)"
+	@echo "--- Compilation commands --- "
+	@echo "LATEX      -> $(LATEX)"
+	@echo "LATEX2HTML -> $(LATEX2HTML)"
+	@echo "BIBTEX     -> $(BIBTEX)"
+	@echo "DVIPS      -> $(DVIPS)"
+	@echo "DVIPDF     -> $(DVIPDF)"
+	@echo "GZIP       -> $(GZIP)"
+	@echo "--- Files --- "
+	@echo "TEX_SRC    -> $(TEX_SRC)"
+	@echo "MAIN_TEX   -> $(MAIN_TEX)"
+	@echo "FIGURES    -> $(FIGURES)"
+	@echo "BIB_FILES  -> $(BIB_FILES)"
+	@echo "DVI        -> $(DVI)"
+	@echo "PS         -> $(PS)"
+	@echo "PS_GZ      -> $(PS_GZ)"
+	@echo "PDF        -> $(PDF)"
+	@echo "TO_MOVE    -> $(TO_MOVE)"
+	@echo "OUTPUT_PS_GZ -> $(OUTPUT_PS_GZ)"
+	@echo "OUTPUT_PDF   -> $(OUTPUT_PDF)"
+	@echo "BACKUP_FILES -> $(BACKUP_FILES)"
+
+# print help message
+help :
+	@echo '+--------------------------------------------------------------+'
+	@echo '|                        Available Commands                    |'
+	@echo '+------------+-------------------------------------------------+'
+	@echo '| make       | Compile LaTeX files.                            |'
+	@echo '|            |   PDF/Postcript generated are placed in $(OUTPUT_DIR)/ |'
+	@echo '| make force | Force re-compilation, even if not needed        |'
+	@echo '| make clean | Remove all generated files                      |'
+	@echo '| make html  | Generate HTML files from TeX in $(HTML_DIR)/    |'
+	@echo '| make help  | Print help message                              |'
+	@echo '+------------+-------------------------------------------------+'
+
+
+# HTML pages generation using latex2html
+# First check that $(LATEX2HTML) and $(HTML_DIR)/ exist
+html :
+ifeq ($(LATEX2HTML),)
+	@echo "Please install latex2html to use this option!"
+	@echo "('apt-get install latex2html' under Debian)"
+else
+	@if [ ! -d ./$(HTML_DIR) ]; then                                         \
+		echo "$(HTML_DIR)/ does not exist => Now creating $(HTML_DIR)/"; \
+		mkdir -p ./$(HTML_DIR);                                         \
+	fi
+	-cp --target-directory=. $(TRASH_DIR)/*.aux $(TRASH_DIR)/*.bbl
+	$(LATEX2HTML) -show_section_numbers -local_icons -split +1 \
+		-dir $(HTML_DIR) $(MAIN_TEX)
+	@rm -f *.aux *.bbl $(HTML_DIR)/*.tex $(HTML_DIR)/*.aux $(HTML_DIR)/*.bbl
+	@echo "==> HTML files generated in $(HTML_DIR)/" 
+	@echo "May be you can try to execute 'mozilla ./$(HTML_DIR)/index.html'"
+endif
+endif
+endif
+EOF
+
+
+    # genère le fichier README
+    cat > README << EOF
+-----------------------------------------------------------------------------
+README  
+Author : Sebastien Varrette <Sebastien.Varrette@imag.fr>
+         Web page : http://www-id.imag.fr/~svarrett/
+
+Source version : 0.1
+
+Prerequis : 
+---------
+
+Compilation of the files contained in this directory requires the
+following binaries : 
+- latex 	(for compilation)
+- bibtex 	(for references)
+- dvips 	(conversion dvi <-> ps)
+- gzip 		(compression)
+- dvipdf 	(conversion dvi <-> pdf) 
+Please check that these commands are available on your system. 
+
+Installation :
+--------------
+
+Just type 'make'. 
+Output files (in PDF and Postscript format) will be placed in the
+Output/ directory
+Other generated files will be place in .Trash/
+You have the possiblity to generate HTML files using latex2html. To do that, 
+simply run 'make html', generated files will be located in Output/HTML/. 
+Please note that this directory is only created when summoning 'make html' and 
+it will be deleted on 'make clean' 
+
+Available Commands  
+------------------
+ make       : Compile LaTeX files. The resulting PDF and Compressed Poscript 
+              is placed in Output/ 
+ make force : Force re-compilation, even if not needed 
+ make clean : Remove all generated files 
+ make html  : generate HTML files from tex in Output/HTML/ (using latex2html)
+              The directory is created on the first invocation and removed 
+              when using the 'clean' option     
+ make help  : print help message 
+
+
+-----------------------------------------------------------------------------
+EOF
+}
+################################################################################
+####################### --- Gestion de projets Beamer --- ######################
+################################################################################
+####
+# Creer le fichier Makefile et les scripts qu'il utilise pour les projets Latex
+##
+Create_Makefile2beamer() {
+    cat > Makefile << "EOF"
+####################################################################################
+# Makefile (configuration file for GNU make - see http://www.gnu.org/software/make/)
+#
+# Author  : Sebastien Varrette <Sebastien.Varrette at imag.fr>
+#           Web page : http://www-id.imag.fr/~svarrett/
+#
+# Compilation of beamer presentations (version 0.2)
+# beamer is a special package of LaTeX to realize  presentations (as powerpoint). 
+# More informations on http://latex-beamer.sourceforge.net/
+# Debian package for beamer : latex-beamer
+#
+# Documentation on the Makefile utility may be found at 
+#                  http://www.gnu.org/software/make/manual/make.html           
+# 
+# Available Commands  
+# ------------------
+# make           : Compile tex files, the generated pdf is placed in current dir  
+# make force     : Force the complete re-compilation, even if not needed 
+# make clean     : Remove generated files           
+# make help      : print help message                                          
+#
+############################# Variables Declarations ##############################
+# Main tex file and figures it may depend on 
+MAIN    = $(shell grep -l "[\]begin{document}" *.tex | xargs echo)
+FIGURES = $(shell find . -name "*.eps" -o -name "*.fig")
+# Compilation Command ;
+PDFLATEX   = $(shell which pdflatex)
+# generated files
+PDF     = $(MAIN:%.tex=%.pdf)
+AUX     = $(MAIN:%.tex=%.aux)
+LOG     = $(MAIN:%.tex=%.log)
+NAV     = $(MAIN:%.tex=%.nav)
+OUT     = $(MAIN:%.tex=%.out)
+SNM     = $(MAIN:%.tex=%.snm)
+TOC     = $(MAIN:%.tex=%.toc)
+# backup files generated by text editor like emacs or vi
+BACKUP_FILES   = $(shell find . -name "*~")
+############################### Now starting rules ################################
+# Check avalibility of pdflatex
+ifeq ($(PDFLATEX),)
+all:
+	@echo "I can't find pdflatex on your system. Please install it first"
+	@echo "(the Debian package tetex-bin should provide it)"
+else
+# Check avalibility of source file
+ifeq ($(MAIN),)
+all:
+	@echo "No source files available - I can't handle the compilation"
+	@echo "Please check the presence of at least a tex files containing "\
+		"the '\begin{document}' directive"
+else
+all: $(PDF)
+
+test:
+	@echo "MAIN     -> $(MAIN)"
+	@echo "PDF      -> $(PDF)"
+	@echo "FIGURES  -> $(FIGURES)"
+	@echo "PDFLATEX -> $(PDFLATEX)"
+	@echo "AUX      -> $(AUX)"
+	@echo "LOG      -> $(LOG)"
+	@echo "NAV      -> $(NAV)"
+	@echo "OUT      -> $(OUT)"
+	@echo "SNM      -> $(SNM)"
+	@echo "TOC      -> $(TOC)"
+	@echo "BACKUP_FILES -> $(BACKUP_FILES)"
+
+$(PDF) : $(MAIN) $(FIGURES)
+	@ for f in $(MAIN) ; \
+	do echo -e "\n"; \
+	   echo -e "      *************************************"; \
+	   echo -e "      *** Proceeding $$f "; \
+	   echo -e "      *************************************\n"; \
+	   $(PDFLATEX) $$f ; \
+	   $(PDFLATEX) $$f ; \
+	done
+	rm -f $(AUX) $(LOG) $(NAV) $(OUT) $(SNM) $(TOC)
+	$(MAKE) help
+
+clean :
+	@echo "Delete all generated files"
+	rm -f $(AUX) $(LOG) $(NAV) $(OUT) $(SNM) $(TOC) $(PDF)
+	@echo "Delete backup files generated by Emacs or Vim"
+	rm -f $(BACKUP_FILES)
+
+force:
+	touch $(MAIN)
+	$(MAKE)
+
+help :
+	@echo '+------------------------------------------------------------------+'
+	@echo '|                        Available Commands                        |'
+	@echo '+------------+-----------------------------------------------------+'
+	@echo '| make       | Compile tex files, the pdf is placed in current dir |'
+	@echo '| make force | Force re-compilation, even if not required          |'
+	@echo '| make clean | Remove generated files.                             |'
+	@echo '| make help  | Print help message                                  |'
+	@echo '+------------+-----------------------------------------------------+'
+endif
+endif
+EOF
+    # genère le fichier README
+    cat > README << EOF
+-----------------------------------------------------------------------------
+README  
+Author : Sebastien Varrette <Sebastien.Varrette@imag.fr>
+         Web page : http://www-id.imag.fr/~svarrett/
+
+Source version : 0.1
+
+Installation :
+--------------
+
+This is a beamer presentation. Beamer (http://latex-beamer.sourceforge.net/) is
+a special package for LaTeX to handle slides generation (as powerpoint).
+First ensure that you have installed this package on your system 
+('apt-get install latex-beamer' under Debian).
+Then, the makefile supposes the availability of 'pdflatex'. Please make sure 
+it is also installed on your system. 
+
+Finally, compilation is achieved by typing 'make'. 
+
+Available Commands  
+------------------
+ make           : Compile tex files, the generated pdf is placed in current dir  
+ make force     : Force the complete re-compilation, even if not needed 
+ make clean     : Remove generated files           
+ make help      : print help message                                          
+-----------------------------------------------------------------------------
+EOF
+    if [ -f $beamer_Additionnal_Files_TGZ ]; then
+	echo "Proceed to extraction of $beamer_Additionnal_Files_TGZ ?"
+	yesno
+	echo "Now adding following files : "
+	tar xvzf $beamer_Additionnal_Files_TGZ 
+    else
+	echo "May be you should precise a valid value for variable " \
+	    "beamer_Additionnal_Files_TGZ (Current value : " \
+	    "$beamer_Additionnal_Files_TGZ )"
+    fi
+}
+################################################################################
+####################### --- Gestion de projets C/C++ --- #######################
+################################################################################
+Create_Makefile2c_cpp() {
+    cat > Makefile << "EOF"
+####################################################################################
+# Makefile (configuration file for GNU make - see http://www.gnu.org/software/make/)
+#
+# Compilation of files written in C/C++ (version 0.5)
+#
+# Author : Sebastien Varrette <Sebastien.Varrette@imag.fr>
+#          Web page : http://www-id.imag.fr/~svarrett/
+#
+# --------------------------------------------------------------------------------
+# This is a generic makefile in the sense that it doesn't require to be 
+# modified when adding/removing new source files.
+# --------------------------------------------------------------------------------
+#
+# Documentation on the Makefile utility may be found at 
+#                  http://www.gnu.org/software/make/manual/make.html           
+# 
+# Available Commands  
+# ------------------
+# make           : Compile files, binary is generated in the current directory  
+# make force     : Force the complete re-compilation, even if not needed 
+# make clean     : Remove backup files generated by emacs and vi         
+# make realclean : Remove all generated files           
+# make doc       : Generate Doxygen documentation (in Doc/) see www.doxygen.org 
+# make help      : print help message                                          
+#
+############################## Variables Declarations ##############################
+# Name of the executable to generate --- TO BE ADAPTED ---
+EXE          = toto 
+# Directory where header files (.h) and object files (.o) will be placed
+INCLUDE_DIR  = Include
+OBJ_DIR      = Obj
+# File entensions for C, C++ and header files
+C_EXT        = c
+CPP_EXT      = cpp
+H_EXT        = h
+# Source files
+SRC          = $(wildcard *.$(C_EXT) *.$(CPP_EXT))
+SRC_H        = $(wildcard *.$(H_EXT) $(INCLUDE_DIR)/*.$(H_EXT))
+ALL_SRC      = $(SRC) $(SRC_H)
+# Check avalibility of source files
+ifeq ($(SRC),)
+all:
+	@echo "No source files available - I can't handle the compilation"
+	@echo "Please check the presence and/or extension of source files "
+	@echo "(This makefile is configured to manage *.$(C_EXT) or *.$(CPP_EXT) - "\
+		"you may modify variables C_EXT and CPP_EXT to reflect your " \
+		"own programming style)"
+else
+# Object files
+OBJ          = $(patsubst %.$(C_EXT),%.o,$(SRC:.$(CPP_EXT)=.o))
+ABSOBJ       = $(OBJ:%.o=$(OBJ_DIR)/%.o)
+# Backup files generated by text editors
+BACKUP_FILE  = $(shell find . -name "*~")
+# Doxygen stuff 
+DOC_DIR      = Doc
+DOXYGEN      = $(shell which doxygen)
+DOXYGEN_CONF = .doxygen.conf
+YES_ATTRIBUTES := JAVADOC_AUTOBRIEF EXTRACT_ALL EXTRACT_PRIVATE EXTRACT_STATIC \
+		 SOURCE_BROWSER GENERATE_MAN 
+# Compilator configuration
+# Detect if you have a C or a C++ project through file extension
+ifneq ($(filter %.c,$(SRC)),)
+	CXX    = gcc
+	YES_ATTRIBUTES := $(YES_ATTRIBUTES) OPTIMIZE_OUTPUT_FOR_C
+else 
+	CXX    = g++
+	SPECIAL_CPP_OPTION = -Wno-deprecated
+endif
+CXXFLAGS     = -g3 -O3 -Wall $(SPECIAL_CPP_OPTION) -I$(INCLUDE_DIR) -c
+ADD_OPT      = #-lntl -lgmp -lm  # Optionnal option for the linker
+# Specifies the list of directories that make should search
+VPATH        = $(INCLUDE_DIR):$(OBJ_DIR)
+# dependance file used for make rules 
+MAKEDEP_FILE = .Makefile.dep
+############################### Now starting rules ################################
+# Required rule : what's to be done each time 
+all :  	$(MAKEDEP_FILE) $(EXE) TAGS
+
+# Generate TAGS for emacs
+TAGS : $(ALL_SRC)
+	etags $<
+	cp TAGS $(INCLUDE_DIR)/
+
+# Clean Options
+clean : 
+	@echo "Remove backup files generated by emacs and vi"
+	rm -f $(BACKUP_FILE)
+
+# Clean everything (including object files, binaries and documentation) 
+realclean : clean 
+	@echo "Remove object files"
+	rm -f $(ABSOBJ) 
+	@echo "Remove generated executable"
+	rm -f $(EXE)
+	@if [ ! -z "$(DOC_DIR)" -a ! -z "$(DOXYGEN)" ]; then \
+		echo "Remove documentation ('make doc' to regenerate it)"; \
+		rm -rf $(DOC_DIR)/*; \
+	fi
+
+# Force re-compilation, even if not required 
+force :
+	touch $(ALL_SRC) $(ABSOBJ)
+	@$(MAKE)
+
+# Generate the dependance file
+$(MAKEDEP_FILE) : $(ALL_SRC) 
+	$(CXX) $(SPECIAL_CPP_OPTION) -MM -I$(INCLUDE_DIR) $(SRC) > $@
+
+include $(MAKEDEP_FILE)
+
+# Generic description for compilation of object files 
+%.o : %.$(C_EXT)
+	$(CXX) $(CXXFLAGS) $< -o $(OBJ_DIR)/$@ 
+%.o : %.$(CPP_EXT)
+	$(CXX) $(CXXFLAGS) $< -o $(OBJ_DIR)/$@ 
+
+# Generation of the final binary (see $(EXE))
+$(EXE) : $(OBJ) $(ALL_SRC)
+	$(CXX) -g -o $@ $(ABSOBJ) $(ADD_OPT)
+	@$(MAKE) help
+
+# Help rule - print help message
+help :
+	@echo '+-----------------------------------------------------------------------------+'
+	@echo '|                             Available Commands                              |'
+	@echo '+----------------+------------------------------------------------------------+'
+	@echo '| make           | Compile files, binary is generated in the current directory|'
+	@echo '| make force     | Force the complete re-compilation, even if not required    |'
+	@echo '| make clean     | Remove cache backup files generated by emacs and vi        |'
+	@echo '| make realclean | Remove all generated files (including .o and binary)       |'
+	@echo '| make doc       | Generate documentation using doxygen (see www.doxygen.org) |'
+	@echo '| make help      | Print help message                                         |'
+	@echo '+----------------+------------------------------------------------------------+'
+
+# Test values of variables - for debug purpose 
+test : 
+	@echo "INCLUDE_DIR  = $(INCLUDE_DIR)"
+	@echo "OBJ_DIR      = $(OBJ_DIR)"
+	@echo "EXE          = $(EXE)"
+	@echo "SRC          = $(SRC)"
+	@echo "SRC_H        = $(SRC_H)"
+	@echo "ALL_SRC      = $(ALL_SRC)"
+	@echo "OBJ          = $(OBJ)"
+	@echo "BACKUP_FILE  = $(BACKUP_FILE)"
+	@echo "CXX          = $(CXX)"
+	@echo "CXXFLAGS     = $(CXXFLAGS)"
+	@echo "ADD_OPT      = $(ADD_OPT)"
+	@echo "DOC_DIR      = $(DOC_DIR)"
+	@echo "DOXYGEN      = $(DOXYGEN)"
+	@echo "DOXYGEN_CONF = $(DOXYGEN_CONF)"
+	@echo "YES_ATTRIBUTES = $(YES_ATTRIBUTES)"
+	@echo "MAKEDEP_FILE = $(MAKEDEP_FILE)"
+
+# Documentation generation through doxygen 
+# First check if the $(DOXYGEN) and the $(DOC_DIR) directory exist
+# Then Check $(DOXYGEN_CONF) availability;otherwise,generate one with 'doxygen -s -g'
+#    The following attributes should be modified in the generated file: 
+#    - OUTPUT_DIRECTORY should be set to '$(DOC_DIR)', INPUT to '. $(INCLUDE_DIR)'
+#    - $(YES_ATTRIBUTES) attributes should be set to YES
+#    - OPTIMIZE_OUTPUT_FOR_C should be set to YES if the project in in C
+# Finally, launch documentation generation
+doc :
+ifeq ($(DOXYGEN),)
+	@echo "Please install Doxygen to use this option!"
+	@echo "('apt-get install doxygen' under Debian)"
+else
+	@if [ ! -d ./$(DOC_DIR) ]; then \
+		echo "$(DOC_DIR)/ does not exist => creating $(DOC_DIR)/"; \
+		mkdir -p ./$(DOC_DIR)/; \
+	fi
+	@if [ ! -f $(DOXYGEN_CONF) ]; then \
+		echo "I don't found the configuration file for Doxygen ($(DOXYGEN_CONF))"; \
+		echo "Now generating one using '$(DOXYGEN) -s -g $(DOXYGEN_CONF)'"; \
+		$(DOXYGEN) -s -g $(DOXYGEN_CONF); \
+		echo "Now updating OUTPUT_DIRECTORY attribute to '$(DOC_DIR)'"; \
+		cat $(DOXYGEN_CONF) | sed -e "s/^\(OUTPUT_DIRECTORY \+= \+\).*/\1$(DOC_DIR)/" > $(DOXYGEN_CONF); \
+		echo "Now updating INPUT attribute to '. $(INCLUDE_DIR)'"; \
+		cat $(DOXYGEN_CONF) | sed -e "s/^\(INPUT \+= \+\).*/\1. $(INCLUDE_DIR)/" > $(DOXYGEN_CONF); \
+		for attr in $(YES_ATTRIBUTES); do \
+			echo "now updating $$attr to YES"; \
+			cat $(DOXYGEN_CONF) | sed -e "s/^\($$attr \+= \+\).*/\1YES/" > $(DOXYGEN_CONF); \
+		done; \
+	fi
+	$(DOXYGEN) $(DOXYGEN_CONF)
+	@echo 
+	@echo Documentation generated in $(DOC_DIR)/ 
+	@echo May be you can try to execute 'mozilla ./$(DOC_DIR)/html/index.html'
+endif
+endif
+EOF
+    # genère le fichier README
+    cat > README << EOF
+-----------------------------------------------------------------------------
+README  
+Author : Sebastien Varrette <Sebastien.Varrette@imag.fr>
+         Web page : http://www-id.imag.fr/~svarrett/
+
+Sources version : 0.1
+
+Installation :
+--------------
+
+Just type 'make'. 
+The binary generated will be placed in the current directory
+ 
+
+Available Commands  
+------------------
+ make           : Compile files, binary is placed in the current directory
+ make force     : Force the complete re-compilation, even if not required     
+ make clean     : Remove backup files generated by emacs and vi (*~)              
+ make realclean : Remove all generated files (including .o and binary)             
+ make doc       : Generate documentation using doxygen (see www.doxygen.org)
+ make help      : print help message                                          
+-----------------------------------------------------------------------------
+EOF
+    # genère le fichier Makefile de Include/
+    # TODO: vérifier + parametrer le répertoire!
+    cat > Include/Makefile << EOF
+####################################################################################
+# Makefile (configuration file for GNU make - see http://www.gnu.org/software/make/)
+#
+# Author : Sebastien Varrette <Sebastien.Varrette@imag.fr>
+#          Web page : http://www-id.imag.fr/~svarrett/
+#
+# Please refer to ../Makefile for more informations on compilation options
+# Alternatively, you may try 'make help'
+# 
+all:
+	make -C ../
+
+%:
+	make -C ../ \$@
+EOF
+    echo "Pensez a modifier la variable EXE du Makefile!!!"
+}
+
+####################################################################################
+###### --- Génération des fichiers/rep. nécessaires au Makefile générique --- ######
+####################################################################################
+######
+# Création d'un makefile générique, des fichiers/répertoires associés 
+# pour gérer un projet au format $1
+# Precondition : $1 est a la bonne valeur!
+###
+setGenericMakefile(){
+    if [ -f "Makefile" ]; then
+	echo "Un fichier 'Makefile' est déjà présent." \
+	    "En continuant, ce fichier sera écrasé."
+	yesno
+    fi
+    eval f=$(echo "\$$1_Files")
+    eval d=$(echo "\$$1_Directories")    
+    mkdir -m $mode $d
+    Create_Makefile2$1
+    chmod -f 755 $f 2>/dev/null
+    chmod -x ./Makefile ./README
+    echo "*** Création correctement effectuée ***";
+}
+
+################################################################################
+############################ --- Debut du script --- ###########################
+################################################################################
+# First check format
+if [ $# -eq 0 ]; then 
+    print_error_and_exit
+fi
+
+# now parse command line arguments
+while [ $# -ge 1 ]; do
+    case $1 in
+	-h*) print_help;    exit 0;;
+	-v*) print_version; exit 0;;
+	latex|beamer) setGenericMakefile $1;;
+	cpp|c)     setGenericMakefile c_cpp;;
+	-d) shift
+	    if [ $# -gt 1 ]; then
+		#on teste le répertoire; s'agit-il d'une option?
+		option=`echo $1 | grep -e '^-'`
+		if [ ! -z $option ]; then
+		    print_error_and_exit "$1 : invalid directory;" 
+		fi
+		#le répertoire est-il un chemin?  
+		chemin=`echo $1 | grep -e '^/'`
+		if [ -z $chemin ]; then
+		    #echo " pas un chemin -> on ajoute un ~/ au début"
+		    chemin="./$1"
+		fi
+		if [ ! -d $chemin ]; then
+		    echo "You are going to create the following directory: $chemin"
+		    yesno
+		    mkdir -p $chemin
+		fi
+		cd $chemin
+	    else
+		print_error_and_exit
+	    fi;;	    
+	-r) shift;
+	    if [ $# -ge 1 ]; then 
+		DeleteType $1
+	    else
+		print_error_and_exit
+	    fi;;	    
+	*)  print_error_and_exit;;
+    esac    
+    shift
+done
