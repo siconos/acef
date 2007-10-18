@@ -3,6 +3,7 @@
 
 Convention:
 When possible, current go from Neg node to Pos node(for KCL law).
+tension = V_neg - V_pos
 
 **************************************************************************/
 

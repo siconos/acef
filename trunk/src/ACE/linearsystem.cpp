@@ -141,7 +141,7 @@ void linearSystem::allocMemory(){
 /**
  * 
  */
-bool linearSystem::isUnknown (int type, component* c) {
+bool linearSystem::isUnknown (int type, component* c,unknown **uout=0) {
   if(type == ACE_TYPE_U){
       int ii;
       for(ii=0; ii <(int) mx.size(); ii++)
@@ -150,8 +150,11 @@ bool linearSystem::isUnknown (int type, component* c) {
 	  
 	  if (u->mType == ACE_TYPE_U && (
 	      (u->mComponent->mNodePos == c->mNodePos && u->mComponent->mNodeNeg == c->mNodeNeg ) ||
-	      (u->mComponent->mNodePos == c->mNodeNeg && u->mComponent->mNodeNeg == c->mNodePos )))
+	      (u->mComponent->mNodePos == c->mNodeNeg && u->mComponent->mNodeNeg == c->mNodePos ))){
+	    if (uout)
+	      (*uout)=u;
 	    return true;
+	  }
 	}
       return false;
   }else{
@@ -181,6 +184,11 @@ equationVD* linearSystem::addVdEquation(){
   return res;
 
 }
+equationTEN* linearSystem::addTenEquation(){
+   equationTEN* eq = new equationTEN();
+   mTEN.push_back(eq);
+   return eq;
+}
 
 void linearSystem::addKCLinDyn(int j){
   if (j > mNbNodes){
@@ -208,6 +216,8 @@ void linearSystem::print(){
   for (i=0; i<nzns; i++)
     mZns[i]->print();
   printf("\n---------------------------------------\nequation\t");
+  for (i=0; i<nx; i++)
+    mx[i]->print();
   for (i=0; i<nx; i++)
     mx[i]->print();
   for (i=0; i<nzs; i++)

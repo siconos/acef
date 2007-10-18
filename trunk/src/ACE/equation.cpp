@@ -24,7 +24,7 @@ void equation::allocMemory(int nb)
 
  void equation::print(){
    for(int i =0; i <mSize;i++)
-     printf("\t%f",mCoefs[i]);
+     printf("\t%12.12f",mCoefs[i]);
    printf("\n");
  }
 

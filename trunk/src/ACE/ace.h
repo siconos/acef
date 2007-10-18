@@ -7,7 +7,7 @@ class unknown;
 class equation;
 class component;
 
-#define ACE_INF 0.000000001
+#define ACE_INF 0.00000000000001
 #define ACE_DOUBLE double
 
 #define ACE_TYPE_NO 0
@@ -29,12 +29,14 @@ typedef std::vector<unknown *> unknowns;
 typedef std::vector<equation *> equations;
 typedef std::vector<component *> components;
 
-
+typedef std::vector<component *>::iterator componentsIt;
 
 bool ACE_IS_NULL(ACE_DOUBLE d);
+void ACE_MESSAGE(char * mess);
 void ACE_ERROR(char * mess);
 void ACE_WARNING(char * mess);
 void ACE_INTERNAL_ERROR(char *mess);
+void ACE_INTERNAL_WARNING(char *mess);
 void ACE_TYPE_TO_CHAR(int type,char* name);
 
 #endif //ACE_H

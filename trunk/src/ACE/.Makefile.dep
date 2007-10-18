@@ -3,11 +3,11 @@ algo.o: algo.cpp algo.h ace.h extern.h includes/parser.h linearsystem.h \
   unknown.h component.h equationkcl.h equation.h equationcap.h \
   equationind.h equationvd.h equationten.h componentcap.h componentdyn.h \
   componentlinear.h componentind.h componentres.h componentdio.h \
-  componentnlinear.h componentvsrc.h componentisrc.h
+  componentnlinear.h componentvsrc.h componentisrc.h graph.h
 componentcap.o: componentcap.cpp componentcap.h ace.h extern.h \
-  includes/parser.h componentdyn.h componentlinear.h component.h algo.h \
-  linearsystem.h unknown.h equationkcl.h equation.h equationcap.h \
-  equationind.h equationvd.h equationten.h
+  includes/parser.h componentdyn.h componentlinear.h component.h \
+  equationten.h equation.h algo.h linearsystem.h unknown.h equationkcl.h \
+  equationcap.h equationind.h equationvd.h
 componentcomp.o: componentcomp.cpp componentcomp.h ace.h extern.h \
   includes/parser.h componentnlinear.h component.h
 component.o: component.cpp unknown.h ace.h extern.h includes/parser.h \
@@ -49,6 +49,9 @@ equationten.o: equationten.cpp equationten.h equation.h ace.h extern.h \
   includes/parser.h
 equationvd.o: equationvd.cpp equationvd.h equation.h ace.h extern.h \
   includes/parser.h
+graph.o: graph.cpp graph.h componentcap.h ace.h extern.h \
+  includes/parser.h componentdyn.h componentlinear.h component.h \
+  equationten.h equation.h
 linearsystem.o: linearsystem.cpp linearsystem.h unknown.h ace.h extern.h \
   includes/parser.h component.h equationkcl.h equation.h equationcap.h \
   equationind.h equationvd.h equationten.h

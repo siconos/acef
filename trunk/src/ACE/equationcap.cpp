@@ -8,6 +8,6 @@
 
 equationCAP::equationCAP(){;}
 void equationCAP::print(){
- printf("CAP\t");
+ printf("CAP*\t");
  equation::print();
 }

@@ -23,7 +23,7 @@ public:
   void allocMemory();
   void initKCL();
   void addVUnknowns();
-  bool isUnknown (int type, component* c);
+  bool isUnknown (int type, component* c,unknown **uout);
   void addKCLinDyn(int j);
   void print();
 
@@ -34,6 +34,7 @@ public:
   equationCAP* addCapEquation();
   equationIND* addIndEquation();
   equationVD* addVdEquation();
+  equationTEN* addTenEquation();
   int getIndexUnknown (int type,int node);
 
   int mNbNodes;

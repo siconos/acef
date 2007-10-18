@@ -15,7 +15,7 @@ componentIND::componentIND(dataIND * d){
   mName = mData.name;
   if(ACE_IS_NULL(mData.value))
     ACE_ERROR("Inductor null");
-  mType = ACE_TYPE_DIO;
+  mType = ACE_TYPE_IND;
 
 }
 
@@ -28,14 +28,14 @@ void componentIND::addEquations(){
 void componentIND::stamp(){
   //Li'=U
   int i;
-  mDynEquation->mCoefs[mI->mDynIndex]=mData.value;
+  mDynEquation->mCoefs[mI->mDynIndex]+=mData.value;
   i=algo::sls.getIndexUnknown(ACE_TYPE_V,mData.nodePos);
-  mDynEquation->mCoefs[i]=1;
+  mDynEquation->mCoefs[i]+=-1;
   i=algo::sls.getIndexUnknown(ACE_TYPE_V,mData.nodeNeg);
-  mDynEquation->mCoefs[i]=-1;
+  mDynEquation->mCoefs[i]+=1;
   //KCL
-  algo::sls.KCL(mData.nodeNeg)->mCoefs[mI->mIndex]+=1;
-  algo::sls.KCL(mData.nodePos)->mCoefs[mI->mIndex]+=-1;
+  algo::sls.KCL(mData.nodeNeg)->mCoefs[mI->mIndex]+=-1;
+  algo::sls.KCL(mData.nodePos)->mCoefs[mI->mIndex]+=1;
 }
 componentIND::~componentIND(){
   

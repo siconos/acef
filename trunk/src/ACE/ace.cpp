@@ -1,14 +1,22 @@
 #include "extern.h"
 #include "ace.h"
 #include <math.h>
+#include <cstdlib>
 
 bool ACE_IS_NULL(ACE_DOUBLE d){
   return (fabs(d)<ACE_INF);
 }
+void ACE_MESSAGE(char * mess){
+#ifndef NO_MESSAGE
+  printf(mess);
+#endif
+}
+
 void ACE_ERROR(char * mess){
   printf("ERROR: ");
   printf(mess);
   printf("\n");
+  exit(1);
 
 }
 void ACE_WARNING(char * mess){
@@ -18,6 +26,13 @@ void ACE_WARNING(char * mess){
 }
 void ACE_INTERNAL_ERROR(char *mess){
   printf("INTERNAL ERROR: ");
+  printf(mess);
+  printf("\n");
+  exit(1);
+
+}
+void ACE_INTERNAL_WARNING(char *mess){
+  printf("INTERNAL WARNING: ");
   printf(mess);
   printf("\n");
 

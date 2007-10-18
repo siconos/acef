@@ -1,5 +1,9 @@
+#include "componentcap.h"
 
-void graphAddEdge(int n1,int n2,component *c);
+void stopGraph();
+void printEdges();
+int initGraph(int nbNodes, int nbEdges);
+void graphAddEdge(int np,int nn,componentCAP *c);
 int computeGraphMST();
-int nextEdgeInMST(int& n1,int& n2,component *c);
-int nextEdgeInMST(int& n1,int& n2,component *c);
+int nextEdgeOutMST(int& np,int& nn,componentCAP **c);
+int nextEdgeInMST(int& np,int& nn,componentCAP **c);

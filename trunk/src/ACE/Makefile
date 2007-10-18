@@ -27,7 +27,7 @@
 # Name of the executable to generate --- TO BE ADAPTED ---
 EXE          = toto 
 # Directory where header files (.h) and object files (.o) will be placed
-INCLUDE_DIR  = ./includes
+INCLUDE_DIR  = includes
 OBJ_DIR      = Obj
 # File entensions for C, C++ and header files
 C_EXT        = c
@@ -66,7 +66,7 @@ else
 	CXX    = g++
 	SPECIAL_CPP_OPTION = -Wno-deprecated
 endif
-CXXFLAGS     = -g3 -O3 -Wall $(SPECIAL_CPP_OPTION) -I$(INCLUDE_DIR) -c
+CXXFLAGS     = -g -Wall $(SPECIAL_CPP_OPTION) -I$(INCLUDE_DIR) -c
 ADD_OPT      = #-lntl -lgmp -lm  # Optionnal option for the linker
 # Specifies the list of directories that make should search
 VPATH        = $(INCLUDE_DIR):$(OBJ_DIR)

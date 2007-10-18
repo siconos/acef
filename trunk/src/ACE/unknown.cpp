@@ -27,7 +27,10 @@ void unknown::print(){
     printf("\t%s%d",type,mNode);
   }else{
     if (mComponent){
-      printf("\t%s%d_%d",type,mComponent->mNodeNeg,mComponent->mNodePos);
+      if (mType == ACE_TYPE_I)
+	printf("\t%s%d_%d",type,mComponent->mNodeNeg,mComponent->mNodePos);
+      else
+	printf("\t%s%d_%d",type,mComponent->mNodePos,mComponent->mNodeNeg);
     }else{
       printf("\t%s",type);
     }

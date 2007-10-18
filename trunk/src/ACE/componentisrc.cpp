@@ -21,8 +21,8 @@ componentISRC::componentISRC(dataISRC *d)
 }
 void componentISRC::stamp(){
   //KCL
-  algo::sls.KCL(mData.nodeNeg)->mCoefs[algo::sls.mRS]-=mData.value;
-  algo::sls.KCL(mData.nodePos)->mCoefs[algo::sls.mRS]+=mData.value;
+  algo::sls.KCL(mData.nodeNeg)->mCoefs[algo::sls.mRS]-=-mData.value;
+  algo::sls.KCL(mData.nodePos)->mCoefs[algo::sls.mRS]+=-mData.value;
 }
 
 void componentISRC::print(){

@@ -6,7 +6,7 @@
 
 equationIND::equationIND(){;}
 void equationIND::print(){
- printf("IND\t");
+ printf("IND*\t");
  equation::print();
 }
 

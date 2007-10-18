@@ -47,6 +47,7 @@ void algo::perform(){
  sls.addVUnknowns();
  //BUILD x VECTOR
  //get CAPACITOR from parser
+ initGraph(sls.mNbNodes,getNbElementsOfType("Capacitor"));
  initComponentList("Capacitor");
  dataCAP dCap;
  while(nextComponent(&dCap)){
@@ -55,48 +56,53 @@ void algo::perform(){
    
    int np = dCap.nodePos;
    int nn = dCap.nodeNeg;
-   if (!sls.isUnknown(ACE_TYPE_U,c)){
-     unknown *u=sls.addinx(ACE_TYPE_U,c);
+   unknown *uout;
+   if (!sls.isUnknown(ACE_TYPE_U,c,&uout)){
+     c->addTensionUnknown();
+     c->addTensionEquation();
      if (np == 0){
        equationKCL *eq=sls.KCL(nn);
        if(!eq->mAvailable)
 	 ACE_INTERNAL_ERROR("algo::perform : KCL not available");
        sls.addKCLinDyn(nn);
-       c->mU = u;
      }else if(nn ==0){
        equationKCL *eq=sls.KCL(np);
        if(!eq->mAvailable)
 	 ACE_INTERNAL_ERROR("algo::perform : KCL not available");
        sls.addKCLinDyn(np);
-       c->mU = u;
      }else{
        //add only edge not connected on node 0.
        graphAddEdge(np,nn,c);
      }
+   }else{
+     c->mU=uout;
    }
   }
  computeGraphMST();
- /*edge = next_edge_in_MST();
- while edge{
-      j=edge.n1;k=edge.n2;
-      if sls.KCL(j).mAvailable {
-	sls.addKCLinDyn(j);
+ 
+ int n1;
+ int n2;
+ componentCAP *c=0;
+ while (nextEdgeInMST(n1,n2,&c)){
+      
+      if (sls.KCL(n1)->mAvailable) {
+	sls.addKCLinDyn(n1);
       }
-      else if KCL(k).mAvailable{
-	sls.addKCLinDyn(j);
+      else if (sls.KCL(n2)->mAvailable){
+	sls.addKCLinDyn(n2);
       }else{
-	u=sls.addinZs(ACE_TYPE_I,c);
-	sls.addCapEquation(u);
+	ACE_WARNING("algo::perform : Add unknown I could be avoid!!");
+	c->addCurrentUnknown();
+	c->addCurrentEquation();
+	
       }
  }
 
-
- for edge not in MST{
-   u=sls.addinZs(ACE_TYPE_I,c);
-   sls.addCapEquation(u);
-   line++;
-   
-   }*/
+ while (nextEdgeOutMST(n1,n2,&c)){   
+   c->addCurrentUnknown();
+   c->addCurrentEquation();
+ }
+ stopGraph();
 
  //get INDUCTOR from parser
  initComponentList("Inductor");
@@ -152,7 +158,7 @@ void algo::stamp(){
     mInds[i]->stamp();
   n = mCaps.size();
   for(i=0;i<n;i++)
-    mCaps[i]->stamp();
+    ((componentCAP *)(mCaps[i]))->stampBeforeInvertion();
   n = mRess.size();
   for(i=0;i<n;i++)
     mRess[i]->stamp();
