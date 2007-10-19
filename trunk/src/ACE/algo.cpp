@@ -137,6 +137,8 @@ void algo::perform(){
  dataVSRC dVsrc;
  while(nextComponent(&dVsrc)){
    componentVSRC *c=new componentVSRC(&dVsrc);
+   c->addUnknowns();
+   c->addEquations();
    mVsrcs.push_back(c);   
  }
 //get Isource from parser
@@ -149,6 +151,7 @@ void algo::perform(){
  sls.preparForStamp();
  stamp();
  sls.print();
+ 
 }
 void algo::stamp(){
   int n=0;

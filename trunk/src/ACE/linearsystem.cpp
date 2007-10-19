@@ -215,7 +215,7 @@ void linearSystem::print(){
   int nzns = mZns.size();
   for (i=0; i<nzns; i++)
     mZns[i]->print();
-  printf("\n---------------------------------------\nequation\t");
+  printf("\n---------------------------------------\nequation");
   for (i=0; i<nx; i++)
     mx[i]->print();
   for (i=0; i<nx; i++)

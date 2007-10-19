@@ -24,15 +24,15 @@ void unknown::print(){
   char type[ACE_CHAR_LENGTH];
   ACE_TYPE_TO_CHAR(mType,type);
   if (mType == ACE_TYPE_V){
-    printf("\t%s%d",type,mNode);
+    printf("\t________%s%d",type,mNode);
   }else{
     if (mComponent){
       if (mType == ACE_TYPE_I)
-	printf("\t%s%d_%d",type,mComponent->mNodeNeg,mComponent->mNodePos);
+	printf("\t________%s%d_%d",type,mComponent->mNodeNeg,mComponent->mNodePos);
       else
-	printf("\t%s%d_%d",type,mComponent->mNodePos,mComponent->mNodeNeg);
+	printf("\t________%s%d_%d",type,mComponent->mNodePos,mComponent->mNodeNeg);
     }else{
-      printf("\t%s",type);
+      printf("\t________%s",type);
     }
   }
   

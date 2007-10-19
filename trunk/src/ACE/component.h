@@ -4,7 +4,8 @@
 Convention:
 When possible, current go from Neg node to Pos node(for KCL law).
 tension = V_neg - V_pos
-
+stamp() to write : Ax'=Bx+CZs+DZns+s
+                    0 =Ex+FZs+DZns+t
 **************************************************************************/
 
 #ifndef COMPONENT_H

@@ -26,13 +26,15 @@ void componentVSRC::addEquations(){
 void componentVSRC::stamp(){
   //KCL
   int i;
-  algo::sls.KCL(mData.nodeNeg)->mCoefs[mI->mIndex]+=1;
-  algo::sls.KCL(mData.nodePos)->mCoefs[mI->mIndex]+=-1;
+  if (!mI || ! mEquation)
+    ACE_INTERNAL_ERROR("componentVSRC::stamp no mI or no mEquation!!");
+  algo::sls.KCL(mData.nodeNeg)->mCoefs[mI->mIndex]-=1;
+  algo::sls.KCL(mData.nodePos)->mCoefs[mI->mIndex]+=1;
   //VD laws
   i= algo::sls.getIndexUnknown(ACE_TYPE_V,mData.nodeNeg);
   mEquation->mCoefs[i]+=-1;
   i= algo::sls.getIndexUnknown(ACE_TYPE_V,mData.nodePos);
   mEquation->mCoefs[i]+=1;
-  mEquation->mCoefs[algo::sls.mRS]+=mData.value;
+  mEquation->mCoefs[algo::sls.mRS]-=mData.value;
 }
 
