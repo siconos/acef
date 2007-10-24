@@ -36,7 +36,7 @@ int main(void) {
  }
 
  /* Now call the function in the DL library */
- (*open_function)("/scratch/installParser/bin/L.cir");
+ (*open_function)("/scratch/L.cir");
  demo_function = dlsym(module, "MEprint");
  if ((error = dlerror())) {
    fprintf(stderr, "Couldn't find MEprint: %s\n", error);

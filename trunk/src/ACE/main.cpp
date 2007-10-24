@@ -8,7 +8,6 @@ int main(int argc, char **argv){
   printCircuit();
   algo *a=new algo();
   a->perform();
-  a->printComponents();
   stopParserLibrary();
   return 0;
  

@@ -10,8 +10,7 @@
 
 componentCAP::componentCAP(dataCAP *d)
 :componentDYN(){
-  if(!d)
-    ACE_ERROR("Capacitor data null");    
+  ACE_CHECK_IERROR(d,"Capacitor data null");    
   mData = (*d);
   mNodePos=mData.nodePos;
   mNodeNeg=mData.nodeNeg;
@@ -22,8 +21,7 @@ componentCAP::componentCAP(dataCAP *d)
   mDynEquation=0;
   mTenEq=0;
   mICoefs=0;
-  if (ACE_IS_NULL(mData.value))
-    ACE_ERROR("Capacitor null");
+  ACE_CHECK_IERROR(!ACE_IS_NULL(mData.value),"Capacitor null");
 }
 componentCAP::~componentCAP(){
   if (mICoefs)
@@ -52,8 +50,7 @@ void componentCAP::stampBeforeInvertion(){
     }else{
        ;//stamp KCL with current(afterinvertion)
    }
-    if (!dyn)
-      ACE_INTERNAL_WARNING("componentCAP::stampBeforeInvertion : no dyn KCL");
+   ACE_CHECK_IWARNING(dyn,"componentCAP::stampBeforeInvertion : no dyn KCL");
   }else{
     ACE_INTERNAL_WARNING("componentCAP::stampBeforeInvertion component without U.");
   }
@@ -65,20 +62,27 @@ void componentCAP::stampBeforeInvertion(){
 }
 void componentCAP::stampAfterInvertion(){
   int i;
-  if (!mICoefs){
-    ACE_INTERNAL_WARNING("componentCAP::stampAfterInvertion mICoefs null.");
-    return;
-  }
+  mICoefs = (ACE_DOUBLE*)calloc(algo::sls.mNbUnknowns+1,sizeof(ACE_DOUBLE));
+  algo::sls.getlinefromdxdt(mU->mDynIndex,mICoefs+algo::sls.mx.size());
+  printI();
+  
   if (!algo::sls.KCL(mData.nodePos)->mIsDyn){
-    for (i=0;i<algo::sls.mNbUnknowns;i++){
+    for (i=0;i<algo::sls.mNbUnknowns+1;i++){
       algo::sls.KCL(mData.nodePos)->mCoefs[i]+=mICoefs[i];
     }
   }
   if (!algo::sls.KCL(mData.nodeNeg)->mIsDyn){
-    for (i=0;i<algo::sls.mNbUnknowns;i++){
+    for (i=0;i<algo::sls.mNbUnknowns+1;i++){
       algo::sls.KCL(mData.nodeNeg)->mCoefs[i]+=mICoefs[i];
     }
   }
+}
+void componentCAP::printI(){
+  printf("print cap i coefs %s:\n",mName?mName:"no_name");
+  if (mICoefs)
+    for (int i =0; i <= algo::sls.mNbUnknowns; i++)
+      printf("\t%f",mICoefs[i]);
+  printf("\n");
 }
 
 void componentCAP::addTensionUnknown(){

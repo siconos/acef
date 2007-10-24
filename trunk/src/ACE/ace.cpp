@@ -76,3 +76,11 @@ void ACE_TYPE_TO_CHAR(int type,char* name){
     strcpy(name,"????");
   }
 }
+void ACE_CHECK_IERROR(bool b,char* mess){
+  if (!b)
+    ACE_INTERNAL_ERROR(mess);
+}
+void ACE_CHECK_IWARNING(bool b,char* mess){
+  if (!b)
+    ACE_INTERNAL_WARNING(mess);
+}

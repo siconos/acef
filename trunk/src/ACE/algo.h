@@ -19,6 +19,8 @@ public:
   void perform();
   void printComponents();
   void stamp();
+  void stampAfterInvertion();
+
 
   components mInds;
   components mCaps;

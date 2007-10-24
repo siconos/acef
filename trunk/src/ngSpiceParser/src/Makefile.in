@@ -131,7 +131,7 @@ am__DEPENDENCIES_1 = spicelib/devices/asrc/libasrc.a \
 	spicelib/devices/vccs/libvccs.a \
 	spicelib/devices/vcvs/libvcvs.a \
 	spicelib/devices/vsrc/libvsrc.a
-ngspice_DEPENDENCIES = perform.o spice.o frontend/libfte.a \
+ngspice_DEPENDENCIES = spice.o frontend/libfte.a \
 	frontend/plotting/libplotting.a spicelib/devices/dev.o \
 	$(am__DEPENDENCIES_1) spicelib/analysis/libckt.a \
 	spicelib/devices/libdev.a frontend/parser/libparser.a \
@@ -366,8 +366,7 @@ DYNAMIC_DEVICELIBS = \
 	@NUMDEV@
 
 ngspice_SOURCES = perform.c conf.c conf.h ngspice.c $(am__append_2)
-ngspice_LDADD = \
-	spice.o \
+perform_LDADD = \
 	frontend/libfte.a \
 	@WINDISPLIB@ \
 	frontend/plotting/libplotting.a \
@@ -389,6 +388,9 @@ ngspice_LDADD = \
 	maths/ni/libni.a \
 	maths/sparse/libsparse.a \
 	misc/libmisc.a
+ngspice_LDADD = \
+	spice.o \
+	$(perform_LDADD)
 
 ngnutmeg_SOURCES = main.c conf.c conf.h ngnutmeg.c $(am__append_3)
 ngnutmeg_LDADD = \
@@ -510,9 +512,11 @@ ngproc2mod$(EXEEXT): $(ngproc2mod_OBJECTS) $(ngproc2mod_DEPENDENCIES)
 ngsconvert$(EXEEXT): $(ngsconvert_OBJECTS) $(ngsconvert_DEPENDENCIES) 
 	@rm -f ngsconvert$(EXEEXT)
 	$(LINK) $(ngsconvert_LDFLAGS) $(ngsconvert_OBJECTS) $(ngsconvert_LDADD) $(LIBS)
-ngspice$(EXEEXT): $(ngspice_OBJECTS) $(ngspice_DEPENDENCIES) 
+ngspice$(EXEEXT): perform.so $(ngspice_OBJECTS) $(ngspice_DEPENDENCIES) 
 	@rm -f ngspice$(EXEEXT)
 	$(LINK) $(ngspice_LDFLAGS) $(ngspice_OBJECTS) $(ngspice_LDADD) $(LIBS)
+perform.so: open.o perform.o $(ngspice_OBJECTS) $(ngspice_DEPENDENCIES)
+	gcc -shared -Wl -o perform.so open.o ngspice.o conf.o perform.o $(perform_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -882,7 +886,8 @@ spice.o: main.c
 
 perform.o: perform.c
 		$(COMPILE) -DSIMULATOR -o perform.o  -c $(srcdir)/perform.c
-
+open.o: open.c
+		$(COMPILE) -DSIMULATOR -o open.o  -c $(srcdir)/open.c
 
 ngspice.idx: makeidx
 	./makeidx $(srcdir)/ngspice.txt

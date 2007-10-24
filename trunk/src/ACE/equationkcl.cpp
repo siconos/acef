@@ -10,7 +10,7 @@ equationKCL::equationKCL(int n){
 void equationKCL::print(){
  printf("KCL%d",mNode);
  if (mIsDyn)
-   printf("*");
+   printf("*%d",mLine);
  printf("\t");
  equation::print();
 }

@@ -4,7 +4,7 @@
 #include "equation.h"
 
 equation::equation(){
-  mLine=0;
+  mLine=-1;
   mCoefs=(ACE_DOUBLE *)0;
   mIsDyn = false;
   mAvailable=true;
@@ -18,7 +18,7 @@ void equation::allocMemory(int nb)
      ACE_INTERNAL_ERROR("equation alloc with nb<1");
      return;
    }
-   mSize = nb+1;
+   mSize = nb;
     mCoefs = (ACE_DOUBLE*)calloc(mSize,sizeof(ACE_DOUBLE));
  }
 

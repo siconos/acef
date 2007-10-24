@@ -62,13 +62,11 @@ void algo::perform(){
      c->addTensionEquation();
      if (np == 0){
        equationKCL *eq=sls.KCL(nn);
-       if(!eq->mAvailable)
-	 ACE_INTERNAL_ERROR("algo::perform : KCL not available");
+       ACE_CHECK_IERROR(eq->mAvailable,"algo::perform : KCL not available");
        sls.addKCLinDyn(nn);
      }else if(nn ==0){
        equationKCL *eq=sls.KCL(np);
-       if(!eq->mAvailable)
-	 ACE_INTERNAL_ERROR("algo::perform : KCL not available");
+       ACE_CHECK_IERROR(eq->mAvailable,"algo::perform : KCL not available");
        sls.addKCLinDyn(np);
      }else{
        //add only edge not connected on node 0.
@@ -91,7 +89,7 @@ void algo::perform(){
       else if (sls.KCL(n2)->mAvailable){
 	sls.addKCLinDyn(n2);
       }else{
-	ACE_WARNING("algo::perform : Add unknown I could be avoid!!");
+	ACE_INTERNAL_WARNING("algo::perform : Add unknown current, could be avoid!!");
 	c->addCurrentUnknown();
 	c->addCurrentEquation();
 	
@@ -148,11 +146,25 @@ void algo::perform(){
    componentISRC *c=new componentISRC(&dIsrc);
    mIsrcs.push_back(c);   
  }
+ printComponents();
  sls.preparForStamp();
  stamp();
- sls.print();
+ sls.printEquations();
+ sls.computedxdt();
+ stampAfterInvertion();
+ 
+ 
  
 }
+
+//with x'=A1x * mx + A1zs * mZs + A1zns * mZns, compute curent in all capacitor branche, and fill KCL law
+void algo::stampAfterInvertion(){
+  int n = mCaps.size();
+  for(int i=0;i<n;i++){
+    ((componentCAP *)(mCaps[i]))->stampAfterInvertion();
+  }
+}
+//write Ax'=Bx+CZs+DZns+s
 void algo::stamp(){
   int n=0;
   int i=0;

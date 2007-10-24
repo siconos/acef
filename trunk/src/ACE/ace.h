@@ -39,4 +39,9 @@ void ACE_INTERNAL_ERROR(char *mess);
 void ACE_INTERNAL_WARNING(char *mess);
 void ACE_TYPE_TO_CHAR(int type,char* name);
 
+//Raise an error if not b
+//check b is true
+void ACE_CHECK_IERROR(bool b,char* mess);
+void ACE_CHECK_IWARNING(bool b,char* mess);
+
 #endif //ACE_H

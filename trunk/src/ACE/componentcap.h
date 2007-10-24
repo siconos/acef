@@ -29,6 +29,9 @@ public:
   void addCurrentUnknown();
   void addTensionUnknown();
   equationTEN* mTenEq;
+
+  void printI();
+
 protected:
  
 private:
