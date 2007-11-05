@@ -17,6 +17,7 @@ public:
   bool mIsDyn;
   bool mAvailable;
   int mSize;
+
 protected:
 private:
 };

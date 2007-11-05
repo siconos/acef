@@ -13,8 +13,22 @@
 
 linearSystem algo::sls;
 
-algo::algo(){;}
+algo::algo(char * file){
+  ACE_CHECK_IERROR(strlen(file) < ACE_CHAR_LENGTH && strlen(file) >3,"algo::algo: file name length!");
+  strncpy(mFile,file,strlen(file)-3);
+  strcat(mFile,"txt");
+
+  if (!initParserLibrary()){
+    ACE_INTERNAL_ERROR("initParserLibrary");
+  }
+  readFile(file);
+  printCircuit();
+
+
+  
+}
 algo::~algo(){
+  stopParserLibrary();
 
   //destroy components
   int n=0;
@@ -89,7 +103,7 @@ void algo::perform(){
       else if (sls.KCL(n2)->mAvailable){
 	sls.addKCLinDyn(n2);
       }else{
-	ACE_INTERNAL_WARNING("algo::perform : Add unknown current, could be avoid!!");
+	ACE_MESSAGE("algo::perform : Add unknown current in capacitor branche!!\n");
 	c->addCurrentUnknown();
 	c->addCurrentEquation();
 	
@@ -150,11 +164,16 @@ void algo::perform(){
  sls.preparForStamp();
  stamp();
  sls.printEquations();
+ 
+ //compute matrix: x'=A1x * mx + A1zs * mZs + A1zns * mZns;
  sls.computedxdt();
+ sls.printA1();
  stampAfterInvertion();
- 
- 
- 
+ ACE_MESSAGE("final equation ;\n");
+ sls.printEquations();
+ sls.printSystemInTabFile(&mFile[0]);
+ sls.buildLinearSystem();
+ sls.printB1();
 }
 
 //with x'=A1x * mx + A1zs * mZs + A1zns * mZns, compute curent in all capacitor branche, and fill KCL law

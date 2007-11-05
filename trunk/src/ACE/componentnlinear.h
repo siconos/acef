@@ -14,6 +14,7 @@ class componentNLINEAR : public component {
 
 public:
   componentNLINEAR();
+  
 protected:
 
 private:

@@ -15,6 +15,7 @@ public:
    unknown(int type, component *c);
    unknown(int type, int node);
   void print();
+  void printdev();
   int mNode;
    int mType;
    int mIndex;

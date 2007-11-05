@@ -14,7 +14,8 @@ componentCAP::componentCAP(dataCAP *d)
   mData = (*d);
   mNodePos=mData.nodePos;
   mNodeNeg=mData.nodeNeg;
-  mName = mData.name;
+  mName = mData.name?mData.name:ACE_name;
+  ACE_CHECK_WARNING(mData.name,"componentCAP::componentCAP : No name");
   mType = ACE_TYPE_CAP;
   mU=0;
   mI=0;
@@ -34,7 +35,7 @@ void componentCAP::stampBeforeInvertion(){
   if (mU){
     bool dyn=false;
     if (mTenEq){
-      mTenEq->mCoefs[mU->mIndex]+=1;
+      mTenEq->mCoefs[mU->mIndex]-=1;
       mTenEq->mCoefs[algo::sls.getIndexUnknown(ACE_TYPE_V,mData.nodeNeg)]+=1;
       mTenEq->mCoefs[algo::sls.getIndexUnknown(ACE_TYPE_V,mData.nodePos)]-=1;
     }
@@ -62,8 +63,13 @@ void componentCAP::stampBeforeInvertion(){
 }
 void componentCAP::stampAfterInvertion(){
   int i;
+  ACE_CHECK_IWARNING(mICoefs==0,"componentCAP::stampAfterInvertion alloc mIcoefs not null");
   mICoefs = (ACE_DOUBLE*)calloc(algo::sls.mNbUnknowns+1,sizeof(ACE_DOUBLE));
   algo::sls.getlinefromdxdt(mU->mDynIndex,mICoefs+algo::sls.mx.size());
+  for (i=0;i<algo::sls.mNbUnknowns+1;i++){
+      mICoefs[i]=mData.value*mICoefs[i];
+  }
+
   printI();
   
   if (!algo::sls.KCL(mData.nodePos)->mIsDyn){
@@ -73,7 +79,7 @@ void componentCAP::stampAfterInvertion(){
   }
   if (!algo::sls.KCL(mData.nodeNeg)->mIsDyn){
     for (i=0;i<algo::sls.mNbUnknowns+1;i++){
-      algo::sls.KCL(mData.nodeNeg)->mCoefs[i]+=mICoefs[i];
+      algo::sls.KCL(mData.nodeNeg)->mCoefs[i]-=mICoefs[i];
     }
   }
 }

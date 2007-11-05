@@ -14,7 +14,7 @@
 class algo {
 public:
   static linearSystem sls;
-  algo();
+  algo(char * file);
   virtual ~algo();
   void perform();
   void printComponents();
@@ -28,6 +28,7 @@ public:
   components mIsrcs;
   components mVsrcs;
   components mDios;
+  char mFile[ACE_CHAR_LENGTH];
   
 protected:
 private:

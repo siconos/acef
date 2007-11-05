@@ -1,11 +1,16 @@
 #include <boost/graph/adjacency_list.hpp>
 #include <boost/graph/kruskal_min_spanning_tree.hpp>
+#include <boost/graph/visitors.hpp>
+#include <boost/graph/breadth_first_search.hpp>
+#include <boost/graph/dijkstra_shortest_paths.hpp>
+#include <boost/graph/graph_utility.hpp>
 #include "graph.h"
 #include <fstream>
 #include <iostream>
 
-
+using namespace std;
 using namespace boost;
+
   typedef adjacency_list < vecS, vecS, undirectedS,
     no_property, property < edge_weight_t, int > > Graph;
   typedef graph_traits < Graph >::edge_descriptor Edge;
@@ -15,6 +20,17 @@ typedef std::list<E> listE;
 
 typedef std::list<E>::iterator listInterE;
 
+
+
+
+typedef property<vertex_color_t, default_color_type, 
+         property<vertex_distance_t,int> > VProperty;
+typedef int weight_t;
+typedef property<edge_weight_t,weight_t> EProperty;
+
+typedef adjacency_list<vecS, vecS, directedS, VProperty, EProperty > Graph_;
+
+static int sss_i=0;
 
 typedef std::map<E,componentCAP *> mapEdge;
 
@@ -28,10 +44,34 @@ static listE sInE;
 static listE sOutE;
 
 static components sInComp;
+static components sInBFSComp;
 static components sOutComp;
 static componentsIt sInIt;
+static componentsIt sInItEnd;
+
 static componentsIt sOutIt;
 
+template < class Tag>
+struct edge_printer
+ : public boost::base_visitor< edge_printer< Tag> >
+{
+  typedef Tag event_filter;
+
+  edge_printer()  { }
+
+  template <class T, class Graph_>
+  void operator()(T x, Graph_& g) {
+    //printf("\t%d-%d-%d",sss_i, source(x, g),target(x, g));
+    sInBFSComp.push_back(sEdges[E(source(x, g),target(x, g))]);
+    //sss_i++;
+  }
+  
+};
+template < class Tag>
+edge_printer< Tag>
+print_edge( Tag) {
+  return edge_printer< Tag>();
+}
 
 
 int initGraph(int nbNodes, int nbEdges){
@@ -52,7 +92,7 @@ int nextEdgeInMST(int& np,int& nn,componentCAP **c){
   if (sNbEdges==0){
     return 0;
   }
-  if (sInIt == sInComp.end())
+  if (sInIt == sInItEnd)
     return 0;
   np = (*sInIt)->mNodePos;
   nn = (*sInIt)->mNodeNeg;
@@ -75,9 +115,8 @@ int nextEdgeOutMST(int& np,int& nn,componentCAP **c){
 
 
 void graphAddEdge(int n1,int n2,componentCAP *c){
-  if (sNbEdges < sNb+1){
-    ACE_INTERNAL_ERROR("graphAddEdge");
-  }
+  ACE_CHECK_IERROR(sNbEdges >= sNb+1,"graphAddEdge, sNbEdges >= sNb+1 ");
+  ACE_CHECK_IERROR(sEdges.find(E(n1,n2)) == sEdges.end(),"graphAddEdge, edge already in the graphe ");
   sEdges[E(n1,n2)]=c;
   spE[sNb]=E(n1,n2);
   sNb+=1;
@@ -126,13 +165,45 @@ int computeGraphMST(){
       sOutComp.push_back(sEdges[E(source(*it, g),target(*it, g))]);
       //std::cout<<"find edge "<<sEdges[E(source(*it, g),target(*it, g))]->mNodePos<<"\n";
       }else{
-	std::cout<<"cant find edge\n";
+	ACE_INTERNAL_WARNING("computeGraphMST: cant find edge.");
       }
       std::cout<<source(*it, g)<<"  "<<target(*it, g)<<"\n";
     }
-  sInIt = sInComp.begin();
-  sOutIt= sOutComp.begin();
 
+  /*
+  int N = sNbNodes;
+  Graph_ G(N);
+  boost::property_map<Graph_, vertex_index_t>::type 
+    vertex_id = get(vertex_index, G);
+
+  componentsIt cIt;
+  
+  for (cIt = sInComp.begin();cIt != sInComp.end(); cIt++){
+    componentCAP *c;
+    c=(componentCAP *)(*cIt);
+    add_edge(c->mNodePos, c->mNodeNeg, 1, G);
+  }
+
+   
+  ACE_MESSAGE("breadth_first_search: Starting graph\n");
+
+  boost::breadth_first_search
+    (G, vertex(0, G), 
+     visitor(make_bfs_visitor(
+           print_edge( on_examine_edge()))));
+
+  int naux = sInBFSComp.size();
+  int nauxbis = sInComp.size();
+  if (sInBFSComp.size() != sInComp.size()){
+  ACE_INTERNAL_WARNING("computeGraphMST BFS size!!");*/
+    sInItEnd = sInComp.end();
+    sInIt =  sInComp.begin();
+    /* }else{
+    sInItEnd = sInBFSComp.end();
+    sInIt =  sInBFSComp.begin();
+    }*/
+  
+  sOutIt= sOutComp.begin();
   return 1;
   }
 void stopGraph(){
@@ -143,6 +214,7 @@ void stopGraph(){
   sInComp.clear();
   sOutComp.clear();
   sInE.clear();
+  sInBFSComp.clear();
   sOutE.clear();
   sEdges.clear();
 }

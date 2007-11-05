@@ -24,17 +24,22 @@ void unknown::print(){
   char type[ACE_CHAR_LENGTH];
   ACE_TYPE_TO_CHAR(mType,type);
   if (mType == ACE_TYPE_V){
-    printf("\t________%s%d",type,mNode);
+    printf("\t%s%d",type,mNode);
   }else{
     if (mComponent){
       if (mType == ACE_TYPE_I)
-	printf("\t________%s%d_%d",type,mComponent->mNodeNeg,mComponent->mNodePos);
+	printf("\t%s_%s%d_%d",mComponent->mName,type,mComponent->mNodeNeg,mComponent->mNodePos);
       else
-	printf("\t________%s%d_%d",type,mComponent->mNodePos,mComponent->mNodeNeg);
+	printf("\t%s_%s%d_%d",mComponent->mName,type,mComponent->mNodePos,mComponent->mNodeNeg);
     }else{
-      printf("\t________%s",type);
+      printf("\t%s",type);
     }
   }
   
 }
 
+void unknown::printdev()
+{
+  print();
+  printf("'");
+}

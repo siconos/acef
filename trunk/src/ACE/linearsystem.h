@@ -12,7 +12,7 @@
 #include "equationvd.h"
 #include "equationten.h"
 #include "aceMatrix.h"
-
+using namespace std;
 // Class linearSystem
 // 
 // Ax'=Bx+CZs+DZns+s
@@ -43,10 +43,15 @@ public:
   void computedxdt();
   void getlinefromdxdt(int line, ACE_DOUBLE * coefs);
 
+  //0 = B1x*x + B1zs*Zs + B1zns*Zns + B1s
+  void buildLinearSystem();
+
+
   int mNbNodes;
   int mNbUnknowns;
   int mNbEquations;
   int mNbDynEquations;
+  int mNbNonDynEquations;
 
   int mRS;
   bool mReAlloc;
@@ -62,27 +67,48 @@ public:
 
   //siconos obj
   // Ax'=Bx+CZs+DZns+s
-
   aceMatrix *mA;
   aceMatrix *mB;
   aceMatrix *mC;
   aceMatrix *mD;
   aceMatrix *ms;
 
+  //x'=A1x*x + A1zs*Zs + A1zns*Zns + A1s
   aceMatrix *mA1x;
   aceMatrix *mA1zs;
   aceMatrix *mA1zns;
   aceMatrix *mA1s;
+  //0 = B1x*x + B1zs*Zs + B1zns*Zns + B1s
+  aceMatrix *mB1x;
+  aceMatrix *mB1zs;
+  aceMatrix *mB1zns;
+  aceMatrix *mB1s;
 
-  void printEquations();
-  void printABCDs();
-  void printA1();
+  //Zns = C1x*x + C1s*Zs + C1l*lamdba + C1s
+  aceMatrix *mC1x;
+  aceMatrix *mC1zs;
+  aceMatrix *mC1l;
+  aceMatrix *mC1s;
+
+
+  
+  void printEquations(ostream& os = cout);
+  void printABCDs(ostream& os = cout);
+  void printA1(ostream& os = cout);
+  void printB1(ostream& os = cout);
+  void printSystemInTabFile(char * file);
 
 protected:
 private:
   void buildABCDs();
   void extractDynBockInMat(aceMatrix * m, int IndexBegin, int IndexEnd);
-  void allocMatrix();
+  void extractNonDynBockInMat(aceMatrix * m, int IndexBegin, int IndexEnd);
+  void allocA1Matrix();
+  void freeA1Matrix();
+  void allocB1Matrix();
+  void freeB1Matrix();
+  void allocC1Matrix();
+  void freeC1Matrix();
 
 };
 #endif //LINEARSYSTEM_H

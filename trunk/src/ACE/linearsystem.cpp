@@ -4,15 +4,22 @@
 
 
 #include "linearsystem.h"
+#include <fstream>
 
 using namespace std;
 //|--------x'---------|----------x--------|-------Zs------|------Zns------|
 
 linearSystem::linearSystem(){
+
+
+  
   mReAlloc = false;
   mDynIndex=0;
+  mNbNodes=0;
+  mNbUnknowns=0;
   mNbEquations=0;
   mNbDynEquations=0;
+  mNbNonDynEquations=0;
   mA=0;
   mB=0;
   mC=0;
@@ -24,15 +31,29 @@ linearSystem::linearSystem(){
   mA1zns=0;
   mA1s=0;
 
+  mB1x=0;
+  mB1zs=0;
+  mB1zns=0;
+  mB1s=0;
+
+  mC1x=0;
+  mC1zs=0;
+  mC1l=0;
+  mC1s=0;
+
+
+
 }
-void linearSystem::allocMatrix(){
+////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////MEMORY
+
+void linearSystem::allocA1Matrix(){
   ACE_CHECK_IERROR(!mA,"linearSystem::buildABCDs : mA not NULL");
   ACE_CHECK_IERROR(!mA,"linearSystem::buildABCDs : mB not NULL");
 
   int nx = mx.size();
-  if (nx == 0 ){
-    ACE_MESSAGE("No Dynamique\n");
-  }else{
+  if (nx != 0 ){
     mA = new aceMatrix(nx,nx);
     mB= new aceMatrix(nx,nx);
     int nzs=mZs.size();
@@ -49,6 +70,94 @@ void linearSystem::allocMatrix(){
     mA1s=ms;
   }
 }
+void linearSystem::freeA1Matrix(){
+
+  if (mA)
+    delete mA;
+  if (mB)
+    delete mB;
+  if (mC)
+    delete mC;
+  if (mD)
+    delete mD;
+  if (ms)
+    delete ms;
+}
+
+//0 = B1x*x + B1zs*Zs + B1zns*Zns + B1s
+void linearSystem::allocB1Matrix(){
+  if (mNbNonDynEquations>0){
+    int nx = mx.size();
+    int nzs= mZs.size();
+    int nzns=mZns.size();
+    if (nx)
+      mB1x=new aceMatrix(mNbNonDynEquations,nx);
+    if (nzs)
+      mB1zs=new aceMatrix(mNbNonDynEquations,nzs);
+    if (nzns)
+      mB1zns=new aceMatrix(mNbNonDynEquations,nzns);
+    mB1s=new aceMatrix(mNbNonDynEquations,1);
+  }
+}
+void linearSystem::freeB1Matrix(){
+  if (mB1x)
+    delete mB1x;
+  if (mB1zs)
+    delete mB1zs;
+  if (mB1zns)
+    delete mB1zns;
+  if (mB1s)
+    delete mB1s;
+  
+}
+void linearSystem::allocMemory(){
+  ACE_CHECK_IERROR(!mReAlloc,"linearSystem::allocMemory again");
+  mReAlloc = true;
+  mNbUnknowns = 2*mx.size()+mZs.size()+mZns.size();
+  mRS = mNbUnknowns;
+  int i;
+  int n=mKCL.size();
+  for (i=0;i<n;i++)
+    mKCL[i]->allocMemory(mNbUnknowns+1);
+  n=mVD.size();
+  for (i=0;i<n;i++)
+    mVD[i]->allocMemory(mNbUnknowns+1);
+  n=mTEN.size();
+  for (i=0;i<n;i++)
+    mTEN[i]->allocMemory(mNbUnknowns+1);
+  n=mIND.size();
+  for (i=0;i<n;i++)
+    mIND[i]->allocMemory(mNbUnknowns+1);
+  n=mCAP.size();
+  for (i=0;i<n;i++)
+    mCAP[i]->allocMemory(mNbUnknowns+1);
+}
+void linearSystem::allocC1Matrix(){
+  int nx = mx.size();
+  int nzs= mZs.size();
+  int nzns=mZns.size();
+  if (!nZns)
+    return;
+  if (nx)
+    mC1x=new aceMatrix(nzns,nx);
+  if (nzs)
+    mC1zs=new aceMatrix(nzns,nzs);
+  if(??)
+    mC1l = new aceMatrix(nzns,???);
+  mC1s = new aceMatrix(nzns,1);
+
+}
+void linearSystem::freeC1Matrix(){
+  if (mC1x)
+    delete mC1x;
+  if (mC1zs)
+    delete mC1zs;
+  if (mC1l)
+    delete mC1l;
+  if (mC1s)
+    delete mC1s;
+}
+
 linearSystem::~linearSystem(){
   int i =0;
   //free unknows
@@ -78,20 +187,13 @@ linearSystem::~linearSystem(){
   n=mCAP.size();
   for (i=0;i<n;i++)
     delete mCAP[i];
-  if (mA)
-    delete mA;
-  if (mB)
-    delete mB;
-  if (mC)
-    delete mC;
-  if (mD)
-    delete mD;
-  if (ms)
-    delete ms;
-
-  
+  freeA1Matrix();
+  freeB1Matrix();
+  freeC1Matrix();
 }
-
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////UNKNOWN
 unknown* linearSystem::addinx(int type, component* c)
 {
   unknown* res = new unknown(type,c);
@@ -120,22 +222,6 @@ int linearSystem::getIndexUnknown (int type,int node) {
   }
   
 }
-equationKCL* linearSystem::KCL(int i){
-  if (i >= (int)mKCL.size())
-    ACE_ERROR("linearSystem::KCL");
-  else
-    return (equationKCL*) mKCL[i];
-  return 0;
-}
-void linearSystem::initKCL(){
-  ACE_CHECK_IERROR(mKCL.size()==0,"linearSystem::initKCL with mKCL not empty!");
-  for (int i=0;i<mNbNodes;i++){
-    mKCL.push_back(new equationKCL(i));
-  }
-  mKCL[0]->mAvailable=false;
-  mNbEquations+=mNbNodes-1;
-}
-
 void  linearSystem::addVUnknowns(){
   ACE_CHECK_IERROR(mZs.size()==0,"linearSystem::initAddVUnknowns mZs not empty");
   ACE_CHECK_IERROR(mNbNodes,"linearSystem::initAddVUnknowns no nodes");
@@ -143,49 +229,6 @@ void  linearSystem::addVUnknowns(){
    mZs.push_back(new unknown(ACE_TYPE_V,i));
  }
 }
-
-void linearSystem::preparForStamp(){
-  int i =0;
-  int nx = mx.size();
-  for (i=0; i<nx; i++){
-    mx[i]->mDynIndex = i;
-    mx[i]->mIndex = nx+i;
-    
-  }
-  int ns=mZs.size();
-  for (i=0; i<ns; i++){
-    mZs[i]->mIndex = 2*nx+i;
-  }
-  int Zns=mZns.size();
-  for (i=0; i<Zns; i++){
-    mZns[i]->mIndex = 2*nx+ns+i;
-  }
-
-  allocMemory();
-}
-void linearSystem::allocMemory(){
-  ACE_CHECK_IERROR(!mReAlloc,"linearSystem::allocMemory again");
-  mReAlloc = true;
-  mNbUnknowns = 2*mx.size()+mZs.size()+mZns.size();
-  mRS = mNbUnknowns;
-  int i;
-  int n=mKCL.size();
-  for (i=0;i<n;i++)
-    mKCL[i]->allocMemory(mNbUnknowns+1);
-  n=mVD.size();
-  for (i=0;i<n;i++)
-    mVD[i]->allocMemory(mNbUnknowns+1);
-  n=mTEN.size();
-  for (i=0;i<n;i++)
-    mTEN[i]->allocMemory(mNbUnknowns+1);
-  n=mIND.size();
-  for (i=0;i<n;i++)
-    mIND[i]->allocMemory(mNbUnknowns+1);
-  n=mCAP.size();
-  for (i=0;i<n;i++)
-    mCAP[i]->allocMemory(mNbUnknowns+1);
-}
-
 /**
  * 
  */
@@ -211,7 +254,24 @@ bool linearSystem::isUnknown (int type, component* c,unknown **uout=0) {
   }
   
 }
-
+////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////EQUATIONS
+equationKCL* linearSystem::KCL(int i){
+  if (i >= (int)mKCL.size())
+    ACE_ERROR("linearSystem::KCL");
+  else
+    return (equationKCL*) mKCL[i];
+  return 0;
+}
+void linearSystem::initKCL(){
+  ACE_CHECK_IERROR(mKCL.size()==0,"linearSystem::initKCL with mKCL not empty!");
+  for (int i=0;i<mNbNodes;i++){
+    mKCL.push_back(new equationKCL(i));
+  }
+  mKCL[0]->mAvailable=false;
+  mNbEquations+=mNbNodes-1;
+}
 equationCAP* linearSystem::addCapEquation(){
   equationCAP* res = new equationCAP();
   mNbEquations++;
@@ -259,14 +319,47 @@ void linearSystem::addKCLinDyn(int j){
 
 }
 
-//fill matrix A1
+/////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////STAMP
+
+void linearSystem::preparForStamp(){
+  int i =0;
+  int nx = mx.size();
+  for (i=0; i<nx; i++){
+    mx[i]->mDynIndex = i;
+    mx[i]->mIndex = nx+i;
+    
+  }
+  int ns=mZs.size();
+  for (i=0; i<ns; i++){
+    mZs[i]->mIndex = 2*nx+i;
+  }
+  int Zns=mZns.size();
+  for (i=0; i<Zns; i++){
+    mZns[i]->mIndex = 2*nx+ns+i;
+  }
+
+  allocMemory();
+}
+
+
+
+
+
+///////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////DYNAMICS EQUATIONS  : x'=A1x*x + A1zs*Zs + A1zns*Zns + A1s
+//fill matrix: x'=A1x * mx + A1zs * mZs + A1zns * mZns; 
 void linearSystem::computedxdt(){
-  allocMatrix();
+  if (mx.size() == 0){
+    ACE_MESSAGE("No Dynamic\n");
+    return;
+  }
+  allocA1Matrix();
   buildABCDs();
   if(!mA)
     return;
-  printf("A:\n");
-  mA->display();
   try{
     mA->PLUInverseInPlace();
   }
@@ -280,7 +373,9 @@ void linearSystem::computedxdt(){
       std::cout << "Exception caught." << endl;
       ACE_INTERNAL_ERROR("linearSystem::computedxdt");
     }
-  printABCDs();
+  cout<<"inv A:\n-----\n";
+  cout<<(*mA);
+
   try{
     if (mA)
       (*mA1x)=prod(*mA,*mB);
@@ -301,10 +396,9 @@ void linearSystem::computedxdt(){
       std::cout << "Exception caught." << endl;
       ACE_INTERNAL_ERROR("linearSystem::computedxdt");
     }
-  printA1();
+  
 
 }
-
 void linearSystem::getlinefromdxdt(int line, ACE_DOUBLE * coefs){
   if (!mA)
     return;
@@ -326,12 +420,11 @@ void linearSystem::getlinefromdxdt(int line, ACE_DOUBLE * coefs){
     coefs[i]= (*mA1zns)(line,i-idStart);
   }
   idStart+=nzns;
-  ACE_CHECK_IERROR(idStart+nx == mNbUnknowns,"linearSystem::getlinefromdxdt idStart == mNbUnknowns");
+  ACE_CHECK_IERROR(idStart+nx == mNbUnknowns,"linearSystem::getlinefromdxdt idStart +nx == mNbUnknowns");
   coefs[idStart]=(*mA1s)(line,0);
 
 }
-
-
+//Ax'=Bx+CZs+DZns+s
 void linearSystem::buildABCDs(){
   int nx = mx.size();
   int nzs = mZs.size();
@@ -342,7 +435,7 @@ void linearSystem::buildABCDs(){
   //BUILD A
   if (mA)
     extractDynBockInMat(mA,istart,istart+nx);
-     
+
   istart+=nx;
   //BUILD B
   if (mB)
@@ -362,10 +455,9 @@ void linearSystem::buildABCDs(){
   //BUILD s
   ACE_CHECK_IERROR(istart == mNbUnknowns,"linearSystem::buildABCDs istart == mNbUnknowns");
   extractDynBockInMat(ms,istart,istart+1);
+  printABCDs();
+
 }
-
-
-
 //copy in m the double contains in dynamique equation from IndexBegin to IndexEnd
 void linearSystem::extractDynBockInMat(aceMatrix * m, int IndexBegin, int IndexEnd){
   ACE_CHECK_IERROR(m,"linearSystem::extractDynBockInMat m null");
@@ -404,18 +496,89 @@ void linearSystem::extractDynBockInMat(aceMatrix * m, int IndexBegin, int IndexE
 	}
       }
     }
-    
+}
+
+///////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////LINEAR SYSTEM : 0 = B1x*x + B1zs*Zs + B1zns*Zns + B1s
+void linearSystem::buildLinearSystem(){
+  mNbNonDynEquations = mNbEquations - mNbDynEquations;
+  ACE_CHECK_IERROR(mNbNonDynEquations >=0,"linearSystem::allocB1Matrix, mNbNonDynEquations <0.");
+  allocB1Matrix();
+
+  int nx = mx.size();
+  int nzs = mZs.size();
+  int nzns = mZns.size();
+  int istart = nx;
+  //BUILD B1x
+  if (mB1x)
+    extractNonDynBockInMat(mB1x,istart,istart+nx);
+  istart+=nx;
+  
+  //BUILD B1zs
+  if (mB1zs)
+    extractNonDynBockInMat(mB1zs,istart,istart+nzs);
+  istart+=nzs;
+
+  //BUILD B1zns
+  if (mB1zns)
+    extractNonDynBockInMat(mB1zns,istart,istart+nzns);    
+  istart+=nzns;
+
+  //BUILD s
+  ACE_CHECK_IERROR(istart == mNbUnknowns,"linearSystem::buildLinearSystem istart == mNbUnknowns");
+  extractNonDynBockInMat(mB1s,istart,istart+1);
 }
 
 
+//copy in m the double contains in none dynamique equation from IndexBegin to IndexEnd
+void linearSystem::extractNonDynBockInMat(aceMatrix * m, int IndexBegin, int IndexEnd){
+  ACE_CHECK_IERROR(m,"linearSystem::extractNonDynBockInMat m null");
+  int nx=mx.size();
+  ACE_CHECK_IERROR(IndexBegin>=nx,"linearSystem::extractNonDynBockInMat IndexBegin");
+  ACE_CHECK_IERROR(IndexEnd>=IndexBegin && IndexEnd < mNbUnknowns+2 ,"linearSystem::extractNonDynBockInMat IndexEnd");
+  
+  int line=0;
+  int i,j;
 
+  int nbKcl = mKCL.size();
+  for (i=1;i<nbKcl;i++){
+    if (!mKCL[i]->mIsDyn){
+      ACE_DOUBLE * coefs=mKCL[i]->mCoefs;    
+      ACE_CHECK_IERROR(coefs,"linearSystem::extractNonDynBockInMat  Kcl");
+      for(j=IndexBegin;j<IndexEnd;j++){
+	m->setValue(line,j-IndexBegin,coefs[j]);
+      }
+      line++;
+    }
+  }
+  int nVD = mVD.size();
+  for (i=0;i<nVD;i++){
+      ACE_DOUBLE * coefs=mVD[i]->mCoefs;    
+      ACE_CHECK_IERROR(coefs,"linearSystem::extractNonDynBockInMat  VD");
+      for(j=IndexBegin;j<IndexEnd;j++){
+	m->setValue(line,j-IndexBegin,coefs[j]);
+      }
+      line++;
+  }
 
+  int nTEN = mTEN.size();
+  for (i=0;i<nTEN;i++){
+      ACE_DOUBLE * coefs=mTEN[i]->mCoefs;    
+      ACE_CHECK_IERROR(coefs,"linearSystem::extractNonDynBockInMat  TEN");
+      for(j=IndexBegin;j<IndexEnd;j++){
+	m->setValue(line,j-IndexBegin,coefs[j]);
+      }
+      line++;
+  }
 
+  ACE_CHECK_IERROR(mNbNonDynEquations == line,"linearSystem::extractNonDynBockInMat number equation!");
+}
 
-
-
-
-void linearSystem::printEquations(){
+///////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////PRINT FONCTIONS
+void linearSystem::printEquations(ostream& os ){
   int i,n =0;
   int nx = mx.size();
   printf("--->linearSystem with %d equations whose %d dynamic equations.\n",mNbEquations,mNbDynEquations);
@@ -432,7 +595,7 @@ void linearSystem::printEquations(){
     mZns[i]->print();
   printf("\n---------------------------------------\nequation");
   for (i=0; i<nx; i++)
-    mx[i]->print();
+    mx[i]->printdev();
   for (i=0; i<nx; i++)
     mx[i]->print();
   for (i=0; i<nzs; i++)
@@ -452,7 +615,9 @@ void linearSystem::printEquations(){
   n=mIND.size();
   for (i=0;i<n;i++)
     mIND[i]->print();
-  
+
+  //non dyn equation
+  n=mKCL.size();
   for (i=0;i<n;i++)
     if (!mKCL[i]->mIsDyn)
       mKCL[i]->print();
@@ -464,35 +629,59 @@ void linearSystem::printEquations(){
     mTEN[i]->print();
 }
 
-void linearSystem::printABCDs(){
-  printf("inv A:\n");
+void linearSystem::printABCDs(ostream& os ){
+  os <<"Ax'=Bx+CZs+DZns+s\n";
+  os <<"-----------------\n";
+  os <<"A:\n";
   if (mA)
-    mA->display();
-  printf("B:\n");
+    os << (*mA);
+  os <<"B:\n";
   if (mB)
-    mB->display();
-  printf("C:\n");
+    os<< (*mB);
+  os<<"C:\n";
   if (mC)
-    mC->display();
-  printf("D:\n");
+    os <<(*mC);
+  os<<"D:\n";
   if (mD)
-    mD->display();
-  printf("s:\n");
+    os <<(*mD);
+  os <<"s:\n";
   if (ms)
-    ms->display();
+    os <<(*ms);
  }
-void linearSystem::printA1(){
-  printf("system x'=A1x+A1zs+A1zns+s\n");
-  printf("A1x:\n");
+void linearSystem::printA1(ostream& os ){
+  os <<"system x'=A1x+A1zs+A1zns+s\n";
+  os <<"A1x:\n";
   if (mA1x)
-    mA1x->display();
-  printf("A1zs:\n");
+    os <<(*mA1x);
+  os <<"A1zs:\n";
   if (mA1zs)
-    mA1zs->display();
-  printf("A1zns:\n");
+    os <<(*mA1zs);
+  os <<"A1zns:\n";
   if (mA1zns)
-    mA1zns->display();
-  printf("A1s:\n");
+    os <<(*mA1zns);
+  os <<"A1s:\n";
   if (mA1s)
-    mA1s->display();
+    os << (*mA1s);
  }
+void linearSystem::printB1(ostream& os ){
+  os <<"0 = B1x*x + B1zs*Zs + B1zns*Zns + B1s\n";
+  os <<"B1x:\n";
+  if (mB1x)
+    os <<(*mB1x);
+  os <<"B1zs:\n";
+  if (mB1zs)
+    os <<(*mB1zs);
+  os <<"B1zns:\n";
+  if (mB1zns)
+    os <<(*mB1zns);
+  os <<"B1s:\n";
+  if (mB1s)
+    os << (*mB1s);
+ }
+
+void linearSystem::printSystemInTabFile(char * file){
+  ofstream pout(file);
+  printA1(pout);
+  printB1(pout);
+  pout.close();
+}

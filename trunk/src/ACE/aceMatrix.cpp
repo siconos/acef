@@ -9,13 +9,13 @@ SimpleMatrix(row,col,typ,upper,lower)
 }
 
 
-void aceMatrix::display(){
-  printf("[%d,%d]\n",dimRow,dimCol);
-  for (int i=0;i<dimRow;i++){
-    for (int j=0;j<dimCol;j++){
-      printf("\t%f",((SimpleMatrix&)*this)(i,j));
+void aceMatrix::display(ostream& os) const{
+  os <<"["<<dimRow<<","<<dimCol<<"]"<<endl;
+  for (unsigned int i=0;i<dimRow;i++){
+    for (unsigned int j=0;j<dimCol;j++){
+      os <<"\t"<<((SimpleMatrix&)*this)(i,j);
     }
-    printf("\n");
+    os <<"\n";
   }
       
 }
@@ -24,4 +24,11 @@ aceMatrix& aceMatrix::operator = (const SimpleMatrix& m)
 {
   ((SimpleMatrix&)*this) =  m;
   return *this;
+}
+
+
+ostream & operator<<(ostream &f, const aceMatrix &Mat)
+{
+  Mat.display(f);
+  return f;
 }

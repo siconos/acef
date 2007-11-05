@@ -2,6 +2,8 @@
   			equation.cpp 
 **************************************************************************/
 #include "equation.h"
+#include <iostream>
+using namespace std;
 
 equation::equation(){
   mLine=-1;
@@ -24,11 +26,13 @@ void equation::allocMemory(int nb)
 
  void equation::print(){
    for(int i =0; i <mSize;i++)
-     printf("\t%12.12f",mCoefs[i]);
-   printf("\n");
+     cout <<"\t"<<mCoefs[i];
+   cout <<"\n";
  }
 
 equation::~equation(){
   if (mCoefs)
     free(mCoefs);
 }
+
+

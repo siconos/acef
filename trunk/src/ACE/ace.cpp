@@ -3,36 +3,39 @@
 #include <math.h>
 #include <cstdlib>
 
+char ACE_name[12]="ace_name";
+
 bool ACE_IS_NULL(ACE_DOUBLE d){
   return (fabs(d)<ACE_INF);
 }
 void ACE_MESSAGE(char * mess){
 #ifndef NO_MESSAGE
+  printf("ACE MESSAGE :");
   printf(mess);
 #endif
 }
 
 void ACE_ERROR(char * mess){
-  printf("ERROR: ");
+  printf("ACE ERROR: ");
   printf(mess);
   printf("\n");
   exit(1);
 
 }
 void ACE_WARNING(char * mess){
-  printf("WARNING: ");
+  printf("ACE WARNING: ");
   printf(mess);
   printf("\n");
 }
 void ACE_INTERNAL_ERROR(char *mess){
-  printf("INTERNAL ERROR: ");
+  printf("ACE INTERNAL ERROR: ");
   printf(mess);
   printf("\n");
   exit(1);
 
 }
 void ACE_INTERNAL_WARNING(char *mess){
-  printf("INTERNAL WARNING: ");
+  printf("ACE INTERNAL WARNING: ");
   printf(mess);
   printf("\n");
 
@@ -83,4 +86,8 @@ void ACE_CHECK_IERROR(bool b,char* mess){
 void ACE_CHECK_IWARNING(bool b,char* mess){
   if (!b)
     ACE_INTERNAL_WARNING(mess);
+}
+void ACE_CHECK_WARNING(bool b,char* mess){
+  if (!b)
+    ACE_WARNING(mess);
 }
