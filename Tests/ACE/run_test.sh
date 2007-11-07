@@ -8,3 +8,5 @@
 ./toto RLC_para.cir > RLC_para.res
 ./toto RLCC_para.cir > RLCC_para.res
 ./toto sdm2.cir > sdm2.res
+./toto RD.cir > RD.res
+./toto DiodeBridgeSimple.cir > DiodeBridgeSimple.res

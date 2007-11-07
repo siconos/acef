@@ -511,12 +511,12 @@ inp_spsource(FILE *fp, bool comfile, char *filename)
 #endif
 
       /* Now that the deck is loaded, do the commands, if there are any */
-      if (controls) {
+      /*OLIVIER if (controls) {
             for (end = wl = wl_reverse(controls); wl; wl = wl->wl_next)
                 cp_evloop(wl->wl_word);
 
             wl_free(end); 
-      }
+	    }*/
     }
 
     /* Hitoshi Tanaka */

@@ -91,3 +91,7 @@ void ACE_CHECK_WARNING(bool b,char* mess){
   if (!b)
     ACE_WARNING(mess);
 }
+void ACE_CHECK_ERROR(bool b,char* mess){
+  if (!b)
+    ACE_ERROR(mess);
+}

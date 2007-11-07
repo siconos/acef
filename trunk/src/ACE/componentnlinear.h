@@ -14,6 +14,10 @@ class componentNLINEAR : public component {
 
 public:
   componentNLINEAR();
+  int mDimlambda;
+  int mDimZns;
+  int mIndiceStartZns;
+  int mIndiceStartLambda;
   
 protected:
 

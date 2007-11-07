@@ -83,9 +83,9 @@ B:
 	0	1
 	0	0
 C:
-[2,2]
-	0	0
-	1	-1
+[2,1]
+	0
+	-1
 D:
 s:
 [2,1]
@@ -102,9 +102,9 @@ A1x:
 	0	-100
 	0	0
 A1zs:
-[2,2]
-	0	0
-	50	-50
+[2,1]
+	0
+	-50
 A1zns:
 A1s:
 [2,1]
@@ -112,7 +112,7 @@ A1s:
 	0
 print cap i coefs c1:
 	0.000000	0.000000	0.000000	-1.000000	0.000000	0.000000	-1.000000
-ACE_MESSAGE :final equation ;
+ACE MESSAGE :final equation ;
 --->linearSystem with 3 equations whose 2 dynamic equations.
 x
 	c1_U1_0	l1_I0_1
@@ -131,9 +131,53 @@ B1x:
 [1,2]
 	-1	0
 B1zs:
-[1,2]
-	1	-1
+[1,1]
+	-1
 B1zns:
 B1s:
 [1,1]
 	0
+Zns = C1x*x + C1s*Zs + C1l*lamdba + C1s
+C1x:
+C1zs:
+C1l:
+C1s:
+Y = D1x*x + D1s*Zs + D1ns*Zns + D1l*lambda +D1s
+D1x:
+D1zs:
+D1zns:
+D1l:
+D1s:
+R=A1zns*C1l
+x'=A2x*x + A2zs*Zs + R*lambda+A2s
+0=B2x*x + B2zs*Zs + B2l*lambda + B2s
+Y=D2x*x + D2zs*Zs + D2l*lambda + D2s
+R:
+A2x:
+[2,2]
+	0	-100
+	0	0
+A2zs:
+[2,1]
+	0
+	-50
+A2s:
+[2,1]
+	-100
+	0
+B2x:
+[1,2]
+	-1	0
+B2zs:
+[1,1]
+	-1
+B2l:
+[1,0]
+
+B2s:
+[1,1]
+	0
+D2x:
+D2zs:
+D2l:
+D2s:

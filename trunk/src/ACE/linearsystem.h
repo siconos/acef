@@ -47,11 +47,25 @@ public:
   void buildLinearSystem();
 
 
+  //
+  //R=A1zns*C1l
+  //x'=A2x*x + A2zs*Zs + R*lambda+A2s
+  //0=B2x*x + B2zs*Zs + B2l*lambda + B2s
+  //Y=D2x*x + D2zs*Zs + D2l*lambda + D2s
+  //
+  void set2matrix();
+
+
   int mNbNodes;
   int mNbUnknowns;
   int mNbEquations;
   int mNbDynEquations;
   int mNbNonDynEquations;
+
+  int mDimLambda;
+  int mDimx;
+  int mDimzs;
+  int mDimzns;
 
   int mRS;
   bool mReAlloc;
@@ -90,13 +104,43 @@ public:
   aceMatrix *mC1l;
   aceMatrix *mC1s;
 
+  //Y = D1x*x + D1s*Zs + D1ns*Zns + D1l*lambda +D1s
+  aceMatrix *mD1x;
+  aceMatrix *mD1zs;
+  aceMatrix *mD1zns;
+  aceMatrix *mD1l;
+  aceMatrix *mD1s;
+
+  aceMatrix *mR;
+  aceMatrix *mA2x;
+  aceMatrix *mA2zs;
+  aceMatrix *mA2s;
+  
+  aceMatrix *mB2x;
+  aceMatrix *mB2zs;
+  aceMatrix *mB2l;
+  aceMatrix *mB2s;
+
+  aceMatrix *mD2x;
+  aceMatrix *mD2zs;
+  aceMatrix *mD2l;
+  aceMatrix *mD2s;
+
+  
+
+  
+  
+
 
   
   void printEquations(ostream& os = cout);
   void printABCDs(ostream& os = cout);
   void printA1(ostream& os = cout);
   void printB1(ostream& os = cout);
+  void printC1(ostream& os = cout);
+  void printD1(ostream& os = cout);
   void printSystemInTabFile(char * file);
+  void printSystem2(ostream& os = cout);
 
 protected:
 private:
@@ -109,7 +153,10 @@ private:
   void freeB1Matrix();
   void allocC1Matrix();
   void freeC1Matrix();
+  void allocD1Matrix();
+  void freeD1Matrix();
 
+  
 };
 #endif //LINEARSYSTEM_H
 

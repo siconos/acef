@@ -9,6 +9,7 @@ unknown::unknown(int type, component *c)
   mNode =-1;
   mIndex=-1;
   mDynIndex=-1;
+  mIndexInVector = -1;
   mType = type;
   mComponent = c;
 }

@@ -283,6 +283,123 @@ We identify a MLCP:\\
 B_{3\lambda}&B_{3s}
 \end{array}\right)\]
 \newpage
+\section{Non smooth formulation}
+example with 5 non smooth components:\\
+
+
+\[\left(\begin{array}{c}
+  Z_{ns}\\
+  \hline
+  \left(\begin{array}{c} Z_{ns1} \end{array}\right)\\
+  \left(\begin{array}{c} Z_{ns2} \end{array}\right)\\
+  \left(\begin{array}{c} Z_{ns3} \end{array}\right)\\
+  \left(\begin{array}{c} Z_{ns4} \end{array}\right)\\
+  \left(\begin{array}{c} Z_{ns5} \end{array}\right)\\
+\end{array}\right) =
+\left(\begin{array}{c}
+  C_{1x}\\
+  \hline
+  \left(\begin{array}{c}1\end{array}\right)\\
+  \left(\begin{array}{c}2\end{array}\right)\\
+  \left(\begin{array}{c}3\end{array}\right)\\
+  \left(\begin{array}{c}4\end{array}\right)\\
+  \left(\begin{array}{c}5\end{array}\right)\\
+\end{array}\right)*x +
+\left(\begin{array}{c}
+  C_{1s}\\
+  \hline
+  \left(\begin{array}{c}1\end{array}\right)\\
+  \left(\begin{array}{c}2\end{array}\right)\\
+  \left(\begin{array}{c}3\end{array}\right)\\
+  \left(\begin{array}{c}4\end{array}\right)\\
+  \left(\begin{array}{c}5\end{array}\right)\\
+\end{array}\right)*Z_{s} +
+\left(\begin{array}{ccccc}
+  C1_{\lambda}\\
+  \hline
+  B1&0&0&0&0\\
+  0&B2&0&0&0\\
+  0&0&B3&0&0\\
+  0&0&0&B4&0\\
+  0&0&0&0&B5\\
+\end{array}\right)*
+\left(\begin{array}{c}
+  \lambda\\
+  \hline
+  \left(\begin{array}{c} \lambda _{1} \end{array}\right)\\
+  \left(\begin{array}{c} \lambda _{2}\end{array}\right)\\
+  \left(\begin{array}{c} \lambda _{3}\end{array}\right)\\
+  \left(\begin{array}{c} \lambda _{4}\end{array}\right)\\
+  \left(\begin{array}{c} \lambda _{5}\end{array}\right)\\
+\end{array}\right)+
+\left(\begin{array}{c}
+  cst\\
+  \hline
+  \left(\begin{array}{c} cst_{1} \end{array}\right)\\
+  \left(\begin{array}{c} cst_{2}\end{array}\right)\\
+  \left(\begin{array}{c} cst_{3}\end{array}\right)\\
+  \left(\begin{array}{c} cst_{4}\end{array}\right)\\
+  \left(\begin{array}{c} cst_{5}\end{array}\right)\\
+\end{array}\right)
+\]
+
+\[\left(\begin{array}{c}
+  Y\\
+  \hline
+  \left(\begin{array}{c} Y_{1} \end{array}\right)\\
+  \left(\begin{array}{c} Y_{2} \end{array}\right)\\
+  \left(\begin{array}{c} Y_{3} \end{array}\right)\\
+  \left(\begin{array}{c} Y_{4} \end{array}\right)\\
+  \left(\begin{array}{c} Y_{5} \end{array}\right)\\
+\end{array}\right) =
+\left(\begin{array}{c}
+  D_{1x}\\
+  \hline
+  \left(\begin{array}{c}1\end{array}\right)\\
+  \left(\begin{array}{c}2\end{array}\right)\\
+  \left(\begin{array}{c}3\end{array}\right)\\
+  \left(\begin{array}{c}4\end{array}\right)\\
+  \left(\begin{array}{c}5\end{array}\right)\\
+\end{array}\right)*x +
+\left(\begin{array}{c}
+  D_{1s}\\
+  \hline
+  \left(\begin{array}{c}1\end{array}\right)\\
+  \left(\begin{array}{c}2\end{array}\right)\\
+  \left(\begin{array}{c}3\end{array}\right)\\
+  \left(\begin{array}{c}4\end{array}\right)\\
+  \left(\begin{array}{c}5\end{array}\right)\\
+\end{array}\right)*Z_{s} +
+\left(\begin{array}{ccccc}
+  D1_{\lambda}\\
+  \hline
+  B1&0&0&0&0\\
+  0&B2&0&0&0\\
+  0&0&B3&0&0\\
+  0&0&0&B4&0\\
+  0&0&0&0&B5\\
+\end{array}\right)*
+\left(\begin{array}{c}
+  \lambda\\
+  \hline
+  \left(\begin{array}{c} \lambda _{1} \end{array}\right)\\
+  \left(\begin{array}{c} \lambda _{2}\end{array}\right)\\
+  \left(\begin{array}{c} \lambda _{3}\end{array}\right)\\
+  \left(\begin{array}{c} \lambda _{4}\end{array}\right)\\
+  \left(\begin{array}{c} \lambda _{5}\end{array}\right)\\
+\end{array}\right)+
+\left(\begin{array}{c}
+  cst\\
+  \hline
+  \left(\begin{array}{c} cst_{1} \end{array}\right)\\
+  \left(\begin{array}{c} cst_{2}\end{array}\right)\\
+  \left(\begin{array}{c} cst_{3}\end{array}\right)\\
+  \left(\begin{array}{c} cst_{4}\end{array}\right)\\
+  \left(\begin{array}{c} cst_{5}\end{array}\right)\\
+\end{array}\right)
+\]
+
+\newpage
 \section{How get $x' = Ax+BZ_{s} + CZ_{ns}$?}
 \subsection{Example 1}
 \begin{figure}[h]

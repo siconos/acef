@@ -171,9 +171,13 @@ void algo::perform(){
  stampAfterInvertion();
  ACE_MESSAGE("final equation ;\n");
  sls.printEquations();
- sls.printSystemInTabFile(&mFile[0]);
  sls.buildLinearSystem();
+ sls.set2matrix();
+ sls.printSystemInTabFile(&mFile[0]);
  sls.printB1();
+ sls.printC1();
+ sls.printD1();
+ sls.printSystem2();
 }
 
 //with x'=A1x * mx + A1zs * mZs + A1zns * mZns, compute curent in all capacitor branche, and fill KCL law

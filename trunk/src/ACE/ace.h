@@ -49,4 +49,5 @@ void ACE_TYPE_TO_CHAR(int type,char* name);
 void ACE_CHECK_IERROR(bool b,char* mess);
 void ACE_CHECK_IWARNING(bool b,char* mess);
 void ACE_CHECK_WARNING(bool b,char* mess);
+void ACE_CHECK_ERROR(bool b,char* mess);
 #endif //ACE_H
