@@ -14,6 +14,7 @@
 class componentDYN : public componentLINEAR {
 public:
   componentDYN();
+  virtual ~componentDYN();
   equation *mDynEquation;
 protected:
 private:

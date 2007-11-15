@@ -15,6 +15,7 @@ class componentISRC : public componentLINEAR {
 
 public:
   dataISRC mData;
+  virtual ~componentISRC();
   componentISRC(dataISRC *d);
   virtual void stamp();
   virtual void print();

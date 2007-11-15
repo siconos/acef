@@ -12,6 +12,7 @@
 #include "equationvd.h"
 #include "equationten.h"
 #include "aceMatrix.h"
+#include "mlcp.h"
 using namespace std;
 // Class linearSystem
 // 
@@ -54,7 +55,18 @@ public:
   //Y=D2x*x + D2zs*Zs + D2l*lambda + D2s
   //
   void set2matrix();
+  void set2Sources();
 
+  //DISCRETISATION simulation
+  void readInitialValue();
+  void initSimu();
+  void preparStep();
+  bool step();
+  void stopSimu();
+  void computeZnstiFromX_Zs();
+  void simulate();
+    
+  char mFile[ACE_CHAR_LENGTH];
 
   int mNbNodes;
   int mNbUnknowns;
@@ -129,9 +141,30 @@ public:
   
 
   
+  //DISCRETISATION
+  aceMatrix *mxti;
+  aceMatrix *mzsti;
+  aceMatrix *mznsti;
+  aceMatrix *mxfree;
+
+  aceMatrix *mW;
+  aceMatrix *mD3l;
+  aceMatrix *mD3zs;
+  aceMatrix *mB3l;
+  aceMatrix *mB3zs;
+  aceMatrix *mPfree;
+  aceMatrix *mQfree;
+
+  ACE_DOUBLE mTheta;
+  ACE_DOUBLE mThetap;
+  ACE_DOUBLE mH;
+
+  mlcp* mMLCP;
+  int mStepCmp;
+  int mStepNumber;
   
-
-
+  ofstream* mSimuStream;
+  char mSimuFile[ACE_CHAR_LENGTH];
   
   void printEquations(ostream& os = cout);
   void printABCDs(ostream& os = cout);
@@ -141,6 +174,8 @@ public:
   void printD1(ostream& os = cout);
   void printSystemInTabFile(char * file);
   void printSystem2(ostream& os = cout);
+  void printStep(ostream& os = cout);
+  void printDiscretisation(ostream& os = cout);
 
 protected:
 private:
@@ -155,6 +190,8 @@ private:
   void freeC1Matrix();
   void allocD1Matrix();
   void freeD1Matrix();
+  void allocDiscretisation();
+  void freeDiscretisation();
 
   
 };

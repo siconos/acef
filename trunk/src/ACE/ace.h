@@ -9,6 +9,7 @@ class equation;
 class component;
 
 #define ACE_INF 0.00000000000000001
+#define ACE_NULL 0.000001
 #define ACE_DOUBLE double
 
 

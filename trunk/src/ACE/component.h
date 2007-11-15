@@ -17,6 +17,7 @@ stamp() to write : Ax'=Bx+CZs+DZns+s
 class component {
 public:
   component();
+  virtual ~component();
   virtual void  stamp ();
   virtual void  addUnknowns ();
   virtual void  addEquations ();

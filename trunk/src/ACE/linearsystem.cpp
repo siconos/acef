@@ -5,6 +5,7 @@
 
 #include "linearsystem.h"
 #include <fstream>
+#include "SimpleMatrix.h"
 
 using namespace std;
 //|--------x'---------|----------x--------|-------Zs------|------Zns------|
@@ -26,6 +27,7 @@ linearSystem::linearSystem(){
   mC=0;
   mD=0;
   ms=0;
+  mSimuStream=0;
 
   mA1x=0;
   mA1zs=0;
@@ -67,7 +69,23 @@ linearSystem::linearSystem(){
   mDimzs=0;
   mDimzns=0;
 
+  mxti=0;
+  mzsti=0;
+  mznsti=0;
+  mxfree=0;
 
+  mW=0;
+  mD3l=0;
+  mD3zs=0;
+  mB3l=0;
+  mB3zs=0;
+  mPfree=0;
+  mQfree=0;
+  mMLCP=0;
+
+  mTheta = 0.5;
+  mThetap = 0.5;
+  mH = 1;
 }
 ////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -100,6 +118,7 @@ void linearSystem::allocMemory(){
   //Matrix allocation
   allocA1Matrix();
   mNbNonDynEquations = mNbEquations - mNbDynEquations;
+  ACE_CHECK_IERROR(mNbNonDynEquations == mDimzs-1,"linearSystem::preparForStamp, mNbNonDynEquations and mDimzs-1 not coherent");
   ACE_CHECK_IERROR(mNbNonDynEquations >=0,"linearSystem::preparForStamp, mNbNonDynEquations <0.");
   allocB1Matrix();
   allocC1Matrix();
@@ -205,22 +224,25 @@ void linearSystem::allocD1Matrix(){
     mR = new aceMatrix(mDimx,mDimLambda);
 
 }
+void linearSystem::set2Sources(){
+  mA2s=mA1s;
+  mB2s=mB1s;
+  mD2s=mD1s;
+  //(*mA2s)=(*mA1s)+prod(
+}
 void linearSystem::set2matrix(){
 
   mA2x=mA1x;
   mA2zs=mA1zs;
-  mA2s=mA1s;
   
   mB2x=mB1x;
   mB2zs=mB1zs;
   mB2l=new aceMatrix(mNbNonDynEquations,mDimLambda);
-  mB2s=mB1s;
 
   mD2x=mD1x;
   mD2zs=mD1zs;
   mD2l=mD1l;
-  mD2s=mD1s;
-
+  set2Sources();
 
   if (mDimzns){
     if (mDimx){
@@ -261,6 +283,56 @@ void linearSystem::freeD1Matrix(){
     delete mB2l;
 }
 
+
+void linearSystem::allocDiscretisation(){
+  if(mDimx){
+    mxti = new aceMatrix(mDimx,1);
+    mxfree = new aceMatrix(mDimx,1);
+    mW = new aceMatrix(mDimx,mDimx);
+  }
+  
+  mzsti = new aceMatrix(mDimzs-1,1);
+  if(mDimzns)
+    mznsti = new aceMatrix(mDimzns,1);
+  if (mB2zs)
+    mB3zs = new aceMatrix(mNbNonDynEquations,mDimzs-1);
+  if (mNbNonDynEquations && mDimLambda)
+    mB3l=new aceMatrix(mNbNonDynEquations,mDimLambda);
+  if (mNbNonDynEquations)
+    mQfree = new aceMatrix(mNbNonDynEquations,1);
+
+  if (mDimLambda)
+    mD3zs = new aceMatrix(mDimLambda,mDimzs-1);
+  if (mDimLambda)
+    mD3l = new aceMatrix(mDimLambda,mDimLambda);
+  if (mDimLambda)
+    mPfree = new aceMatrix(mDimLambda,1);
+}
+void linearSystem::freeDiscretisation(){
+  if (mxti)
+    delete mxti;
+  if (mxfree)
+    delete mxfree;
+  if (mzsti)
+    delete mzsti;
+  if (mznsti)
+    delete mznsti;
+  if(mW)
+    delete mW;
+  if (mD3l)
+    delete mD3l;
+  if (mD3zs)
+    delete mD3zs;
+  if (mB3l)
+    delete mB3l;
+  if (mB3zs)
+    delete mB3zs;
+  if (mPfree)
+    delete mPfree;
+  if (mQfree)
+    delete mQfree;
+}
+
 linearSystem::~linearSystem(){
   int i =0;
   //free unknows
@@ -294,7 +366,119 @@ linearSystem::~linearSystem(){
   freeB1Matrix();
   freeC1Matrix();
   freeD1Matrix();
+  freeDiscretisation();
 }
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////DISCRETISATION
+void linearSystem::readInitialValue(){
+  int i;
+  double aux;
+  cout << "read init value\n";
+  try{
+    ifstream pin(mFile);
+    pin >> mStepNumber ;
+    pin >> mH;
+    cout << "mStepNumber\t"<<mStepNumber<<"\tmH\t"<<mH<<endl;
+    cout << "x\n";
+    for (i=0;i<mDimx;i++){
+      pin >> aux;
+      mxti->setValue(i,0,aux);
+      cout << aux<<"\t";
+    }
+    
+    cout << "\nzs\n";
+    for (i=0;i<mDimzs-1;i++){
+      pin >> aux ;
+      mzsti->setValue(i,0,aux);
+      cout << aux<<"\t";
+    }
+    cout <<"\n";
+  }
+  catch(...)
+    {
+      std::cout << "Exception caught." << endl;
+      ACE_INTERNAL_ERROR("linearSystem::readInitialValue");
+    }
+
+}
+void linearSystem::initSimu(){
+  ACE_INTERNAL_WARNING("linearSystem::preparStep : non cst source not managed");
+  allocDiscretisation();
+  readInitialValue();
+  mSimuStream = new ofstream(mSimuFile);
+  mStepCmp=0;
+
+  try{
+    ACE_CHECK_IERROR(mDimx >0 && mDimLambda >0,"linearSystem::initSimu case no x or no lambda not yet implemented");
+    *mW = SimpleMatrix(mDimx,mDimx,IDENTITY) - mH*mTheta*(*mA2x);
+    mW->PLUInverseInPlace();
+    
+    *mB3zs = mH*mTheta*prod(*mB2x,prod(*mW,*mA2zs)) + *mB2zs;
+    *mB3l = mH*prod(*mB2x,prod(*mW,*mR))+*mB2l;
+    *mD3zs = *mD2zs+mH*mTheta*prod(*mD2x,prod(*mW,*mA2zs));
+    *mD3l = *mD2l + mH*prod(*mD2x,prod(*mW,*mR));
+    mMLCP = new mlcp(mDimLambda,mNbNonDynEquations);
+    *(mMLCP->mM11) = *mD3l;
+    *(mMLCP->mM12) = *mD3zs;
+    *(mMLCP->mM21) = *mB3l;
+    *(mMLCP->mM22) = *mB3zs;
+  }
+  catch(SiconosException e)
+    {
+      std::cout << e.report() << endl;
+      ACE_INTERNAL_ERROR("linearSystem::initSimu");
+    }
+  catch(...)
+    {
+      std::cout << "Exception caught." << endl;
+      ACE_INTERNAL_ERROR("linearSystem::initSimu");
+    }
+
+  
+}
+void linearSystem::preparStep(){
+  (*mxfree) = (*mxti) + mH*(1-mTheta)*prod(*mA2x,*mxti)+mH*(1-mTheta)*prod(*mA2zs,*mzsti)+mH*(*mA2s);
+  (*mPfree) = prod(*mD2x,prod(*mW,*mxfree)) + (*mD2s);
+  (*mQfree) = prod(*mB2x,prod(*mW,*mxfree)) + (*mB2s);
+  *(mMLCP->mQ1)= *mPfree;
+  *(mMLCP->mQ2)= *mQfree;
+}
+bool linearSystem::step(){
+  mStepCmp++;
+  if (mStepCmp >= mStepNumber)
+    return false;
+  return mMLCP->solve();
+}
+void linearSystem::stopSimu(){
+  if (mMLCP)
+    delete mMLCP;
+  mMLCP=0;
+  mSimuStream->close();
+  delete mSimuStream;
+  mSimuStream=0;
+}
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////simulation
+void linearSystem::computeZnstiFromX_Zs(){
+  (*mznsti)=prod(*mC1x,*mxti)+prod(*mC1zs,*mzsti)+prod(*mC1l,*(mMLCP->mZ1))+(*mC1s);
+}
+void linearSystem::simulate(){
+  initSimu();
+  preparStep();
+  while(step()){
+    *mzsti=*(mMLCP->mZ2);
+    *mxti=prod(*mW,*mxfree)+mH*mTheta*prod(*mW,prod(*mA2zs,*mzsti))+mH*prod(*mW,prod(*mR,*(mMLCP->mZ1)));
+    computeZnstiFromX_Zs();
+    printStep();
+    printStep(*mSimuStream);
+    preparStep();
+  }
+  stopSimu();
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////UNKNOWN
@@ -719,6 +903,23 @@ void linearSystem::printSystem2(ostream& os){
   if (mD2s)
     os<<(*mD2s);
 }
+void linearSystem::printStep(ostream& os){
+  int i;
+  os << "xt("<<mStepCmp*mH<<")\t";
+  if (mxti)
+    for (i=0;i<mDimx;i++)
+      os << mxti->getValue(i,0)<<"\t";
+  os << "zs("<<mStepCmp*mH<<")\t";
+  if (mzsti)
+    for (i=0;i<mDimzs-1;i++)
+      os << mzsti->getValue(i,0)<<"\t";
+  
+  os << "zns("<<mStepCmp*mH<<")\t";
+  if (mznsti)
+    for (i=0;i<mDimzns;i++)
+      os << mznsti->getValue(i,0)<<"\t";
+  os<<"\n";
+}
 
 void linearSystem::printEquations(ostream& os ){
   int i,n =0;
@@ -851,6 +1052,33 @@ void linearSystem::printD1(ostream& os ){
   if (mD1s)
     os << (*mD1s);
  }
+void linearSystem::printDiscretisation(ostream& os){
+  os <<"W(I - h*ThetaA2x)"<<endl;
+  if (mW)
+    os << mW;
+  os <<"xfree"<<endl;
+    
+  os <<"0=Qfree + B3zs * Zs + B3l * Lambda"<<endl;
+  os <<"Qfree"<<endl;
+  if (mQfree)
+    os << (*mQfree);
+  os <<"B3zs"<<endl;
+  if (mB3zs)
+    os << (*mB3zs);
+  os <<"B3l"<<endl;
+  if (mB3l)
+    os<<(*mB3l);
+  os <<"Y=pfree + D3zs*Zs + D3l*Lambda"<<endl;
+  os << "pfree\n";
+  if (mPfree)
+    os<<(*mPfree);
+  os <<"D3zs"<<endl;
+  if (mD3zs)
+    os <<(*mD3zs);
+  os <<"D3l"<<endl;
+  if (mD3l)
+    os <<(*mD3l);
+}
 
 void linearSystem::printSystemInTabFile(char * file){
   ofstream pout(file);
@@ -859,5 +1087,6 @@ void linearSystem::printSystemInTabFile(char * file){
   printC1(pout);
   printD1(pout);
   printSystem2(pout);
+  
   pout.close();
 }

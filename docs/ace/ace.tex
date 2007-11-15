@@ -25,7 +25,7 @@
 \fancyfoot[C]{}%
  \begin{document}
  \title{Automatic circuit equations formulation}
-
+\author{Olivier Bonnefon}
 \maketitle
 
 \newpage
@@ -228,43 +228,59 @@ $Z_{s}$ a vector extract from X, $Z_{s}$ contains only the non dynamic variables
 
 We replace X by x,$Z_{s}$,$Z_{ns}$:
 \[\left(\begin{array}{c}
-x'=A_{1x}x +A_{1s}Z_{s} + A_{1ns}Z_{ns}\\
-0=B_{1x}x+B_{1s}Z_{s} + B_{1ns}Z_{ns}\\
-Z_{ns}= C_{1x}x+C_{1s}Z_{s}+C_{1\lambda}\lambda \\
-Y=D_{1x}x +D_{1s}Z_{s}+D_{1ns}Z_{ns}+D_{1\lambda}\lambda\\
+x'=A_{1x}x +A_{1zs}Z_{s} + A_{1ns}Z_{ns}+A_{1s}\\
+0=B_{1x}x+B_{1zs}Z_{s} + B_{1ns}Z_{ns}+B_{1s}\\
+Z_{ns}= C_{1x}x+C_{1zs}Z_{s}+C_{1\lambda}\lambda +C_{1s}\\
+Y=D_{1x}x +D_{1zs}Z_{s}+D_{1ns}Z_{ns}+D_{1\lambda}\lambda+D_{1s}\\
 0 \leq Y \, \perp \, \lambda \geq 0
 \end{array}\right)\]
 Substitute $Z_{ns}$:
 \[\left(\begin{array}{cc}
-R=A_{1ns}C_{\lambda}\lambda &(eq1)\\
-x'=(A_{1x}+A_{1ns}C_{x})x +(A_{1s}+A_{1ns}C_{1s})Z_{s} +R=A_{2x}x +A_{2s}Z_{s} +R&(eq2)\\
-0=(B_{1x}+B_{1ns}C_{1x})x+(B_{1s}+B_{1ns}C_{1s})Z_{s} + B_{1ns}C_{1\lambda}\lambda = B_{2x}x+B_{2s}Z_{s} + C_{2\lambda}\lambda&(eq3)\\
-Y=(D_{1x}+D_{1ns}C_{1x})x+(D_{1s}+D_{1ns}C_{1s})Z_{s}+(D_{1\lambda}+D_{1ns}C_{1\lambda})\lambda = D_{2x}x+D_{2s}Z_{s}+D_{2\lambda}\lambda &(eq4)\\
+R=A_{1ns}C_{1\lambda}&(eq1)\\
+x'=(A_{1x}+A_{1ns}C_{1x})x +(A_{1zs}+A_{1ns}C_{1zs})Z_{s} +R\lambda+A_{1s} + A_{1ns}C_{1s}\\
+x'=A_{2x}x +A_{2zs}Z_{s} +R \lambda +A_{2s}&(eq2)\\
+0=(B_{1x}+B_{1ns}C_{1x})x+(B_{1zs}+B_{1ns}C_{1s})Z_{s} + B_{1ns}C_{1\lambda}\lambda +B_{1s} + B_{1ns}C_{1s} \\
+0=B_{2x}x+B_{2zs}Z_{s} + B_{2\lambda}\lambda + B_{2s}&(eq3)\\
+Y=(D_{1x}+D_{1ns}C_{1x})x+(D_{1zs}+D_{1ns}C_{1s})Z_{s}+(D_{1\lambda}+D_{1ns}C_{1\lambda})\lambda +D_{1s}+D_{1ns}C_{1s}=\\
+Y=D_{2x}x+D_{2zs}Z_{s}+D_{2\lambda}\lambda + D_{2s} &(eq4)\\
 0 \leq Y \, \perp \, \lambda \geq 0&(\perp)\\
 \end{array}\right)\]
+$A_{2s}, B_{2s}$ and $D_{2s}$ are vectors.
 \newpage
 
 \subsection{A time discretisation}
+\[\left(\begin{array}{cc}
+R=A_{1ns}C_{1\lambda}&(eq1)\\
+x'=A_{2x}x +A_{2zs}Z_{s} +R \lambda +A_{2s}&(eq2)\\
+0=B_{2x}x+B_{2zs}Z_{s} + B_{2\lambda}\lambda + B_{2s}&(eq3)\\
+Y=D_{2x}x+D_{2zs}Z_{s}+D_{2\lambda}\lambda + D_{2s} &(eq4)\\
+0 \leq Y \, \perp \, \lambda \geq 0&(\perp)\\
+\end{array}\right)\]
 
  eq1 discretisation:
-\[x(t_{i+1}) - x(t_{i})=h\theta A_{2x}x(t_{i+1})+h(1-\theta)A_{2x}x(t_{i}) +h\theta A_{2s}Z_{s}(t_{i+1}) +h(1-\theta)A_{2s}Z_s(t_{i}) +hR(t_{i+1})\]
+\[x(t_{i+1}) - x(t_{i})=h\theta A_{2x}x(t_{i+1})+h(1-\theta)A_{2x}x(t_{i}) +h\theta
+A_{2zs}Z_{s}(t_{i+1}) +\]
+\[h(1-\theta)A_{2zs}Z_s(t_{i}) +hR\lambda (t_{i+1}) + h\theta 'A_{2s}(t_{i+1}) +
+h(1-\theta ')A_{2s}(t_{i})\]
 We assume $(I-h\theta A_{2x})$ is regular,$W(I-h\theta A_{2x}) = I.$
-\[x(t_{i+1})=Wx_{free}+h\theta WA_{2s}Z_{s}(t_{i+1})+hWR(t_{i+1}) = Wx_{free}+h\theta
-WA_{2s}Z_{s}(t_{i+1}) 
-+hWA_{ns}C_{\lambda}\lambda(t_{i+1}) (eq5)\]
+\[x(t_{i+1})=Wx_{free}+h\theta WA_{2zs}Z_{s}(t_{i+1})+hWR\lambda (t_{i+1})  (eq5)\]
+With:
+\[x_{free}=(I+h(1-\theta)A_{2x})x(t_{i}) + h(1-\theta )A_{2zs}Zs(t_{i}) + h\theta 'A_{2s}(t_{i+1}) +
+h(1-\theta ')A_{2s}(t_{i})\]
 eq3 discretisation:
-\[0 = B_{2x}x(t_{i+1})+B_{2s}Z_{s}(t_{i+1}) + C_{2\lambda}\lambda(t_{i+1})\]
+\[0 = B_{2x}x(t_{i+1})+B_{2zs}Z_{s}(t_{i+1}) + B_{2\lambda}\lambda(t_{i+1})+B_{2s}(t_{i+1})\]
 With eq5:
-\[0 = B_{2x}Wx_{free}+(h\theta B_{2x} WA_{2s}+B_{2s})
-Z_{s}(t_{i+1})+(hB_{2x}WA_{ns}C_{\lambda}+C_{2\lambda})\lambda(t_{i+1})\]
+\[0 = B_{2x}Wx_{free}+B_{2s}(t_{i+1})+(h\theta B_{2x} WA_{2zs}+B_{2zs}) Z_{s}(t_{i+1})+(hB_{2x}WR+B_{2\lambda})\lambda(t_{i+1})\]
 Rename the matrices:
-\[0 = q_{free}+B_{3s} Z_{s}(t_{i+1})+B_{3\lambda}\lambda(t_{i+1})\]
+\[0 = q_{free}+B_{3zs} Z_{s}(t_{i+1})+B_{3\lambda}\lambda(t_{i+1})\]
 
 eq4 discretisation:
-\[Y(t_{i+1})=D_{2x}x(t_{i+1})+D_{2s}Z_{s}(t_{i+1}) +D_{2\lambda}\lambda(t_{i+1})\]
+\[Y(t_{i+1})=D_{2x}x(t_{i+1})+D_{2zs}Z_{s}(t_{i+1}) +D_{2\lambda}\lambda(t_{i+1})+D_{2s}(t_{i+1})\]
 With eq5 and rename the matrices:
-\[Y(t_{i+1})=D_{2x}Wx_{free}+D_{3s}Z_{s}(t_{i+1})+D_{3\lambda}\lambda(t_{i+1})\]
-\[0 \leq Y(t_{i+1}) \, \perp \, \lambda(t_{i+1}) \geq 0\]
+\[Y(t_{i+1})=D_{2x}Wx_{free}+ D_{2s}(t_{i+1})+(D_{2zs}+h\theta
+D_{2x}WA_{2zs})Z_{s}(t_{i+1})+(D_{2\lambda} + hD_{2x}WR)\lambda(t_{i+1})\]
+Rename the matrices:
+\[Y(t_{i+1})=p_{free}+D_{3zs}Zs(t_{i+1}) +D_{3\lambda}\lambda (t_{i+1})\]
 
 \paragraph{MLCP}
 description:\\
@@ -279,9 +295,12 @@ We identify a MLCP:\\
 \[Z_{1} = \lambda(t_{i+1})\]
 \[Z_{2} = Z_{s}(t_{i+1})\]
 \[M = \left(\begin{array}{cc}
-  WD_{2\lambda}&WD_{2s}\\
-B_{3\lambda}&B_{3s}
+  D_{3\lambda}&D_{3zs}\\
+B_{3\lambda}&B_{3zs}
 \end{array}\right)\]
+\[q=\left(\begin{array}{c}
+p_{free}\\
+q_{free}\end{array}\right)\]
 \newpage
 \section{Non smooth formulation}
 example with 5 non smooth components:\\

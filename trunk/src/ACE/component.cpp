@@ -6,7 +6,8 @@
 #include "unknown.h"
 #include "equation.h"
 
-
+component::~component(){
+}
 component::component(){
   mU=0;
   mI=0;

@@ -6,4 +6,5 @@
 #include "componentlinear.h"
 
 componentLINEAR::componentLINEAR(){;}
+componentLINEAR::~componentLINEAR(){;}
 

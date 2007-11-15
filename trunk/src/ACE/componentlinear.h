@@ -14,6 +14,7 @@ class componentLINEAR : public component {
   
 public:
   componentLINEAR();
+  virtual ~componentLINEAR();
 protected:
 private:
 };

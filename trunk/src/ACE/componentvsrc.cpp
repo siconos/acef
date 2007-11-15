@@ -5,6 +5,7 @@
 #include "componentvsrc.h"
 #include "algo.h"
 
+componentVSRC::~componentVSRC(){;}
 componentVSRC::componentVSRC(dataVSRC *d)
 :componentLINEAR(){
   if(!d)
@@ -14,6 +15,7 @@ componentVSRC::componentVSRC(dataVSRC *d)
   mNodeNeg=mData.nodeNeg;
   mName = mData.name;
   mType = ACE_TYPE_VSRC;
+  mCurrentValue=0;
   if (ACE_IS_NULL(mData.value))
     ACE_WARNING("VSRC null");
 }
@@ -24,6 +26,12 @@ void componentVSRC::addEquations(){
   mEquation=algo::sls.addVdEquation();
 }
 void componentVSRC::stamp(){
+  ACE_DOUBLE newValue;
+  ACE_DOUBLE difValue;
+  //getSourceValue(mData.id,&newValue);
+  mCurrentValue = newValue - mCurrentValue;
+
+
   //KCL
   int i;
   if (!mI || ! mEquation)
@@ -36,5 +44,8 @@ void componentVSRC::stamp(){
   i= algo::sls.getIndexUnknown(ACE_TYPE_V,mData.nodePos);
   mEquation->mCoefs[i]+=1;
   mEquation->mCoefs[algo::sls.mRS]-=mData.value;
+
+  mCurrentValue = newValue;
 }
+
 

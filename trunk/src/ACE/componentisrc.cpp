@@ -5,6 +5,7 @@
 #include "componentisrc.h"
 #include "algo.h"
 
+componentISRC::~componentISRC(){;}
 
 componentISRC::componentISRC(dataISRC *d)
 :componentLINEAR(){

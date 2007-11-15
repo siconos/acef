@@ -14,8 +14,11 @@ class componentVSRC : public componentLINEAR {
 
 public:
   dataVSRC mData;
+  ACE_DOUBLE mCurrentValue;
   componentVSRC(dataVSRC *d);
+  virtual ~componentVSRC();
   virtual void  stamp ();
+  void stampTime();
   virtual void  addUnknowns ();
   virtual void  addEquations ();
 protected:

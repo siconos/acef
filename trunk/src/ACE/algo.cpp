@@ -17,6 +17,12 @@ algo::algo(char * file){
   ACE_CHECK_IERROR(strlen(file) < ACE_CHAR_LENGTH && strlen(file) >3,"algo::algo: file name length!");
   strncpy(mFile,file,strlen(file)-3);
   strcat(mFile,"txt");
+  
+  strncpy(sls.mFile,file,strlen(file)-3);
+  strcat(sls.mFile,"ini");
+  strncpy(sls.mSimuFile,file,strlen(file)-3);
+  strcat(sls.mSimuFile,"sim");
+  
 
   if (!initParserLibrary()){
     ACE_INTERNAL_ERROR("initParserLibrary");
@@ -144,6 +150,7 @@ void algo::perform(){
    componentRES *c=new componentRES(&dRes);
    mRess.push_back(c);   
  }
+ //computeSourcesValues(0.0);
 //get Vsource from parser
  initComponentList("Vsource");
  dataVSRC dVsrc;
@@ -173,11 +180,15 @@ void algo::perform(){
  sls.printEquations();
  sls.buildLinearSystem();
  sls.set2matrix();
+
+ 
  sls.printSystemInTabFile(&mFile[0]);
  sls.printB1();
  sls.printC1();
  sls.printD1();
  sls.printSystem2();
+
+ sls.simulate();
 }
 
 //with x'=A1x * mx + A1zs * mZs + A1zns * mZns, compute curent in all capacitor branche, and fill KCL law
