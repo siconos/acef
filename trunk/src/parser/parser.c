@@ -7,12 +7,17 @@ typedef int (*fct_nextComponent)(void*);
 typedef int (*fct_readFile)(char *);
 typedef int (*fct_initComponentList)(char *);
 typedef int (*fct_getNbElementsOfType)(char *);
+typedef int (*fct_getSourceValue)(char *,void *,double *);
+typedef int (*fct_computeSourcesValues)(double);
 
 static fct_print ptr_print=0;
 static fct_readFile ptr_readFile=0;
 static fct_nextComponent ptr_nextComponent=0;
 static fct_initComponentList ptr_initComponentList=0;
 static fct_getNbElementsOfType ptr_getNbElementsOfType=0;
+static fct_getSourceValue ptr_getSourceValue=0;
+static fct_computeSourcesValues ptr_computeSourcesValues=0;
+
 static void* module=0;
 
 
@@ -56,6 +61,18 @@ int initParserLibrary(){
    fprintf(stderr, "Couldn't find readFile: %s\n", error);
    return (0);
   }
+  
+  ptr_getSourceValue = dlsym(module, "getSourceValue");
+  if ((error = dlerror())) {
+   fprintf(stderr, "Couldn't find getSourceValue: %s\n", error);
+   return (0);
+  }
+  ptr_computeSourcesValues = dlsym(module, "computeSourcesValues");
+  if ((error = dlerror())) {
+   fprintf(stderr, "Couldn't find computeSourcesValues: %s\n", error);
+   return (0);
+  }
+    
   return 1;
 }
 
@@ -76,3 +93,9 @@ int nextComponent(void * data){
   return (*ptr_nextComponent)(data);
 }
 
+int getSourceValue(char *type,void* id,double* value){
+  return (*ptr_getSourceValue)(type,id,value);
+}
+int computeSourcesValues(double time){
+  return (*ptr_computeSourcesValues)(time);
+}

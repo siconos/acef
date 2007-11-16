@@ -5,6 +5,11 @@ void MEprint();
 int initComponentList(char *type);
 int nextComponent(void * data);
 int getNbElementsOfType(char* type);
+//input : component's Id
+//output : value.
+//if succes, return 1 else return 0 
+int getSourceValue(char *type,void* id,double* value);
+int computeSourcesValues(double time);
 
 typedef struct {
   char *name;
@@ -53,6 +58,7 @@ typedef struct {
   int nodePos;
   int nodeNeg;
   double value;
+  void* id;
 } dataVSRC;
 
 
@@ -63,4 +69,5 @@ typedef struct {
   int nodeNeg;
   double value;
   double *coef;
+  void* id;
 } dataISRC;

@@ -19,6 +19,7 @@ public:
   component();
   virtual ~component();
   virtual void  stamp ();
+  virtual void stampTimer();
   virtual void  addUnknowns ();
   virtual void  addEquations ();
   virtual void print ();

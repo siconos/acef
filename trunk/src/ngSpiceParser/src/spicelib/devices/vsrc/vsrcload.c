@@ -36,10 +36,10 @@ VSRCload(GENmodel *inModel, CKTcircuit *ckt)
                 here=here->VSRCnextInstance) {
 	    if (here->VSRCowner != ARCHme) continue;
             
-            *(here->VSRCposIbrptr) += 1.0 ;
+            /**(here->VSRCposIbrptr) += 1.0 ;
             *(here->VSRCnegIbrptr) -= 1.0 ;
             *(here->VSRCibrPosptr) += 1.0 ;
-            *(here->VSRCibrNegptr) -= 1.0 ;
+            *(here->VSRCibrNegptr) -= 1.0 ;OLIVIER*/
             if( (ckt->CKTmode & (MODEDCOP | MODEDCTRANCURVE)) &&
                     here->VSRCdcGiven ) {
                 /* grab dc value */
@@ -322,7 +322,8 @@ loadDone:
             value *= cm_analog_ramp_factor();
 #else
 if (ckt->CKTmode & MODETRANOP) value *= ckt->CKTsrcFact;
-          *(ckt->CKTrhs + (here->VSRCbranch)) += value;
+ here->currentValue = value;
+ /**(ckt->CKTrhs + (here->VSRCbranch)) += value;OLIVIER*/
 #endif
 /* gtri - end - wbk - modify to process srcFact, etc. for all sources */
         }

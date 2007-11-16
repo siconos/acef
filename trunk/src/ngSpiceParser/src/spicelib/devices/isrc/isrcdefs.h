@@ -41,6 +41,7 @@ typedef struct sISRCinstance {
     double ISRCdF2mag; /* distortion f2 magnitude */
     double ISRCdF1phase; /* distortion f1 phase */
     double ISRCdF2phase; /* distortion f2 phase */
+  double currentValue;/*OLIVIER*/
 
     /* gtri - begin - add member to hold current source value */
 #ifdef XSPICE

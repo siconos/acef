@@ -131,7 +131,7 @@ am__DEPENDENCIES_1 = spicelib/devices/asrc/libasrc.a \
 	spicelib/devices/vccs/libvccs.a \
 	spicelib/devices/vcvs/libvcvs.a \
 	spicelib/devices/vsrc/libvsrc.a
-ngspice_DEPENDENCIES = perform.o spice.o frontend/libfte.a \
+ngspice_DEPENDENCIES = spice.o frontend/libfte.a \
 	frontend/plotting/libplotting.a spicelib/devices/dev.o \
 	$(am__DEPENDENCIES_1) spicelib/analysis/libckt.a \
 	spicelib/devices/libdev.a frontend/parser/libparser.a \
@@ -185,7 +185,7 @@ AUTOHEADER = autoheader
 AUTOMAKE = automake-1.9
 AWK = gawk
 CC = gcc
-CCDEPMODE = depmode=gcc3
+CCDEPMODE = depmode=none
 CFLAGS = -g -O2 -Wall 
 CIDERDIR = 
 CIDERMATH = 
@@ -196,7 +196,7 @@ CPP = gcc -E
 CPPFLAGS = 
 CXX = g++
 CXXCPP = g++ -E
-CXXDEPMODE = depmode=gcc3
+CXXDEPMODE = depmode=none
 CXXFLAGS = -g -O2
 CYGPATH_W = echo
 DEFS = -DHAVE_CONFIG_H
@@ -209,7 +209,7 @@ EGREP = grep -E
 EKVDIR = 
 EKVLIB = 
 EXEEXT = 
-F77 = g77
+F77 = f95
 FFLAGS = -g -O2
 INSTALL_DATA = ${INSTALL} -m 644
 INSTALL_PROGRAM = ${INSTALL}
@@ -220,7 +220,7 @@ LEX = flex
 LEXLIB = -lfl
 LEX_OUTPUT_ROOT = lex.yy
 LIBOBJS = 
-LIBS = -lm   -L/usr/X11R6/lib -lXaw -lXmu -lXt -lXext -lX11  -lSM -lICE 
+LIBS = -lm   -lXaw -lXmu -lXt -lXext -lX11  -lSM -lICE 
 LIBTOOL = $(SHELL) $(top_builddir)/libtool
 LN_S = ln -s
 LTLIBOBJS = 
@@ -256,21 +256,21 @@ XSPICEINIT = *
 XSPICELIB1 = 
 XSPICELIB2 = 
 XSPICETESTS = 
-X_CFLAGS =  -I/usr/X11R6/include
+X_CFLAGS = 
 X_EXTRA_LIBS = 
-X_LIBS =  -L/usr/X11R6/lib -lXaw -lXmu -lXt -lXext -lX11
+X_LIBS =  -lXaw -lXmu -lXt -lXext -lX11
 X_PRE_LIBS =  -lSM -lICE
 YACC = bison -y
 ac_ct_AR = ar
 ac_ct_CC = gcc
 ac_ct_CXX = g++
-ac_ct_F77 = g77
+ac_ct_F77 = f95
 ac_ct_RANLIB = ranlib
 ac_ct_STRIP = strip
-am__fastdepCC_FALSE = #
-am__fastdepCC_TRUE = 
-am__fastdepCXX_FALSE = #
-am__fastdepCXX_TRUE = 
+am__fastdepCC_FALSE = 
+am__fastdepCC_TRUE = #
+am__fastdepCXX_FALSE = 
+am__fastdepCXX_TRUE = #
 am__include = include
 am__leading_dot = .
 am__quote = 
@@ -291,14 +291,14 @@ host_os = linux-gnu
 host_vendor = pc
 includedir = ${prefix}/include
 infodir = ${prefix}/info
-install_sh = /scratch/parserDev/install-sh
+install_sh = /scratch/gforge/noselecs/trunk/src/ngSpiceParser/install-sh
 libdir = ${exec_prefix}/lib
 libexecdir = ${exec_prefix}/libexec
 localstatedir = ${prefix}/var
 mandir = ${prefix}/man
 mkdir_p = mkdir -p --
 oldincludedir = /usr/include
-prefix = /scratch/installParser
+prefix = /home/bipop/bonnefon/installParser
 program_transform_name = s,x,x,
 sbindir = ${exec_prefix}/sbin
 sharedstatedir = ${prefix}/com
@@ -366,8 +366,7 @@ DYNAMIC_DEVICELIBS = \
 	
 
 ngspice_SOURCES = perform.c conf.c conf.h ngspice.c $(am__append_2)
-ngspice_LDADD = \
-	spice.o \
+perform_LDADD = \
 	frontend/libfte.a \
 	 \
 	frontend/plotting/libplotting.a \
@@ -389,6 +388,9 @@ ngspice_LDADD = \
 	maths/ni/libni.a \
 	maths/sparse/libsparse.a \
 	misc/libmisc.a
+ngspice_LDADD = \
+	spice.o \
+	$(perform_LDADD)
 
 ngnutmeg_SOURCES = main.c conf.c conf.h ngnutmeg.c $(am__append_3)
 ngnutmeg_LDADD = \
@@ -427,7 +429,7 @@ ngmultidec_LDADD = \
 	misc/libmisc.a 
 
 makeidx_SOURCES = makeidx.c
-INCLUDES = -I$(top_srcdir)/src/include -I$(top_srcdir)/src/spicelib/devices  -I/usr/X11R6/include
+INCLUDES = -I$(top_srcdir)/src/include -I$(top_srcdir)/src/spicelib/devices 
 MAINTAINERCLEANFILES = Makefile.in
 all: all-recursive
 
@@ -510,9 +512,11 @@ ngproc2mod$(EXEEXT): $(ngproc2mod_OBJECTS) $(ngproc2mod_DEPENDENCIES)
 ngsconvert$(EXEEXT): $(ngsconvert_OBJECTS) $(ngsconvert_DEPENDENCIES) 
 	@rm -f ngsconvert$(EXEEXT)
 	$(LINK) $(ngsconvert_LDFLAGS) $(ngsconvert_OBJECTS) $(ngsconvert_LDADD) $(LIBS)
-ngspice$(EXEEXT): $(ngspice_OBJECTS) $(ngspice_DEPENDENCIES) 
+ngspice$(EXEEXT): perform.so $(ngspice_OBJECTS) $(ngspice_DEPENDENCIES) 
 	@rm -f ngspice$(EXEEXT)
 	$(LINK) $(ngspice_LDFLAGS) $(ngspice_OBJECTS) $(ngspice_LDADD) $(LIBS)
+perform.so: open.o perform.o $(ngspice_OBJECTS) $(ngspice_DEPENDENCIES)
+	gcc -shared -Wl -o perform.so open.o ngspice.o conf.o perform.o $(perform_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -532,25 +536,25 @@ include ./$(DEPDIR)/ngspice.Po
 include ./$(DEPDIR)/winmain.Po
 
 .c.o:
-	if $(COMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ $<; \
-	then mv -f "$(DEPDIR)/$*.Tpo" "$(DEPDIR)/$*.Po"; else rm -f "$(DEPDIR)/$*.Tpo"; exit 1; fi
-#	source='$<' object='$@' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(COMPILE) -c $<
+#	if $(COMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ $<; \
+#	then mv -f "$(DEPDIR)/$*.Tpo" "$(DEPDIR)/$*.Po"; else rm -f "$(DEPDIR)/$*.Tpo"; exit 1; fi
+	source='$<' object='$@' libtool=no \
+	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+	$(COMPILE) -c $<
 
 .c.obj:
-	if $(COMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ `$(CYGPATH_W) '$<'`; \
-	then mv -f "$(DEPDIR)/$*.Tpo" "$(DEPDIR)/$*.Po"; else rm -f "$(DEPDIR)/$*.Tpo"; exit 1; fi
-#	source='$<' object='$@' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(COMPILE) -c `$(CYGPATH_W) '$<'`
+#	if $(COMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ `$(CYGPATH_W) '$<'`; \
+#	then mv -f "$(DEPDIR)/$*.Tpo" "$(DEPDIR)/$*.Po"; else rm -f "$(DEPDIR)/$*.Tpo"; exit 1; fi
+	source='$<' object='$@' libtool=no \
+	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+	$(COMPILE) -c `$(CYGPATH_W) '$<'`
 
 .c.lo:
-	if $(LTCOMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ $<; \
-	then mv -f "$(DEPDIR)/$*.Tpo" "$(DEPDIR)/$*.Plo"; else rm -f "$(DEPDIR)/$*.Tpo"; exit 1; fi
-#	source='$<' object='$@' libtool=yes \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(LTCOMPILE) -c -o $@ $<
+#	if $(LTCOMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ $<; \
+#	then mv -f "$(DEPDIR)/$*.Tpo" "$(DEPDIR)/$*.Plo"; else rm -f "$(DEPDIR)/$*.Tpo"; exit 1; fi
+	source='$<' object='$@' libtool=yes \
+	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+	$(LTCOMPILE) -c -o $@ $<
 
 mostlyclean-libtool:
 	-rm -f *.lo
@@ -881,9 +885,9 @@ spice.o: main.c
 		$(COMPILE) -DSIMULATOR -o spice.o  -c $(srcdir)/main.c
 
 perform.o: perform.c
-		gcc -DSIMULATOR -DHAVE_CONFIG_H -I. -I. -I.. -I../src/include -I../src/spicelib/devices  -I/usr/X11R6/include    -fPIC -g -c -Wall perform.o  -c ./perform.c
-		gcc -DSIMULATOR -DHAVE_CONFIG_H -I. -I. -I.. -I../src/include -I../src/spicelib/devices  -I/usr/X11R6/include    -fPIC -g -c -Wall open.o  -c ./open.c
-		gcc -shared -Wl,-soname,perform.so -o perform.so open.o ngspice.o conf.o perform.o frontend/libfte.a frontend/plotting/libplotting.a spicelib/devices/dev.o spicelib/devices/asrc/libasrc.a spicelib/devices/bjt/libbjt.a spicelib/devices/bjt2/libbjt2.a spicelib/devices/bsim1/libbsim1.a spicelib/devices/bsim2/libbsim2.a spicelib/devices/bsim3/libbsim3.a spicelib/devices/bsim3v0/libbsim3v0.a spicelib/devices/bsim3v1/libbsim3v1.a spicelib/devices/bsim3v1s/libbsim3v1s.a spicelib/devices/bsim3v1a/libbsim3v1a.a spicelib/devices/bsim4/libbsim4.a spicelib/devices/cap/libcap.a spicelib/devices/bsim3soi/libbsim3soi.a spicelib/devices/bsim3soi_pd/libbsim3soipd.a spicelib/devices/bsim3soi_fd/libbsim3soifd.a spicelib/devices/bsim3soi_dd/libbsim3soidd.a spicelib/devices/cccs/libcccs.a spicelib/devices/ccvs/libccvs.a spicelib/devices/ccvs/libccvs.a spicelib/devices/cpl/libcpl.a spicelib/devices/csw/libcsw.a spicelib/devices/dio/libdio.a spicelib/devices/ind/libind.a spicelib/devices/isrc/libisrc.a spicelib/devices/hfet1/libhfet.a spicelib/devices/hfet2/libhfet2.a spicelib/devices/hisim/libhisim.a spicelib/devices/jfet/libjfet.a spicelib/devices/jfet2/libjfet2.a spicelib/devices/ltra/libltra.a spicelib/devices/mes/libmes.a spicelib/devices/mesa/libmesa.a spicelib/devices/mos1/libmos1.a spicelib/devices/mos2/libmos2.a spicelib/devices/mos3/libmos3.a spicelib/devices/mos6/libmos6.a spicelib/devices/mos9/libmos9.a spicelib/devices/res/libres.a spicelib/devices/soi3/libsoi3.a spicelib/devices/sw/libsw.a spicelib/devices/txl/libtxl.a spicelib/devices/tra/libtra.a spicelib/devices/urc/liburc.a spicelib/devices/vbic/libvbic.a spicelib/devices/vccs/libvccs.a spicelib/devices/vcvs/libvcvs.a spicelib/devices/vsrc/libvsrc.a  spicelib/analysis/libckt.a spicelib/devices/libdev.a frontend/parser/libparser.a frontend/help/libhlp.a spicelib/parser/libinp.a maths/deriv/libderiv.a maths/cmaths/libcmaths.a maths/poly/libpoly.a maths/ni/libni.a maths/sparse/libsparse.a misc/libmisc.a -lm   -L/usr/X11R6/lib -lXaw -lXmu -lXt -lXext -lX11  -lSM -lICE  -lc
+		$(COMPILE) -DSIMULATOR -o perform.o  -c $(srcdir)/perform.c
+open.o: open.c
+		$(COMPILE) -DSIMULATOR -o open.o  -c $(srcdir)/open.c
 
 ngspice.idx: makeidx
 	./makeidx $(srcdir)/ngspice.txt

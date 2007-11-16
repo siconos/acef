@@ -9,7 +9,7 @@ Author: 1988 Thomas L. Quarles
 #include "inpmacs.h"
 #include "fteext.h"
 #include "inp.h"
-
+int sNbCap=0;
 void INP2C(void *ckt, INPtables * tab, card * current)
 {
 

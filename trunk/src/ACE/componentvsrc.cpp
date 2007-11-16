@@ -27,10 +27,7 @@ void componentVSRC::addEquations(){
 }
 void componentVSRC::stamp(){
   ACE_DOUBLE newValue;
-  ACE_DOUBLE difValue;
   //getSourceValue(mData.id,&newValue);
-  mCurrentValue = newValue - mCurrentValue;
-
 
   //KCL
   int i;
@@ -43,7 +40,15 @@ void componentVSRC::stamp(){
   mEquation->mCoefs[i]+=-1;
   i= algo::sls.getIndexUnknown(ACE_TYPE_V,mData.nodePos);
   mEquation->mCoefs[i]+=1;
-  mEquation->mCoefs[algo::sls.mRS]-=mData.value;
+  //  mEquation->mCoefs[algo::sls.mRS]-=newValue - mCurrentValue;
+
+  //mCurrentValue = newValue;
+}
+
+void componentVSRC::stampTimer(){
+  ACE_DOUBLE newValue;
+  getSourceValue("Vsource",mData.id,&newValue);
+  mEquation->mCoefs[algo::sls.mRS]-=newValue - mCurrentValue;
 
   mCurrentValue = newValue;
 }

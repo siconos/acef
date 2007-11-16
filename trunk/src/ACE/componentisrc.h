@@ -15,9 +15,11 @@ class componentISRC : public componentLINEAR {
 
 public:
   dataISRC mData;
+  ACE_DOUBLE mCurrentValue;
   virtual ~componentISRC();
   componentISRC(dataISRC *d);
   virtual void stamp();
+  virtual void stampTimer();
   virtual void print();
 protected:
 private:

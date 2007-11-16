@@ -10,6 +10,7 @@
 #include "componentvsrc.h"
 #include "componentisrc.h"
 #include "graph.h"
+#include <fstream>
 
 linearSystem algo::sls;
 
@@ -20,8 +21,8 @@ algo::algo(char * file){
   
   strncpy(sls.mFile,file,strlen(file)-3);
   strcat(sls.mFile,"ini");
-  strncpy(sls.mSimuFile,file,strlen(file)-3);
-  strcat(sls.mSimuFile,"sim");
+  strncpy(mSimuFile,file,strlen(file)-3);
+  strcat(mSimuFile,"sim");
   
 
   if (!initParserLibrary()){
@@ -60,7 +61,7 @@ algo::~algo(){
 
 }
 
-
+////////////////////////////////////////////////////////////////////// ALGO
 void algo::perform(){
  sls.mNbNodes = getNbElementsOfType("Node");
  sls.initKCL();
@@ -150,7 +151,7 @@ void algo::perform(){
    componentRES *c=new componentRES(&dRes);
    mRess.push_back(c);   
  }
- //computeSourcesValues(0.0);
+ computeSourcesValues(0.0);
 //get Vsource from parser
  initComponentList("Vsource");
  dataVSRC dVsrc;
@@ -188,9 +189,9 @@ void algo::perform(){
  sls.printD1();
  sls.printSystem2();
 
- sls.simulate();
+ simulate();
 }
-
+////////////////////////////////////////////////////////////////////// STAMP
 //with x'=A1x * mx + A1zs * mZs + A1zns * mZns, compute curent in all capacitor branche, and fill KCL law
 void algo::stampAfterInvertion(){
   int n = mCaps.size();
@@ -211,18 +212,50 @@ void algo::stamp(){
   n = mRess.size();
   for(i=0;i<n;i++)
     mRess[i]->stamp();
-  n = mIsrcs.size();
-  for(i=0;i<n;i++)
-    mIsrcs[i]->stamp();
   n = mVsrcs.size();
   for(i=0;i<n;i++)
     mVsrcs[i]->stamp();
+
+  n = mIsrcs.size();
+  for(i=0;i<n;i++)
+    mIsrcs[i]->stamp();
   n = mDios.size();
   for(i=0;i<n;i++)
     mDios[i]->stamp();
 
 }
+////////////////////////////////////////////////////////////////////// SIMULATION
+void algo::preparStep(){
+  int n;
+  int i;
+  ACE_DOUBLE time = sls.mStepCmp*sls.mH;
+  computeSourcesValues(time);
+  n = mVsrcs.size();
+  for(i=0;i<n;i++)
+    mVsrcs[i]->stampTimer();
+  n = mIsrcs.size();
+  for(i=0;i<n;i++)
+    mIsrcs[i]->stampTimer();
+  
+  sls.preparStep();
+}
+void algo::simulate(){
+  sls.initSimu();
+  mSimuStream = new ofstream(mSimuFile);
 
+  preparStep();
+  while(sls.step()){
+    sls.printStep();
+    sls.printStep(*mSimuStream);
+    preparStep();
+  }
+  sls.stopSimu();
+  mSimuStream->close();
+  delete mSimuStream;
+  mSimuStream=0;
+
+}
+////////////////////////////////////////////////////////////////////// PRINT
 void algo::printComponents(){
   int n =0;
   int i;

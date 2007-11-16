@@ -10,13 +10,13 @@ if $__flag = 0
 
 * For SPICE2 POLYs, edit the below line to point to the location 
 * of your codemode.
-* codemodel /scratch/installParser/lib/spice/spice2poly.cm
+* codemodel /home/bipop/bonnefon/installParser/lib/spice/spice2poly.cm
 
 * The other codemodels
-* codemodel /scratch/installParser/lib/spice/analog.cm
-* codemodel /scratch/installParser/lib/spice/digital.cm
-* codemodel /scratch/installParser/lib/spice/xtradev.cm
-* codemodel /scratch/installParser/lib/spice/xtraevt.cm
+* codemodel /home/bipop/bonnefon/installParser/lib/spice/analog.cm
+* codemodel /home/bipop/bonnefon/installParser/lib/spice/digital.cm
+* codemodel /home/bipop/bonnefon/installParser/lib/spice/xtradev.cm
+* codemodel /home/bipop/bonnefon/installParser/lib/spice/xtraevt.cm
 
 end
 unset __flag

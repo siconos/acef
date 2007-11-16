@@ -125,7 +125,7 @@ struct timeb timebegin;
 #include "wstdio.h"
 #endif
 
-static int sNbCap=0;
+extern int sNbCap;
 
 extern char *gettok(char **s);
 extern char *gettok_noparens(char **s);

@@ -47,6 +47,8 @@ typedef struct sVSRCinstance {
     double VSRCdF2mag; /* distortion f2 magnitude */
     double VSRCdF1phase; /* distortion f1 phase */
     double VSRCdF2phase; /* distortion f2 phase */
+  //OLIVIER
+  double currentValue;
 
     double *VSRCposIbrptr;  /* pointer to sparse matrix element at 
                              * (positive node, branch equation) */

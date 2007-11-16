@@ -20,7 +20,8 @@ public:
   void printComponents();
   void stamp();
   void stampAfterInvertion();
-
+  void preparStep();
+  void simulate();
 
   components mInds;
   components mCaps;
@@ -29,7 +30,9 @@ public:
   components mVsrcs;
   components mDios;
   char mFile[ACE_CHAR_LENGTH];
-  
+  ofstream* mSimuStream;
+  char mSimuFile[ACE_CHAR_LENGTH];
+
 protected:
 private:
     

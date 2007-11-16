@@ -321,8 +321,9 @@ loadDone:
 #endif
 /* gtri - end - wbk - modify for supply ramping option */
 
-            *(ckt->CKTrhs + (here->ISRCposNode)) += value;
-            *(ckt->CKTrhs + (here->ISRCnegNode)) -= value;
+	    /*OLIVIER  *(ckt->CKTrhs + (here->ISRCposNode)) += value;
+	     *(ckt->CKTrhs + (here->ISRCnegNode)) -= value;*/
+	    here->currentValue = value;
 
 /* gtri - end - wbk - modify to process srcFact, etc. for all sources */
 

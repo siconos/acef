@@ -55,7 +55,6 @@ public:
   //Y=D2x*x + D2zs*Zs + D2l*lambda + D2s
   //
   void set2matrix();
-  void set2Sources();
 
   //DISCRETISATION simulation
   void readInitialValue();
@@ -64,7 +63,8 @@ public:
   bool step();
   void stopSimu();
   void computeZnstiFromX_Zs();
-  void simulate();
+  void ExtractAndCompute2Sources();
+  void extractSources();
     
   char mFile[ACE_CHAR_LENGTH];
 
@@ -127,7 +127,8 @@ public:
   aceMatrix *mA2x;
   aceMatrix *mA2zs;
   aceMatrix *mA2s;
-  
+  aceMatrix *mA2sti;
+
   aceMatrix *mB2x;
   aceMatrix *mB2zs;
   aceMatrix *mB2l;
@@ -163,8 +164,6 @@ public:
   int mStepCmp;
   int mStepNumber;
   
-  ofstream* mSimuStream;
-  char mSimuFile[ACE_CHAR_LENGTH];
   
   void printEquations(ostream& os = cout);
   void printABCDs(ostream& os = cout);
@@ -176,6 +175,8 @@ public:
   void printSystem2(ostream& os = cout);
   void printStep(ostream& os = cout);
   void printDiscretisation(ostream& os = cout);
+
+  
 
 protected:
 private:

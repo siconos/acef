@@ -19,6 +19,8 @@ component::component(){
 
 }
 
+void component::stampTimer(){
+  ;}
 
 void component::stamp () {
   

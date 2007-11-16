@@ -13,10 +13,55 @@
 #include "./spicelib/devices/ind/inddefs.h"
 #include "./spicelib/devices/ind/indext.h"
 #include "./spicelib/devices/vsrc/vsrcdefs.h"
+//#include "./spicelib/devices/dev.h"
+#include "devdefs.h"
+
+#include "./spicelib/devices/dev.h"
 
 static int sType =0;
 static char sTypeName[16];
 static GENinstance *psInstance =0;
+
+int computeSourcesValues(double time){
+  SPICEdev **myDEVices = devices();
+  int dev[2];
+  int i =0;
+  int error=0;
+  CKTcircuit *circuit =0;
+  dev[0]=46;
+  dev[1]=27;
+  circuit =(CKTcircuit *) ft_curckt->ci_ckt;
+
+  if (!circuit)
+    return 0;
+  circuit->CKTtime = time;
+
+  for(i=0;i<2;i++){
+    if ( ((*myDEVices[dev[i]]).DEVload != NULL) && (circuit->CKThead[dev[i]] != NULL) ){
+      error = (*((*myDEVices[dev[i]]).DEVload))(circuit->CKThead[dev[i]],circuit);
+    }
+  }
+  return 1;
+}
+
+
+int getSourceValue(char *type,void* id,double* value){
+  VSRCinstance *hereVSRC;
+  ISRCinstance *hereISRC;
+  int _type=0;
+  _type=INPtypelook(type);
+  if (_type == 46){
+    hereVSRC = (VSRCinstance *) id;
+    *value = hereVSRC->currentValue;
+  }
+  else if (_type == 27){
+    hereISRC = (ISRCinstance *) id;
+    *value = hereISRC->currentValue;
+  }else{
+    return 0;
+  }
+  return 1;
+}
 
 void     fillResistorInfos(void *data, GENinstance *pInstance){
   dataRES *p;
@@ -56,6 +101,7 @@ void     fillResistorInfos(void *data, GENinstance *pInstance){
   p->nodePos = here->VSRCposNode;
   p->nodeNeg = here->VSRCnegNode;
   p->value = here->VSRCdcValue;
+  p->id = (void*)here;
 }
  
  void     fillIsourceInfos(void *data, GENinstance *pInstance){
@@ -69,6 +115,7 @@ void     fillResistorInfos(void *data, GENinstance *pInstance){
   p->nodePos = here->ISRCposNode;
   p->nodeNeg = here->ISRCnegNode;
   p->value = here->ISRCdcValue;
+  p->id = (void*)here;
    ;}
  void     fillCapacitorInfos(void *data, GENinstance *pInstance){
    CAPinstance *here;
@@ -139,7 +186,7 @@ void MEprint(){
     while (pInstance != 0){
       pISRC = (ISRCinstance *) pInstance;
       val = pISRC->ISRCdcValue;
-      printf("une source entre les noeuds %d et %d, de valeur %f A.\n",pInstance->GENnode1,pInstance->GENnode2,val);
+      printf("une source entre les noeuds neg %d et pos %d, de valeur %f A.\n",pISRC->ISRCnegNode,pISRC->ISRCposNode,val);
       pInstance = pInstance->GENnextInstance;
     }
   }
@@ -171,7 +218,7 @@ void MEprint(){
     while (pInstance != 0){
       pVSRC = (VSRCinstance *) pInstance;
       val = pVSRC->VSRCdcValue;
-      printf("name : %s\n entre les noeuds %d et %d.\n valeur : %f Volt \n",pVSRC->VSRCname,  pInstance->GENnode1,pInstance->GENnode2,val);
+      printf("name : %s\n entre les noeuds neg %d et pos %d.\n valeur : %f Volt \n",pVSRC->VSRCname,  pVSRC->VSRCnegNode,pVSRC->VSRCposNode,val);
       pInstance = pInstance->GENnextInstance;
     }
   }
@@ -210,7 +257,7 @@ int nextComponent(void * data){
     case 25:
       fillInductorInfos(data,psInstance);
       break;
-    case 18:
+    case 46:
       fillVsourceInfos(data,psInstance);
       break;
     case 27:
@@ -223,8 +270,8 @@ int nextComponent(void * data){
       fillCapacitorInfos(data,psInstance);
       break;
     default :
-      /*error*/;
-    return -2;
+      printf("ERROR parser/src/perform.c : unknown type\n");
+    return 0;
   }
   psInstance = psInstance->GENnextInstance;
   return 1;

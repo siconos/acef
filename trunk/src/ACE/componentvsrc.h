@@ -18,6 +18,7 @@ public:
   componentVSRC(dataVSRC *d);
   virtual ~componentVSRC();
   virtual void  stamp ();
+  virtual void stampTimer();
   void stampTime();
   virtual void  addUnknowns ();
   virtual void  addEquations ();

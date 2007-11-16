@@ -96,9 +96,11 @@ bool mlcp::solve(){
     ACE_MESSAGE("mlcp::solve : Linear system\n");
     try{
       (*mQ2)=-1*(*mQ2);
+      cout <<(*mM22);
+      cout <<(*mQ2);
       mM22->PLUForwardBackwardInPlace(*mQ2);
       for (lin=0;lin<mDlin;lin++)
-	mZ2[lin]=mQ2[lin];
+	mZ2->setValue(lin,0,mQ2->getValue(lin,0));
       return true;
     }
     catch(SiconosException e)
