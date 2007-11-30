@@ -375,6 +375,9 @@ linearSystem::~linearSystem(){
 void linearSystem::readInitialValue(){
   int i;
   double aux;
+  int nbGuess;
+  unsigned long guess;
+
   cout << "read init value\n";
   try{
     ifstream pin(mFile);
@@ -382,6 +385,14 @@ void linearSystem::readInitialValue(){
 
     pin >> mStepNumber ;
     pin >> mH;
+    pin >> nbGuess;
+    for (i=0;i<nbGuess;i++){
+      pin >> guess;
+      mMLCP->addGuess(guess);
+    }
+      
+    initSimulation(PARSER_TSTEP,mH);
+    initSimulation(PARSER_TSTOP,mH*mStepNumber);
     cout << "mStepNumber\t"<<mStepNumber<<"\tmH\t"<<mH<<endl;
     cout << "x\n";
     for (i=0;i<mDimx;i++){
@@ -407,6 +418,7 @@ void linearSystem::readInitialValue(){
 }
 void linearSystem::initSimu(){
   allocDiscretisation();
+  mMLCP = new mlcp(mDimLambda,mNbNonDynEquations);
   readInitialValue();
   mStepCmp=0;
 
@@ -429,7 +441,6 @@ void linearSystem::initSimu(){
 	*mD3l = *mD2l;
       }
     }
-    mMLCP = new mlcp(mDimLambda,mNbNonDynEquations);
     *(mMLCP->mM11) = *mD3l;
     *(mMLCP->mM12) = *mD3zs;
     *(mMLCP->mM21) = *mB3l;
@@ -451,21 +462,21 @@ void linearSystem::initSimu(){
 void linearSystem::preparStep(){
   
   ExtractAndCompute2Sources();
-  if (mDimx && mDimLambda){
+  if (mDimx && mDimLambda){//both
     (*mxfree) = (*mxti) + mH*((1-mTheta)*prod(*mA2x,*mxti)+(1-mTheta)*prod(*mA2zs,*mzsti)+mThetap*(*mA2s)+(1-mThetap)*(*mA2sti));
     (*mPfree) = prod(*mD2x,prod(*mW,*mxfree)) + (*mD2s);
     (*mQfree) = prod(*mB2x,prod(*mW,*mxfree)) + (*mB2s);
-  } else if(mDimx){
+  } else if(mDimx){//only x
     (*mxfree) = (*mxti) + mH*(1-mTheta)*prod(*mA2x,*mxti)+mH*(1-mTheta)*prod(*mA2zs,*mzsti)+mH*(*mA2s);
     (*mQfree) = prod(*mB2x,prod(*mW,*mxfree)) + (*mB2s);
-  }else if (mDimLambda){
-    (*mxfree) = mH*(1-mTheta)*prod(*mA2zs,*mzsti)+mH*(*mA2s);
+  }else if (mDimLambda){//only lambda
     (*mPfree) = (*mD2s);
     (*mQfree) = (*mB2s);
   }else{
     (*mQfree) = (*mB2s);
   }
   *(mMLCP->mQ1)= *mPfree;
+  
   *(mMLCP->mQ2)= *mQfree;
 }
 void linearSystem::computeZnstiFromX_Zs(){
@@ -491,6 +502,7 @@ bool linearSystem::step(){
 
 }
 void linearSystem::stopSimu(){
+  mMLCP->printGuess();
   if (mMLCP)
     delete mMLCP;
   mMLCP=0;
@@ -598,8 +610,8 @@ equationIND* linearSystem::addIndEquation(){
  mIND.push_back(res);
  return res;
 }
-equationVD* linearSystem::addVdEquation(){
-  equationVD* res = new equationVD();
+equationVD* linearSystem::addVdEquation(char* name){
+  equationVD* res = new equationVD(name);
   mNbEquations++;
   mVD.push_back(res);
   return res;
@@ -810,7 +822,7 @@ void linearSystem::extractSources(){
     extractDynBockInMat(ms,mNbUnknowns,mNbUnknowns+1);
     (*mA1s)=prod(*mA,*ms);
   }
-  /*cout<<"vecteur source s:";
+  /*  cout<<"vecteur source s:";
   if (ms)
     cout<<(*ms);
   cout<<"\nvecteur source Bs1:";

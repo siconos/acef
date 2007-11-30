@@ -3,7 +3,7 @@
 #include <math.h>
 #include <cstdlib>
 
-char ACE_name[12]="ace_name";
+char ACE_name[12]="ace";
 
 bool ACE_IS_NULL(ACE_DOUBLE d){
   return (fabs(d)<ACE_INF);
@@ -64,7 +64,7 @@ void ACE_TYPE_TO_CHAR(int type,char* name){
       strcpy(name,"Diode");
       break;
     case ACE_TYPE_COMP:
-      strcpy(name,"Comparator?");
+      strcpy(name,"Comp");
       break;
     case ACE_TYPE_U:
       strcpy(name,"U");
@@ -74,6 +74,18 @@ void ACE_TYPE_TO_CHAR(int type,char* name){
       break;
     case ACE_TYPE_I:
       strcpy(name,"I");
+      break;
+    case ACE_TYPE_MOS:
+      strcpy(name,"MOS");
+      break;
+    case ACE_TYPE_VCVS:
+      strcpy(name,"VCVS");
+      break;
+    case ACE_TYPE_ARB:
+      strcpy(name,"ARB");
+      break;
+    case ACE_TYPE_VCCS:
+      strcpy(name,"VCCS");
       break;
   default:
     strcpy(name,"????");

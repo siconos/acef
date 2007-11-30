@@ -36,7 +36,7 @@ public:
   equationKCL* KCL(int i);
   equationCAP* addCapEquation();
   equationIND* addIndEquation();
-  equationVD* addVdEquation();
+  equationVD* addVdEquation(char* name =0);
   equationTEN* addTenEquation();
   int getIndexUnknown (int type,int node);
 

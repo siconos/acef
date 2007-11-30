@@ -9,7 +9,7 @@
 
 class equationVD : public equation {
 public:
-  equationVD();
+  equationVD(char* name);
   virtual void print();
 protected:
 private:

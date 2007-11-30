@@ -9,6 +9,7 @@ typedef int (*fct_initComponentList)(char *);
 typedef int (*fct_getNbElementsOfType)(char *);
 typedef int (*fct_getSourceValue)(char *,void *,double *);
 typedef int (*fct_computeSourcesValues)(double);
+typedef int (*fct_initSimulation)(int,double);
 
 static fct_print ptr_print=0;
 static fct_readFile ptr_readFile=0;
@@ -17,6 +18,7 @@ static fct_initComponentList ptr_initComponentList=0;
 static fct_getNbElementsOfType ptr_getNbElementsOfType=0;
 static fct_getSourceValue ptr_getSourceValue=0;
 static fct_computeSourcesValues ptr_computeSourcesValues=0;
+static fct_initSimulation ptr_initSimulation=0;
 
 static void* module=0;
 
@@ -72,6 +74,11 @@ int initParserLibrary(){
    fprintf(stderr, "Couldn't find computeSourcesValues: %s\n", error);
    return (0);
   }
+  ptr_initSimulation = dlsym(module, "initSimulation");
+  if ((error = dlerror())) {
+   fprintf(stderr, "Couldn't find initSimulation: %s\n", error);
+   return (0);
+  }
     
   return 1;
 }
@@ -98,4 +105,7 @@ int getSourceValue(char *type,void* id,double* value){
 }
 int computeSourcesValues(double time){
   return (*ptr_computeSourcesValues)(time);
+}
+int initSimulation(int type,double val){
+  return (*ptr_initSimulation)(type,val);
 }

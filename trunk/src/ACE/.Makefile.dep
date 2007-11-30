@@ -33,7 +33,26 @@ algo.o: algo.cpp algo.h ace.h extern.h includes/parser.h linearsystem.h \
   /scratch/install/include/Siconos/SiconosException.h mlcp.h \
   componentcap.h componentdyn.h componentlinear.h componentind.h \
   componentres.h componentdio.h componentnlinear.h componentvsrc.h \
-  componentisrc.h graph.h
+  componentvcvs.h componentvccs.h componentarb.h componentcomp.h \
+  componentisrc.h componentmos.h graph.h
+componentarb.o: componentarb.cpp componentarb.h componentlinear.h \
+  component.h ace.h extern.h includes/parser.h algo.h linearsystem.h \
+  unknown.h equationkcl.h equation.h equationcap.h equationind.h \
+  equationvd.h equationten.h aceMatrix.h \
+  /scratch/install/include/Siconos/SimpleMatrix.h \
+  /scratch/install/include/Siconos/SiconosMatrix.h \
+  /scratch/install/include/Siconos/SiconosAlgebra.h \
+  /scratch/install/include/Siconos/SiconosConst.h \
+  /scratch/install/include/Siconos/Tools.h \
+  /scratch/install/include/Siconos/boost/numeric/bindings/atlas/cblas_enum.hpp \
+  /scratch/install/include/Siconos/boost/numeric/bindings/traits/traits.hpp \
+  /scratch/install/include/Siconos/boost/numeric/bindings/traits/vector_traits.hpp \
+  /scratch/install/include/Siconos/boost/numeric/bindings/traits/config.hpp \
+  /scratch/install/include/Siconos/boost/numeric/bindings/traits/detail/generate_const.hpp \
+  /scratch/install/include/Siconos/boost/numeric/bindings/traits/matrix_traits.hpp \
+  /scratch/install/include/Siconos/boost/numeric/bindings/atlas/cblas_inc.hpp \
+  /scratch/install/include/Siconos/SiconosMatrixException.h \
+  /scratch/install/include/Siconos/SiconosException.h mlcp.h
 componentcap.o: componentcap.cpp componentcap.h ace.h extern.h \
   includes/parser.h componentdyn.h componentlinear.h component.h \
   equationten.h equation.h algo.h linearsystem.h unknown.h equationkcl.h \
@@ -53,7 +72,23 @@ componentcap.o: componentcap.cpp componentcap.h ace.h extern.h \
   /scratch/install/include/Siconos/SiconosMatrixException.h \
   /scratch/install/include/Siconos/SiconosException.h mlcp.h
 componentcomp.o: componentcomp.cpp componentcomp.h ace.h extern.h \
-  includes/parser.h componentnlinear.h component.h
+  includes/parser.h componentnlinear.h component.h algo.h linearsystem.h \
+  unknown.h equationkcl.h equation.h equationcap.h equationind.h \
+  equationvd.h equationten.h aceMatrix.h \
+  /scratch/install/include/Siconos/SimpleMatrix.h \
+  /scratch/install/include/Siconos/SiconosMatrix.h \
+  /scratch/install/include/Siconos/SiconosAlgebra.h \
+  /scratch/install/include/Siconos/SiconosConst.h \
+  /scratch/install/include/Siconos/Tools.h \
+  /scratch/install/include/Siconos/boost/numeric/bindings/atlas/cblas_enum.hpp \
+  /scratch/install/include/Siconos/boost/numeric/bindings/traits/traits.hpp \
+  /scratch/install/include/Siconos/boost/numeric/bindings/traits/vector_traits.hpp \
+  /scratch/install/include/Siconos/boost/numeric/bindings/traits/config.hpp \
+  /scratch/install/include/Siconos/boost/numeric/bindings/traits/detail/generate_const.hpp \
+  /scratch/install/include/Siconos/boost/numeric/bindings/traits/matrix_traits.hpp \
+  /scratch/install/include/Siconos/boost/numeric/bindings/atlas/cblas_inc.hpp \
+  /scratch/install/include/Siconos/SiconosMatrixException.h \
+  /scratch/install/include/Siconos/SiconosException.h mlcp.h
 component.o: component.cpp unknown.h ace.h extern.h includes/parser.h \
   component.h equation.h
 componentdio.o: componentdio.cpp componentdio.h ace.h extern.h \
@@ -114,10 +149,64 @@ componentisrc.o: componentisrc.cpp componentisrc.h ace.h extern.h \
   /scratch/install/include/Siconos/SiconosException.h mlcp.h
 componentlinear.o: componentlinear.cpp componentlinear.h component.h \
   ace.h extern.h includes/parser.h
+componentmos.o: componentmos.cpp componentmos.h ace.h extern.h \
+  includes/parser.h componentnlinear.h component.h algo.h linearsystem.h \
+  unknown.h equationkcl.h equation.h equationcap.h equationind.h \
+  equationvd.h equationten.h aceMatrix.h \
+  /scratch/install/include/Siconos/SimpleMatrix.h \
+  /scratch/install/include/Siconos/SiconosMatrix.h \
+  /scratch/install/include/Siconos/SiconosAlgebra.h \
+  /scratch/install/include/Siconos/SiconosConst.h \
+  /scratch/install/include/Siconos/Tools.h \
+  /scratch/install/include/Siconos/boost/numeric/bindings/atlas/cblas_enum.hpp \
+  /scratch/install/include/Siconos/boost/numeric/bindings/traits/traits.hpp \
+  /scratch/install/include/Siconos/boost/numeric/bindings/traits/vector_traits.hpp \
+  /scratch/install/include/Siconos/boost/numeric/bindings/traits/config.hpp \
+  /scratch/install/include/Siconos/boost/numeric/bindings/traits/detail/generate_const.hpp \
+  /scratch/install/include/Siconos/boost/numeric/bindings/traits/matrix_traits.hpp \
+  /scratch/install/include/Siconos/boost/numeric/bindings/atlas/cblas_inc.hpp \
+  /scratch/install/include/Siconos/SiconosMatrixException.h \
+  /scratch/install/include/Siconos/SiconosException.h mlcp.h
 componentnlinear.o: componentnlinear.cpp componentnlinear.h ace.h \
   extern.h includes/parser.h component.h
 componentres.o: componentres.cpp componentres.h ace.h extern.h \
   includes/parser.h componentlinear.h component.h algo.h linearsystem.h \
+  unknown.h equationkcl.h equation.h equationcap.h equationind.h \
+  equationvd.h equationten.h aceMatrix.h \
+  /scratch/install/include/Siconos/SimpleMatrix.h \
+  /scratch/install/include/Siconos/SiconosMatrix.h \
+  /scratch/install/include/Siconos/SiconosAlgebra.h \
+  /scratch/install/include/Siconos/SiconosConst.h \
+  /scratch/install/include/Siconos/Tools.h \
+  /scratch/install/include/Siconos/boost/numeric/bindings/atlas/cblas_enum.hpp \
+  /scratch/install/include/Siconos/boost/numeric/bindings/traits/traits.hpp \
+  /scratch/install/include/Siconos/boost/numeric/bindings/traits/vector_traits.hpp \
+  /scratch/install/include/Siconos/boost/numeric/bindings/traits/config.hpp \
+  /scratch/install/include/Siconos/boost/numeric/bindings/traits/detail/generate_const.hpp \
+  /scratch/install/include/Siconos/boost/numeric/bindings/traits/matrix_traits.hpp \
+  /scratch/install/include/Siconos/boost/numeric/bindings/atlas/cblas_inc.hpp \
+  /scratch/install/include/Siconos/SiconosMatrixException.h \
+  /scratch/install/include/Siconos/SiconosException.h mlcp.h
+componentvccs.o: componentvccs.cpp componentvccs.h componentlinear.h \
+  component.h ace.h extern.h includes/parser.h algo.h linearsystem.h \
+  unknown.h equationkcl.h equation.h equationcap.h equationind.h \
+  equationvd.h equationten.h aceMatrix.h \
+  /scratch/install/include/Siconos/SimpleMatrix.h \
+  /scratch/install/include/Siconos/SiconosMatrix.h \
+  /scratch/install/include/Siconos/SiconosAlgebra.h \
+  /scratch/install/include/Siconos/SiconosConst.h \
+  /scratch/install/include/Siconos/Tools.h \
+  /scratch/install/include/Siconos/boost/numeric/bindings/atlas/cblas_enum.hpp \
+  /scratch/install/include/Siconos/boost/numeric/bindings/traits/traits.hpp \
+  /scratch/install/include/Siconos/boost/numeric/bindings/traits/vector_traits.hpp \
+  /scratch/install/include/Siconos/boost/numeric/bindings/traits/config.hpp \
+  /scratch/install/include/Siconos/boost/numeric/bindings/traits/detail/generate_const.hpp \
+  /scratch/install/include/Siconos/boost/numeric/bindings/traits/matrix_traits.hpp \
+  /scratch/install/include/Siconos/boost/numeric/bindings/atlas/cblas_inc.hpp \
+  /scratch/install/include/Siconos/SiconosMatrixException.h \
+  /scratch/install/include/Siconos/SiconosException.h mlcp.h
+componentvcvs.o: componentvcvs.cpp componentvcvs.h componentlinear.h \
+  component.h ace.h extern.h includes/parser.h algo.h linearsystem.h \
   unknown.h equationkcl.h equation.h equationcap.h equationind.h \
   equationvd.h equationten.h aceMatrix.h \
   /scratch/install/include/Siconos/SimpleMatrix.h \

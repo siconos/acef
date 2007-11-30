@@ -12,9 +12,23 @@
 // 
 // 
 class componentCOMP : public componentNLINEAR {
-
 public:
-  componentCOMP();
+  dataCOMP mData;
+  ACE_DOUBLE mVplus;
+  ACE_DOUBLE mVmoins;
+  ACE_DOUBLE mEpsilon;
+  ACE_DOUBLE mD11;
+  ACE_DOUBLE mD12;
+  int mNodeS;
+  unknown *mVs;
+  
+  componentCOMP(dataCOMP *d);
+  virtual void  addUnknowns ();
+  virtual void  addEquations ();
+  virtual void  stamp ();
+  virtual void  print ();
+
+  virtual ~componentCOMP();
 protected:
   
 private:

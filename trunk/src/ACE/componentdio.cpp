@@ -25,6 +25,8 @@ componentDIO::componentDIO(dataDIO *d)
   mDimZns=1;
   mIndiceStartZns=-1;
   mIndiceStartLambda=-1;
+  mType = ACE_TYPE_DIO;
+  
 
   
 }

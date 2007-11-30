@@ -22,6 +22,12 @@ class component;
 #define ACE_TYPE_ISRC 5
 #define ACE_TYPE_DIO 6
 #define ACE_TYPE_COMP 7
+#define ACE_TYPE_MOS 8
+#define ACE_TYPE_VCVS 9
+#define ACE_TYPE_ARB 10
+#define ACE_TYPE_VCCS 11
+
+
 
 #define ACE_TYPE_U 108
 #define ACE_TYPE_V 109

@@ -13,6 +13,10 @@
 #include "./spicelib/devices/ind/inddefs.h"
 #include "./spicelib/devices/ind/indext.h"
 #include "./spicelib/devices/vsrc/vsrcdefs.h"
+#include "./spicelib/devices/vcvs/vcvsdefs.h"
+#include "./spicelib/devices/vccs/vccsdefs.h"
+#include "./spicelib/devices/asrc/asrcdefs.h"
+#include "./spicelib/devices/mos1/mos1defs.h"
 //#include "./spicelib/devices/dev.h"
 #include "devdefs.h"
 
@@ -103,6 +107,39 @@ void     fillResistorInfos(void *data, GENinstance *pInstance){
   p->value = here->VSRCdcValue;
   p->id = (void*)here;
 }
+void     fillVCVsourceInfos(void *data, GENinstance *pInstance){
+  dataVCVS *p;
+  VCVSinstance *here;
+  if (!data || !psInstance)
+    return;
+  
+  p = (dataVCVS *)data;
+  here = (VCVSinstance *)psInstance;
+  p->name = here->VCVSname;
+  p->nodePos = here->VCVSposNode;
+  p->nodeNeg = here->VCVSnegNode;
+  p->nodeDriverPos = here->VCVScontPosNode;
+  p->nodeDriverNeg = here->VCVScontNegNode;
+  p->value = 0;
+  p->coef = here->VCVScoeff;
+}
+void     fillVCCsourceInfos(void *data, GENinstance *pInstance){
+  dataVCCS *p;
+  VCCSinstance *here;
+  if (!data || !psInstance)
+    return;
+  
+  p = (dataVCCS *)data;
+  here = (VCCSinstance *)psInstance;
+  p->name = here->VCCSname;
+  p->nodePos = here->VCCSposNode;
+  p->nodeNeg = here->VCCSnegNode;
+  p->nodeDriverPos = here->VCCScontPosNode;
+  p->nodeDriverNeg = here->VCCScontNegNode;
+  p->value = 0;
+  p->coef = here->VCCScoeff;
+}
+
  
  void     fillIsourceInfos(void *data, GENinstance *pInstance){
    ISRCinstance * here;
@@ -117,6 +154,20 @@ void     fillResistorInfos(void *data, GENinstance *pInstance){
   p->value = here->ISRCdcValue;
   p->id = (void*)here;
    ;}
+
+ void     fillARBsourceInfos(void *data, GENinstance *pInstance){
+   ASRCinstance *here;
+   dataARB *p;
+  if (!data || !psInstance)
+    return;
+
+  p = (dataARB *)data;
+  here = (ASRCinstance *)psInstance;
+  p->name = here->ASRCname;
+  p->nodePos = here->ASRCposNode;
+  p->nodeNeg = here->ASRCnegNode;
+  p->type = here->ASRCtype;
+ }
  void     fillCapacitorInfos(void *data, GENinstance *pInstance){
    CAPinstance *here;
    dataCAP *p;
@@ -141,8 +192,29 @@ void     fillResistorInfos(void *data, GENinstance *pInstance){
   p->nodePos = here->DIOposNode;
   p->nodeNeg = here->DIOnegNode;
   p->area = here->DIOarea;
-   ;}
- 
+ }
+void bidon(MOS1instance *here){
+  printf("%d\n",here->MOS1mode);
+}
+ void fillMos1Infos(void *data, GENinstance *pInstance){
+   MOS1instance *here;
+   dataMOS1 *p;
+  if (!data || !psInstance)
+    return;
+  p = (dataMOS1 *)data;
+  here = (MOS1instance *)psInstance;
+  bidon(here);
+  p->mode = here->sMOS1modPtr->MOS1type;
+  p->name = here->MOS1name;
+  p->drain = here->MOS1dNode;
+  p->gate = here->MOS1gNode;
+  p->source = here->MOS1sNode;
+  p->w =  here->MOS1w;
+  p->k =  here->sMOS1modPtr->MOS1transconductance;
+  p->vt = here->sMOS1modPtr->MOS1vt0;
+
+  
+ }
 
 void MEperform(){
     CKTcircuit *circuit =0;
@@ -251,26 +323,40 @@ int nextComponent(void * data){
   if (!psInstance)
     return 0;
   switch(sType){
-    case 38:
-      fillResistorInfos(data,psInstance);
-      break;
-    case 25:
-      fillInductorInfos(data,psInstance);
-      break;
-    case 46:
-      fillVsourceInfos(data,psInstance);
-      break;
-    case 27:
-      fillIsourceInfos(data,psInstance);
-      break;
-    case 21:
-      fillDiodeInfos(data,psInstance);
-      break;
-    case 16:
-      fillCapacitorInfos(data,psInstance);
-      break;
-    default :
-      printf("ERROR parser/src/perform.c : unknown type\n");
+  case 38:
+    fillResistorInfos(data,psInstance);
+    break;
+  case 25:
+    fillInductorInfos(data,psInstance);
+    break;
+  case 46:
+    fillVsourceInfos(data,psInstance);
+    break;
+  case 27:
+    fillIsourceInfos(data,psInstance);
+    break;
+  case 21:
+    fillDiodeInfos(data,psInstance);
+    break;
+  case 33:
+    fillMos1Infos(data,psInstance);
+    break;
+  case 16:
+    fillCapacitorInfos(data,psInstance);
+    break;
+  case 45:
+    fillVCVsourceInfos(data,psInstance);
+    break;
+  case 1:
+    fillARBsourceInfos(data,psInstance);
+    break;
+  case 44:
+    fillVCCsourceInfos(data,psInstance);
+    break;
+  default :
+    printf("ERROR parser/src/perform.c : unknown type\n");
+
+    
     return 0;
   }
   psInstance = psInstance->GENnextInstance;

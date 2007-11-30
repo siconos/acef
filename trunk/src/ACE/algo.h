@@ -28,7 +28,11 @@ public:
   components mRess;
   components mIsrcs;
   components mVsrcs;
+  components mVcvs;
+  components mVccs;
+  components mArbs;
   components mDios;
+  components mMos;
   char mFile[ACE_CHAR_LENGTH];
   ofstream* mSimuStream;
   char mSimuFile[ACE_CHAR_LENGTH];

@@ -27,22 +27,18 @@ void componentVSRC::addEquations(){
 }
 void componentVSRC::stamp(){
   ACE_DOUBLE newValue;
-  //getSourceValue(mData.id,&newValue);
 
   //KCL
   int i;
-  if (!mI || ! mEquation)
-    ACE_INTERNAL_ERROR("componentVSRC::stamp no mI or no mEquation!!");
+  ACE_CHECK_IERROR(mI && mEquation,"componentVSRC::stamp no mI or no mEquation!!");
   algo::sls.KCL(mData.nodeNeg)->mCoefs[mI->mIndex]-=1;
   algo::sls.KCL(mData.nodePos)->mCoefs[mI->mIndex]+=1;
+  
   //VD laws
   i= algo::sls.getIndexUnknown(ACE_TYPE_V,mData.nodeNeg);
   mEquation->mCoefs[i]+=-1;
   i= algo::sls.getIndexUnknown(ACE_TYPE_V,mData.nodePos);
   mEquation->mCoefs[i]+=1;
-  //  mEquation->mCoefs[algo::sls.mRS]-=newValue - mCurrentValue;
-
-  //mCurrentValue = newValue;
 }
 
 void componentVSRC::stampTimer(){

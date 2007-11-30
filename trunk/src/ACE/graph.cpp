@@ -30,7 +30,7 @@ typedef property<edge_weight_t,weight_t> EProperty;
 
 typedef adjacency_list<vecS, vecS, directedS, VProperty, EProperty > Graph_;
 
-static int sss_i=0;
+//static int sss_i=0;
 
 typedef std::map<E,componentCAP *> mapEdge;
 

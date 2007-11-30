@@ -4,8 +4,13 @@
 
 #include "equationvd.h"
 
-equationVD::equationVD(){;}
+equationVD::equationVD(char * name){
+  mName = name;
+}
 void equationVD::print(){
-  printf("VD\t");
+  printf("VD");
+  if (mName)
+    printf(mName);
+  printf("\t");
   equation::print();
 }

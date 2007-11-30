@@ -8,7 +8,12 @@
 #include "componentres.h"
 #include "componentdio.h"
 #include "componentvsrc.h"
+#include "componentvcvs.h"
+#include "componentvccs.h"
+#include "componentarb.h"
+#include "componentcomp.h"
 #include "componentisrc.h"
+#include "componentmos.h"
 #include "graph.h"
 #include <fstream>
 
@@ -58,8 +63,20 @@ algo::~algo(){
   n = mDios.size();
   for(i=0;i<n;i++)
     delete mDios[i];
-
-}
+  n = mMos.size();
+  for(i=0;i<n;i++)
+    delete mMos[i];
+  n = mVcvs.size();
+  for(i=0;i<n;i++)
+    delete mVcvs[i];
+  n = mArbs.size();
+  for(i=0;i<n;i++)
+    delete mArbs[i];
+  n = mVccs.size();
+  for(i=0;i<n;i++)
+    delete mVccs[i];
+  
+ }
 
 ////////////////////////////////////////////////////////////////////// ALGO
 void algo::perform(){
@@ -143,7 +160,16 @@ void algo::perform(){
    c->addEquations();
    
  }
+ initComponentList("Mos1");
+ dataMOS1 mos;
+ while(nextComponent(&mos)){
+   componentMOS *c=new componentMOS(&mos);
+   mMos.push_back(c);
+   c->addUnknowns();
+   c->addEquations();
+ }
 
+ 
 //get RESISTOR from parser
  initComponentList("Resistor");
  dataRES dRes;
@@ -161,6 +187,43 @@ void algo::perform(){
    c->addEquations();
    mVsrcs.push_back(c);   
  }
+
+ initComponentList("VCVS");
+ dataVCVS dVcvs;
+ while(nextComponent(&dVcvs)){
+   componentVCVS *c=new componentVCVS(&dVcvs);
+   c->addUnknowns();
+   c->addEquations();
+   mVcvs.push_back(c);   
+ }
+ 
+ initComponentList("ASRC");
+ dataARB dArb;
+ dataCOMP dCOMP;
+ while(nextComponent(&dArb)){
+   ACE_MESSAGE("replace arb by comp\n");
+   dCOMP.nodePos=7;
+   dCOMP.nodeNeg=12;
+   dCOMP.nodeS=3;
+   dCOMP.vplus = 3;
+   dCOMP.vmoins = 0;
+   dCOMP.epsilon=0.1;
+   dCOMP.name=ACE_name;
+   componentCOMP *c=new componentCOMP(&dCOMP);
+   c->addUnknowns();
+   c->addEquations();
+   mArbs.push_back(c);   
+ }
+ 
+ initComponentList("VCCS");
+ dataVCCS dVCCS;
+ while(nextComponent(&dVCCS)){
+   componentVCCS *c=new componentVCCS(&dVCCS);
+   c->addUnknowns();
+   c->addEquations();
+   mVccs.push_back(c);   
+ }
+ 
 //get Isource from parser
  initComponentList("Isource");
  dataISRC dIsrc;
@@ -222,6 +285,18 @@ void algo::stamp(){
   n = mDios.size();
   for(i=0;i<n;i++)
     mDios[i]->stamp();
+  n = mMos.size();
+  for(i=0;i<n;i++)
+    mMos[i]->stamp();
+  n = mVcvs.size();
+  for(i=0;i<n;i++)
+    mVcvs[i]->stamp();
+  n = mArbs.size();
+  for(i=0;i<n;i++)
+    mArbs[i]->stamp();
+  n = mVccs.size();
+  for(i=0;i<n;i++)
+    mVccs[i]->stamp();
 
 }
 ////////////////////////////////////////////////////////////////////// SIMULATION
@@ -259,36 +334,58 @@ void algo::simulate(){
 void algo::printComponents(){
   int n =0;
   int i;
-  
-  n=mInds.size();
-  printf("ACE %d Inductors:\n",n);
-  for(i=0;i<n;i++)
-    mInds[i]->print();
-  
-  n=mCaps.size();
-  printf("ACE %d Capacitors:\n",n);
-  for(i=0;i<n;i++)
-    mCaps[i]->print();
-  
-  n=mRess.size();
-  printf("ACE %d Resistors:\n",n);
-  for(i=0;i<n;i++)
-    mRess[i]->print();
-  
+  ACE_MESSAGE("ACE components:\n");
   n=mIsrcs.size();
-  printf("ACE %d Isource:\n",n);
+  printf("-->%d I source:\n",n);
   for(i=0;i<n;i++)
     mIsrcs[i]->print();
   
   n=mVsrcs.size();
-  printf("ACE %d Vsource:\n",n);
+  printf("-->%d Vsource:\n",n);
   for(i=0;i<n;i++)
     mVsrcs[i]->print();
   
+  n=mArbs.size();
+  printf("-->%d Arb:\n",n);
+  for(i=0;i<n;i++)
+    mArbs[i]->print();
+
+  n=mVccs.size();
+  printf("-->%d VCCS:\n",n);
+  for(i=0;i<n;i++)
+    mVccs[i]->print();
+
+  n=mVcvs.size();
+  printf("-->%d VCVS:\n",n);
+  for(i=0;i<n;i++)
+    mVcvs[i]->print();
+  
+
+  n=mInds.size();
+  printf("-->%d Inductors:\n",n);
+  for(i=0;i<n;i++)
+    mInds[i]->print();
+  
+  n=mCaps.size();
+  printf("-->%d Capacitors:\n",n);
+  for(i=0;i<n;i++)
+    mCaps[i]->print();
+  
+  n=mRess.size();
+  printf("-->%d Resistors:\n",n);
+  for(i=0;i<n;i++)
+    mRess[i]->print();
+  
   n=mDios.size();
-  printf("ACE %d Diode:\n",n);
+  printf("-->%d Diode:\n",n);
   for(i=0;i<n;i++)
     mDios[i]->print();
+
+  n=mMos.size();
+  printf("-->%d MOS:\n",n);
+  for(i=0;i<n;i++)
+    mMos[i]->print();
+  
 
   
 }

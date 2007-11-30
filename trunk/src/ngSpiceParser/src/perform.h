@@ -42,14 +42,46 @@ typedef struct {
   double area;
 } dataDIO;
 
+typedef struct {
+  char *name;
+  int mode;
+  /*int nodePos;
+    int nodeNeg;*/
+  int drain;
+  int gate;
+  int source;
+  double w;
+  double k;
+  double vt;
+} dataMOS1;
+
 /* structures to describe Voltage Controlled Current Sources */
 typedef struct {
   char *name;
   int nodePos;
   int nodeNeg;
-  double *coef;
+  double coef;
+  int nodeDriverPos;
+  int nodeDriverNeg;
   double value;
 } dataVCCS;
+/* structures to describe Voltage Controlled Voltage Sources */
+typedef struct {
+  char *name;
+  int nodePos;
+  int nodeNeg;
+  double coef;
+  int nodeDriverPos;
+  int nodeDriverNeg;
+  double value;
+} dataVCVS;
+
+typedef struct {
+  char *name;
+  int nodePos;
+  int nodeNeg;
+  int type;
+} dataARB;
 
 
 /*structures to describe independent voltage sources*/

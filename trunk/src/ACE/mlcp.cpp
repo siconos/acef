@@ -5,6 +5,7 @@
 #include "SimpleVector.h"
 
 
+
 mlcp::mlcp(unsigned int Dlcp,unsigned int Dlin){
 
    mDlcp = Dlcp;
@@ -27,6 +28,10 @@ mlcp::mlcp(unsigned int Dlcp,unsigned int Dlin){
    mCurEnum=0;
    mCmp=0;
    mMaxEnum = (unsigned long) powl(2,(long)mDlcp);
+   mGuess.clear();
+   mTryGuess = false;
+   mUseGuess = true;
+   mPourCent=0;
 
    mM = new aceMatrix(Dlcp+Dlin,Dlcp+Dlin);
    mQ= new aceMatrix(Dlcp+Dlin,1);
@@ -51,42 +56,65 @@ mlcp::mlcp(unsigned int Dlcp,unsigned int Dlin){
      mM12 = new aceMatrix(mDlcp,mDlin);
    }
 }
-
-void mlcp::initEnum(){
-  unsigned long aux;
-  mCmp=0;
-  aux = mCurEnum;
+void mlcp::addGuess(unsigned long l){
+  mGuess.push_back(l);
+}
+void mlcp::affectW1Z1(unsigned long ll){
+  unsigned long aux = ll;
+  mCase = ll;
   for (unsigned int i =0; i <mDlcp; i++){
     mW1Z1[i]=aux & 1;
     aux = aux >> 1;
+  }
+
+}
+void mlcp::initGuess(){
+  mItGuess = mGuess.begin();
+}
+bool mlcp::tryGuess(){
+  if (mItGuess == mGuess.end()){
+    mTryGuess = false;
+    return false;
+  }
+  printf("try guess %d\n",(int)*mItGuess);
+  affectW1Z1(*mItGuess);
+  mItGuess++;
+  return true;
+}
+void mlcp::initEnum(){
+  mPourCent=0;
+  mCmp=0;
+  if (mUseGuess){
+    mTryGuess = true;
+    initGuess();
+  }else{
+    mTryGuess = false;
   }
 }
 
 bool mlcp::nextEnum(){
+  if (mTryGuess && tryGuess())
+    return true;
+  
   if (mCmp == mMaxEnum)
     return false;
-  unsigned long aux;
-  mCmp++;
-  mCurEnum++;
-  aux = mCurEnum;
-  for (unsigned int i =0; i <mDlcp; i++){
-    mW1Z1[i]=aux & 1;
-    aux = aux >> 1;
+  if (mCmp > mPourCent*mMaxEnum){
+    mPourCent+=0.001;
+    printf(" %f %d \n",mPourCent,(int) mCurEnum);
   }
-
+  if (mCurEnum >= mMaxEnum){
+    mCurEnum=0;
+  }
+  affectW1Z1(mCurEnum);
+  mCurEnum++;
+  mCmp++;
   
   return true;
-  /*for (unsigned int i =0; i <mDlcp; i++){
-    if (mW1Z1[i]==0){
-      mW1Z1[i]=1;
-      return true;
-    }
-    mW1Z1[i]=0;
-  }    
-  return false;*/
 }
 bool mlcp::solve(){
   bool muet = true;
+  bool onlyOne = false;
+
   bool find = false;
   unsigned int col =0;
   unsigned int lin =0;
@@ -96,8 +124,8 @@ bool mlcp::solve(){
     ACE_MESSAGE("mlcp::solve : Linear system\n");
     try{
       (*mQ2)=-1*(*mQ2);
-      cout <<(*mM22);
-      cout <<(*mQ2);
+      //cout <<(*mM22);
+      //cout <<(*mQ2);
       mM22->PLUForwardBackwardInPlace(*mQ2);
       for (lin=0;lin<mDlin;lin++)
 	mZ2->setValue(lin,0,mQ2->getValue(lin,0));
@@ -116,16 +144,17 @@ bool mlcp::solve(){
   }
   
   initEnum();
-  if(!muet){
+  if(!muet || onlyOne){
+    onlyOne=false;
     mM->setBlock(0,0,mM11);
     mM->setBlock(0,mDlcp,mM12);
     mM->setBlock(mDlcp,0,mM21);
     mM->setBlock(mDlcp,mDlcp,mM22);
     mQ->setBlock(0,0,mQ1);
     mQ->setBlock(mDlcp,0,mQ2);
-    printInPut();
+    printInPutABCDab();
   }
-  do{
+  while(nextEnum()){
     mM->setBlock(0,mDlcp,mM12);
     mM->setBlock(mDlcp,mDlcp,mM22);
     mQ->setBlock(0,0,mQ1);
@@ -164,11 +193,6 @@ bool mlcp::solve(){
       cout<<endl;
       printInPut();
     }
-    //mM->PLUFactorizationInPlace();
-    //if(!mM->isFactorized())
-    //  continue;
-
-   //cout <<"mM:\n"<<(*mM)<<"\n";
    *mQ=-1*(*mQ);
    mM->PLUForwardBackwardInPlace(*mQ);
    bool check=true;
@@ -185,6 +209,10 @@ bool mlcp::solve(){
      continue;
    if(!muet)
      ACE_MESSAGE("mlcp::solve succes\n");
+   
+   printf("val de step %d \n",(int)mCase);
+   if (mUseGuess && ! mTryGuess)
+     addGuess(mCase);
    find = true;
    break;// gagne.
   }
@@ -200,7 +228,7 @@ bool mlcp::solve(){
       continue;
     }
    
- }while(nextEnum());
+ };
  if (find){
    for (lin=0;lin<mDlcp;lin++){
      if (mW1Z1[lin]==0){
@@ -250,8 +278,34 @@ mlcp::~mlcp(){
     delete mM21;
   if (mM22)
     delete mM22;
+  mGuess.clear();
+
 }
 
+void mlcp::printGuess(ostream& os){
+  initGuess();
+  while (tryGuess())
+    os<<"guess : "<<mCase<<endl;
+}
+
+void mlcp::printInPutABCDab(ostream& os)
+{
+  os<<"mlcp print input"<<endl;
+  os<<"dim lcp:\t"<<mDlcp<<"\tlin\t"<<mDlin;
+  os<<"A\n";
+  os<<(*mM22);
+  os<<"B\n";
+  os<<(*mM11);
+  os<<"C\n";
+  os<<(*mM21);
+  os<<"D\n";
+  os<<(*mM12);
+  os<<"a\n";
+  os<<(*mQ2);
+  os<<"b\n";
+  os<<(*mQ1);
+  
+}
 void mlcp::printInPut(ostream& os)
 {
   os<<"mlcp print input"<<endl;
@@ -262,7 +316,7 @@ void mlcp::printInPut(ostream& os)
   os<<(*mQ);
 }
 void mlcp::printOutPut(ostream& os){
-  os<<"mlcp print input"<<endl;
+  os<<"mlcp print output"<<endl;
   os<<"Z1:\n";
   os<<(*mZ1);
   os<<"Z2:\n";
