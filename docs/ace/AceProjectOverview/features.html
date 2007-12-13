@@ -1,0 +1,633 @@
+<!DOCTYPE html PUBLIC "-//Tigris//DTD XHTML 1.0 Transitional//EN" "http://style.tigris.org/tigris_transitional.dtd">
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=iso-8859-1"/>
+  <title>Features</title>
+  <style type="text/css">
+/* <![CDATA[ */ 
+@import "css/readyset.css"; 
+@import "css/inst.css";
+/*  ]]>
+
+ */
+ </style>
+  <link rel="stylesheet" type="text/css" href="css/print.css" media="print"/>
+</head>
+<body>
+<div class="app">
+<div class="readyset">
+<h2>Features</h2>
+
+<!-- /processimpact -->
+<div id="F-1.001">
+<h3>F-1.001: Store a Netlist</h3>
+<table class="axial" border="1" cellpadding="3" cellspacing="2">
+  <tbody>
+    <tr>
+      <th>Priority:</th>
+      <td>Essential</td>
+    </tr>
+    <tr>
+      <th>Functional area(s):</th>
+      <td>Parser</td>
+    </tr>
+    <tr>
+      <th>Description:</th>
+      <td>The parser store a Netlist. There are an API to explore the circuit topology.</td>
+    </tr>
+    <tr>
+      <th>Notes and Questions:</th>
+      <td><br />
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<div id="F-1.002">
+<h3>F-1.002: Sub-circuit management<br />
+</h3>
+<table class="axial" border="1" cellpadding="3" cellspacing="2">
+  <tbody>
+    <tr>
+      <th>Priority:</th>
+      <td>Essential</td>
+    </tr>
+    <tr>
+      <th>Functional area(s):</th>
+      <td>Parser</td>
+    </tr>
+    <tr>
+      <th>Description:</th>
+      <td>Sub circuit is a special key in a Netlist. It consists to manage it when the sub circuit is a comparator.</td>
+    </tr>
+    <tr>
+      <th>Notes and Questions:</th>
+      <td>A comparator is a non smooth component modelized with complementarity conditions.<br />
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<div id="F-1.003">
+<h3>F-1.003: Transient analysis.</h3>
+<table class="axial" border="1" cellpadding="3" cellspacing="2">
+  <tbody>
+    <tr>
+      <th>Priority:</th>
+      <td>Secondary importance</td>
+    </tr>
+    <tr>
+      <th>Functional area(s):</th>
+      <td>Parser</td>
+    </tr>
+    <tr>
+      <th>Description:</th>
+      <td>A Netlist has a special key word to define the transient analysis parameters. It consists to read and
+      export these parameters.<br />
+      <ul>
+      </ul>
+      </td>
+    </tr>
+    <tr>
+      <th>Notes and Questions:</th>
+      <td>In current version, this imformation is written in an other file.<br />
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<div id="F-2.000">
+<h3>F-2.000: Linear, circuit RLC</h3>
+<table class="axial" border="1" cellpadding="3" cellspacing="2">
+  <tbody>
+    <tr>
+      <th>Priority:</th>
+      <td>Essential</td>
+    </tr>
+    <tr>
+      <th>Functional area(s):</th>
+      <td>ACEF</td>
+    </tr>
+    </tr>
+    <tr>
+      <th>Description:</th>
+      <td>In this case the circuit is composed only with resistances, capacitors and inductors.
+      It consists to develop an automatic circuit equation formulation. The result is a linear system.<br/>
+      </td>
+    </tr>
+    <tr>
+      <th>Notes and Questions:</th>
+      <td><br />
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<div id="F-2.001">
+<h3><br />
+F-2.001: Diodes</h3>
+<table class="axial" border="1" cellpadding="3" cellspacing="2">
+  <tbody>
+    <tr>
+      <th>Priority:</th>
+      <td>Essential</td>
+    </tr>
+    <tr>
+      <th>Functional area(s):</th>
+      <td>ACEF</td>
+    </tr>
+    <tr>
+      <th>Description:</th>
+      <td>A diode is a non smooth component, modelized with compementarity conditions. Diode model
+      is an ideal diode. Automatic circuit equation formulation lead into a Mixte Linear Complementarity
+      Problem(MLCP). <br />
+      </td>
+    </tr>
+    <tr>
+      <th>Notes and Questions:</th>
+      <td>There are no parameters in the model. <br />
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<div id="F-2.002">
+<h3><br />
+F-2.002: Transistor MOS<br />
+</h3>
+<table class="axial" border="1" cellpadding="3" cellspacing="2">
+  <tbody>
+    <tr>
+      <th>Priority:</th>
+      <td>Essential</td>
+    </tr>
+    <tr>
+      <th>Functional area(s):</th>
+      <td>ACEF</td>
+    </tr>
+    <tr>
+      <th>Description:</th>
+      <td>A transistor is a non smooth component, piecewise linear ,modelized with compementarity
+      conditions. Automatic circuit equation formulation lead into a Mixte Linear Complementarity
+      Problem(MLCP). <br />
+      </td>
+    </tr>
+    <tr>
+      <th>Notes and Questions:</th>
+      <td>There are no parameters in the model.<br />
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<div id="F-2.003">
+<h3><br />
+F-2.003: Comparator<br />
+</h3>
+<table class="axial" border="1" cellpadding="3" cellspacing="2">
+  <tbody>
+    <tr>
+      <th>Priority:</th>
+      <td>Essential</td>
+    </tr>
+    <tr>
+      <th>Functional area(s):</th>
+      <td>ACEF</td>
+    </tr>
+    <tr>
+      <th>Description:</th>
+      <td>A Comparator is a non smooth component, piecewise linear ,modelized with compementarity conditions. <br />
+      </td>
+    </tr>
+    <tr>
+      <th>Notes and Questions:</th>
+      <td>There are no parameters in the model.<br />
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<div id="F-2.004">
+<h3><br />
+F-2.004: Diode, transistor, comparator with parameters<br />
+</h3>
+<table class="axial" border="1" cellpadding="3" cellspacing="2">
+  <tbody>
+    <tr>
+      <th>Priority:</th>
+      <td>Secondary importance</td>
+    </tr>
+    <tr>
+      <th>Functional area(s):</th>
+      <td>ACEF</td>
+    </tr>
+    <tr>
+      <th>Description:</th>
+      <td>It consists to customize the component model with parameters(Saturation current, zero
+      biais,...). The goal is to be nearer to the physical behaviour.<br />
+      </td>
+    </tr>
+    <tr>
+      <th>Notes and Questions:</th>
+      <td>Parameters list must be defiened for each component.<br />
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+<div id="F-2.005">
+<h3><br />
+F-2.005: Automatique picewise linear approximation and L.C.P. formulation.<br />
+</h3>
+<table class="axial" border="1" cellpadding="3" cellspacing="2">
+  <tbody>
+    <tr>
+      <th>Priority:</th>
+      <td>Essential</td>
+    </tr>
+    <tr>
+      <th>Functional area(s):</th>
+      <td>ACEF</td>
+    </tr>
+    <tr>
+      <th>Description:</th>
+      <td> The goal is to develop a module to build a picewise linear approximation for any non-smooth component, and
+      write the L.C.P. formulation of this geometry.
+      </td>
+    </tr>
+    <tr>
+      <th>Notes and Questions:</th>
+      <td>A feasibility study must be done.<br />
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<div id="F-2.006">
+<h3><br />
+F-2.006: Use simple piecewise linear approximation to accelerate the M.L.C.P. resolution..<br />
+</h3>
+<table class="axial" border="1" cellpadding="3" cellspacing="2">
+  <tbody>
+    <tr>
+      <th>Priority:</th>
+      <td>Secondary importance</td>
+    </tr>
+    <tr>
+      <th>Functional area(s):</th>
+      <td>ACEF</td>
+    </tr>
+    <tr>
+      <th>Description:</th>
+      <td> The dimention of the L.C.P. formulation for a transistor is 10. These 10 parameters
+      described 5 linear parts in the picewise linear description. The goal is to use a very simple
+      picewise linear description, with only tow parts, to get the smaller M.L.C.P.. We solve this
+      smaller formulation, and the result is used like a "guess point" to solve the initial
+      M.L.C.P.
+      </td>
+    </tr>
+    <tr>
+      <th>Notes and Questions:</th>
+      <td>A feasibility study must be done.<br />
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<div id="F-2.007">
+<h3><br />
+F-2.007: Non linear circuit: R,L or C non constant.<br />
+</h3>
+<table class="axial" border="1" cellpadding="3" cellspacing="2">
+  <tbody>
+    <tr>
+      <th>Priority:</th>
+      <td>Essential</td>
+    </tr>
+    <tr>
+      <th>Functional area(s):</th>
+      <td>ACEF</td>
+    </tr>
+    <tr>
+      <th>Description:</th>
+      <td> It consists to update the tableau equations when R, L or C are not constant.
+      </td>
+    </tr>
+    <tr>
+      <th>Notes and Questions:</th>
+      <td>A time discretisation for R, L, C must be done.<br />
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<div id="F-2.008">
+<h3><br />
+F-2.008: Non linear complementarity formulation.<br />
+</h3>
+<table class="axial" border="1" cellpadding="3" cellspacing="2">
+  <tbody>
+    <tr>
+      <th>Priority:</th>
+      <td>Secondary importance</td>
+    </tr>
+    <tr>
+      <th>Functional area(s):</th>
+      <td>ACEF</td>
+    </tr>
+    <tr>
+      <th>Description:</th>
+      <td> 
+      </td>
+    </tr>
+    <tr>
+      <th>Notes and Questions:</th>
+      <td><br />
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<div id="F-3.000">
+<h3>F-3.000: Time discretisation<br />
+</h3>
+<table class="axial" border="1" cellpadding="3" cellspacing="2">
+  <tbody>
+    <tr>
+      <th>Priority:</th>
+      <td>Essential</td>
+    </tr>
+    <tr>
+      <th>Functional area(s):</th>
+      <td>Simulator<br />
+      </td>
+    </tr>
+    <tr>
+      <th>Description:</th>
+      <td>It consists to develop a Moreau time discretisation.<br />
+
+      </td>
+    </tr>
+    <tr>
+      <th>Notes and Questions:</th>
+      <td><br />
+      </td>
+    </tr>
+  </tbody>
+</table>
+<br />
+<br />
+</div>
+<div id="F-3.001">
+<h3>F-3.001: Transient analysis<br />
+</h3>
+<table class="axial" border="1" cellpadding="3" cellspacing="2">
+  <tbody>
+    <tr>
+      <th>Priority:</th>
+      <td>Essential</td>
+    </tr>
+    <tr>
+      <th>Functional area(s):</th>
+      <td>Simulator</td>
+    </tr>
+    <tr>
+      <th>Description:</th>
+      <td>It consists to make the transient analysis. </td>
+    </tr>
+    <tr>
+      <th>Notes and Questions:</th>
+      <td>During each time step, SICONOS is called to solve a MLCP.<br />
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<div id="F-3.002">
+<h3>F-3.002: Non constante sources<br />
+</h3>
+<table class="axial" border="1" cellpadding="3" cellspacing="2">
+  <tbody>
+    <tr>
+      <th>Priority:</th>
+      <td>Essential</td>
+    </tr>
+    <tr>
+      <th>Functional area(s):</th>
+      <td>Simulator</td>
+    </tr>
+    <tr>
+      <th>Description:</th>
+      <td>Some Currents and voltages source are not constant (RAMP, SIN,...). It consists to manage
+      it for the transient analysis.</td>
+    </tr>
+    <tr>
+      <th>Notes and Questions:</th>
+      <td><br />
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<div id="F-3.003">
+<h3>F-3.003: DC analysis<br />
+</h3>
+<table class="axial" border="1" cellpadding="3" cellspacing="2">
+  <tbody>
+    <tr>
+      <th>Priority:</th>
+      <td>Essential</td>
+    </tr>
+    <tr>
+      <th>Functional area(s):</th>
+      <td>Simulator</td>
+    </tr>
+    <tr>
+      <th>Description:</th>
+      <td>The DC analysis (Direct Current) determines the operating point of a circuit. There are no
+      currents flowing through capacitors and zero voltages across inductors.</td>
+    </tr>
+    <tr>
+      <th>Notes and Questions:</th>
+      <td><br />
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+<div id="F-4.000">
+<h3>F-4.000: Gradient method<br />
+</h3>
+<table class="axial" border="1" cellpadding="3" cellspacing="2">
+  <tbody>
+    <tr>
+      <th>Priority:</th>
+      <td>Essential</td>
+    </tr>
+    <tr>
+      <th>Functional area(s):</th>
+      <td>Mixted Simulator<br />
+      </td>
+    </tr>
+    <tr>
+      <th>Description:</th>
+      <td>It consists to build the Jacobi matrix from the linear components.   <br />
+      </td>
+    </tr>
+    <tr>
+      <th>Notes and Questions:</th>
+      <td><br />
+      </td>
+    </tr>
+  </tbody>
+</table>
+<br />
+<br />
+</div>
+<div id="F-4.001">
+<h3>F-4.001: Quasi-Newton methods<br />
+</h3>
+<table class="axial" border="1" cellpadding="3" cellspacing="2">
+  <tbody>
+    <tr>
+      <th>Priority:</th>
+      <td>Essential</td>
+    </tr>
+    <tr>
+      <th>Functional area(s):</th>
+      <td>Mixted Simulator</td>
+    </tr>
+    <tr>
+      <th>Description:</th>
+      <td>It consists to build a Hessian matrix approximation. </td>
+    </tr>
+    <tr>
+      <th>Notes and Questions:</th>
+      <td<br />
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<div id="F-4.002">
+<h3>F-4.002: Write a mixted solver<br />
+</h3>
+<table class="axial" border="1" cellpadding="3" cellspacing="2">
+  <tbody>
+    <tr>
+      <th>Priority:</th>
+      <td>Essential</td>
+    </tr>
+    <tr>
+      <th>Functional area(s):</th>
+      <td>Mixte Simulator</td>
+    </tr>
+    <tr>
+      <th>Description:</th>
+      <td>It consists to write a iterator algorithm using both Newton-Raphton and MLCP formulation. The non smooth
+      components are described with a LCP formulation. The mixte solver make a Newton-Raphton step for the
+      smooth components and solved the LCP formulation. It is possible to formulate this step like a MLCP.</td>
+    </tr>
+    <tr>
+      <th>Notes and Questions:</th>
+      <td><br />
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<div id="F-5.000">
+<h3>F-5.000: Time discretisation<br />
+</h3>
+<table class="axial" border="1" cellpadding="3" cellspacing="2">
+  <tbody>
+    <tr>
+      <th>Priority:</th>
+      <td>Essential</td>
+    </tr>
+    <tr>
+      <th>Functional area(s):</th>
+      <td>SICONOS</td>
+    </tr>
+    <tr>
+      <th>Description:</th>
+      <td>It consists to integrate the time discretisation in SICONOS.</td>
+    </tr>
+    <tr>
+      <th>Notes and Questions:</th>
+      <td><br />
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<div id="F-5.001">
+<h3>F-5.001: MLCP solver<br />
+</h3>
+<table class="axial" border="1" cellpadding="3" cellspacing="2">
+  <tbody>
+    <tr>
+      <th>Priority:</th>
+      <td>Essential</td>
+    </tr>
+    <tr>
+      <th>Functional area(s):</th>
+      <td>SICONOS</td>
+    </tr>
+    <tr>
+      <th>Description:</th>
+      <td>It consists to develop MLCP solver in SICONOS.</td>
+    </tr>
+    <tr>
+      <th>Notes and Questions:</th>
+      <td><br />
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<div id="F-6.000">
+<h3>F-6.000: Specific electrical heuristic<br />
+</h3>
+<table class="axial" border="1" cellpadding="3" cellspacing="2">
+  <tbody>
+    <tr>
+      <th>Priority:</th>
+      <td>Must be defined</td>
+    </tr>
+    <tr>
+      <th>Functional area(s):</th>
+      <td>ACEF</td>
+    </tr>
+    <tr>
+      <th>Description:</th>
+      <td>It consists to add electrical knowledges to help the MLCP solver. For example, give the
+      list of possible electrical modes is very efficient to accelerate the simulation.</td>
+    </tr>
+    <tr>
+      <th>Notes and Questions:</th>
+      <td><br />
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+</body>
+</html>

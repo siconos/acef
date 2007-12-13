@@ -1,0 +1,80 @@
+<!DOCTYPE html PUBLIC "-//Tigris//DTD XHTML 1.0 Transitional//EN" "http://style.tigris.org/tigris_transitional.dtd">
+<html>
+<head>
+  <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/>
+  <title>Global architecture</title>
+  <style type="text/css">
+/* <![CDATA[ */ 
+@import "css/readyset.css"; 
+@import "css/inst.css";
+/*  ]]>
+
+ */
+ </style>
+  <link rel="stylesheet" type="text/css" href="css/print.css" media="print"/>
+</head>
+<body>
+<div class="app">
+<div class="readyset">
+<h1>Global architecture</h1>
+<div id="releaseinfo">
+<h2>Release Information</h2>
+<table class="axial" border="1" cellpadding="3" cellspacing="2">
+  <tbody>
+    <tr>
+      <th>Project:</th>
+      <td><a href="index.html">ACES</a><br />
+      </td>
+    </tr>
+    <tr>
+      <th>Internal Release Number:</th>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>Last update:</th>
+      <td>December 5, 2007</td>
+    </tr>
+
+    <tr>
+      <th>Attached worksheets:</th>
+      <td class="linklist">
+      <div>  <a href="feature-set.html">Feature set</a>
+
+      </div>
+      </td>
+    </tr>
+    <tr>
+      <th>Related Documents:</th>
+      <td><a href="Spec.html" >Specication details</a>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<!-- /releaseinfo -->
+<!-- /processimpact -->
+<div id="introduction">
+<h2>Introduction</h2>
+<p>The following chart presents the global software architecture</a>
+<center>
+<img src=GFL.jpg align=top>
+</center>
+
+</div>
+<!-- /introduction -->
+<div id="usecases">
+<h2>Parser library</h2>
+<p>The parser is an external library. It exports an API used by ACEF.</p>
+<p>If the input file format changed, it impacts only the parser.</p>
+</ul>
+</div>
+<h2>An executable</h2>
+It implements tow functionalities:
+<ul>
+<li>Automatic Circuit Equation Formulation.</li>
+<li>Simulator or transient analysis.</li>
+</ul>
+<h2>SICONOS/NUMERICS</h2>
+Numerics is a library used to solved the MLCP instances.
+</body>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html PUBLIC "-//Tigris//DTD XHTML 1.0 Transitional//EN" "http://style.tigris.org/tigris_transitional.dtd">
+<html>
+<head>
+  <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/>
+  <title>Tests plan</title>
+  <style type="text/css">
+/* <![CDATA[ */ 
+@import "css/readyset.css"; 
+@import "css/inst.css";
+/*  ]]>
+
+ */
+ </style>
+  <link rel="stylesheet" type="text/css" href="css/print.css" media="print"/>
+</head>
+<body>
+<div class="app">
+<div class="readyset">
+<h1>Tests plan</h1>
+<div id="releaseinfo">
+<h2>Release Information</h2>
+<table class="axial" border="1" cellpadding="3" cellspacing="2">
+  <tbody>
+    <tr>
+      <th>Project:</th>
+      <td><a href="index.html">ACES</a><br />
+      </td>
+    </tr>
+    <tr>
+      <th>Internal Release Number:</th>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>Last update:</th>
+      <td>December 5, 2007</td>
+    </tr>
+
+    <tr>
+      <th>Attached worksheets:</th>
+      <td>
+      <div>  <a href="feature-set.html">Feature set</a></div>
+      </td>
+    </tr>
+    <tr>
+      <th>Related Documents:</th>
+      <td>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<!-- /releaseinfo -->
+<!-- /processimpact -->
+<!-- /introduction -->
+<div id="usecases">
+<h2>Parser library tests</h2>
+<p>It consist to check Netlist is correctly interpreted. Endeed Netlist contains macro must be
+evaluated. The program test displays the interpreted Netlist.</p>
+</div>
+<h2>Automatique circuit equation formulation</h2>
+<p>It consists to check the tableau equation is correct. The program test display the tabeau
+equation and we have to check physical law are correctly wrote.</p>
+<h2>Transient analysis</h2>
+<p>The test consists to compart result with a SPICE simulation.</p>
+<h2>Automatic tests</h2>
+<p>A script run the program on a list of Netlist. For each circuit file, a file is
+created. This file contains the result of the parser, the automatique equation formulation and the
+transient analysis.</p>
+</body>
+</html>
