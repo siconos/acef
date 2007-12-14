@@ -1,9 +1,9 @@
 %!PS-Adobe-2.0 EPSF-2.0
 %%Title: buck_resistor.fig
 %%Creator: fig2dev Version 3.2 Patchlevel 4
-%%CreationDate: Fri Oct  5 15:00:32 2007
+%%CreationDate: Fri Dec 14 11:35:55 2007
 %%For: denoyell@honegger (Pascal Denoyelle)
-%%BoundingBox: 0 0 410 224
+%%BoundingBox: 0 0 440 224
 %%Magnification: 0.7400
 %%EndComments
 /$F2psDict 200 dict def
@@ -45,7 +45,7 @@ $F2psDict /mtrx matrix put
 
 end
 save
-newpath 0 224 moveto 0 0 lineto 410 0 lineto 410 224 lineto closepath clip newpath
+newpath 0 224 moveto 0 0 lineto 440 0 lineto 440 224 lineto closepath clip newpath
 -18.2 302.5 translate
 1 -1 scale
 

@@ -153,13 +153,20 @@ the supply voltage $V_I~=~3~V$, thus providing non-overlapping conduction times.
 if $x > 0.1 V$.
 
 \item[Ramp voltage:] the frequency is $600~kHz$ and the bounds are $0$ and $0.75 \cdot ~V_I~=~2.25~V$. The rise time is
-$1.66~\mu s$ and the fall time is $5~ns$.
+$1.655~\mu s$ and the fall time is $10~ns$.
 
 \item[Other components:] $V_I~=~3~V$, $L~=~10~\mu H$, $C~=~22~\mu F$, load resistor $R~=~10~\Omega$, compensator :
 $R_{11}~=~15.58~k \Omega$, $R_{12}~=~227.8~k \Omega$, $R_{21}~=~5.613~M \Omega$, $C_{11}~=~20~pF$, $C_{21}~=~1.9~pF$
 
 The reference voltage $V_{ref}$ rises from $0$ to $1.8~V$ in $0.1~ms$ at the beginning of the simulation.
 \end{description}
+The output voltage $V_{output}$ is regulated to track the reference voltage $V_{ref}$ when $V_I$ or $V_{ref}$ or the load current
+vary. The error voltage $V_{error}$ is a filtered value of the difference between $V_{output}$ and $V_{ref}$.
+This voltage signal is converted into a time length thanks to a comparison with the periodic ramp signal. The comparator drives
+the PMOS transistor which in turn provides more or less charge to the output depending on the error level. The operation of
+a buck converter involves both a relatively slow dynamics when the switching elements (MOS and diodes) are keeping
+their conducting state, and a fast dynamics when the states change. The order of magnitude are $50~ps$ for some switching details,
+$1~\mu s$ for a slow variation period and $100~\mu s$ at least for a settling period of the whole circuit requiring a simulation.
 
 \newpage
 \section{Equations of the buck converter modelled as a non-smooth dynamical system}
@@ -310,12 +317,34 @@ with $b(t)$ and $u(t)$ source terms.
 \section{Simulation as a non-smooth dynamical system with SICONOS}
 The start-up of the converter was simulated thanks to the SICONOS platform developed at INRIA.
 As initial conditions, all state variables are zeroed.
-The overall result is shown on the figure \ref{fig-buck-resistor-simu-sico-0p2ms-1p0ns}.
-More details of the start-up phase are shown on figures \ref{fig-buck-resistor-simu-sico-0p02ms-1p0ns} and \ref{fig-buck-resistor-simu-sico-5mics-1p0ns}.
+
+The detailed analysis of the switching events requires to use a time step as small as~$50~ps$.
+The simulations are carried with a fixed time step, 4000000 steps are then computed for the~$200~\mu s$~long
+settling of the output voltage.
+
+The overall result is shown on the figure \ref{fig-buck-resistor-simu-sico-0p2ms-0p05ns}.
+More details of the start-up phase are shown on the figure \ref{fig-buck-resistor-simu-sico-0p01ms-0p05ns}.
 
 The conduction times of the transistors and the NMOS intrinsic diode are visible.
-The CPU time required to achieve the simulation of $200~\mu s$ is $15$~seconds on a 
-Pentium~4 clocked at 3~GHz.
+The CPU time required to achieve the simulation is 52~seconds on a Pentium~4 processor clocked at 3~GHz.
+
+\begin{figure}[hbtp]
+\begin{center}
+\includegraphics[scale=1.2,angle=0]{simu_siconos_0p2ms_0p05ns.eps}
+\end{center}
+\caption[SICONOS results, buck \protect\& load resistor (first~$200~\mu s$)]
+{SICONOS simulation results, buck converter with a load resistor (first~$200~\mu s$)}
+\label{fig-buck-resistor-simu-sico-0p2ms-0p05ns}
+\end{figure}
+
+\begin{figure}[hbtp]
+\begin{center}
+\includegraphics[scale=1.2,angle=0]{simu_siconos_0p01ms_0p05ns.eps}
+\end{center}
+\caption[SICONOS results, buck \protect\& load resistor (first~$20~\mu s$)]
+{SICONOS simulation results, buck converter with a load resistor (first~$20~\mu s$)}
+\label{fig-buck-resistor-simu-sico-0p01ms-0p05ns}
+\end{figure}
 
 Some configuration parameters (namely a small LC value and a high value of the high
 frequency compensator gain) may yield multiple crossings of the error voltage with the
@@ -324,36 +353,6 @@ with the same CPU time the simulation of such cases. For instance, figures \ref{
 \ref{fig-buck-resistor-simu-sico-lowLC} and \ref{fig-buck-resistor-simu-sico-lowLC-badcomp} 
 show the effect of reducing $L$ to $4~\mu H$, $C$
 to $10~\mu F$ (yielding double crossings along one ramp period) and then to change $R_{11}$ to $10~K\Omega$, $R_{21}$ to $8~M\Omega$, $C_{11}$ to $10~pF$ (yielding a sliding mode).
-Figure \ref{fig-buck-resistor-simu-sico-lowLC-badcomp-zoom} is a zoom showing the \emph{sliding mode}
-occurring with this parameters set and figure \ref{fig-buck-resistor-simu-sico-lowLC-badcomp-full} displays the full
-simulation result.
-
-\begin{figure}[hbtp]
-\begin{center}
-\includegraphics[scale=1.2,angle=0]{simu_siconos_0p2ms_1p0ns.eps}
-\end{center}
-\caption[SICONOS results, buck \protect\& load resistor (first~$200~\mu s$)]
-{SICONOS simulation results, buck converter with a load resistor (first~$200~\mu s$)}
-\label{fig-buck-resistor-simu-sico-0p2ms-1p0ns}
-\end{figure}
-
-\begin{figure}[hbtp]
-\begin{center}
-\includegraphics[scale=1.2,angle=0]{simu_siconos_0p02ms_1p0ns.eps}
-\end{center}
-\caption[SICONOS results, buck \protect\& load resistor (first~$20~\mu s$)]
-{SICONOS simulation results, buck converter with a load resistor (first~$20~\mu s$)}
-\label{fig-buck-resistor-simu-sico-0p02ms-1p0ns}
-\end{figure}
-
-\begin{figure}[hbtp]
-\begin{center}
-\includegraphics[scale=1.2,angle=0]{simu_siconos_5mics_1p0ns.eps}
-\end{center}
-\caption[SICONOS results, buck \protect\& load resistor (first~$5~\mu s$)]
-{SICONOS simulation results, buck converter with a load resistor (first~$5~\mu s$)}
-\label{fig-buck-resistor-simu-sico-5mics-1p0ns}
-\end{figure}
 
 \begin{figure}[hbtp]
 \begin{center}
@@ -384,28 +383,6 @@ steady state with $L~=~4~\mu H$, $C~=~10~\mu F$}
 steady state with $L~=~4~\mu H$, $C~=~10~\mu F$ , $R_{11}~=~10~K\Omega$, $R_{21}~=~8~M\Omega$, $C_{11}~=~10~pF$\protect\newline
 exhibiting a sliding mode}
 \label{fig-buck-resistor-simu-sico-lowLC-badcomp}
-\end{figure}
-
-\begin{figure}[hbtp]
-\begin{center}
-\includegraphics[scale=1.2,angle=0]{simu_siconos_lowLC_badcompzoom.eps}
-\end{center}
-\caption[SICONOS results, buck \protect\& load resistor , steady state , sliding mode (zoom)]
-{SICONOS simulation results, buck converter with a load resistor\protect\newline
-steady state with $L~=~4~\mu H$, $C~=~10~\mu F$ , $R_{11}~=~10~K\Omega$, $R_{21}~=~8~M\Omega$, $C_{11}~=~10~pF$\protect\newline
-exhibiting a sliding mode (zoom on one ramp)}
-\label{fig-buck-resistor-simu-sico-lowLC-badcomp-zoom}
-\end{figure}
-
-\begin{figure}[hbtp]
-\begin{center}
-\includegraphics[scale=1.2,angle=0]{simu_siconos_sliding.eps}
-\end{center}
-\caption[SICONOS results, buck \protect\& load resistor , sliding mode (full simulation)]
-{SICONOS simulation results, buck converter with a load resistor\protect\newline
-steady state with $L~=~4~\mu H$, $C~=~10~\mu F$ , $R_{11}~=~10~K\Omega$, $R_{21}~=~8~M\Omega$, $C_{11}~=~10~pF$\protect\newline
-exhibiting a sliding mode (full $200~\mu s$ simulation)}
-\label{fig-buck-resistor-simu-sico-lowLC-badcomp-full}
 \end{figure}
 
 \clearpage
