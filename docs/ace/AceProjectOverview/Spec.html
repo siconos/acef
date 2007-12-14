@@ -54,9 +54,9 @@
 <div id="introduction">
 <h2>Parser</h2>
 <h3>Parser Implementation</h3>
-<p>Develop a Netlist parser without use any existing code is a very big and long work. </p>
+<p>To develop a Netlist parser without using any existing code is a very big and long work. </p>
 <p>A quicker solution is
-      to use the NGSPICE's parser. It consists to extract the parser and build a library. NGSPICE is
+      to use the NGSPICE's parser. It consists in extracting the parser and building a library. NGSPICE is
       under BSD license.<a href="http://ngspice.sourceforge.net">(Ngspice legal issues)</a>.
    </p>
    <p>Programming language is C.</p>
@@ -102,18 +102,18 @@ It is a C++ module. Following the class diagram of mains class.
 <img src=component.jpeg align=top>
 </center>
 <p>Each electrical component has a component instance in ACEF.</p>
-<p>Component add its equations and unknowns. The main advantage is only useful uknowns are added in
+<p>Component add its equations and unknowns. The main advantage is only that useful unknowns are added in
 the system. For example, current through a comparator is null, so this current doesn't appear in the
 system.
-Stamp method consists to write component's contribution in the tableau equation.</p>
-<p>componentNLINEAR stamp method is overload to fill the linear complementarity matrix formulation.</p>
+Stamp method consists in writing component's contribution in the table equation.</p>
+<p>componentNLINEAR stamp methods is overloaded to fill the linear complementarity matrix formulation.</p>
 <h3>Equation class</h3>
 <center>
 <img src=equation.jpeg align=top>
 </center>
-<p>The components build the equation instances. A equation is a line(menber myLine) in the tableau
+<p>The components build the equation instances. A equation is a line(menber myLine) in the table
 equations.
-Component stamp method uses equation instance to fill the tableau equations.</p>
+The component stamp method uses equation instance to fill the table equations.</p>
 <h3>Linear system class</h3>
 <center>
 <img src=LS.jpeg align=top>

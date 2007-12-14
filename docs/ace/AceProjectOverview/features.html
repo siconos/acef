@@ -58,7 +58,7 @@
     </tr>
     <tr>
       <th>Description:</th>
-      <td>Sub circuit is a special key in a Netlist. It consists to manage it when the sub circuit is a comparator.</td>
+      <td>Sub circuit is a special key in a Netlist. It consists in managing it when the sub circuit is a comparator.</td>
     </tr>
     <tr>
       <th>Notes and Questions:</th>
@@ -82,15 +82,15 @@
     </tr>
     <tr>
       <th>Description:</th>
-      <td>A Netlist has a special key word to define the transient analysis parameters. It consists to read and
-      export these parameters.<br />
+      <td>A Netlist has a special key word to define the transient analysis parameters. It consists in reading and
+      exporting these parameters.<br />
       <ul>
       </ul>
       </td>
     </tr>
     <tr>
       <th>Notes and Questions:</th>
-      <td>In current version, this imformation is written in an other file.<br />
+      <td>In current version, this information is written in an other file.<br />
       </td>
     </tr>
   </tbody>
@@ -112,8 +112,8 @@
     </tr>
     <tr>
       <th>Description:</th>
-      <td>In this case the circuit is composed only with resistances, capacitors and inductors.
-      It consists to develop an automatic circuit equation formulation. The result is a linear system.<br/>
+      <td>In this case the circuit is composed only with resistors, capacitors and inductors.
+      It consists in developing an automatic circuit equation formulation. The result is a linear system.<br/>
       </td>
     </tr>
     <tr>
@@ -139,14 +139,14 @@ F-2.001: Diodes</h3>
     </tr>
     <tr>
       <th>Description:</th>
-      <td>A diode is a non smooth component, modelized with compementarity conditions. Diode model
-      is an ideal diode. Automatic circuit equation formulation lead into a Mixte Linear Complementarity
+      <td>A diode is a non smooth component, modelized with complementarity conditions. The diode model
+      is an ideal diode. The automatic circuit equation formulation leads to a Mixte Linear Complementarity
       Problem(MLCP). <br />
       </td>
     </tr>
     <tr>
       <th>Notes and Questions:</th>
-      <td>There are no parameters in the model. <br />
+      <td>There is no parameter in the model. <br />
       </td>
     </tr>
   </tbody>
@@ -168,14 +168,14 @@ F-2.002: Transistor MOS<br />
     </tr>
     <tr>
       <th>Description:</th>
-      <td>A transistor is a non smooth component, piecewise linear ,modelized with compementarity
-      conditions. Automatic circuit equation formulation lead into a Mixte Linear Complementarity
+      <td>A transistor is a non smooth component, piecewise linear ,modelized with complementarity
+      conditions. Automatic circuit equation formulation leads to a Mixte Linear Complementarity
       Problem(MLCP). <br />
       </td>
     </tr>
     <tr>
       <th>Notes and Questions:</th>
-      <td>There are no parameters in the model.<br />
+      <td>There is no parameter in the model.<br />
       </td>
     </tr>
   </tbody>
@@ -197,7 +197,7 @@ F-2.003: Comparator<br />
     </tr>
     <tr>
       <th>Description:</th>
-      <td>A Comparator is a non smooth component, piecewise linear ,modelized with compementarity conditions. <br />
+      <td>A Comparator is a non smooth component, piecewise linear ,modelized with complementarity conditions. <br />
       </td>
     </tr>
     <tr>
@@ -284,9 +284,9 @@ F-2.006: Use simple piecewise linear approximation to accelerate the M.L.C.P. re
     </tr>
     <tr>
       <th>Description:</th>
-      <td> The dimention of the L.C.P. formulation for a transistor is 10. These 10 parameters
+      <td> The dimension of the L.C.P. formulation for a transistor is 10. These 10 parameters
       described 5 linear parts in the picewise linear description. The goal is to use a very simple
-      picewise linear description, with only tow parts, to get the smaller M.L.C.P.. We solve this
+      picewise linear description, with only two parts, to get a smaller M.L.C.P.. We solve this
       smaller formulation, and the result is used like a "guess point" to solve the initial
       M.L.C.P.
       </td>
@@ -316,7 +316,7 @@ F-2.007: Non linear circuit: R,L or C non constant.<br />
     </tr>
     <tr>
       <th>Description:</th>
-      <td> It consists to update the tableau equations when R, L or C are not constant.
+      <td> It consists in updating the table equations when R, L or C are not constant.
       </td>
     </tr>
     <tr>
@@ -372,7 +372,7 @@ F-2.008: Non linear complementarity formulation.<br />
     </tr>
     <tr>
       <th>Description:</th>
-      <td>It consists to develop a Moreau time discretisation.<br />
+      <td>It consists in developing a Moreau time discretisation.<br />
 
       </td>
     </tr>
@@ -401,7 +401,7 @@ F-2.008: Non linear complementarity formulation.<br />
     </tr>
     <tr>
       <th>Description:</th>
-      <td>It consists to make the transient analysis. </td>
+      <td>It consists in doing the transient analysis. </td>
     </tr>
     <tr>
       <th>Notes and Questions:</th>
@@ -426,7 +426,7 @@ F-2.008: Non linear complementarity formulation.<br />
     </tr>
     <tr>
       <th>Description:</th>
-      <td>Some Currents and voltages source are not constant (RAMP, SIN,...). It consists to manage
+      <td>Some Currents and voltages source are not constant (RAMP, SIN,...). It consists in managing
       it for the transient analysis.</td>
     </tr>
     <tr>
@@ -482,7 +482,7 @@ F-2.008: Non linear complementarity formulation.<br />
     </tr>
     <tr>
       <th>Description:</th>
-      <td>It consists to build the Jacobi matrix from the linear components.   <br />
+      <td>It consists in building the Jacobi matrix from the linear components.   <br />
       </td>
     </tr>
     <tr>
@@ -510,7 +510,7 @@ F-2.008: Non linear complementarity formulation.<br />
     </tr>
     <tr>
       <th>Description:</th>
-      <td>It consists to build a Hessian matrix approximation. </td>
+      <td>It consists in building a Hessian matrix approximation. </td>
     </tr>
     <tr>
       <th>Notes and Questions:</th>
@@ -535,9 +535,9 @@ F-2.008: Non linear complementarity formulation.<br />
     </tr>
     <tr>
       <th>Description:</th>
-      <td>It consists to write a iterator algorithm using both Newton-Raphton and MLCP formulation. The non smooth
-      components are described with a LCP formulation. The mixte solver make a Newton-Raphton step for the
-      smooth components and solved the LCP formulation. It is possible to formulate this step like a MLCP.</td>
+      <td>It consists in writing an iterator algorithm using both Newton-Raphton and MLCP formulation. The non smooth
+      components are described with a LCP formulation. The mixed solver makes a Newton-Raphton step for the
+      smooth components and solves the LCP formulation. It is possible to formulate a step like a MLCP.</td>
     </tr>
     <tr>
       <th>Notes and Questions:</th>
@@ -563,7 +563,7 @@ F-2.008: Non linear complementarity formulation.<br />
     </tr>
     <tr>
       <th>Description:</th>
-      <td>It consists to integrate the time discretisation in SICONOS.</td>
+      <td>It consists in integrating the time discretisation in SICONOS.</td>
     </tr>
     <tr>
       <th>Notes and Questions:</th>
@@ -589,7 +589,7 @@ F-2.008: Non linear complementarity formulation.<br />
     </tr>
     <tr>
       <th>Description:</th>
-      <td>It consists to develop MLCP solver in SICONOS.</td>
+      <td>It consists in developing MLCP solver in SICONOS.</td>
     </tr>
     <tr>
       <th>Notes and Questions:</th>
@@ -615,7 +615,7 @@ F-2.008: Non linear complementarity formulation.<br />
     </tr>
     <tr>
       <th>Description:</th>
-      <td>It consists to add electrical knowledges to help the MLCP solver. For example, give the
+      <td>It consists in adding electrical knowledges to help the MLCP solver. For example, to give the
       list of possible electrical modes is very efficient to accelerate the simulation.</td>
     </tr>
     <tr>
