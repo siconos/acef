@@ -3,6 +3,7 @@
 **************************************************************************/
 #include "mlcp.h"
 #include "SimpleVector.h"
+#include "mlcp_simplex.h"
 
 
 
@@ -21,6 +22,7 @@ mlcp::mlcp(unsigned int Dlcp,unsigned int Dlin){
    mM12=0;
    mM21=0;
    mM22=0;
+   mSolverType=SOLVER_SIMPLEX;
    //mFirst=true;
    
    mW1Z1=0;
@@ -31,6 +33,8 @@ mlcp::mlcp(unsigned int Dlcp,unsigned int Dlin){
    mGuess.clear();
    mTryGuess = false;
    mUseGuess = true;
+   if (mSolverType==SOLVER_SIMPLEX)
+     mUseGuess =false;
    mPourCent=0;
 
    mM = new aceMatrix(Dlcp+Dlin,Dlcp+Dlin);
@@ -111,6 +115,58 @@ bool mlcp::nextEnum(){
   
   return true;
 }
+bool mlcp::solveWithSimplex(){
+  int n = mDlin;
+  int m = mDlcp;
+  double* A;
+  double* B;
+  double* C;
+  double* D;
+  double* a;
+  double* b;
+  double* u;
+  double* v;
+  double* w;
+  bool res;
+  A=(double *)calloc(n*n,sizeof(double));
+  C=(double *)calloc(n*m,sizeof(double));
+  D=(double *)calloc(m*n,sizeof(double));
+  B=(double *)calloc(m*m,sizeof(double));
+  a=(double *)calloc(n,sizeof(double));
+  b=(double *)calloc(m,sizeof(double));
+  u=(double *)calloc(n,sizeof(double));
+  v=(double *)calloc(m,sizeof(double));
+  w=(double *)calloc(m,sizeof(double));
+
+  mM22->MatrixToFortran(A);  
+  mM11->MatrixToFortran(B);  
+  mM21->MatrixToFortran(C);  
+  mM12->MatrixToFortran(D);  
+  mQ2->MatrixToFortran(a);  
+  mQ1->MatrixToFortran(b);  
+
+  res= mlcp_simplex(&n , &m, A , B , C , D , a, b, u, v, w , 0 , 0 , 0  );
+
+
+  mZ1->FortranToMatrix(v);
+  mZ2->FortranToMatrix(u);
+  mW1->FortranToMatrix(w);
+
+
+
+  
+  free(A);
+  free(B);
+  free(C);
+  free(D);
+  free(a);
+  free(b);
+  free(u);
+  free(v);
+  free(w);
+  
+  return res;
+}
 bool mlcp::solve(){
   bool muet = true;
   bool onlyOne = false;
@@ -118,6 +174,10 @@ bool mlcp::solve(){
   bool find = false;
   unsigned int col =0;
   unsigned int lin =0;
+  if (mSolverType==SOLVER_SIMPLEX){
+    return solveWithSimplex();
+  }else{
+  }
   if (mDlin==0){//LCP case
     ACE_ERROR("mlcp::solve : LCP not implemented");
   }else if(mDlcp==0){//Linear system case
@@ -283,6 +343,8 @@ mlcp::~mlcp(){
 }
 
 void mlcp::printGuess(ostream& os){
+  if (!mUseGuess)
+    return;
   initGuess();
   while (tryGuess())
     os<<"guess : "<<mCase<<endl;

@@ -32,3 +32,16 @@ ostream & operator<<(ostream &f, const aceMatrix &Mat)
   Mat.display(f);
   return f;
 }
+
+void aceMatrix::MatrixToFortran(double * t){
+  for (unsigned int i=0; i < dimRow; i++)
+    for (unsigned int j=0; j < dimCol; j++)
+      t[j*dimRow+i]=((SimpleMatrix&)*this)(i,j);
+    
+}
+void aceMatrix::FortranToMatrix(double * t){
+  for (unsigned int i=0; i < dimRow; i++)
+    for (unsigned int j=0; j < dimCol; j++){
+      setValue(i,j,t[j*dimRow+i]);
+    }
+}

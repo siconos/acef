@@ -12,6 +12,8 @@ public:
   virtual void display(ostream& os = cout) const;
   aceMatrix& operator = (const SimpleMatrix& );
   friend ostream & operator<<(ostream &f, const aceMatrix &Mat);
+  void MatrixToFortran(double * t);
+  void FortranToMatrix(double * t);
 
 
 };

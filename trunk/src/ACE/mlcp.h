@@ -8,8 +8,12 @@
 #include "aceMatrix.h"
 #include <list>
 
+#define SOLVER_ENUM 0
+#define SOLVER_SIMPLEX 1
+
 typedef std::list<unsigned long> ulongs;
 typedef std::list<unsigned long>::iterator Itulongs;
+
 
 // Class mlcp
 // 
@@ -19,7 +23,9 @@ public:
   mlcp(unsigned int Dlcp,unsigned int Dlin);
   virtual ~mlcp();
   bool solve();
+
   void addGuess(unsigned long l);
+  int mSolverType;
   
   aceMatrix *mW1;
   aceMatrix *mZ1;
@@ -59,5 +65,7 @@ private:
   bool tryGuess();
   void initGuess();
   void affectW1Z1(unsigned long ll);
+  bool solveWithSimplex();
+
 };
 #endif //MLCP_H

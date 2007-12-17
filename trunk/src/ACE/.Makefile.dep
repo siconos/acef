@@ -35,6 +35,7 @@ algo.o: algo.cpp algo.h ace.h extern.h includes/parser.h linearsystem.h \
   componentres.h componentdio.h componentnlinear.h componentvsrc.h \
   componentvcvs.h componentvccs.h componentarb.h componentcomp.h \
   componentisrc.h componentmos.h graph.h
+auxFun.o: auxFun.cpp
 componentarb.o: componentarb.cpp componentarb.h componentlinear.h \
   component.h ace.h extern.h includes/parser.h algo.h linearsystem.h \
   unknown.h equationkcl.h equation.h equationcap.h equationind.h \
@@ -306,6 +307,8 @@ mlcp.o: mlcp.cpp mlcp.h ace.h extern.h includes/parser.h aceMatrix.h \
   /scratch/install/include/Siconos/SiconosException.h \
   /scratch/install/include/Siconos/SimpleVector.h \
   /scratch/install/include/Siconos/SiconosVector.h \
-  /scratch/install/include/Siconos/SiconosVectorException.h
+  /scratch/install/include/Siconos/SiconosVectorException.h \
+  mlcp_simplex.h
+mlcp_simplex.o: mlcp_simplex.cpp mlcp_simplex.h auxFun.h
 unknown.o: unknown.cpp unknown.h ace.h extern.h includes/parser.h \
   component.h

@@ -11,8 +11,6 @@ using namespace std;
 //|--------x'---------|----------x--------|-------Zs------|------Zns------|
 
 linearSystem::linearSystem(){
-
-
   
   mReAlloc = false;
   mDynIndex=0;
