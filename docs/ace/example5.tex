@@ -1,0 +1,88 @@
+ 
+\subsection{Example 5}
+This example shows we have to manage the capacitor cycle.\\
+\begin{figure}[h]
+\centerline{
+ \scalebox{0.6}{
+    \input{cir5.pstex_t}
+ }
+}\end{figure}\\
+$x=^{t}(U_{12},U_{23},U_{34},U_{41})$$Z_{s}=(V_{1},V_{2},V_{3},V_{4},V_{5},I_{50})$\\
+Start to write Ax'=...\
+\[\left(\begin{array}{c}
+  \\
+KCL(1)\\KCL(2)\\KCL(3)\\KCL(4)
+\end{array}\right)
+\left(\begin{array}{cccc}
+  U_{12}'&U_{23}'&U_{34}'&U_{41}'\\
+  \hline
+  C&0&0&-C\\
+  -C&C&0&0\\
+  0&-C&C&0\\
+  0&0&-C&C\\  
+\end{array}\right)x'=
+\]
+This matrix is not regular because of the cycle \{1-2,2-3,3-4,4-1\}. A solution could be to use the Minimum
+Spanning Tree \{1-2,2-3,3-4\} to write the KCL law. About the last tension, $U_{41}$, there are tow
+ways:
+\begin{enumerate}
+\item add a unknown $I_{41} in Z_{S}$ and write CU'=I
+\item Find the linear relation $U_{41}'= \sum_{jk}^{}a_{jk}U_{kj}'$, and replace $U_{ki}'$.
+\end{enumerate}
+The matrices become:\\
+Start to write Ax'=...\
+\[\left(\begin{array}{c}
+  \\
+KCL(1)\\KCL(2)\\KCL(3)\\I_{41}
+\end{array}\right)
+\left(\begin{array}{cccc}
+  U_{12}'&U_{23}'&U_{34}'&U_{41}'\\
+  \hline
+  C&0&0&-C\\
+  -C&C&0&0\\
+  0&-C&C&0\\
+  0&0&0&C\\  
+\end{array}\right)x'=0x+
+\left(\begin{array}{ccccccc}
+  V_{1}&V_{2}&V_{3}&V_{4}&V_{5}&I_{50}&I_{41}\\
+  \hline
+  -\frac{1}{R}&0&0&0&0&0&0\\
+  0&0&0&0&0&0&0\\
+  0&0&0&\frac{1}{R}&-\frac{1}{R}&0&0\\
+  0&0&0&0&0&0&1\\
+\end{array}\right)Z_{s}
+\]
+So, we obtain $x'=A1_{zs}Z_{s}$. Therefore all capacitor's currents are known:$I_{12}=I_{23}=I_{41}+\frac{V1}{R},I_{43}=I_{41}+\frac{V1}{R}+\frac{V5}{R}-\frac{V3}{R}$\\
+ \[\left(\begin{array}{c}
+  \\
+KCL(4)\\KCL(5)\\U_{12}\\U_{23}\\U_{34}\\U_{41}\\VD_{50}
+\end{array}\right)
+ \left(\begin{array}{cccc}
+  U_{12}&U_{23}&U_{34}&U_{41}\\
+  \hline
+  0&0&0&0\\
+  0&0&0&0\\
+  1&0&0&0\\
+  0&1&0&0\\
+  0&0&1&0\\
+  0&0&0&1\\
+  0&0&0&0\\
+
+\end{array}\right)x+
+ \left(\begin{array}{ccccccc}
+  V_{1}&V_{2}&V_{3}&V_{4}&V_{5}&I_{50}&I_{41}\\
+  \hline
+  \frac{1}{R}&0&-\frac{1}{R}&0&\frac{1}{R}&0&\underline{-1+1}\\
+  0&0&\frac{1}{R}&0&-\frac{1}{R}&-1&0\\
+  -1&1&0&0&0&0&0\\
+  0&-1&1&0&0&0&0\\
+  0&0&-1&1&0&0&0\\
+  0&0&0&-1&1&0&0\\
+  0&0&0&0&1&0&0\\
+\end{array}\right)Z_{s}=
+ \left(\begin{array}{c}
+  \\0\\0\\0\\0\\0\\0\\E
+\end{array}\right)
+ \]
+$N_{I}=N_{E}=11$\\
+

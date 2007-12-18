@@ -1,0 +1,58 @@
+ 
+
+\section{How get $x' = A_{1x}x +A_{1zs}Z_{s} + A_{1ns}Z_{ns}+A_{1s}$?}
+To get this system, a good set of unknowns must be done. Only the necessary unknowns are added. The
+following examples show how this choice could be done.
+\input{example1.tex}
+\input{example2.tex}
+\input{example3.tex}
+\input{example4.tex}
+\input{example5.tex}
+
+\subsection{conclusion}
+The vector x contains inductor's currents and capacitor's tensions. Derivate inductor's current is equal to a
+nodal voltage difference.\\
+About the capacitor's tensions, we use the Minimum Spanning Tree of the capacitor' tension to avoid cycle.\\
+
+
+\begin{algorithm}
+\caption{fill the matrices : $x'=A_{1x}x+A_{1s}Z_{s}+A_{1ns}Z_{ns}$ }
+\begin{algorithmic}
+\REQUIRE Init\_I\_in\_x : initialize internal data structure to get all I from x.
+\REQUIRE Next\_I\_in\_x : return the next available I from x. If there are not available x, return 0.\\
+\REQUIRE Minimum Spanning Tree of the capacitor' tension graph
+\REQUIRE Init\_MST : initialize internal data structure to get all u from x.
+\REQUIRE Next\_u\_in\_MST : return a available U's neighbour from MST if possible. If there are not
+available u in MST, return 0.\\
+\REQUIRE Next\_U\_in\_x : return the next available U from x. If there are not available x, return 0.\\
+
+0\\
+\COMMENT{About current}\\
+\COMMENT{get first current}
+\STATE Init\_I\_in\_x()
+\STATE $I_{kj}$ = Next\_I\_in\_x()
+\WHILE{$I_{kj}$}
+\STATE use $LI'=V_{j}-V_{k}$ to fill $I_{kj}$'s line.
+\ENDWHILE\\
+\COMMENT{About tension}\\
+\COMMENT{get a first capacitor tension}
+\STATE Init\_MST()
+\STATE $U_{kj}$ = Next\_u\_in\_MST()
+\WHILE{$U_{kj}$}
+\STATE l=j or k with KCL(k) available.
+\STATE Use CU'=I and KCL(k) to fill $U_{ki}$'s line.\\
+\STATE enable KCL(k)
+
+\STATE $U_{kj}$= Next\_u\_in\_MST ()
+\ENDWHILE
+\STATE $U_{kj}$ = Next\_U\_in\_x()
+\WHILE {$U_{kj}$}
+\STATE Add an unknown $I_{kj}$, and use it to fill the matrices. Write I=CU'.
+\STATE $U_{kj}$ = Next\_U\_in\_x()
+\ENDWHILE
+\COMMENT{reverse A : $Ax'=Bx+CZ_{s}+DZ_{ns}$\\}
+\STATE $A^{-1}$=Inv(A)
+\STATE $x'=A_{1x}x+A_{1s}Z_{s}+A_{1ns}Z_{ns}$
+\end{algorithmic}
+\end{algorithm}
+

@@ -1,0 +1,132 @@
+\subsection{Example 4}
+This example shows that is not always possible to use the KCL law to get x'=...\\
+\begin{figure}[h]
+\centerline{
+ \scalebox{0.9}{
+    \input{cir4.pstex_t}
+ }
+}\end{figure}\\
+$x=^{t}(U_{21},U_{23},U_{34})$
+$Z_{s}=^{t}(V_{1},V_{2},V_{3},V_{4})$
+\paragraph{a problem:}
+Start to fill the x' matrices. We use KCL(2) for $U_{21}$, and KCL(3) for $U_{34}$.
+\[\left(\begin{array}{c}
+  \\
+KCL(2)\\KCL(3)\\??
+\end{array}\right)
+\left(\begin{array}{ccc}
+  U_{21}'&U_{23}'&U_{34}'\\
+  \hline
+  C&-C&0\\
+  0&C&C\\
+  ?&?&?
+\end{array}\right)x'=0x+
+\left(\begin{array}{cccc}
+  V_{1}&V_{2}&V_{3}&V_{4}\\
+  \hline
+  0&0&0&0\\
+  0&0&0&0\\
+  ?&?&?&?\\
+\end{array}\right)Z_{s}
+ \]
+ We can't use a other KCL law to get $U_{23}$. A solution could be to add an unknown, \underline{$I_{23}$} in
+ $Z_{s}$. The system becomes:\\
+ \[\left(\begin{array}{c}
+  \\
+KCL(2)\\KCL(3)\\I_{23}
+\end{array}\right)
+\left(\begin{array}{ccc}
+  U_{21}'&U_{23}'&U_{34}'\\
+  \hline
+  C&-C&0\\
+  0&C&C\\
+  0&C&0
+\end{array}\right)x'=0x+
+\left(\begin{array}{ccccc}
+  V_{1}&V_{2}&V_{3}&V_{4}&\underline{I_{23}}\\
+  \hline
+  0&0&0&0&0\\
+  0&0&0&0&0\\
+  0&0&0&0&1\\
+\end{array}\right)Z_{s}
+ \]
+ So, we obtain $x'=A1_{zs}Z_{s}$. All capacitor's currents are known:
+ $I_{21}=\underline{I_{23}}=I_{34}$\\
+\[\left(\begin{array}{c}
+  \\
+KCL(4)\\KCL(1)\\U_{21}\\U_{23}\\U_{34}
+\end{array}\right)
+\left(\begin{array}{ccc}
+  U_{21}&U_{23}&U_{34}\\
+  \hline
+  0&0&0\\
+  0&0&0\\
+  1&0&0\\
+  0&1&0\\
+  0&0&1
+\end{array}\right)x+
+\left(\begin{array}{cccc}
+  V_{1}&V_{2}&V_{3}&\underline{I_{23}}\\
+  \hline
+  0&0&0&1\\
+  \frac{1}{R}&0&0&1\\
+  -1&1&0&0\\
+  0&-1&1&0\\
+  0&0&-1&1\\
+\end{array}\right)Z_{s}=
+\left(\begin{array}{c}
+\\I\\0\\0\\0\\0
+\end{array}\right)
+\]
+ $N_{I}=N_{E}=8$\\
+\paragraph{a good choice:}
+\[\left(\begin{array}{c}
+  \\
+KCL(1)\\KCL(2)\\KCL(3)
+\end{array}\right)
+\left(\begin{array}{ccc}
+  U_{21}'&U_{23}'&U_{34}'\\
+  \hline
+  C&0&0\\
+  C&C&0\\
+  0&-C&C
+\end{array}\right)x'=0x+
+\left(\begin{array}{cccc}
+  V_{1}&V_{2}&V_{3}&V_{4}\\
+  \hline
+  \frac{1}{R}&-\frac{1}{R}&0&0\\
+  0&0&0&0\\
+  0&0&0&0\\
+\end{array}\right)Z_{s}
+ \]
+ So, we obtain $x'=A1_{zs}Z_{s}$. Therefore all capacitor's currents are known: $I_{12}=I_{23}=I_{34}=\frac{V1}{R1}$\\
+ \[\left(\begin{array}{c}
+  \\
+KCL(4)\\U_{21}\\U_{23}\\U_{34}
+\end{array}\right)
+ \left(\begin{array}{ccc}
+  U_{21}&U_{23}&U_{24}\\
+  \hline
+  0&0&0\\
+  1&0&0\\
+  0&1&0\\
+  0&0&1\\
+\end{array}\right)x+
+ \left(\begin{array}{cccc}
+  V_{1}&V_{2}&V_{3}&V_{4}\\
+  \hline
+  \frac{1}{R}&0&0&0\\
+  -1&1&0&0\\
+  0&-1&1&0\\
+  0&0&-1&1\\
+\end{array}\right)Z_{s}=
+ \left(\begin{array}{c}
+  \\I\\0\\0\\0
+\end{array}\right)
+ \]
+$N_{I}=N_{E}=7$\\
+
+
+
+
+

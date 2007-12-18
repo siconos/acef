@@ -1,0 +1,41 @@
+\subsection{Example 3}
+\begin{figure}[h]
+\centerline{
+ \scalebox{0.8}{
+    \input{cir3.pstex_t}
+ }
+}
+\end{figure}
+
+x=$(U_{12})$\\
+$Z_{s}=^{t}(V_{1},V_{2},I_{10})$\\
+\[(KCL(1))=>(C1+C2+C3)x'=I_{10}\]
+So, all capacitor's currents are known:\\
+$I_{c1}=\frac{C1}{C1+C2+C3}I_{10}$\\
+$I_{c2}=\frac{C2}{C1+C2+C3}I_{10}$\\
+$I_{c3}=\frac{C3}{C1+C2+C3}I_{10}$\\
+Use these equations to fill following matrices:\\
+\[\left(\begin{array}{c}
+  \\
+KCL(2)\\U_{21}\\VD
+\end{array}\right)
+\left(\begin{array}{c}
+U_{21}\\
+\hline
+0\\
+1\\
+0
+\end{array}\right)x+
+\left(\begin{array}{ccc}
+V_{1}&V_{2}&I_{10}\\
+\hline
+0&\frac{1}{R}&\frac{C1}{C1+C2+C3}+\frac{C2}{C1+C2+C3}+\frac{C3}{C1+C2+C3}\\
+1&-1&0\\
+1&0&0
+\end{array}\right)Z_{s}=
+\left(\begin{array}{c}
+\\0\\0\\E
+\end{array}\right)
+\]
+$N_{I}=N_{E}=4$
+\newpage

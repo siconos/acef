@@ -1,0 +1,211 @@
+\documentclass[10pt]{article}
+\input{macro.tex}
+\usepackage{psfrag}
+\usepackage{fancyhdr}
+\usepackage{subfigure}
+%\renewcommand{\baselinestretch}{1.2}
+\textheight 23cm
+\textwidth 16cm
+\topmargin 0cm
+%\evensidemargin 0cm
+\oddsidemargin 0cm
+\evensidemargin 0cm
+\usepackage{layout}
+\usepackage{mathpple}
+\makeatletter
+\renewcommand\bibsection{\paragraph{References
+     \@mkboth{\MakeUppercase{\bibname}}{\MakeUppercase{\bibname}}}}
+\makeatother
+%% style des entetes et des pieds de page
+\fancyhf{} % nettoie le entetes et les pieds
+\fancyhead[L]{Template 6 : Electrical oscillator with 4 diodes bridge full-wave rectifier - Pascal Denoyelle}
+%\fancyhead[C]{}%
+\fancyhead[R]{\thepage}
+%\fancyfoot[L]{\resizebox{!}{0.7cm}{\includegraphics[clip]{logoesm2.eps}}}%
+\fancyfoot[C]{}%
+ \begin{document}
+
+\section{Diodes bridge}
+
+\begin{figure}[h]
+\centerline{
+ \scalebox{0.7}{
+    \input{Bridge.pstex_t}
+ }
+}\end{figure}
+
+
+\subsection{Unknowns}
+
+x = $^{t}(U_{1},I_{7})$,
+$Z_{ns}=^{t}(I_{2},I_{3},I_{4},I_{5}$),
+$Z_{s} = ^{t}(V_{2},V_{3})$
+\subsection{Diode non smooth model instance}
+
+\[ \beta = z_{i} = I_{i}\]
+\[ \alpha =U_{i}\]
+\[z_{i}=1l_{i}+0\alpha\]
+\[y_{i}=1\alpha+0l_{i}\]
+\[0 \leq y_{i} \, \perp \, l_{i} \geq 0\]
+
+
+\subsection{Global formulation}
+
+\[ \lambda =(l_{1},l_{2},l_{3},l_{4})\]
+\[Z_{ns}=0X+0Z_{s}+Id\lambda\]
+\[Y=\left(\begin{array}{cc}
+0&0\\
+0&0\\
+1&0\\
+1&0\end{array}\right) x+
+\left(\begin{array}{cc}
+1&0\\
+0&1\\
+0&-1\\
+-1&0\end{array}
+\right) Z_{s} + 0Z_{ns} +0\lambda\]
+
+\[0 \leq Y \, \perp \, \lambda \geq 0\]
+
+
+
+\subsection{Matrices formulation}
+\[
+\left(\begin{array}{c}
+  
+x'=\left(\begin{array}{cc}
+0 &\frac{-1}{C}\\
+\frac{1}{L}&0\end{array} \right)x
++\left(\begin{array}{cc}
+0&\frac{-1}{C}\\
+0&0\end{array} \right)Z_{s}
++\left(\begin{array}{cccc}
+0&0&\frac{1}{C}&\frac{-1}{C}\\
+0&0&0&0\end{array} \right)Z_{ns}
+\\
+0=\left(\begin{array}{cc}
+0 &0\\
+0 &0\\
+0 &1\end{array} \right)x
++\left(\begin{array}{cc}
+\frac{-1}{R}&\frac{1}{R}\\
+\frac{-1}{R}&\frac{1}{R}\\
+1&0\end{array} \right)Z_{s}
++\left(\begin{array}{cccc}
+1&0&0&1\\
+0&+1&1&0\\
+0&0&0&0\end{array} \right)Z_{ns}
+\\
+Z_{ns}=Dx+0Z_{s}+Id\lambda\\
+Y=\left(\begin{array}{cc}
+0&0\\
+0&0\\
+1&0\\
+1&0\end{array}\right) x+
+\left(\begin{array}{cc}
+1&0\\
+0&1\\
+0&-1\\
+-1&0\end{array}
+\right) Z_{s} + 0Z_{ns} +0\lambda\\
+
+0 \leq Y \, \perp \, \lambda \geq 0
+
+\end{array}
+\right)
+\]
+
+\subsection{AN}
+C=0.01 F\\
+L=1/120 H\\
+R=33 ohm
+
+\[
+\left(\begin{array}{c}
+  
+x'=\left(\begin{array}{cc}
+0 &-100\\
+120&0\end{array} \right)x
++\left(\begin{array}{cc}
+0&-100\\
+0&0\end{array} \right)Z_{s}
++\left(\begin{array}{cccc}
+0&0&-100&-100\\
+0&0&0&0\end{array} \right)Z_{ns}
+\\
+0=\left(\begin{array}{cc}
+0 &0\\
+0 &0\\
+0 &1\end{array} \right)x
++\left(\begin{array}{cc}
+-0.03&0.03\\
+-0.03&0.03\\
+1 &0\end{array} \right)Z_{s}
++\left(\begin{array}{cccc}
+1&0&0&1\\
+0&+1&1&0\\
+0&0&0&0\end{array} \right)Z_{ns}
+\\
+Z_{ns}=0x+0Z_{s}+Id\lambda\\
+Y=\left(\begin{array}{cc}
+0&0\\
+0&0\\
+1&0\\
+1&0\end{array}\right) x+
+\left(\begin{array}{cc}
+1&0\\
+0&1\\
+0&-1\\
+-1&0\end{array}
+\right) Z_{s} + 0Z_{ns} +0\lambda\\
+
+0 \leq Y \, \perp \, \lambda \geq 0
+
+\end{array}
+\right)
+\]
+ie
+\[
+\left(\begin{array}{c}
+R=\left(\begin{array}{cccc}
+0&0&-100&-100\\
+0&0&0&0\end{array} \right) \lambda\\
+  
+x'=\left(\begin{array}{cc}
+0 &-100\\
+120&0\end{array} \right)x
++\left(\begin{array}{cc}
+0&-100\\
+0&0\end{array} \right)Z_{s}+R\\
+0=\left(\begin{array}{cc}
+0 &0\\
+0 &0\\
+0 &1\\\end{array} \right)x
++\left(\begin{array}{cc}
+-0.03&0.03\\
+-0.03&0.03\\
+1&0\end{array} \right)Z_{s}
++\left(\begin{array}{cccc}
+1&0&0&1\\
+0&-1&-1&0\\
+0&0&0&0\end{array} \right)\lambda\\
+Y=\left(\begin{array}{cc}
+0&0\\
+0&0\\
+1&0\\
+1&0\end{array}\right) x+
+\left(\begin{array}{cc}
+1&0\\
+0&1\\
+0&-1\\
+-1&0\end{array}
+\right) Z_{s} +0\lambda\\
+
+0 \leq Y \, \perp \, \lambda \geq 0
+
+\end{array}
+\right)
+\]
+
+
+ \end{document}

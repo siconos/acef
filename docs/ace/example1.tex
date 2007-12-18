@@ -1,0 +1,118 @@
+\subsection{Example 1}
+\begin{figure}[h]
+\centerline{
+ \scalebox{0.5}{
+    \input{cir1.pstex_t}
+ }
+}
+\end{figure}
+\paragraph{First matrices formulation}
+X=$^{t}(V_{1},V_{2},V_{3})$\\
+\[\left(\begin{array}{c}
+  \\
+  KCL(1)\\  KCL(2)\\  KCL(3)
+  \end{array}\right)
+\left(\begin{array}{ccc}
+  V_{1}&V_{2}&V_{3}\\
+  \hline
+  \frac{1}{R}-\frac{1}{R}&  \frac{-1}{R}&0\\
+  \frac{1}{R}&  \frac{-1}{R}&0\\
+  0&0&\frac{1}{R}
+\end{array}\right)X+
+\underline{
+\left(\begin{array}{ccc}
+   V_{1}'&V_{2}'&V_{3}'\\
+  \hline
+0&0&0\\
+  0&C&-C\\
+  0&-C&C
+\end{array}\right)}X'=
+\left(\begin{array}{c}
+  \\
+  I\\
+  0\\
+  0
+  \end{array}\right)
+\]
+But, we can't extract x from X to get x'=...\\
+\newline
+\paragraph{Add current and tension from the capacitor}
+x=$(U_{32})$
+$Z_{s}=^{t}(V_{1},V_{2},V_{3},I_{32})$\\
+\[x'=CI_{32}\]
+\[\left(\begin{array}{c}
+  \\
+  KCL(1)\\
+  KCL(2)\\
+  KCL(3)\\
+  U_{32}
+  \end{array}\right)
+\left(\begin{array}{cccc}
+  V_{1}&V_{2}&V_{3}&I_{32}\\
+  \hline
+  \frac{1}{R}-\frac{1}{R}&  \frac{-1}{R}&0&0\\
+  \frac{1}{R}&  \frac{-1}{R}&0&1\\
+  0&0&\frac{1}{R}&-1\\
+  0&-1&1&0
+\end{array}\right)Z_{s}+
+\left(\begin{array}{c}
+  U_{32}\\
+  \hline
+  0\\
+  0\\
+  0\\
+  1
+  \end{array}\right)x
+=
+\left(\begin{array}{c}
+  \\
+  I\\
+  0\\
+  0\\
+  0
+  \end{array}\right)
+\]
+We obtain the matrices system\\
+\[x'=A1_{zs}Z_{s}\]
+\[Ax+CZ_{s}=s\]
+$N_{I}=N_{E}=5$\\
+The following examples, show we don't need to add the capacitor current. Sometime, current in
+capacitor can be replace with a KCL law.\\
+
+\paragraph{Add only tension from the capacitor}
+x=$(U_{32})$,$Z_{s}=^{t}(V_{1},V_{2},V_{3})$\\
+First get x' with \underline{KCL(3)}:
+\[x'=\frac{V_{3}}{RC}\]
+Second, the current in capacitor is $\frac{V_{3}}{R}$, and use it to write other KCL law:
+\[\left(\begin{array}{c}
+  \\
+  KCL(1)\\
+  KCL(2)\\
+  U_{32}
+  \end{array}\right)
+\left(\begin{array}{ccc}
+V_{1}&V_{2}&V_{3}\\
+  \hline
+  \frac{1}{R}+\frac{1}{R}&  \frac{-1}{R}&0\\
+  \frac{-1}{R}&  \frac{1}{R}&\frac{1}{R}\\
+  0&-1&1
+\end{array}\right)Z_{s}+
+\left(\begin{array}{c}
+U_{32}\\
+  \hline
+  0\\
+  0\\
+  0\\
+  1
+  \end{array}\right)x
+=
+\left(\begin{array}{c}
+  \\
+  I\\
+  0\\
+  0\\
+  0
+  \end{array}\right)
+\]
+$N_{I}=N_{E}=4$
+\newpage

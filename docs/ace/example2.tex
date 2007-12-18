@@ -1,0 +1,129 @@
+ 
+\subsubsection{Example 2}
+\begin{figure}[h]
+\centerline{
+ \scalebox{0.9}{
+    \input{cir2.pstex_t}
+ }
+}
+\end{figure}
+\paragraph{Add currents and tensions from the capacitor}
+$x=^{t}(I_{42},U_{43},U_{31},U_{50})$,
+$Z_{s}=^{t}(V_{1},V_{2},V_{3},V_{4},V_{5},I_{43},I_{31},I_{50})$
+We obtain following equation:
+\[\left(\begin{array}{cccc}
+  I_{42}'&U_{43}'&U_{31}'&U_{50}'\\
+  \hline
+L&0&0&0\\
+0&C&0&0\\
+0&0&C&0\\
+0&0&0&C
+\end{array}\right)x'=
+0x+
+\left(\begin{array}{cccccccc}
+  V_{1}&V_{2}&V_{3}&V_{4}&V_{5}&I_{43}&I_{31}&I_{50}\\
+  \hline
+  0&1&0&-1&0&0&0&0\\
+  0&0&0&0&0&-1&0&0\\
+  0&0&0&0&0&0&1&0\\
+  0&0&0&0&0&0&0&1\\
+\end{array}\right)Z_{s}
+\]
+\[\left(\begin{array}{c}
+\\KCL(1)\\KCL(2)\\KCL(3)\\KCL(4)\\KCL(5)\\U_{43}\\U_{31}\\U_{50}
+\end{array}\right)
+\left(\begin{array}{cccccccc}
+  V_{1}&V_{2}&V_{3}&V_{4}&V_{5}&I_{43}&I_{31}&I_{50}\\
+  \hline
+  -\frac{1}{R}&\frac{1}{R}&0&0&0&0&1&0\\
+  \frac{1}{R}&-\frac{1}{R}&0&0&0&0&0&0\\
+  0&0&0&0&0&-1&1&0\\
+  0&0&0&-\frac{1}{R}&\frac{1}{R}&1&0&0\\
+  0&0&0&\frac{1}{R}&-\frac{1}{R}&0&0&1\\
+  0&0&-1&1&0&0&0&0\\
+  -1&0&1&0&0&0&0&0\\
+  0&0&0&0&1&0&0&0\\
+\end{array}\right)Z_{s}+
+\left(\begin{array}{cccc}
+  I_{42}&U_{43}&U_{31}&U_{50}\\
+  \hline
+  0&0&0&0\\
+  1&0&0&0\\
+  0&0&0&0\\
+  0&0&0&0\\
+  1&0&0&0\\
+  0&1&0&0\\
+  0&0&1&0\\
+  0&0&0&1\\
+\end{array}\right)x=
+\left(\begin{array}{c}
+  \\ I\\  0\\  0\\  0\\  0\\  0\\  0\\  0
+  \end{array}\right)
+\]
+
+\[x'=A1_{zs}Z_{s}\]
+\[Cx+BZ_{s}=s\]
+$N_{I}=N_{E}=12$
+\paragraph{Add only tensions from the capacitor}
+$x=^{t}(I_{42},U_{43},U_{31},U_{50})$,
+$Z_{s}=^{t}(V_{1},V_{2},V_{3},V_{4},V_{5})$\\
+We obtain following equation:
+\[
+\left(\begin{array}{c}
+  \\  KCL(4)\\  KCL(3)\\  KCL(5)
+\end{array}\right)
+\underline{
+\left(\begin{array}{cccc}
+  I_{42}'&U_{43}'&U_{31}'&U_{50}'\\
+  \hline
+L&0&0&0\\
+0&C&0&0\\
+0&C&C&0\\
+0&0&0&C
+\end{array}\right)}x'=
+\left(\begin{array}{cccc}
+  I_{42}&U_{43}&U_{31}&U_{50}\\
+  \hline
+0&0&0&0\\
+1&0&0&0\\
+0&0&0&0\\
+0&0&0&0\\ 
+\end{array}\right)x+
+\left(\begin{array}{ccccc}
+V_{1}&V_{2}&V_{3}&V_{4}&V_{5}\\
+  \hline
+  0&1&0&-1&0\\
+  0&0&0&\frac{1}{R}&-\frac{1}{R}\\
+  0&0&0&0&0\\
+  0&0&0&-\frac{1}{R}&\frac{1}{R}
+\end{array}\right)Z_{s}
+\]
+So, we get $x'=A1_{x}x+A1_{zs}Z_{s}$. Therefore, all currents in the capacitor branch are known.\\
+$I_{43}= I_{42}+\frac{V_{4}}{R}-\frac{V_{5}}{R}$,
+$I_{31}= I_{42}+\frac{V_{4}}{R}-\frac{V_{5}}{R}$,
+$I_{50}= \frac{V_{4}}{R}-\frac{V_{5}}{R}$\\
+Use these equations to fill following matrices:
+\[\left(\begin{array}{c}
+KCL(1)\\KCL(2)\\U_{43}\\U_{31}\\U_{50}
+\end{array}\right)
+\left(\begin{array}{ccccc}
+V_{1}&V_{2}&V_{3}&V_{4}&V_{5}\\
+  \hline
+  -\frac{1}{R}&\frac{1}{R}&0&\underline{\frac{1}{R}}&\underline{-\frac{1}{R}}\\
+  \frac{1}{R}&-\frac{1}{R}&0&0&0\\
+  0&0&-1&1&0\\
+  -1&0&1&0&0\\
+  0&0&0&0&1\\
+\end{array}\right)Z_{s}+
+\left(\begin{array}{cccc}
+  I_{42}&U_{43}&U_{31}&U_{50}\\
+  \hline
+  \underline{1}&0&0&0\\
+  1&0&0&0\\0&1&0&0\\0&0&1&0\\0&0&0&1\\
+\end{array}\right)x=
+\left(\begin{array}{c}
+  I\\0\\0\\0\\0
+  \end{array}\right)
+\]
+$N_{I}=N_{E}=9$
+
