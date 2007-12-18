@@ -1,0 +1,302 @@
+%!PS-Adobe-2.0 EPSF-2.0
+%%Title: MNA.fig
+%%Creator: fig2dev Version 3.2 Patchlevel 4
+%%CreationDate: Fri Dec 14 08:31:34 2007
+%%For: bonnefon@duparc (Olivier Bonnefon)
+%%BoundingBox: 0 0 502 234
+%%Magnification: 1.0000
+%%EndComments
+/$F2psDict 200 dict def
+$F2psDict begin
+$F2psDict /mtrx matrix put
+/col-1 {0 setgray} bind def
+/col0 {0.000 0.000 0.000 srgb} bind def
+/col1 {0.000 0.000 1.000 srgb} bind def
+/col2 {0.000 1.000 0.000 srgb} bind def
+/col3 {0.000 1.000 1.000 srgb} bind def
+/col4 {1.000 0.000 0.000 srgb} bind def
+/col5 {1.000 0.000 1.000 srgb} bind def
+/col6 {1.000 1.000 0.000 srgb} bind def
+/col7 {1.000 1.000 1.000 srgb} bind def
+/col8 {0.000 0.000 0.560 srgb} bind def
+/col9 {0.000 0.000 0.690 srgb} bind def
+/col10 {0.000 0.000 0.820 srgb} bind def
+/col11 {0.530 0.810 1.000 srgb} bind def
+/col12 {0.000 0.560 0.000 srgb} bind def
+/col13 {0.000 0.690 0.000 srgb} bind def
+/col14 {0.000 0.820 0.000 srgb} bind def
+/col15 {0.000 0.560 0.560 srgb} bind def
+/col16 {0.000 0.690 0.690 srgb} bind def
+/col17 {0.000 0.820 0.820 srgb} bind def
+/col18 {0.560 0.000 0.000 srgb} bind def
+/col19 {0.690 0.000 0.000 srgb} bind def
+/col20 {0.820 0.000 0.000 srgb} bind def
+/col21 {0.560 0.000 0.560 srgb} bind def
+/col22 {0.690 0.000 0.690 srgb} bind def
+/col23 {0.820 0.000 0.820 srgb} bind def
+/col24 {0.500 0.190 0.000 srgb} bind def
+/col25 {0.630 0.250 0.000 srgb} bind def
+/col26 {0.750 0.380 0.000 srgb} bind def
+/col27 {1.000 0.500 0.500 srgb} bind def
+/col28 {1.000 0.630 0.630 srgb} bind def
+/col29 {1.000 0.750 0.750 srgb} bind def
+/col30 {1.000 0.880 0.880 srgb} bind def
+/col31 {1.000 0.840 0.000 srgb} bind def
+
+end
+save
+newpath 0 234 moveto 0 0 lineto 502 0 lineto 502 234 lineto closepath clip newpath
+-79.4 369.7 translate
+1 -1 scale
+
+/cp {closepath} bind def
+/ef {eofill} bind def
+/gr {grestore} bind def
+/gs {gsave} bind def
+/sa {save} bind def
+/rs {restore} bind def
+/l {lineto} bind def
+/m {moveto} bind def
+/rm {rmoveto} bind def
+/n {newpath} bind def
+/s {stroke} bind def
+/sh {show} bind def
+/slc {setlinecap} bind def
+/slj {setlinejoin} bind def
+/slw {setlinewidth} bind def
+/srgb {setrgbcolor} bind def
+/rot {rotate} bind def
+/sc {scale} bind def
+/sd {setdash} bind def
+/ff {findfont} bind def
+/sf {setfont} bind def
+/scf {scalefont} bind def
+/sw {stringwidth} bind def
+/tr {translate} bind def
+/tnt {dup dup currentrgbcolor
+  4 -2 roll dup 1 exch sub 3 -1 roll mul add
+  4 -2 roll dup 1 exch sub 3 -1 roll mul add
+  4 -2 roll dup 1 exch sub 3 -1 roll mul add srgb}
+  bind def
+/shd {dup dup currentrgbcolor 4 -2 roll mul 4 -2 roll mul
+  4 -2 roll mul srgb} bind def
+ /DrawEllipse {
+	/endangle exch def
+	/startangle exch def
+	/yrad exch def
+	/xrad exch def
+	/y exch def
+	/x exch def
+	/savematrix mtrx currentmatrix def
+	x y tr xrad yrad sc 0 0 1 startangle endangle arc
+	closepath
+	savematrix setmatrix
+	} def
+
+/$F2psBegin {$F2psDict begin /$F2psEnteredState save def} def
+/$F2psEnd {$F2psEnteredState restore end} def
+
+$F2psBegin
+10 setmiterlimit
+0 slj 0 slc
+ 0.06000 0.06000 sc
+%
+% Fig objects follow
+%
+% 
+% here starts figure with depth 50
+% Ellipse
+7.500 slw
+n 1650 4200 318 318 0 360 DrawEllipse gs col0 s gr
+
+% Polyline
+n 1650 3900 m 1650 2700 l 3600 2700 l 3600 2475 l 4950 2475 l 4950 2700 l
+
+ 7050 2700 l gs col0 s gr 
+% Polyline
+n 6000 2700 m
+ 6000 4050 l gs col0 s gr 
+% Polyline
+n 6000 4350 m 6000 5775 l 1650 5775 l
+ 1650 4500 l gs col0 s gr 
+% Polyline
+n 6000 5775 m 9450 5775 l 9450 4875 l 9675 4875 l 9675 3750 l 9450 3750 l
+ 9450 2700 l
+ 8775 2700 l gs col0 s gr 
+% Polyline
+n 5700 4350 m
+ 6300 4350 l gs col0 s gr 
+% Polyline
+n 5700 4050 m
+ 6300 4050 l gs col0 s gr 
+% Polyline
+n 8775 2700 m
+ 8250 2700 l gs col0 s gr 
+% Polyline
+n 3600 2700 m 3600 2925 l 4950 2925 l
+ 4950 2700 l gs col0 s gr 
+% Polyline
+n 9450 4875 m 9225 4875 l 9225 3825 l 9225 3750 l
+ 9450 3750 l gs col0 s gr 
+% Polyline
+n 1575 3975 m
+ 1725 3975 l gs col0 s gr 
+% Polyline
+n 1650 3900 m
+ 1650 4050 l gs col0 s gr 
+% Polyline
+n 1575 4425 m
+ 1725 4425 l gs col0 s gr 
+% Polyline
+n 6000 5775 m
+ 6000 6000 l gs col0 s gr 
+% Polyline
+n 5775 6000 m
+ 6225 6000 l gs col0 s gr 
+% Polyline
+n 5850 6000 m
+ 5775 6150 l gs col0 s gr 
+% Polyline
+n 5925 6000 m
+ 5850 6150 l gs col0 s gr 
+% Polyline
+n 6000 6000 m
+ 5925 6150 l gs col0 s gr 
+% Polyline
+n 6075 6000 m
+ 6000 6150 l gs col0 s gr 
+% Polyline
+n 6150 6000 m
+ 6075 6150 l gs col0 s gr 
+% Polyline
+n 1650 3300 m
+ 1725 3225 l gs col0 s gr 
+% Polyline
+n 1650 3300 m
+ 1575 3225 l gs col0 s gr 
+% Polyline
+n 6000 3300 m
+ 5925 3225 l gs col0 s gr 
+% Polyline
+n 6000 3300 m
+ 6075 3225 l gs col0 s gr 
+% Polyline
+n 6675 2700 m
+ 6600 2775 l gs col0 s gr 
+% Polyline
+n 6675 2700 m
+ 6600 2625 l gs col0 s gr 
+% Polyline
+n 9450 3375 m
+ 9525 3300 l gs col0 s gr 
+% Polyline
+n 9450 3375 m
+ 9375 3300 l gs col0 s gr 
+% Polyline
+n 9075 5025 m 9075 2925 l
+ 9000 3000 l gs col0 s gr 
+% Polyline
+n 9075 2925 m
+ 9150 3000 l gs col0 s gr 
+% Polyline
+n 9075 5025 m
+ 9075 5625 l gs col0 s gr 
+% Polyline
+n 5550 5550 m 5550 3000 l
+ 5625 3075 l gs col0 s gr 
+% Polyline
+n 5550 3000 m
+ 5475 3075 l gs col0 s gr 
+% Polyline
+n 2100 5550 m 2100 2925 l
+ 2175 3000 l gs col0 s gr 
+% Polyline
+n 2100 2925 m
+ 2025 3000 l gs col0 s gr 
+% Polyline
+2 slj
+n 7050 2700 m 7050 2699 l 7050 2695 l 7051 2685 l 7052 2668 l 7053 2645 l
+ 7056 2615 l 7058 2582 l 7062 2548 l 7066 2513 l 7070 2481 l
+ 7076 2452 l 7082 2427 l 7090 2408 l 7100 2395 l 7112 2392 l
+ 7125 2400 l 7135 2413 l 7146 2432 l 7155 2455 l 7163 2480 l
+ 7171 2508 l 7177 2536 l 7181 2565 l 7185 2594 l 7189 2623 l
+ 7191 2652 l 7194 2681 l 7196 2710 l 7199 2739 l 7203 2767 l
+ 7207 2795 l 7212 2822 l 7219 2848 l 7227 2872 l 7237 2893 l
+ 7249 2910 l 7262 2921 l 7275 2925 l 7288 2921 l 7301 2909 l
+ 7312 2892 l 7322 2870 l 7330 2845 l 7336 2817 l 7341 2788 l
+ 7344 2757 l 7347 2726 l 7348 2694 l 7350 2662 l 7352 2631 l
+ 7353 2599 l 7356 2568 l 7359 2537 l 7364 2508 l 7370 2480 l
+ 7378 2455 l 7388 2433 l 7399 2416 l 7412 2404 l 7425 2400 l
+ 7438 2404 l 7451 2416 l 7462 2433 l 7472 2455 l 7480 2480 l
+ 7486 2508 l 7491 2537 l 7494 2568 l 7497 2599 l 7498 2631 l
+ 7500 2663 l 7502 2694 l 7503 2726 l 7506 2757 l 7509 2788 l
+ 7514 2817 l 7520 2845 l 7528 2870 l 7538 2892 l 7549 2909 l
+ 7562 2921 l 7575 2925 l 7588 2921 l 7601 2909 l 7612 2892 l
+ 7622 2870 l 7630 2845 l 7636 2817 l 7641 2788 l 7644 2757 l
+ 7647 2726 l 7648 2694 l 7650 2662 l 7652 2631 l 7653 2599 l
+ 7656 2568 l 7659 2537 l 7664 2508 l 7670 2480 l 7678 2455 l
+ 7688 2433 l 7699 2416 l 7712 2404 l 7725 2400 l 7738 2404 l
+ 7751 2416 l 7762 2433 l 7772 2455 l 7780 2480 l 7786 2508 l
+ 7791 2537 l 7794 2568 l 7797 2599 l 7798 2631 l 7800 2663 l
+ 7802 2694 l 7803 2726 l 7806 2757 l 7809 2788 l 7814 2817 l
+ 7820 2845 l 7828 2870 l 7838 2892 l 7849 2909 l 7862 2921 l
+ 7875 2925 l 7888 2921 l 7901 2909 l 7912 2892 l 7922 2870 l
+ 7930 2845 l 7936 2817 l 7941 2788 l 7944 2757 l 7947 2726 l
+ 7948 2694 l 7950 2662 l 7952 2631 l 7953 2599 l 7956 2568 l
+ 7959 2537 l 7964 2508 l 7970 2480 l 7978 2455 l 7988 2433 l
+ 7999 2416 l 8012 2404 l 8025 2400 l 8038 2404 l 8051 2415 l
+ 8063 2432 l 8073 2452 l 8081 2476 l 8088 2501 l 8093 2527 l
+ 8097 2554 l 8101 2582 l 8104 2610 l 8106 2638 l 8109 2666 l
+ 8111 2694 l 8115 2722 l 8119 2751 l 8123 2780 l 8129 2808 l
+ 8137 2836 l 8145 2863 l 8154 2887 l 8165 2909 l 8175 2925 l
+ 8188 2938 l 8200 2941 l 8210 2935 l 8218 2922 l 8224 2903 l
+ 8230 2880 l 8234 2855 l 8238 2827 l 8242 2798 l 8244 2771 l
+ 8247 2746 l 8248 2726 l 8249 2712 l 8250 2704 l 8250 2701 l
+
+ 8250 2700 l gs col0 s gr 
+/Times-Roman ff 180.00 scf sf
+4050 2700 m
+gs 1 -1 sc (R2) col0 sh gr
+/Times-Roman ff 180.00 scf sf
+9375 4350 m
+gs 1 -1 sc (R5) col0 sh gr
+/Times-Roman ff 180.00 scf sf
+7500 3225 m
+gs 1 -1 sc (L4) col0 sh gr
+/Times-Roman ff 180.00 scf sf
+6525 4200 m
+gs 1 -1 sc (C3) col0 sh gr
+/Times-Roman ff 180.00 scf sf
+1950 3375 m
+gs 1 -1 sc (I1) col0 sh gr
+/Times-Roman ff 180.00 scf sf
+1575 2475 m
+gs 1 -1 sc (V1) col0 sh gr
+/Times-Roman ff 180.00 scf sf
+5925 2475 m
+gs 1 -1 sc (V2) col0 sh gr
+/Times-Roman ff 180.00 scf sf
+9375 2400 m
+gs 1 -1 sc (V3) col0 sh gr
+/Times-Roman ff 180.00 scf sf
+5100 4125 m
+gs 1 -1 sc (U3) col0 sh gr
+/Times-Roman ff 180.00 scf sf
+8775 4275 m
+gs 1 -1 sc (U5) col0 sh gr
+/Times-Roman ff 180.00 scf sf
+2250 4275 m
+gs 1 -1 sc (U1\(t\)) col0 sh gr
+/Times-Roman ff 180.00 scf sf
+6225 3300 m
+gs 1 -1 sc (I3) col0 sh gr
+/Times-Roman ff 180.00 scf sf
+6750 2850 m
+gs 1 -1 sc (I4) col0 sh gr
+/Times-Roman ff 180.00 scf sf
+9225 3375 m
+gs 1 -1 sc (I5) col0 sh gr
+% here ends figure;
+$F2psEnd
+rs
+showpage

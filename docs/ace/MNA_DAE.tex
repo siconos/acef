@@ -187,14 +187,13 @@ used in our formulation.
   \item If a node is not connected to a capacitor then the Kirchhoff Current Law (KCL) is static. \\
   \item The V.D. equation (VDE) : \\
     A V.D. branch give an equation :
-    \[V_{i}-V_{j} = \sum_{i}^{}a_{i}V_{i} + \sum_{j\in J}^{}b_{j}I_{j} +  \sum_{i}^{}c_{i}V'_{i} +
-    source\]
+    \[V_{i}-V_{j} = \sum_{i}^{}a_{i}V_{i} + \sum_{j\in J}^{}b_{j}I_{j} +   source\]
     This equation comes from the branch constitution, not from Kirchoff. (ex : U = R*I)
 \subsubsection{dynamic equations}
   \item If a node is connected to a capacitor then the Kirchhoff Current Law is dynamic (KCL).\\
     NB : The current in the capacitor branches is written with :
     \[I = C*\frac{d(V_{i} - V_{j})}{dt}\]
-  \item The inductor law (IL) : $n_{i}$ equations.
+  \item The inductor law (IL) : 
      \[V_{i} - V_{j} = L*\frac{dI}{dt}\]
 \end{enumerate}
 
