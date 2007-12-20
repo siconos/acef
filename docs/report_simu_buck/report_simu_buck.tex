@@ -315,10 +315,11 @@ y  & = & C x + D \lambda + F u(t) + e\\
 with $b(t)$ and $u(t)$ source terms.
 
 \section{Simulation as a non-smooth dynamical system with SICONOS}
+\label{results-buck-SICO}
 The start-up of the converter was simulated thanks to the SICONOS platform developed at INRIA.
 As initial conditions, all state variables are zeroed.
 
-The detailed analysis of the switching events requires to use a time step as small as~$50~ps$.
+The detailed analysis of the switching events requires to use a time step as small as~50~ps.
 The simulations are carried with a fixed time step, 4000000 steps are then computed for the~$200~\mu s$~long
 settling of the output voltage.
 
@@ -388,11 +389,30 @@ exhibiting a sliding mode}
 \clearpage
 
 \section{Simulation with SPICE : convergence issues related to the MOS model}
-The simulation of this circuit was done with several versions of SPICE and two kinds of MOS models :
-\begin{itemize}
-\item the MOS level 1 model (Schichmann and Hodges model)
-\item a simplified model close to 
-\end{itemize}
+\subsection{Simulation conditions}
+The simulation of this circuit was done with several versions of SPICE (the open source NGSPICE from Berkeley, SMASH from Dolphin and
+ELDO from Mentor Graphics) and two kinds of MOS models :
+\begin{description}
+\item[the MOS level 3 model :] this model was preferred to the MOS level 1 since it allowed the convergence
+of the SMASH simulator with the requirement to add a small capacitor between ground and node 2 (connection between
+the MOS transistors). This model takes more physical effects into account than the piecewise linear model used in SICONOS simulations,
+in particular the voltage-dependent capacitances. It is an important issue since these varying capacitances
+cause some convergence problems when node 2 switches between $V_I$ and ground.
+Adding a small capacitor of a few picoFarad between this node and ground helps to solve the problem
+but may yield artifacts (spikes) on the current of the~$V_I$~alim and the MOS transistors.
+\item[a simplified model (Sah model)] with fixed capacitances and a quadratic static characteristic :
+\[
+I_{DS} = \textrm{max}(0,V_{GS}-Vt_N)^2 - \textrm{max}(0,V_{GD}-Vt_N)^2 \qquad \textrm{for an NMOS}
+\]
+This model is very close to the piecewise linear model used in SICONOS simulations. The implementation in netlists was done thanks to 
+voltage-dependent current sources that are very likely not compiled by the various SPICE simulators tested.
+Thus the CPU time measured is increased with respect to a compiled version of the same model.
+An estimation of the CPU time with a compiled simplified model is given by multiplying the MOS level 3 CPU time
+by the ratio of the Newton-Raphson iterations required respectively during the simulations with each model.
+An additional correction should be done to reflect that the computation of the jacobian matrix entries
+linked to a compiled simplified model would require less time than with a MOS level 3 model.
+\end{description}
+
 
 \begin{itemize}
 \item Power MOSFETS intrinsic diodes are modelled by the classical Shockley equation with an emission
@@ -401,43 +421,59 @@ coefficient $N~=~1$.
 Thus the 3~segment characteristic used as the non smooth model is regularized to help convergence of SPICE.
 \end{itemize}
 
-\begin{description}
-\item[with standard values of linear components :] $L~=~10~\mu H$, $C~=~22~\mu F$, $R_{11}~=~15.58~k \Omega$, $R_{12}~=~227.8~k \Omega$, $R_{21}~=~5.613~M \Omega$, $C_{11}~=~20~pF$, $C_{21}~=~1.9~pF$\\
-A soft start ($0.1~\mu s$ as rise time) of the power supply $V_I$ was provided to enable the simulation to start. \footnote{This is
+The power supply $V_I$ is raised from 0 in $50~ns$ at the beginning to help the convergence. \footnote{This is
 not required with the SICONOS algorithms that find a consistent initial solution from scratch.}
-It is necessary to release SPICE algorithms tolerance parameters to get a complete simulation. When NGSPICE computes the solution
-at one time step with the (iterative) Newton-Raphson algorithm, it validates one iteration if it differs both absolutely and 
-relatively from the previous iteration less than given thresholds. The standard threshold values are $1~pA$ for a current, $1 \mu V$ for a 
-voltage and $0.001$ for the relative difference. This last parameter was increased up to 0.03 and the time step kept below $0.1~ns$
-to enable convergence. It was then possible to complete the simulation in a CPU time of $161$~seconds. Nevertheless, results are impaired
-by errors on diode current occurring at switching instants (see figures \ref{fig-buck-resistor-simu-ngspice-0p2ms-std} and
-\ref{fig-buck-resistor-simu-ngspice-zoom-std}). Current spikes of more than $10~A$ through the intrinsic NMOS diode are computed. 
-NGSPICE checks the convergence only by evaluating the difference between two iterates and does not check if the computed value 
-is really a solution of Kirchhoff current law. With a convergence criterion implementing this check, the simulation would likely fail.
-\item[with modified values $L~=~4~\mu H$, $C~=~10~\mu F$:] the simulation always fails even with a relative tolerance of~$0.1$ and
-a time step of~$10~ps$.
-\end{description}
+The SPICE tolerance values used are $1~nA$ for currents, $1~\mu V$ for voltages and $0.00075$ for relative differences.
 
-\begin{figure}[hbtp]
-\begin{center}
-\includegraphics[scale=1.2,angle=0]{simu_ngspice_0p2ms_0p1ns_std.eps}
-\end{center}
-\caption[NGSPICE results, buck \protect\& load resistor]
-{NGSPICE simulation results, buck converter with a load resistor\protect\newline
-standard parameters\protect\newline
-Erroneous intrinsic NMOS diode current spikes are visible on~the~$2^{nd}$~graph.}
-\label{fig-buck-resistor-simu-ngspice-0p2ms-std}
-\end{figure}
+Usually, SPICE simulators integrate time with a time step adjusted according to different strategies based on an estimation
+of the local truncation error (LTE) or the number of Newton-Raphson iterations required by previous steps.
+Since SICONOS simulations were carried with a fixed time step of~50~ps, simulators were forced to use this value as a maximum.
+Even when SPICE simulators use fixed time step, they may compute LTE to assess a solution found by the Newton-Raphson
+algorithm. This computation of LTE was disabled because it could impair the performance of SPICE with respect to SICONOS.
+\footnote{For NGSPICE, it implied a slight modification of the source code since no standard option is provided to do it.}
 
-\begin{figure}[hbtp]
-\begin{center}
-\includegraphics[scale=1.2,angle=0]{simu_ngspice_0p2ms_0p1ns_stdzoom.eps}
-\end{center}
-\caption[NGSPICE results, buck \protect\& load resistor , zoom]
-{NGSPICE simulation results, buck converter with a load resistor\protect\newline
-standard parameters, zoom on a NMOS diode current spike}
-\label{fig-buck-resistor-simu-ngspice-zoom-std}
-\end{figure}
+\subsection{Simulation results}
+The following tables displays the results with the standard and the sliding mode values of compensator components
+(see \ref{results-buck-SICO}). An estimation of the CPU time with a compiled simplified model is added.
+
+\begin{tabular}{|l|c|r|r|r|r|}
+\hline
+\multicolumn{6}{|c|}{\textbf{standard compensator values}}\\
+\hline
+simulator & model & time steps & NR iterations & CPU time (s) & CPU time estimation (s)\\
+\hline
+NGSPICE & simple  & 4000000 & 8024814 & 632 & \\
+NGSPICE & level 3 & 4000000 & 8302904 & 383 & \\
+\hline
+SMASH   & simple  & 4000404 & 8073070 & 230 & \\
+SMASH   & level 3 & 4000313 & 8052858 & 178 & \\
+\hline
+ELDO    & simple  & 4000000 & 4547579 & 388 & \\
+ELDO    & level 3 & 4000000 & 4658412 & 363 & \\
+\hline
+\end{tabular}
+
+
+% \begin{figure}[hbtp]
+% \begin{center}
+% \includegraphics[scale=1.2,angle=0]{simu_ngspice_0p2ms_0p1ns_std.eps}
+% \end{center}
+% \caption[NGSPICE results, buck \protect\& load resistor]
+% {NGSPICE simulation results, buck converter with a load resistor\protect\newline
+% standard parameters\protect\newline
+% Erroneous intrinsic NMOS diode current spikes are visible on~the~$2^{nd}$~graph.}
+% \label{fig-buck-resistor-simu-ngspice-0p2ms-std}
+% \end{figure}
+% 
+% \begin{figure}[hbtp]
+% \begin{center}
+% \includegraphics[scale=1.2,angle=0]{simu_ngspice_0p2ms_0p1ns_stdzoom.eps}
+% \end{center}
+% \caption[NGSPICE results, buck \protect\& load resistor , zoom]
+% {NGSPICE simulation results, buck converter with a load resistor\protect\newline
+% standard parameters, zoom on a NMOS diode current spike}
+% \label{fig-buck-resistor-simu-ngspice-zoom-std}
+% \end{figure}
 
 \clearpage
 
