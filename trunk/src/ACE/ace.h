@@ -35,16 +35,40 @@ class component;
 
 #define ACE_CHAR_LENGTH 124
 
+//SOLVER TYPE
+#define ACE_SOLVER_ENUM 0
+#define ACE_SOLVER_SIMPLEX 1
+#define ACE_SOLVER_PATH 2
+#include "acetime.h"
+
+
+#define ACE_TIMER_SOLVE_GUESS 0
+#define ACE_TIMER_SOLVE_ENUM 1
+#define ACE_TIMER_SOLVE_SIMPLEX 2
+#define ACE_TIMER_SOLVE_PATH 3
+#define ACE_TIMER_EQUATION 4
+#define ACE_TIMER_MAIN 5
+#define ACE_TIMER_DIRECT 6
+#define ACE_TIMER_LAST 7
+
 typedef std::vector<unknown *> unknowns;
 typedef std::vector<equation *> equations;
 typedef std::vector<component *> components;
 
 typedef std::vector<component *>::iterator componentsIt;
 
-extern char ACE_name[];
 
+
+extern char ACE_name[];
+extern aceTime ACE_times[];
+extern int ACE_SOLVER_TYPE;
+extern int ACE_MUET_LEVEL; //0 verbose .... 10 muet
+#define ACE_MUET 10
+
+
+void ACE_INIT();
 bool ACE_IS_NULL(ACE_DOUBLE d);
-void ACE_MESSAGE(char * mess);
+void ACE_MESSAGE(char * mess,int level=0);
 void ACE_ERROR(char * mess);
 void ACE_WARNING(char * mess);
 void ACE_INTERNAL_ERROR(char *mess);
@@ -57,4 +81,10 @@ void ACE_CHECK_IERROR(bool b,char* mess);
 void ACE_CHECK_IWARNING(bool b,char* mess);
 void ACE_CHECK_WARNING(bool b,char* mess);
 void ACE_CHECK_ERROR(bool b,char* mess);
+
+
+//TIME FUNCTION
+void ACE_INIT_TIME();
+void ACE_PRINT_TIME();
+void ACE_STOP_SOLVER_TIME();
 #endif //ACE_H

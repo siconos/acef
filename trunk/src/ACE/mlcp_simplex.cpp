@@ -74,6 +74,7 @@
 #include <set>
 #include <cmath>
 #include <ctime>
+#include "ace.h"
 static int n=0;
 static int m=0;
 static int nrows = 0;
@@ -86,6 +87,9 @@ struct node {
 	int *rstat;		/* [nrows] current row basis (for restart) */
 	char *choice;			/* [m] for choices made so far: n = 'no choice', v = 'v->0', w = 'w->0' */
 	void print() const {
+	  if (ACE_MUET_LEVEL >= ACE_MUET)
+	    return;
+
 		int i;
 		printf("Choice= ");
 		for (i=0; i<m; i++) printf("%c", choice[i]);
@@ -115,6 +119,8 @@ typedef std::set<node,compNodes> mySet;
 #include "auxFun.h"
 
 void print_double_array(char * name,double *t, int nn){
+  if (ACE_MUET_LEVEL >= ACE_MUET)
+    return;
   int sizeLine = 10;
   int i = 0;
   printf("%s[%d] = (",name,nn);
@@ -125,6 +131,8 @@ void print_double_array(char * name,double *t, int nn){
   printf(")\n");
 }
 void print_int_array(char * name,int *t, int nn){
+  if (ACE_MUET_LEVEL >= ACE_MUET)
+    return;
   int sizeLine = 10;
   int i = 0;
   printf("%s[%d] = (",name,nn);
@@ -135,6 +143,8 @@ void print_int_array(char * name,int *t, int nn){
   printf(")\n");
 }
 void print_sparse_matrix(int *matbeg,int *matcnt,int *matind,double *matval,double *objective,double *rhs,char *sense,double *lb,double *ub){
+  if (ACE_MUET_LEVEL >= ACE_MUET)
+    return;
   print_int_array("matbeg",matbeg,ncols);
   print_int_array("matcnt",matcnt,ncols);
   print_int_array("matind",matind,nnz);
@@ -163,12 +173,14 @@ int solvesubproblem(CPXENVptr env, CPXLPptr lp, mySet::iterator& currentNode, in
 			infeasComp+=x[n+i]*x[n+m+i];
 		}
 		if (infeasComp<tolComp) { /* we have a solution !!! */
+		  if (ACE_MUET_LEVEL < ACE_MUET){
 			printf("\n----- Getting a solution:\n");
 			for (i=0; i<ncols; i++) {
 				printf("[%2.i] %10.7f", i, x[i]);
 				if (i%5==4) printf("\n");
 			}
 			printf("\n----- End of solution.\n");
+		  }
 			return 1;
 		} else { /* complementarity doesn't hold, keep going */
 			node child;
@@ -429,7 +441,8 @@ int mlcp_simplex( int *nn , int* mm, double *A , double *B , double *C , double 
 	nFixed++;
 	break;
       default:
-	printf("Choice should be either n,v or w (here: %c)\n", currentNode->choice[i]);
+	if (ACE_MUET_LEVEL < ACE_MUET)
+	  printf("Choice should be either n,v or w (here: %c)\n", currentNode->choice[i]);
 	return -1;
       }
     }
@@ -440,9 +453,11 @@ int mlcp_simplex( int *nn , int* mm, double *A , double *B , double *C , double 
 	 but complementarity still doesn't hold up to tolComp
 	 (though it cannot be much larger with all the zero fixed vars.)
 	 The current node is probably a solution, up to roundoff errors...	*/
-      printf("Node without any free variable was found. It might be a solution, or close.\n");
-      for (i=0; i<m; i++) printf("%c", currentNode->choice[i]);
-      printf("\n");
+      if (ACE_MUET_LEVEL < ACE_MUET){
+	printf("Node without any free variable was found. It might be a solution, or close.\n");
+	for (i=0; i<m; i++) printf("%c", currentNode->choice[i]);
+	printf("\n");
+      }
       deleteNode((node*)&(*currentNode));
       tree.erase(currentNode);
       break;
@@ -477,7 +492,7 @@ int mlcp_simplex( int *nn , int* mm, double *A , double *B , double *C , double 
     tree.erase(currentNode);
 		
     /* disp some log */
-    if (nIter%logFrequency==0) printf("iter %i : tree size is now %i \n", nIter, tree.size());
+    if (nIter%logFrequency==0 && ACE_MUET_LEVEL < ACE_MUET) printf("iter %i : tree size is now %i \n", nIter, tree.size());
   }
 
 
@@ -490,7 +505,8 @@ int mlcp_simplex( int *nn , int* mm, double *A , double *B , double *C , double 
   /* display results */
   time_t tEnd = time(NULL);
   tCum+=difftime(tEnd, tStart);
-  printf("%i iterations taken (%f sec.), tree size is %i\n", nIter,tCum , tree.size());
+  if (ACE_MUET_LEVEL < ACE_MUET)
+    printf("%i iterations taken (%f sec.), tree size is %i\n", nIter,tCum , tree.size());
   while (!tree.empty()){
     mySet::iterator currentNode = tree.begin();
     deleteNode((node*)&(*currentNode));

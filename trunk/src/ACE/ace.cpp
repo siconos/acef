@@ -4,15 +4,40 @@
 #include <cstdlib>
 
 char ACE_name[12]="ace";
+aceTime ACE_times[ACE_TIMER_LAST];
+int ACE_SOLVER_TYPE=0;
+int ACE_MUET_LEVEL=0;
 
+void ACE_INIT(){
+  ACE_INIT_TIME();
+}
+void ACE_INIT_TIME(){
+  ACE_times[ACE_TIMER_MAIN].setName("main ");
+  ACE_times[ACE_TIMER_SOLVE_GUESS].setName("solver guess ");
+  ACE_times[ACE_TIMER_SOLVE_ENUM].setName("solver enum ");
+  ACE_times[ACE_TIMER_SOLVE_SIMPLEX].setName("solver simplex ");
+  ACE_times[ACE_TIMER_SOLVE_PATH].setName("solver path ");
+  ACE_times[ACE_TIMER_EQUATION].setName("equation formulation ");
+  ACE_times[ACE_TIMER_DIRECT].setName("solver direct ");
+}
+void ACE_STOP_SOLVER_TIME(){
+  ACE_times[ACE_TIMER_SOLVE_GUESS].stop();
+  ACE_times[ACE_TIMER_SOLVE_ENUM].stop();
+  ACE_times[ACE_TIMER_SOLVE_SIMPLEX].stop();
+  ACE_times[ACE_TIMER_SOLVE_PATH].stop();
+}
+void ACE_PRINT_TIME(){
+  for (int i=0;i <ACE_TIMER_LAST;i++)
+    ACE_times[i].print();
+}
 bool ACE_IS_NULL(ACE_DOUBLE d){
   return (fabs(d)<ACE_INF);
 }
-void ACE_MESSAGE(char * mess){
-#ifndef NO_MESSAGE
+void ACE_MESSAGE( char * mess,int level){
+  if (ACE_MUET_LEVEL>level)
+    return;
   printf("ACE MESSAGE :");
   printf(mess);
-#endif
 }
 
 void ACE_ERROR(char * mess){
@@ -106,4 +131,15 @@ void ACE_CHECK_WARNING(bool b,char* mess){
 void ACE_CHECK_ERROR(bool b,char* mess){
   if (!b)
     ACE_ERROR(mess);
+}
+void startTime(int ID){
+#ifdef ACE_WITH_TIMER
+  ;
+#endif
+}
+double stopTime(int ID){
+#ifdef ACE_WITH_TIMER
+  ;
+#endif
+  return 0;
 }

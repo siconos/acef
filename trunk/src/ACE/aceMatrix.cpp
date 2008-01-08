@@ -45,3 +45,9 @@ void aceMatrix::FortranToMatrix(double * t){
       setValue(i,j,t[j*dimRow+i]);
     }
 }
+void aceMatrix::MatrixToPath(int * I,int * J,double * t){
+  ;
+}
+void aceMatrix::PathToMatrix(int * I,int * J,double * t){
+  ;
+}

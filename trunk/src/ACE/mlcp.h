@@ -8,8 +8,6 @@
 #include "aceMatrix.h"
 #include <list>
 
-#define SOLVER_ENUM 0
-#define SOLVER_SIMPLEX 1
 
 typedef std::list<unsigned long> ulongs;
 typedef std::list<unsigned long>::iterator Itulongs;
@@ -20,13 +18,14 @@ typedef std::list<unsigned long>::iterator Itulongs;
 // 
 class mlcp {
 public:
-  mlcp(unsigned int Dlcp,unsigned int Dlin);
+  mlcp(unsigned int Dlcp,unsigned int Dlin,int solverType = ACE_SOLVER_ENUM);
   virtual ~mlcp();
   bool solve();
 
+  void addGuess(aceMatrix *mZ);
+
   void addGuess(unsigned long l);
-  int mSolverType;
-  
+  void setCurrentConfig(unsigned long l);
   aceMatrix *mW1;
   aceMatrix *mZ1;
   aceMatrix *mZ2;
@@ -37,8 +36,11 @@ public:
   unsigned long mCurEnum;
   ulongs mGuess;
   Itulongs mItGuess;
+  
+  //CONFIGURATION--OPTIONS
   bool mUseGuess;
-  bool mTryGuess;
+  int mSolverType;
+
   unsigned long mCmp;
   unsigned long mMaxEnum;
   double mPourCent;
@@ -65,7 +67,24 @@ private:
   bool tryGuess();
   void initGuess();
   void affectW1Z1(unsigned long ll);
+  bool solveGuessAndIt();
   bool solveWithSimplex();
+  bool solveWithPath();
+  //INTERNAL--OPTION
+  bool mTringGuess;
+  bool mTryOnlyGuess;
+
+  //
+  double* mA;
+  double* mB;
+  double* mC;
+  double* mD;
+  double* ma;
+  double* mb;
+  double* mu;
+  double* mv;
+  double* mw;
+
 
 };
 #endif //MLCP_H

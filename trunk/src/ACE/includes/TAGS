@@ -1,14 +1,8 @@
 
-ace.cpp,350
-char ACE_name[ACE_name6,75
-bool ACE_IS_NULL(8,101
-void ACE_MESSAGE(11,163
-void ACE_ERROR(18,266
-void ACE_WARNING(25,366
-void ACE_INTERNAL_ERROR(30,458
-void ACE_INTERNAL_WARNING(37,575
-void ACE_TYPE_TO_CHAR(43,685
-void ACE_CHECK_IERROR(94,1737
-void ACE_CHECK_IWARNING(98,1821
-void ACE_CHECK_WARNING(102,1909
-void ACE_CHECK_ERROR(106,1987
+aceconfig.cpp,192
+aceConfig::~aceConfig(10,198
+aceConfig::aceConfig(12,225
+void aceConfig::setValue(16,267
+unsigned long aceConfig::getValue(20,328
+void aceConfig::use(23,380
+long aceConfig::nbUse(26,413

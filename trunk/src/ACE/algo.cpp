@@ -80,6 +80,7 @@ algo::~algo(){
 
 ////////////////////////////////////////////////////////////////////// ALGO
 void algo::perform(){
+  ACE_times[ACE_TIMER_EQUATION].start();
  sls.mNbNodes = getNbElementsOfType("Node");
  sls.initKCL();
  sls.addVUnknowns();
@@ -251,7 +252,7 @@ void algo::perform(){
  sls.printC1();
  sls.printD1();
  sls.printSystem2();
-
+ ACE_times[ACE_TIMER_EQUATION].stop();
  simulate();
 }
 ////////////////////////////////////////////////////////////////////// STAMP
@@ -320,7 +321,8 @@ void algo::simulate(){
 
   preparStep();
   while(sls.step()){
-    sls.printStep();
+    if (ACE_MUET_LEVEL != ACE_MUET)
+      sls.printStep();
     sls.printStep(*mSimuStream);
     preparStep();
   }

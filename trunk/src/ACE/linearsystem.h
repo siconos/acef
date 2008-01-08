@@ -65,6 +65,9 @@ public:
   void computeZnstiFromX_Zs();
   void ExtractAndCompute2Sources();
   void extractSources();
+  long  mLogFrequency;
+  long mPourMille;
+
     
   char mFile[ACE_CHAR_LENGTH];
 
@@ -161,8 +164,8 @@ public:
   ACE_DOUBLE mH;
 
   mlcp* mMLCP;
-  int mStepCmp;
-  int mStepNumber;
+  long mStepCmp;
+  long mStepNumber;
   
   
   void printEquations(ostream& os = cout);

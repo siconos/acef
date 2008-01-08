@@ -84,6 +84,8 @@ linearSystem::linearSystem(){
   mTheta = 0.5;
   mThetap = 0.5;
   mH = 1;
+  mLogFrequency=0;
+  mPourMille=0;
 }
 ////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -416,9 +418,13 @@ void linearSystem::readInitialValue(){
 }
 void linearSystem::initSimu(){
   allocDiscretisation();
-  mMLCP = new mlcp(mDimLambda,mNbNonDynEquations);
+  mMLCP = new mlcp(mDimLambda,mNbNonDynEquations,ACE_SOLVER_TYPE);
   readInitialValue();
   mStepCmp=0;
+  mLogFrequency =  mStepNumber/1000;
+  if (mLogFrequency==0)
+    mLogFrequency = 1;
+  mPourMille=0;
 
   try{
     //ACE_CHECK_IERROR(mDimx >0 && mDimLambda >0,"linearSystem::initSimu case no x or no lambda not yet implemented");
@@ -489,6 +495,10 @@ bool linearSystem::step(){
   mStepCmp++;
   if (mStepCmp >= mStepNumber)
     return false;
+  if (mStepCmp%mLogFrequency==0){
+    printf("-->%d\n",mPourMille);
+    mPourMille ++;
+  }
     bool res = mMLCP->solve();
     if (res){
       *mzsti=*(mMLCP->mZ2);
