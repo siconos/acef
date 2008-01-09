@@ -149,8 +149,8 @@ the supply voltage $V_I~=~3~V$, thus providing non-overlapping conduction times.
 
 \item[Compensator amplifier:] is modelled as a $10000$ gain and an output low-pass filter with a cutoff frequency of $30~MHz$.
 
-\item[Comparator:] is modelled as a piecewise linear function whose value is $0$ if $x < -0.1 V$ and $V_I$
-if $x > 0.1 V$.
+\item[Comparator:] is modelled as a piecewise linear function whose value is $0$ if $x~<~-0.15 V$ and $V_I$
+if $x~>~0.15 V$.
 
 \item[Ramp voltage:] the frequency is $600~kHz$ and the bounds are $0$ and $0.75 \cdot ~V_I~=~2.25~V$. The rise time is
 $1.655~\mu s$ and the fall time is $10~ns$.
@@ -231,7 +231,7 @@ The comparator constitutive equation is a piecewise linear model written in LCP 
  + \left( \begin{array}{c} X1_{comp}\\X2_{comp} \end{array} \right) \\
 & & 0 \leq y_{comp} \perp \lambda_{comp} \geq 0
 \end{eqnarray*}
-with $X1_{comp} = -0.1~V$ and $X2_{comp} = 0.1~V$ and $Acomp = \frac{V_I}{X2_{comp} - X1_{comp}}$.
+with $X1_{comp} = -0.15~V$ and $X2_{comp} = 0.15~V$ and $Acomp = \frac{V_I}{X2_{comp} - X1_{comp}}$.
 \\
 \\
 The NMOS and PMOS constitutive equations are piecewise linear model written in LCP form:
@@ -342,8 +342,8 @@ The CPU time required to achieve the simulation is 52~seconds on a Pentium~4 pro
 \begin{center}
 \includegraphics[scale=1.2,angle=0]{simu_siconos_0p01ms_0p05ns.eps}
 \end{center}
-\caption[SICONOS results, buck \protect\& load resistor (first~$20~\mu s$)]
-{SICONOS simulation results, buck converter with a load resistor (first~$20~\mu s$)}
+\caption[SICONOS results, buck \protect\& load resistor (first~$10~\mu s$)]
+{SICONOS simulation results, buck converter with a load resistor (first~$10~\mu s$)}
 \label{fig-buck-resistor-simu-sico-0p01ms-0p05ns}
 \end{figure}
 
@@ -410,7 +410,8 @@ Thus the CPU time measured is increased with respect to a compiled version of th
 An estimation of the CPU time with a compiled simplified model is given by multiplying the MOS level 3 CPU time
 by the ratio of the Newton-Raphson iterations required respectively during the simulations with each model.
 An additional correction should be done to reflect that the computation of the jacobian matrix entries
-linked to a compiled simplified model would require less time than with a MOS level 3 model.
+linked to a compiled simplified model would require less time than with a MOS level 3 model and that computation
+involves operations other than Newton-Raphson algorithm.
 \end{description}
 
 
@@ -418,12 +419,23 @@ linked to a compiled simplified model would require less time than with a MOS le
 \item Power MOSFETS intrinsic diodes are modelled by the classical Shockley equation with an emission
 coefficient $N~=~1$.
 \item The comparator is modelled as a non linear voltage controlled voltage source defined as $V_{out}~=~1.5~\cdot~(tanh(10~\cdot~V_{in}) + 1)$.
-Thus the 3~segment characteristic used as the non smooth model is regularized to help convergence of SPICE.
+Thus the 3~segment characteristic used as the non smooth model is regularized to help convergence of SPICE
+(see a comparison of the PWL comparator as used in SICONOS simulations with the SPICE one on figure \ref{fig-comparator-models}).
 \end{itemize}
+
+\begin{figure}[hbtp]
+\begin{center}
+\includegraphics[scale=1.2,angle=0]{comparators.eps}
+\end{center}
+\caption{Comparison of PWL and SPICE (tanh based) comparator models}
+\label{fig-comparator-models}
+\end{figure}
 
 The power supply $V_I$ is raised from 0 in $50~ns$ at the beginning to help the convergence. \footnote{This is
 not required with the SICONOS algorithms that find a consistent initial solution from scratch.}
 The SPICE tolerance values used are $1~nA$ for currents, $1~\mu V$ for voltages and $0.00075$ for relative differences.
+The maximum number of Newton-Raphson iterations is set to 100 (the default values are 10 for NGSPICE, 20 for SMASH and
+13 for ELDO).
 
 Usually, SPICE simulators integrate time with a time step adjusted according to different strategies based on an estimation
 of the local truncation error (LTE) or the number of Newton-Raphson iterations required by previous steps.
@@ -435,45 +447,110 @@ algorithm. This computation of LTE was disabled because it could impair the perf
 \subsection{Simulation results}
 The following tables displays the results with the standard and the sliding mode values of compensator components
 (see \ref{results-buck-SICO}). An estimation of the CPU time with a compiled simplified model is added.
-
+\\
+\\
 \begin{tabular}{|l|c|r|r|r|r|}
 \hline
 \multicolumn{6}{|c|}{\textbf{standard compensator values}}\\
 \hline
 simulator & model & time steps & NR iterations & CPU time (s) & CPU time estimation (s)\\
 \hline
-NGSPICE & simple  & 4000000 & 8024814 & 632 & \\
+NGSPICE & simple  & 4000000 & 8024814 & 632 & 370\\
 NGSPICE & level 3 & 4000000 & 8302904 & 383 & \\
 \hline
-SMASH   & simple  & 4000404 & 8073070 & 230 & \\
+SMASH   & simple  & 4000404 & 8073070 & 230 & 178\\
 SMASH   & level 3 & 4000313 & 8052858 & 178 & \\
 \hline
-ELDO    & simple  & 4000000 & 4547579 & 388 & \\
+ELDO    & simple  & 4000000 & 4547579 & 388 & 354\\
 ELDO    & level 3 & 4000000 & 4658412 & 363 & \\
 \hline
 \end{tabular}
+\begin{tabular}{|l|c|r|r|r|r|}
+\hline
+\multicolumn{6}{|c|}{\textbf{sliding mode compensator values}}\\
+\hline
+simulator & model & time steps & NR iterations & CPU time (s) & CPU time estimation (s)\\
+\hline
+NGSPICE & simple  & 4000000 & 8070324 & 638 & \\
+NGSPICE & level 3 & failed & failed & failed & \\
+\hline
+SMASH   & simple  & 4000252 & 8239697 & 234 & 180\\
+SMASH   & level 3 & 4000121 & 8191656 & 179 & \\
+\hline
+ELDO    & simple  & 4000000 & 5861226 & 438 & 361\\
+ELDO    & level 3 & 4000000 & 6062189 & 374 & \\
+\hline
+\end{tabular}
+\\
+\\
+These results shall be compared to the 52~s~CPU time achieved with the non-smooth dynamics.
+Moreover, it was necessary to add a parasitic capacitor on the connection between the PMOS and NMOS
+transistors to allow the convergence of the SMASH simulator with both models of MOS
+and of the NGSPICE simulator with the MOS level 3 model.
 
+The overall result obtained with NGSPICE and the simplified model is shown on the figure \ref{fig-buck-resistor-simu-ngspice-0p2ms-0p05ns}.
+More details of the start-up phase are shown on the figure \ref{fig-buck-resistor-simu-ngspice-0p01ms-0p05ns}.
 
-% \begin{figure}[hbtp]
-% \begin{center}
-% \includegraphics[scale=1.2,angle=0]{simu_ngspice_0p2ms_0p1ns_std.eps}
-% \end{center}
-% \caption[NGSPICE results, buck \protect\& load resistor]
-% {NGSPICE simulation results, buck converter with a load resistor\protect\newline
-% standard parameters\protect\newline
-% Erroneous intrinsic NMOS diode current spikes are visible on~the~$2^{nd}$~graph.}
-% \label{fig-buck-resistor-simu-ngspice-0p2ms-std}
-% \end{figure}
-% 
-% \begin{figure}[hbtp]
-% \begin{center}
-% \includegraphics[scale=1.2,angle=0]{simu_ngspice_0p2ms_0p1ns_stdzoom.eps}
-% \end{center}
-% \caption[NGSPICE results, buck \protect\& load resistor , zoom]
-% {NGSPICE simulation results, buck converter with a load resistor\protect\newline
-% standard parameters, zoom on a NMOS diode current spike}
-% \label{fig-buck-resistor-simu-ngspice-zoom-std}
-% \end{figure}
+\begin{figure}[hbtp]
+\begin{center}
+\includegraphics[scale=1.2,angle=0]{simu_ngspice_0p2ms_0p05ns.eps}
+\end{center}
+\caption[NGSPICE results, buck \protect\& load resistor (first~$200~\mu s$)]
+{NGSPICE simulation results, buck converter with a load resistor (first~$200~\mu s$)}
+\label{fig-buck-resistor-simu-ngspice-0p2ms-0p05ns}
+\end{figure}
+
+\begin{figure}[hbtp]
+\begin{center}
+\includegraphics[scale=1.2,angle=0]{simu_ngspice_0p01ms_0p05ns.eps}
+\end{center}
+\caption[NGSPICE results, buck \protect\& load resistor (first~$10~\mu s$)]
+{NGSPICE simulation results, buck converter with a load resistor (first~$10~\mu s$)}
+\label{fig-buck-resistor-simu-ngspice-0p01ms-0p05ns}
+\end{figure}
+
+\clearpage
+The detailed analysis of a ramp cycle with standard component values and sliding mode related values as shown on
+\ref{fig-buck-resistor-simu-sico-std} and \ref{fig-buck-resistor-simu-sico-lowLC-badcomp} are displayed on
+figures \ref{fig-buck-resistor-simu-ngspice-std} and \ref{fig-buck-resistor-simu-ngspice-lowLC-badcomp}.
+SICONOS and NGSPICE simplified model results are very close.
+
+\begin{figure}[hbtp]
+\begin{center}
+\includegraphics[scale=1.2,angle=0]{simu_ngspice_standard.eps}
+\end{center}
+\caption[NGSPICE results, buck \protect\& load resistor , steady state , simple crossings]
+{NGSPICE simulation results, buck converter with a load resistor\protect\newline
+steady state with standard parameters}
+\label{fig-buck-resistor-simu-ngspice-std}
+\end{figure}
+
+\begin{figure}[hbtp]
+\begin{center}
+\includegraphics[scale=1.2,angle=0]{simu_ngspice_lowLC_badcomp.eps}
+\end{center}
+\caption[NGSPICE results, buck \protect\& load resistor , steady state , sliding mode]
+{NGSPICE simulation results, buck converter with a load resistor\protect\newline
+steady state with $L~=~4~\mu H$, $C~=~10~\mu F$ , $R_{11}~=~10~K\Omega$, $R_{21}~=~8~M\Omega$, $C_{11}~=~10~pF$\protect\newline
+exhibiting a sliding mode}
+\label{fig-buck-resistor-simu-ngspice-lowLC-badcomp}
+\end{figure}
+
+\clearpage
+Figure \ref{fig-compar-Sah-level3} shows the differences related to the simplified versus level 3 MOS models,
+where both simulations were performed with ELDO (the only SPICE simulator converging with the level 3 model
+without extra capacitor). The simulations differ by details on the conduction period of the NMOS transistor and 
+intrinsic diode.
+
+\begin{figure}[hbtp]
+\begin{center}
+\includegraphics[scale=0.25,angle=0]{compar_Sah_level3.eps}
+\end{center}
+\caption
+{Simplified vs. level 3 MOS models ELDO results (one ramp in steady state)}
+\label{fig-compar-Sah-level3}
+\end{figure}
+
 
 \clearpage
 
@@ -510,13 +587,15 @@ time integration schemes and one step problem solving based on optimization algo
 The switch models (diodes and transistors) available in the PLECS toolbox are ideal : the transistors
 are supposed to be controlled by a boolean signal forcing a conducting or blocking state. 
 The power NMOS and PMOS are controlled by opposite signals issued from the feedback loop, thus there is no
-flyback conduction by the NMOS diode (see description of the PLECS circuit and the Simulink model in appendix
+flyback conduction by the NMOS intrinsic diode (see description of the PLECS circuit and the Simulink model in appendix
 \ref{modele-PLECS-buckresistor}).
 
-The CPU time required to achieve the simulation of $200~\mu s$ varies between $2~min~15~s$ and $6~min~50~s$ on a 
+The CPU time required to achieve the simulation of $200~\mu s$ ranges between $135~s$ and $410~s$ on a 
 Pentium~4 clocked at 3~GHz, depending on the values of the resistors, capacitors and inductor. This should be compared
-to the $24~s$ of the SICONOS simulation, \textbf{obtained independently from these components values}. This demonstrates
-the robustness and efficiency of the time-stepping scheme and the one step solving algorithms of SICONOS.
+to the $52~s$ of the SICONOS simulation, \textbf{obtained independently from these components values}. This demonstrates
+the robustness and efficiency of the time-stepping scheme and the one step solving algorithms of SICONOS. Moreover, the
+short time step (50~ps) used in SICONOS simulations was required to catch some conduction periods of the NMOS intrinsic
+diode. As explained above, these phenomena are not simulated with the present PLECS circuit.
 
 Figures \ref{fig-buck-resistor-simu-plecs-0p2ms-std} and \ref{fig-buck-resistor-simu-plecs-zoom-std} show the results
 when the standard parameters are used : $L~=~10~\mu H$, $C~=~22~\mu F$, $R_{11}~=~15.58~k \Omega$, $R_{12}~=~227.8~k \Omega$,
