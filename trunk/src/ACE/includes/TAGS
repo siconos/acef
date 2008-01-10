@@ -1,8 +1,23 @@
 
-aceconfig.cpp,192
-aceConfig::~aceConfig(10,198
-aceConfig::aceConfig(12,225
-void aceConfig::setValue(16,267
-unsigned long aceConfig::getValue(20,328
-void aceConfig::use(23,380
-long aceConfig::nbUse(26,413
+ace.cpp,609
+char ACE_name[ACE_name6,75
+aceTime ACE_times[ACE_times7,100
+int ACE_SOLVER_TYPE=8,135
+int ACE_MUET_LEVEL=9,158
+void ACE_INIT(11,181
+void ACE_INIT_TIME(14,219
+void ACE_STOP_SOLVER_TIME(23,656
+void ACE_PRINT_TIME(29,859
+bool ACE_IS_NULL(33,948
+void ACE_MESSAGE(36,1010
+void ACE_ERROR(43,1138
+void ACE_WARNING(50,1238
+void ACE_INTERNAL_ERROR(55,1330
+void ACE_INTERNAL_WARNING(62,1447
+void ACE_TYPE_TO_CHAR(68,1557
+void ACE_CHECK_IERROR(119,2609
+void ACE_CHECK_IWARNING(123,2693
+void ACE_CHECK_WARNING(127,2781
+void ACE_CHECK_ERROR(131,2859
+void startTime(135,2933
+double stopTime(140,2992

@@ -81,6 +81,14 @@ static int nrows = 0;
 static int ncols = 0;
 static int nnz=0;
 static  double tCum=0.0;
+static double normB=0.0;
+static unsigned long configLCP =0;
+/*
+static  double *x;//[ncols];
+static  CPXENVptr env = NULL;
+static  CPXLPptr lp  = NULL;
+*/
+
 
 struct node {
 	int *cstat;		/* [ncols] current col basis (for restart) */
@@ -96,6 +104,44 @@ struct node {
 		printf("\n");
 	};
 };
+unsigned long getConfigLCP(){
+  return configLCP;
+}
+void computeConfig(const node* _node,double x[]){
+  int i;
+  unsigned long cur2pow=1;
+  configLCP=0;
+  if (_node == 0){
+    for (i=0; i<m; i++) {
+      if (x[n+m+i] > x[i+n] || (x[n+m+i] < 10e-4 && x[n+i] < 10e-4))
+	configLCP +=cur2pow;
+      cur2pow=2*cur2pow;
+    }
+    printf("no node\n");
+  }else{
+
+
+    for (i=0; i<m; i++) {
+      switch (_node->choice[i]) {
+      case 'n':
+	if (x[n+m+i] > x[i+n] || (x[n+m+i] < 10e-4 && x[n+i] < 10e-4))
+	  configLCP +=cur2pow;
+	printf("case n\n");
+	break;
+      case 'v':
+	configLCP +=cur2pow;
+	break;
+      case 'w':
+	break;
+      default:
+	if (ACE_MUET_LEVEL < ACE_MUET)
+	  printf("error\n");
+      }
+      cur2pow=2*cur2pow;
+    }
+  }
+  printf("conf :%d",(int)configLCP);
+}
 void buildNode(node* _node){
   _node->cstat = (int*)calloc(ncols,sizeof(int));
   _node->rstat = (int*)calloc(nrows,sizeof(int));
@@ -153,11 +199,45 @@ void print_sparse_matrix(int *matbeg,int *matcnt,int *matind,double *matval,doub
   print_double_array("lb",lb,ncols);
   print_double_array("ub",ub,ncols);
 }
-
-
+void printSolution(double x[]){
+  int i;
+  if (ACE_MUET_LEVEL < ACE_MUET || true){
+    printf("\n----- Getting a solution:\n");
+    
+    for (i=0; i<n; i++) {
+      printf("[%2.i] %10.7f", i, x[i]);
+      if (i%5==4) printf("\n");
+    }
+    
+    printf(" v w \n");
+    for (i=n; i<n+m; i++) {
+      printf("[%2.i] %10.7f  [%2.i] %10.7f", i-n, x[i],i+m-n,x[i+m]);
+      printf("\n");
+    }
+    printf("\n----- End of solution.\n");
+  }
+}
+int checkSolution(double x[],const double tolComp){
+  double infeasComp = 0;
+  int i;
+  for (i=0; i<m; i++) {
+    infeasComp+=x[n+i]*x[n+m+i];
+  }
+  infeasComp=infeasComp/normB;
+  if (infeasComp<tolComp) { /* we have a solution !!! */
+    for (i=0; i<m; i++) {
+      if (x[n+i] > x[n+m+i])
+	x[n+m+i] = 0;
+      else
+	x[n+i]=0;
+    }
+    return 1;
+  }else
+    return 0;
+}
 /* function that processes each child node and either prunes it, gets a solution, or adds it to the tree */
 int solvesubproblem(CPXENVptr env, CPXLPptr lp, mySet::iterator& currentNode, int branchingIndex, char v_or_w, mySet& tree, double x[], const double tolVar, const double tolComp) {
-	int i, solstat;
+	
 	double objval;
 
 	/* reload basis */
@@ -168,41 +248,201 @@ int solvesubproblem(CPXENVptr env, CPXLPptr lp, mySet::iterator& currentNode, in
 	getsolution (env, lp, &objval, x);
 
 	if (std::fabs(objval)<tolVar) { /* minimization succeeded */
-		double infeasComp = 0;
-		for (i=0; i<m; i++) {
-			infeasComp+=x[n+i]*x[n+m+i];
-		}
-		if (infeasComp<tolComp) { /* we have a solution !!! */
-		  if (ACE_MUET_LEVEL < ACE_MUET){
-			printf("\n----- Getting a solution:\n");
-			for (i=0; i<ncols; i++) {
-				printf("[%2.i] %10.7f", i, x[i]);
-				if (i%5==4) printf("\n");
-			}
-			printf("\n----- End of solution.\n");
-		  }
-			return 1;
-		} else { /* complementarity doesn't hold, keep going */
-			node child;
-			buildNode(&child);
-			getbase(env, lp, child.cstat, child.rstat);
-			memcpy(child.choice, currentNode->choice, m*sizeof(char));
-			child.choice[branchingIndex]=v_or_w;
-			tree.insert(child);
-		}
+	  if (checkSolution(x,tolComp)){
+	    return 1;
+	  } else { /* complementarity doesn't hold, keep going */
+	    node child;
+	    buildNode(&child);
+	    getbase(env, lp, child.cstat, child.rstat);
+	    memcpy(child.choice, currentNode->choice, m*sizeof(char));
+	    child.choice[branchingIndex]=v_or_w;
+	    tree.insert(child);
+	  }
 	} else {
 		/*printf("LP pruned node (objval=%f).\n", objval);*/
 	}
 	return 0;
 }
 
+void fillSolution(double u[],double v[],double w[],double x[]){
+  int i;
+  printSolution(x);
+  for( i = 0 ; i < m ; ++i ) {v[i] = x[i+n]; w[i]=x[n+m+i];}
+  for( i = 0 ; i < n ; ++i ) {u[i] = x[i]; }
+}
 
+// void mlcp_simplex_init(int *nn , int* mm, double *A , double *B , double *C , double *D){
+
+
+//   /* Variables declaration */
+//   int curbeg;
+//   int *matbeg=0;
+//   int *matcnt=0;
+//   int *matind;
+//   double *matval;
+//   double *objective;
+//   double *rhs;
+//   char *sense;
+//   double *lb;
+//   double *ub;
+
+//   int linNumber;
+//   int colNumber;
+
+//   int i,j;
+  
+//   /* Variables declaration */
+
+//   n = *nn;
+//   m = *mm;
+//   nnz=m;
+//   nrows = n+m;
+//   ncols = n+m+m;
+//   x=(double*) calloc(ncols,sizeof(double));
+
+
+//   /*SPARSE matrix, count non nul values*/
+//   /*i line*/
+//   /*j col*/
+//   linNumber = n;
+//   colNumber = n;
+//   for (i=0;i<linNumber;i++)
+//     for (j=0;j<colNumber;j++){
+//       if (A[j*linNumber+i]!=0.0)
+// 	nnz++;
+//     }
+//   linNumber = m;
+//   colNumber = m;
+//   for (i=0;i<linNumber;i++)
+//     for (j=0;j<colNumber;j++){
+//       if (B[j*linNumber+i]!=0.0)
+// 	nnz++;
+//     }
+//   linNumber = n;
+//   colNumber = m;
+//   for (i=0;i<linNumber;i++)
+//     for (j=0;j<colNumber;j++){
+//       if (C[j*linNumber+i]!=0.0)
+// 	nnz++;
+//     }
+//   linNumber = m;
+//   colNumber = n;
+//   for (i=0;i<linNumber;i++)
+//     for (j=0;j<colNumber;j++){
+//       if (D[j*linNumber+i]!=0.0)
+// 	nnz++;
+//     }
+//   /*nnz contains the number of non nul values*/
+//   if (!nnz || !nrows || !ncols)
+//     return 0;
+
+//   matbeg = (int*)calloc(ncols+1,sizeof(int));/*The last value is not used.*/
+//   matcnt = (int*)calloc(ncols,sizeof(int));
+//   objective = (double*)calloc(ncols,sizeof(double));
+//   sense = (char*)calloc(nrows,sizeof(char));
+//   lb = (double*)calloc(ncols,sizeof(double));
+//   ub = (double*)calloc(ncols,sizeof(double));
+//   matind= (int*)calloc(nnz,sizeof(int));
+//   matval= (double*)calloc(nnz,sizeof(double));
+//   rhs=(double*)calloc(nrows,sizeof(double));
+
+//   /*INITIAL */
+//   for (i=0; i<n; i++) objective[i]=0;
+//   for (i=n; i<ncols; i++) objective[i]=0;
+  
+//   for (i=0; i<n; i++) { /* first n vars = u, no bounds */
+//     lb[i] = -CPX_INFBOUND;
+//     ub[i] =  CPX_INFBOUND;
+//   }
+//   for (i=n; i<n+2*m; i++) {
+//     lb[i] = 0;
+//     ub[i] = CPX_INFBOUND;
+//   }
+//   for (i=0; i<nrows; i++) {
+//     sense[i] = 'E';
+//   }
+//   /*fill sprase matrix*/
+//   curbeg=0;
+//   matbeg[0]=0;
+//   colNumber = n;
+//   /*Value from A and D*/
+//   for (j=0;j<colNumber;j++){
+//     linNumber=n;
+//     /*Values from A*/
+//     for (i=0;i<linNumber;i++)
+//       if(A[j*linNumber+i]!=0.0){
+// 	matval[curbeg] = A[j*linNumber+i];
+// 	matind[curbeg]=i;
+// 	curbeg++;
+//       }
+//     linNumber=m;
+//     /*Values from D*/
+//     for (i=0;i<linNumber;i++)
+//       if(D[j*linNumber+i]!=0.0){
+// 	matval[curbeg] = D[j*linNumber+i];
+// 	matind[curbeg]=i+n;
+// 	curbeg++;
+//       }
+//     matbeg[j+1]=curbeg;
+//     matcnt[j]=matbeg[j+1]-matbeg[j];
+//   }
+
+//   colNumber = m;
+//   /*Value from C and B*/
+//   for (j=0;j<colNumber;j++){
+//     linNumber=n;
+//     /*Values from C*/
+//     for (i=0;i<linNumber;i++)
+//       if(C[j*linNumber+i]!=0.0){
+// 	matval[curbeg] = C[j*linNumber+i];
+// 	matind[curbeg]=i;
+
+// 	curbeg++;
+//       }
+//     linNumber=m;
+//     /*Values from B*/
+//     for (i=0;i<linNumber;i++)
+//       if(B[j*linNumber+i]!=0.0){
+// 	matval[curbeg] = B[j*linNumber+i];
+// 	matind[curbeg]=i+n;
+// 	curbeg++;
+//       }
+//     matbeg[j+n+1]=curbeg;
+//     matcnt[j+n]=matbeg[j+n+1]-matbeg[j+n];
+//   }
+//   matcnt[n+m]=1;
+//   for (i=1;i< m;i++){
+//     matbeg[n+m+i]=curbeg+i;
+//     matcnt[n+m+i]=1;
+//   }
+//   for (i=0;i< m;i++){
+//     matval[nnz-i-1]=-1;
+//     matind[nnz-i-1]=n+m-1-i;
+//   }
+
+
+//   //print_sparse_matrix( matbeg,matcnt,matind,matval,objective,rhs,sense,lb,ub);
+
+//   /*READY TO SOLVE*/
+	
+//   /* open cplex, create prob, load data, write to file */
+//   env = openCPLEX();
+//   lp = createprob(env);
+//   copylp(env, lp, ncols, nrows, CPX_MIN, objective, rhs, sense, matbeg, matcnt, matind, matval, lb, ub);
+//   writeprob(env, lp);
+	
+//   /* optimize with null objective to find feasible point */
+//   lpopt(env, lp);
+// }
+
+void mlcp_simplex_stop(int *nn , int* mm, double *A , double *B , double *C , double *D){
+}
 
 int mlcp_simplex( int *nn , int* mm, double *A , double *B , double *C , double *D , double *a, double *b, double *u, double *v, double *w , int *info ,	 int *iparamMLCP , double *dparamMLCP  )
 { 
   /* Parameters */
-  const double tolVar = 1e-3;			/* tolerance to consider that a var is null */
-  const double tolComp = 1e-3; 		/* tolerance to consider that complementarity holds */
+  const double tolVar = 1e-6;			/* tolerance to consider that a var is null */
+  const double tolComp = 1e-9; 		/* tolerance to consider that complementarity holds */
   const int nIterMax = 1000000;		/* max number of nodes to consider in tree search */
   const int logFrequency = 10000;	/* print log every ... iterations */
 
@@ -222,6 +462,11 @@ int mlcp_simplex( int *nn , int* mm, double *A , double *B , double *C , double 
   int colNumber;
 
   int i,j;
+  normB=0;
+  for (i=0;i<m;i++)
+    normB += b[i]*b[i];
+  if (normB<1) normB=1;
+  normB=sqrt(normB);
   
   /* Variables declaration */
   mySet tree;
@@ -285,7 +530,8 @@ int mlcp_simplex( int *nn , int* mm, double *A , double *B , double *C , double 
   rhs=(double*)calloc(nrows,sizeof(double));
 
   /*INITIAL */
-  for (i=0; i<ncols; i++) objective[i]=0;
+  for (i=0; i<n; i++) objective[i]=0;
+  for (i=n; i<ncols; i++) objective[i]=1;
   
   for (i=0; i<n; i++) { /* first n vars = u, no bounds */
     lb[i] = -CPX_INFBOUND;
@@ -295,7 +541,7 @@ int mlcp_simplex( int *nn , int* mm, double *A , double *B , double *C , double 
     lb[i] = 0;
     ub[i] = CPX_INFBOUND;
   }
-  for (i=n; i<nrows; i++) {
+  for (i=0; i<nrows; i++) {
     sense[i] = 'E';
   }
   /*fill sprase matrix*/
@@ -378,7 +624,27 @@ int mlcp_simplex( int *nn , int* mm, double *A , double *B , double *C , double 
   /* optimize with null objective to find feasible point */
   lpopt(env, lp);
   getsolution (env, lp, &objval, x);
-	
+  if( checkSolution(x,tolComp)){
+    computeConfig(0,x);
+    fillSolution(u,v,w,x);
+    free(matbeg);
+    free(matcnt);
+    free(objective);
+    free(sense);
+    free(lb);
+    free(ub);
+    free(matval);
+    free(matind);
+    free(rhs);
+    return 1;
+  }
+  int chgObjInd_[200];
+  for (i=0; i<ncols; i++) chgObjInd_[i]=i;
+  for (i=0; i<n; i++) objective[i]=0;
+  for (i=n; i<ncols; i++) objective[i]=0;
+  chgobj (env, lp, ncols, chgObjInd_, objective);
+
+
   /* create root node */
   node root;
   buildNode(&root);
@@ -453,14 +719,19 @@ int mlcp_simplex( int *nn , int* mm, double *A , double *B , double *C , double 
 	 but complementarity still doesn't hold up to tolComp
 	 (though it cannot be much larger with all the zero fixed vars.)
 	 The current node is probably a solution, up to roundoff errors...	*/
+      printf("Warning : Node without any free variable was found. It might be a solution, or close.\n");
+      
       if (ACE_MUET_LEVEL < ACE_MUET){
 	printf("Node without any free variable was found. It might be a solution, or close.\n");
 	for (i=0; i<m; i++) printf("%c", currentNode->choice[i]);
 	printf("\n");
       }
+      //computeConfig((node*)&(*currentNode),x);
       deleteNode((node*)&(*currentNode));
       tree.erase(currentNode);
-      break;
+      //fillSolution(u,v,w,x);
+      //res=1;
+      continue;
     }
     chgbds (env, lp, 2*m, vwIndices, upper, newUppBnd);
 				
@@ -470,8 +741,10 @@ int mlcp_simplex( int *nn , int* mm, double *A , double *B , double *C , double 
     lastBranchingIndex=chgObjInd[1];
     chgobj (env, lp, 2, chgObjInd, chgObjVal);
     if (solvesubproblem(env, lp, currentNode, branchingIndex, 'v', tree, x, tolVar, tolComp)){
-      for( i = 0 ; i < m ; ++i ) {v[i] = x[i+n]; w[i]=x[n+m+i];}
-      for( i = 0 ; i < n ; ++i ) {u[i] = x[i]; }
+      fillSolution(u,v,w,x);
+      computeConfig((node*)&(*currentNode),x);
+
+      res =1;
       break;
     }
 
@@ -481,8 +754,8 @@ int mlcp_simplex( int *nn , int* mm, double *A , double *B , double *C , double 
     lastBranchingIndex=chgObjInd[1];
     chgobj (env, lp, 2, chgObjInd, chgObjVal);
     if (solvesubproblem(env, lp, currentNode, branchingIndex, 'w', tree, x, tolVar, tolComp)){
-      for( i = 0 ; i < m ; ++i ) {v[i] = x[i+n]; w[i]=x[n+m+i];}
-      for( i = 0 ; i < n ; ++i ) {u[i] = x[i]; }
+      computeConfig(&(*currentNode),x);
+      fillSolution(u,v,w,x);
       res =1;
       break;
     }

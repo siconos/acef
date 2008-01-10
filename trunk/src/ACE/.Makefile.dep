@@ -1,4 +1,3 @@
-aceconfig.o: aceconfig.cpp aceconfig.h
 ace.o: ace.cpp extern.h includes/parser.h ace.h acetime.h
 aceMatrix.o: aceMatrix.cpp aceMatrix.h \
   /scratch/install/include/Siconos/SimpleMatrix.h \

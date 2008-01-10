@@ -1,0 +1,4 @@
+BuckConverteur:
+Le solveur iteratif trouve tjs une solution, le critere de complementatiree est tres strickte.
+
+Le solveur base sur Cplex ne fonctionne pas avec des tolerences trop strictes car on arrive sur des feuilles qui sont consideree comme solution.

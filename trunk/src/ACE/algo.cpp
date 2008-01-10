@@ -235,23 +235,23 @@ void algo::perform(){
  printComponents();
  sls.preparForStamp();
  stamp();
- sls.printEquations();
+ // sls.printEquations();
  
  //compute matrix: x'=A1x * mx + A1zs * mZs + A1zns * mZns;
  sls.computedxdt();
- sls.printA1();
+ // sls.printA1();
  stampAfterInvertion();
  ACE_MESSAGE("final equation ;\n");
- sls.printEquations();
+ //sls.printEquations();
  sls.buildLinearSystem();
  sls.set2matrix();
 
  
  sls.printSystemInTabFile(&mFile[0]);
- sls.printB1();
- sls.printC1();
- sls.printD1();
- sls.printSystem2();
+ //sls.printB1();
+ //sls.printC1();
+ //sls.printD1();
+ //sls.printSystem2();
  ACE_times[ACE_TIMER_EQUATION].stop();
  simulate();
 }

@@ -50,7 +50,7 @@ mlcp::mlcp(unsigned int Dlcp,unsigned int Dlin,int solverType){
    
    mW1Z1=0;
    mM=0;
-   mCurEnum=0;
+   mCurEnum=8388600;
    mCmp=0;
    mMaxEnum = (unsigned long) powl(2,(long)mDlcp);
    mPourCent=0;
@@ -82,6 +82,7 @@ mlcp::mlcp(unsigned int Dlcp,unsigned int Dlin,int solverType){
 }
 void mlcp::addGuess(unsigned long l){
   mGuess.push_back(l);
+  cout <<"add guess "<<l<<endl;
 }
 void mlcp::affectW1Z1(unsigned long ll){
   unsigned long aux = ll;
@@ -114,6 +115,8 @@ bool mlcp::tryGuess(){
   return true;
 }
 void mlcp::initEnum(){
+   mCurEnum=8000000;
+
   mPourCent=0;
   mCmp=0;
   if (mUseGuess){
@@ -181,6 +184,7 @@ bool mlcp::solveWithSimplex(){
   
   ACE_times[ACE_TIMER_SOLVE_SIMPLEX].start();
   res= mlcp_simplex(&n , &m, mA , mB , mC , mD , ma, mb, mu, mv, mw , 0 , 0 , 0  );
+  mCase = getConfigLCP();
   ACE_times[ACE_TIMER_SOLVE_SIMPLEX].stop();
 
   mZ1->FortranToMatrix(mv);
@@ -203,6 +207,7 @@ bool mlcp::solve(){
   switch (mSolverType) {
   case ACE_SOLVER_SIMPLEX:
     res= solveWithSimplex();
+    addGuess(mCase);
     break;
   case ACE_SOLVER_PATH:
     res= solveWithPath();
@@ -217,6 +222,7 @@ bool mlcp::solve(){
   }else{
     ACE_MESSAGE("mlcp::solve : 3 Add a new guess point.\n");
     addGuess(mZ1);
+
   }
   ACE_STOP_SOLVER_TIME();
   return res;
@@ -310,7 +316,7 @@ bool mlcp::solveGuessAndIt(){
    ACE_times[ACE_TIMER_DIRECT].stop();
    bool check=true;
    for (lin = 0 ; lin <mDlcp; lin++){
-     //double aux = mQ->getValue(lin,0);
+     double aux = mQ->getValue(lin,0);
      if (mQ->getValue(lin,0) < - ACE_NULL){
        ACE_MESSAGE("mlcp::solveGuessAndIt not in the cone\n");
        check=false;
@@ -356,7 +362,7 @@ bool mlcp::solveGuessAndIt(){
    }
    for (lin=0;lin<mDlin;lin++)
      mZ2->setValue(lin,0,mQ->getValue(mDlcp+lin,0));
-   if(ACE_MUET_LEVEL != ACE_MUET)
+   if(ACE_MUET_LEVEL != ACE_MUET || true)
      printOutPut();
    return true;
  }else{
@@ -373,6 +379,8 @@ void mlcp::addGuess(aceMatrix *Z){
       res+=cur2pow;
     cur2pow=2*cur2pow;
   }
+  cout<<"addguess :"<<res<<endl;
+  Z->display();
   setCurrentConfig(res);
   addGuess(res);
 }
@@ -467,7 +475,7 @@ void mlcp::printInPut(ostream& os)
   os<<(*mQ);
 }
 void mlcp::printOutPut(ostream& os){
-  if (ACE_MUET_LEVEL == ACE_MUET)
+  if (ACE_MUET_LEVEL == ACE_MUET )
     return;
   os<<"mlcp print output"<<endl;
   os<<"Z1:\n";

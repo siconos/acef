@@ -4,5 +4,5 @@
 
 /**/
 int mlcp_simplex( int *nn , int* mm, double *A , double *B , double *C , double *D , double *a, double *b, double *u, double *v, double *w , int *info ,	 int *iparamMLCP , double *dparamMLCP  );
-
+unsigned long getConfigLCP();
 #endif //MLCP_SIMPLEX
