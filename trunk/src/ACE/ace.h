@@ -49,7 +49,11 @@ class component;
 #define ACE_TIMER_EQUATION 4
 #define ACE_TIMER_MAIN 5
 #define ACE_TIMER_DIRECT 6
-#define ACE_TIMER_LAST 7
+#define ACE_TIMER_SIMPLEX_FIRST 7
+#define ACE_TIMER_SIMPLEX_GUESS 8
+#define ACE_TIMER_SIMPLEX_TREE 9
+#define ACE_TIMER_SIMPLEX_TRY_NODE 10
+#define ACE_TIMER_LAST 11
 
 typedef std::vector<unknown *> unknowns;
 typedef std::vector<equation *> equations;

@@ -19,6 +19,11 @@ void ACE_INIT_TIME(){
   ACE_times[ACE_TIMER_SOLVE_PATH].setName("solver path ");
   ACE_times[ACE_TIMER_EQUATION].setName("equation formulation ");
   ACE_times[ACE_TIMER_DIRECT].setName("solver direct ");
+  ACE_times[ACE_TIMER_SIMPLEX_FIRST].setName("simplex first getsolution ");
+  ACE_times[ACE_TIMER_SIMPLEX_GUESS].setName("simplex try previous guess ");
+  ACE_times[ACE_TIMER_SIMPLEX_TREE].setName("simplex tree exploration ");
+  ACE_times[ACE_TIMER_SIMPLEX_TRY_NODE].setName("simplex try node ");
+  
 }
 void ACE_STOP_SOLVER_TIME(){
   ACE_times[ACE_TIMER_SOLVE_GUESS].stop();

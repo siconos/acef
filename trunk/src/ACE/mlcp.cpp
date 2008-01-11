@@ -170,20 +170,34 @@ bool mlcp::solveWithPath(){
   return res;
 
 }
+void mlcp::stopSolver(){
+  if (ACE_SOLVER_TYPE == ACE_SOLVER_SIMPLEX){
+    mlcp_simplex_stop();
+  }
+}
+bool mlcp::initSolver(){
+
+  if (ACE_SOLVER_TYPE == ACE_SOLVER_SIMPLEX){
+    int n = (int)mDlin;
+    int m = (int)mDlcp;
+    mM22->MatrixToFortran(mA);  
+    mM11->MatrixToFortran(mB);  
+    mM21->MatrixToFortran(mC);  
+    mM12->MatrixToFortran(mD);  
+    mlcp_simplex_init(&n,&m,mA,mB,mC,mD);
+  }
+  return true;
+}
 bool mlcp::solveWithSimplex(){
   int n = mDlin;
   int m = mDlcp;
   bool res;
 
-  mM22->MatrixToFortran(mA);  
-  mM11->MatrixToFortran(mB);  
-  mM21->MatrixToFortran(mC);  
-  mM12->MatrixToFortran(mD);  
   mQ2->MatrixToFortran(ma);  
   mQ1->MatrixToFortran(mb);
   
   ACE_times[ACE_TIMER_SOLVE_SIMPLEX].start();
-  res= mlcp_simplex(&n , &m, mA , mB , mC , mD , ma, mb, mu, mv, mw , 0 , 0 , 0  );
+  res= mlcp_simplex(ma, mb, mu, mv, mw , 0 , 0 , 0  );
   mCase = getConfigLCP();
   ACE_times[ACE_TIMER_SOLVE_SIMPLEX].stop();
 
@@ -197,22 +211,17 @@ bool mlcp::solve(){
   bool res =false;
   //1) start with guess point
   ACE_MESSAGE("mlcp::solve : 1 try with guess point.\n");
-  res = solveGuessAndIt();
-  if (res){
-    ACE_STOP_SOLVER_TIME();
-    return true;
-  }
   //2) start other algo
   ACE_MESSAGE("mlcp::solve : 2 start other algo\n");
   switch (mSolverType) {
   case ACE_SOLVER_SIMPLEX:
     res= solveWithSimplex();
-    addGuess(mCase);
     break;
   case ACE_SOLVER_PATH:
     res= solveWithPath();
     break;
   case ACE_SOLVER_ENUM:
+    res = solveGuessAndIt();
     break;
   default:
     ACE_ERROR("mlcp::solve, bad mSolverType value");
@@ -221,7 +230,7 @@ bool mlcp::solve(){
     ACE_MESSAGE("mlcp::solve, failed.\n");
   }else{
     ACE_MESSAGE("mlcp::solve : 3 Add a new guess point.\n");
-    addGuess(mZ1);
+    //    addGuess(mZ1);
 
   }
   ACE_STOP_SOLVER_TIME();

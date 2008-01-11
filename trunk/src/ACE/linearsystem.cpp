@@ -460,6 +460,7 @@ void linearSystem::initSimu(){
       std::cout << "Exception caught." << endl;
       ACE_INTERNAL_ERROR("linearSystem::initSimu");
     }
+  mMLCP->initSolver();
 
   
 }
@@ -511,6 +512,7 @@ bool linearSystem::step(){
 }
 void linearSystem::stopSimu(){
   mMLCP->printGuess();
+  mMLCP->stopSolver();
   if (mMLCP)
     delete mMLCP;
   mMLCP=0;

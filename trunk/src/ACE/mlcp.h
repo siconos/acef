@@ -21,7 +21,8 @@ public:
   mlcp(unsigned int Dlcp,unsigned int Dlin,int solverType = ACE_SOLVER_ENUM);
   virtual ~mlcp();
   bool solve();
-
+  void stopSolver();
+  bool initSolver();
   void addGuess(aceMatrix *mZ);
 
   void addGuess(unsigned long l);
