@@ -120,3 +120,12 @@ void chgobj (CPXENVptr env, CPXLPptr lp, int nInds, int chgObjInd[], const doubl
 		throw(1);
 	}
 }
+/* change rhs */
+void chgrhs (CPXENVptr env, CPXLPptr lp, int nInds, int chgObjInd[], const double chgObjVal[]) {
+  int status;
+  status = CPXchgrhs (env, lp, nInds, chgObjInd, chgObjVal);
+  if (status) {
+    printf ("Failed to update rhs.\n");
+    throw(1);
+  }
+}

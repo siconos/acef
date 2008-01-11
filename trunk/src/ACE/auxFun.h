@@ -34,3 +34,7 @@ void chgbds (CPXENVptr env, CPXLPptr lp, int nbds, int vwIndices[], char upper[]
 
 /* change objective */
 void chgobj (CPXENVptr env, CPXLPptr lp, int nInds, int chgObjInd[], const double chgObjVal[]);
+
+/* change rhs */
+void chgrhs (CPXENVptr env, CPXLPptr lp, int nInds, int chgObjInd[], const double chgObjVal[]);
+
