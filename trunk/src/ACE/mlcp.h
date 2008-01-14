@@ -55,7 +55,8 @@ public:
   aceMatrix *mM21;
   aceMatrix *mM22;
   aceMatrix *mM;
-
+  bool mTryM;
+  
   void printGuess(ostream& os = cout);
   void printInPut(ostream& os = cout);
   void printInPutABCDab(ostream& os = cout);
@@ -63,6 +64,8 @@ public:
   void printOutPut(ostream& os = cout);
 protected:
 private:
+  void   fillSolution();
+
   void initEnum();
   bool nextEnum();
   bool tryGuess();

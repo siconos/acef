@@ -48,7 +48,7 @@ void copylp(CPXENVptr env, CPXLPptr lp, int ncols, int nrows, int minOrMax, doub
 void writeprob(CPXENVptr env, CPXLPptr lp) {
 	int status;
 	/* write to file */
-	status = CPXwriteprob(env, lp, "test.mps", "MPS");
+	status = CPXwriteprob(env, lp, "test.lp", "LP");
   if (status) {
 		printf ("Failed to write problem.\n");
 		return; 
@@ -59,6 +59,7 @@ void writeprob(CPXENVptr env, CPXLPptr lp) {
 void lpopt(CPXENVptr env, CPXLPptr lp) {
 	int status;
 	status = CPXlpopt(env, lp);
+	writeprob(env,lp);
 	if (status) {
 		printf ("Failed to optimize LP.\n");
 		throw(1);
@@ -72,7 +73,6 @@ void getsolution(CPXENVptr env, CPXLPptr lp, double *objval, double x[]) {
 	/* todo: do something with solstat */
 	if (status) {
 		printf ("Failed to obtain solution.\n");
-		writeprob(env,lp);
 		throw(1);
 	}
 #ifdef OUTPUT

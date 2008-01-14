@@ -66,6 +66,7 @@ public:
   void ExtractAndCompute2Sources();
   void extractSources();
   long  mLogFrequency;
+  long  mLogPrint;
   long mPourMille;
 
     

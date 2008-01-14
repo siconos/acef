@@ -11,6 +11,7 @@ class component;
 #define ACE_INF 0.00000000000000001
 #define ACE_NULL 0.000001
 #define ACE_DOUBLE double
+#define ACE_BIG_FLOAT 1e9
 
 
 
@@ -42,18 +43,23 @@ class component;
 #include "acetime.h"
 
 
-#define ACE_TIMER_SOLVE_GUESS 0
-#define ACE_TIMER_SOLVE_ENUM 1
-#define ACE_TIMER_SOLVE_SIMPLEX 2
-#define ACE_TIMER_SOLVE_PATH 3
-#define ACE_TIMER_EQUATION 4
-#define ACE_TIMER_MAIN 5
-#define ACE_TIMER_DIRECT 6
-#define ACE_TIMER_SIMPLEX_FIRST 7
-#define ACE_TIMER_SIMPLEX_GUESS 8
-#define ACE_TIMER_SIMPLEX_TREE 9
-#define ACE_TIMER_SIMPLEX_TRY_NODE 10
-#define ACE_TIMER_LAST 11
+#define ACE_TIMER_MAIN 0
+#define ACE_TIMER_EQUATION 1
+#define ACE_TIMER_SOLVE_ENUM 2
+#define ACE_TIMER_SOLVE_SIMPLEX 3
+#define ACE_TIMER_SOLVE_PATH 4
+#define ACE_TIMER_SOLVE_GUESS 5
+#define ACE_TIMER_SOLVE_LU 6
+#define ACE_TIMER_DIRECT 7
+#define ACE_TIMER_SIMPLEX_FIRST 8
+#define ACE_TIMER_SIMPLEX_GUESS 9
+#define ACE_TIMER_SIMPLEX_TREE 10
+#define ACE_TIMER_SIMPLEX_TRY_NODE 11
+#define ACE_TIMER_SOLVER 12
+#define ACE_TIMER_LU_DIRECT 13
+#define ACE_TIMER_LS_STEP 14
+#define ACE_TIMER_COMPUTE_VAR 15
+#define ACE_TIMER_LAST 16
 
 typedef std::vector<unknown *> unknowns;
 typedef std::vector<equation *> equations;

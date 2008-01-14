@@ -85,6 +85,7 @@ linearSystem::linearSystem(){
   mThetap = 0.5;
   mH = 1;
   mLogFrequency=0;
+  mLogPrint=0;
   mPourMille=0;
 }
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -422,8 +423,9 @@ void linearSystem::initSimu(){
   readInitialValue();
   mStepCmp=0;
   mLogFrequency =  mStepNumber/1000;
-  if (mLogFrequency==0)
-    mLogFrequency = 1;
+  mLogPrint = mStepNumber/100000;
+  if (mLogPrint==0) mLogPrint=1;
+  if (mLogFrequency==0) mLogFrequency = 1;
   mPourMille=0;
 
   try{
@@ -493,21 +495,27 @@ void linearSystem::computeZnstiFromX_Zs(){
     (*mznsti)=prod(*mC1zs,*mzsti)+prod(*mC1l,*(mMLCP->mZ1))+(*mC1s);
 }
 bool linearSystem::step(){
+  ACE_times[ACE_TIMER_LS_STEP].start();
   mStepCmp++;
-  if (mStepCmp >= mStepNumber)
+  if (mStepCmp >= mStepNumber){
+    ACE_times[ACE_TIMER_LS_STEP].stop();
     return false;
+  }
   if (mStepCmp%mLogFrequency==0){
     printf("-->%d\n",mPourMille);
     mPourMille ++;
   }
-    bool res = mMLCP->solve();
-    if (res){
-      *mzsti=*(mMLCP->mZ2);
-      if (mDimx)
-	*mxti=prod(*mW,*mxfree)+mH*mTheta*prod(*mW,prod(*mA2zs,*mzsti))+mH*prod(*mW,prod(*mR,*(mMLCP->mZ1)));
-      computeZnstiFromX_Zs();
-    }
-    return res;
+  bool res = mMLCP->solve();
+  ACE_times[ACE_TIMER_COMPUTE_VAR].start();
+  if (res){
+    *mzsti=*(mMLCP->mZ2);
+    if (mDimx)
+      *mxti=prod(*mW,*mxfree)+(mH*mTheta)*prod(*mW,prod(*mA2zs,*mzsti))+mH*prod(*mW,prod(*mR,*(mMLCP->mZ1)));
+    computeZnstiFromX_Zs();
+  }
+  ACE_times[ACE_TIMER_COMPUTE_VAR].stop();
+  ACE_times[ACE_TIMER_LS_STEP].stop();
+  return res;
 
 }
 void linearSystem::stopSimu(){
@@ -973,20 +981,27 @@ void linearSystem::printSystem2(ostream& os){
 }
 void linearSystem::printStep(ostream& os){
   int i;
-  os << "xt("<<mStepCmp*mH<<")\t";
-  if (mxti)
-    for (i=0;i<mDimx;i++)
-      os << mxti->getValue(i,0)<<"\t";
-  os << "zs("<<mStepCmp*mH<<")\t";
-  if (mzsti)
-    for (i=0;i<mDimzs-1;i++)
-      os << mzsti->getValue(i,0)<<"\t";
+  bool printALL = false;
+  if (printALL){
+    os << "xt("<<mStepCmp*mH<<")\t";
+    if (mxti)
+      for (i=0;i<mDimx;i++)
+	os << mxti->getValue(i,0)<<"\t";
+    os << "zs("<<mStepCmp*mH<<")\t";
+    if (mzsti)
+      for (i=0;i<mDimzs-1;i++)
+	os << mzsti->getValue(i,0)<<"\t";
   
-  os << "zns("<<mStepCmp*mH<<")\t";
-  if (mznsti)
-    for (i=0;i<mDimzns;i++)
-      os << mznsti->getValue(i,0)<<"\t";
-  os<<"\n";
+    os << "zns("<<mStepCmp*mH<<")\t";
+    if (mznsti)
+      for (i=0;i<mDimzns;i++)
+	os << mznsti->getValue(i,0)<<"\t";
+    os<<"\n";
+  }else{
+    if (mStepCmp%mLogPrint==0){
+      os <<mStepCmp*mH<<"\t"<<mxti->getValue(4,0)<<"\n";
+    }
+  }
 }
 
 void linearSystem::printEquations(ostream& os ){

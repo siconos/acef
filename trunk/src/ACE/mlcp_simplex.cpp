@@ -100,16 +100,18 @@ static  double *lb=0;
 static  double *ub=0;
 static  int *ind1toN=0;
 static     char *upper;							/* lower or upper ? (for changing bounds) */
+static     char *lower;							/* lower or upper ? (for changing bounds) */
 static  double *newUppBnd;				/* new upper bounds */
 static   int *vwIndices;/* indices of variables v,w */
 
 static  const double tolVar = 1e-12;			/* tolerance to consider that a var is null */
 static  const double tolComp = 1e-12; 		/* tolerance to consider that complementarity holds */
+static  const double tolNegVar = 1e-9; 		
 static  const int nIterMax = 1000000;		/* max number of nodes to consider in tree search */
 static  const int logFrequency = 10000;	/* print log every ... iterations */
 
 
-
+#define USE_GUESS false
 
 
 
@@ -136,7 +138,7 @@ void computeConfig(const node* _node,double x[]){
   configLCP=0;
   if (_node == 0){
     for (i=0; i<m; i++) {
-      if (x[n+m+i] > x[i+n] || (x[n+m+i] < 10e-4 && x[n+i] < 10e-4))
+      if (x[n+m+i] > x[i+n] )
 	configLCP +=cur2pow;
       cur2pow=2*cur2pow;
     }
@@ -147,7 +149,7 @@ void computeConfig(const node* _node,double x[]){
     for (i=0; i<m; i++) {
       switch (_node->choice[i]) {
       case 'n':
-	if (x[n+m+i] > x[i+n] || (x[n+m+i] < 10e-4 && x[n+i] < 10e-4))
+	if (x[n+m+i] > x[i+n] )
 	  configLCP +=cur2pow;
 	printf("case n\n");
 	break;
@@ -249,15 +251,19 @@ int checkSolution(double x[]){
   int i;
   for (i=0; i<m; i++) {
     infeasComp+=x[n+i]*x[n+m+i];
+    if (x[n+i]  <-tolNegVar || x[n+m+i]<-tolNegVar){
+      //writeprob(env,lp);
+      return 0;
+    }
   }
   infeasComp=infeasComp/normB;
   if (infeasComp<tolComp) { /* we have a solution !!! */
-    for (i=0; i<m; i++) {
-      if (x[n+i] > x[n+m+i])
-	x[n+m+i] = 0;
-      else
-	x[n+i]=0;
-    }
+//     for (i=0; i<m; i++) {
+//       if (x[n+i] > x[n+m+i])
+// 	x[n+m+i] = 0;
+//       else
+// 	x[n+i]=0;
+//     }
     return 1;
   }else
     return 0;
@@ -265,6 +271,10 @@ int checkSolution(double x[]){
 
 int      preparUppBnd(node* currentNode){
   int i,branchingIndex=-1;
+  if (!currentNode){
+    //chgbds (env, lp, 2*m, vwIndices, lower, &lb[n]);
+    return -1;
+  }
   for (i=0;i<m;i++){
     switch (currentNode->choice[i]) {
     case 'n':
@@ -281,18 +291,18 @@ int      preparUppBnd(node* currentNode){
 	branchingIndex = (2*rand() < RAND_MAX ? branchingIndex : i);
       }
 					
-      newUppBnd[i] = CPX_INFBOUND;
-      newUppBnd[m+i] = CPX_INFBOUND;
+      newUppBnd[i] = ACE_BIG_FLOAT;//CPX_INFBOUND;
+      newUppBnd[m+i] = ACE_BIG_FLOAT;//CPX_INFBOUND;
       objective[i]=0;
       objective[m+i]=0;
       break;
     case 'v':
       newUppBnd[i] = 0;
-      newUppBnd[m+i] = CPX_INFBOUND;
+      newUppBnd[m+i] = ACE_BIG_FLOAT;//CPX_INFBOUND;
       //    nFixed++;
       break;
     case 'w':
-      newUppBnd[i] = CPX_INFBOUND;
+      newUppBnd[i] = ACE_BIG_FLOAT;//CPX_INFBOUND;
       newUppBnd[m+i] = 0;
       //    nFixed++;
       break;
@@ -303,6 +313,9 @@ int      preparUppBnd(node* currentNode){
     }
   }
   chgbds (env, lp, 2*m, vwIndices, upper, newUppBnd);
+  //  chgbds (env, lp, 2*m, vwIndices, upper, newUppBnd);
+  //chgbds (env, lp, 2*m, vwIndices, lower, &lb[n]);
+  //writeprob(env,lp);
   return branchingIndex;
 }
 
@@ -324,7 +337,7 @@ void tryNode(node * pNode,double& objval,char v_or_w){
   }else{
       printf("trynode error\n");
     }
-  ACE_times[ACE_TIMER_SIMPLEX_TRY_NODE].start();
+ACE_times[ACE_TIMER_SIMPLEX_TRY_NODE].start();
     /* reload basis */
     copybase (env, lp, pNode->cstat, pNode->rstat);
     /* minimize v_i */
@@ -365,7 +378,7 @@ int solvesubproblem(mySet::iterator& currentNode, int branchingIndex, char v_or_
 
 void fillSolution(double u[],double v[],double w[],double x[]){
   int i;
-  //printSolution(x);
+  printSolution(x);
   for( i = 0 ; i < m ; ++i ) {v[i] = x[i+n]; w[i]=x[n+m+i];}
   for( i = 0 ; i < n ; ++i ) {u[i] = x[i]; }
 }
@@ -434,8 +447,11 @@ void mlcp_simplex_init(int *nn , int* mm, double *A , double *B , double *C , do
   
   ind1toN=(int*)calloc(ncols,sizeof(int));
   upper = (char*) calloc(2*m,sizeof(char));
+  lower = (char*) calloc(2*m,sizeof(char));
   newUppBnd = (double*)calloc( 2*m,sizeof(double));
   vwIndices = (int*)calloc( 2*m,sizeof(int));
+  memset(upper,'U',2*m*sizeof(char));
+  memset(lower,'L',2*m*sizeof(char));
 
 
   for (i=0;i<ncols;i++)
@@ -524,7 +540,8 @@ void mlcp_simplex_init(int *nn , int* mm, double *A , double *B , double *C , do
   env = openCPLEX();
   lp = createprob(env);
   copylp(env, lp, ncols, nrows, CPX_MIN, objective, rhs, sense, matbeg, matcnt, matind, matval, lb, ub);
-	
+  preparUppBnd(0);
+  //writeprob(env,lp);
   /* optimize with null objective to find feasible point */
   lpopt(env, lp);
 }
@@ -540,6 +557,7 @@ void mlcp_simplex_stop(){
   resetList();
   
   if (upper) free(upper);
+  if (lower) free(lower);
   if (vwIndices) free(vwIndices);
   if (newUppBnd) free(newUppBnd);
   if (x) free(x);
@@ -592,6 +610,7 @@ int mlcp_simplex( double *a, double *b, double *u, double *v, double *w , int *i
   chgobj (env, lp, ncols, ind1toN, objective);
 
     /* optimize with objective to find feasible point */
+
   ACE_times[ACE_TIMER_SIMPLEX_FIRST].start();
   lpopt(env, lp);
   getsolution (env, lp, &objval, x);
@@ -614,7 +633,6 @@ int mlcp_simplex( double *a, double *b, double *u, double *v, double *w , int *i
   /* variables for tree search */	
   int lastBranchingIndex=0;		/* last index we minimized */
   int branchingIndex=0;				/* new index */
-  memset(upper,'U',2*m*sizeof(char));
   for (i=0; i<2*m; i++) vwIndices[i]=n+i;
   int nIter=0;									/* iteration count */
   int chgObjInd[2];							/* indices in obj to change */
@@ -624,30 +642,32 @@ int mlcp_simplex( double *a, double *b, double *u, double *v, double *w , int *i
   for (i=0; i<n; i++) objective[i]=0;
   for (i=n; i<ncols; i++) objective[i]=0;
   chgobj (env, lp, ncols, ind1toN, objective);
-  Itlist curIt = sList.begin();
-  while(curIt != sList.end() ){
-    ACE_times[ACE_TIMER_SIMPLEX_GUESS].start();
-    double objval;
-    //printf("last node :");
-    //curIt->print();
+  if (USE_GUESS){
+    Itlist curIt = sList.begin();
+    while(curIt != sList.end() ){
+      ACE_times[ACE_TIMER_SIMPLEX_GUESS].start();
+      double objval;
+      //printf("last node :");
+      //curIt->print();
 
-    tryNode(&(*curIt),objval,'v');
-    if (checkSolution(x)){
-      fillSolution(u,v,w,x);
-      ACE_times[ACE_TIMER_SIMPLEX_GUESS].stop();
-      return 1;
+      tryNode(&(*curIt),objval,'v');
+      if (checkSolution(x)){
+	fillSolution(u,v,w,x);
+	ACE_times[ACE_TIMER_SIMPLEX_GUESS].stop();
+	return 1;
+      }
+      tryNode(&(*curIt),objval,'w');
+      if (checkSolution(x)){
+	fillSolution(u,v,w,x);
+	ACE_times[ACE_TIMER_SIMPLEX_GUESS].stop();
+	return 1;
+      }
+      curIt++;
     }
-    tryNode(&(*curIt),objval,'w');
-    if (checkSolution(x)){
-      fillSolution(u,v,w,x);
-      ACE_times[ACE_TIMER_SIMPLEX_GUESS].stop();
-      return 1;
-    }
-    curIt++;
+    ACE_times[ACE_TIMER_SIMPLEX_GUESS].stop();
+
+    resetList();
   }
-  ACE_times[ACE_TIMER_SIMPLEX_GUESS].stop();
-
-  resetList();
   for (i=0; i<n; i++) objective[i]=0;
   for (i=n; i<ncols; i++) objective[i]=0;
   chgobj (env, lp, ncols, ind1toN, objective);
@@ -692,11 +712,10 @@ int mlcp_simplex( double *a, double *b, double *u, double *v, double *w , int *i
     if (solvesubproblem(currentNode, branchingIndex, 'v', tree, x)){
       computeConfig((node*)&(*currentNode),x);
       fillSolution(u,v,w,x);
-      sList.push_front(*currentNode);
-      //printf("good node :");
-      //currentNode->print();
-
-      tree.erase(currentNode);
+      if (USE_GUESS){
+	sList.push_front(*currentNode);
+	tree.erase(currentNode);
+      }
       res =1;
       break;
     }
@@ -707,13 +726,12 @@ int mlcp_simplex( double *a, double *b, double *u, double *v, double *w , int *i
     lastBranchingIndex=chgObjInd[1];
     chgobj (env, lp, 2, chgObjInd, chgObjVal);
     if (solvesubproblem( currentNode, branchingIndex, 'w', tree, x)){
-      //      computeConfig(&(*currentNode),x);
+      computeConfig(&(*currentNode),x);
       fillSolution(u,v,w,x);
-      sList.push_front(*currentNode);
-      //printf("good node :");
-      //currentNode->print();
-
-      tree.erase(currentNode);
+      if (USE_GUESS){
+	sList.push_front(*currentNode);
+	tree.erase(currentNode);
+      }
       res =1;
       break;
     }

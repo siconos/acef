@@ -56,6 +56,7 @@ mlcp::mlcp(unsigned int Dlcp,unsigned int Dlin,int solverType){
    mPourCent=0;
 
    mM = new aceMatrix(Dlcp+Dlin,Dlcp+Dlin);
+   mTryM = false;
    mQ= new aceMatrix(Dlcp+Dlin,1);
 
    if (mDlcp){
@@ -77,11 +78,26 @@ mlcp::mlcp(unsigned int Dlcp,unsigned int Dlin,int solverType){
      mM21 = new aceMatrix(mDlin,mDlcp);
      mM12 = new aceMatrix(mDlcp,mDlin);
    }
-   mGuess.clear();
+   //   mGuess.clear();
    mGuess.push_back(0);
 }
 void mlcp::addGuess(unsigned long l){
-  mGuess.push_back(l);
+  Itulongs aux = mGuess.begin();
+  bool find = false;
+  if (l == 6361085){
+    find =false;
+  }
+  while (aux != mGuess.end()){
+    unsigned long laux = *aux;
+    if (*aux == l){
+      find = true;
+      break;
+    }
+    aux++;
+  }
+  if (  !find){
+    mGuess.push_back(l);
+  }
   cout <<"add guess "<<l<<endl;
 }
 void mlcp::affectW1Z1(unsigned long ll){
@@ -115,7 +131,7 @@ bool mlcp::tryGuess(){
   return true;
 }
 void mlcp::initEnum(){
-   mCurEnum=8000000;
+   mCurEnum=8300000;
 
   mPourCent=0;
   mCmp=0;
@@ -145,6 +161,8 @@ bool mlcp::nextEnum(){
   }
   affectW1Z1(mCurEnum);
   mCurEnum++;
+  if (mCurEnum > 8988600)
+    mCurEnum = 4000000;
   mCmp++;
   
   return true;
@@ -199,6 +217,7 @@ bool mlcp::solveWithSimplex(){
   ACE_times[ACE_TIMER_SOLVE_SIMPLEX].start();
   res= mlcp_simplex(ma, mb, mu, mv, mw , 0 , 0 , 0  );
   mCase = getConfigLCP();
+  addGuess(mCase);
   ACE_times[ACE_TIMER_SOLVE_SIMPLEX].stop();
 
   mZ1->FortranToMatrix(mv);
@@ -209,8 +228,14 @@ bool mlcp::solveWithSimplex(){
 }
 bool mlcp::solve(){
   bool res =false;
+  ACE_times[ACE_TIMER_SOLVER].start();
   //1) start with guess point
   ACE_MESSAGE("mlcp::solve : 1 try with guess point.\n");
+  res = solveGuessAndIt();
+  if (res){
+    ACE_times[ACE_TIMER_SOLVER].stop();
+    return res;
+  }
   //2) start other algo
   ACE_MESSAGE("mlcp::solve : 2 start other algo\n");
   switch (mSolverType) {
@@ -221,7 +246,7 @@ bool mlcp::solve(){
     res= solveWithPath();
     break;
   case ACE_SOLVER_ENUM:
-    res = solveGuessAndIt();
+    ;//res = solveGuessAndIt();
     break;
   default:
     ACE_ERROR("mlcp::solve, bad mSolverType value");
@@ -265,6 +290,30 @@ bool mlcp::solveGuessAndIt(){
       std::cout << "Exception caught." << endl;
       ACE_ERROR("linearSystem::solveGuessAndIt linear system no solution\n");
     }
+  }
+  if (mTryM){
+    ACE_times[ACE_TIMER_DIRECT].start();
+    mQ->setBlock(0,0,*mQ1);
+    mQ->setBlock(mDlcp,0,*mQ2);
+    *mQ=-1*(*mQ);
+    ACE_times[ACE_TIMER_LU_DIRECT].start();
+    mM->PLUForwardBackwardInPlace(*mQ);
+    ACE_times[ACE_TIMER_LU_DIRECT].stop();
+    bool check=true;
+    for (lin = 0 ; lin <mDlcp; lin++){
+      double aux = mQ->getValue(lin,0);
+      if (mQ->getValue(lin,0) < - ACE_NULL){
+	ACE_MESSAGE("mlcp::solveGuessAndIt not in the cone\n");
+	check=false;
+	break;//pas dans le cone!
+      }
+    }
+    if(check){
+      fillSolution();
+      ACE_times[ACE_TIMER_DIRECT].stop();
+      return true;
+    }
+    ACE_times[ACE_TIMER_DIRECT].stop();
   }
   
   if(ACE_MUET_LEVEL !=10 && onlyOne){
@@ -320,9 +369,10 @@ bool mlcp::solveGuessAndIt(){
     }
     //
    *mQ=-1*(*mQ);
-   ACE_times[ACE_TIMER_DIRECT].start();
+   ACE_times[ACE_TIMER_SOLVE_LU].start();
    mM->PLUForwardBackwardInPlace(*mQ);
-   ACE_times[ACE_TIMER_DIRECT].stop();
+   ACE_times[ACE_TIMER_SOLVE_LU].stop();
+   mTryM=true;
    bool check=true;
    for (lin = 0 ; lin <mDlcp; lin++){
      double aux = mQ->getValue(lin,0);
@@ -357,28 +407,32 @@ bool mlcp::solveGuessAndIt(){
    
  };
  if (find){
-   for (lin=0;lin<mDlcp;lin++){
-     if (mW1Z1[lin]==0){
-       double aux =mQ->getValue(lin,0);
-       mW1->setValue(lin,0,0);
-       mZ1->setValue(lin,0,aux);
-     }else{
-       double aux =mQ->getValue(lin,0);
-       mZ1->setValue(lin,0,0);
-       mW1->setValue(lin,0,aux);
-     }
-
-   }
-   for (lin=0;lin<mDlin;lin++)
-     mZ2->setValue(lin,0,mQ->getValue(mDlcp+lin,0));
-   if(ACE_MUET_LEVEL != ACE_MUET || true)
-     printOutPut();
+   fillSolution();
    return true;
  }else{
    ACE_MESSAGE("mlcp::solveGuessAndIt failed\n",9);
    return false;
  }
 }
+void   mlcp::fillSolution(){
+  int lin;
+  for (lin=0;lin<mDlcp;lin++){
+    if (mW1Z1[lin]==0){
+      double aux =mQ->getValue(lin,0);
+      mW1->setValue(lin,0,0);
+      mZ1->setValue(lin,0,aux);
+    }else{
+      double aux =mQ->getValue(lin,0);
+      mZ1->setValue(lin,0,0);
+      mW1->setValue(lin,0,aux);
+    }
+    
+  }
+  for (lin=0;lin<mDlin;lin++)
+    mZ2->setValue(lin,0,mQ->getValue(mDlcp+lin,0));
+  if((ACE_MUET_LEVEL != ACE_MUET )&& !mTringGuess)
+    printOutPut();
+ }
 void mlcp::addGuess(aceMatrix *Z){
   unsigned long cur2pow=1;
   unsigned long res=0;
@@ -400,6 +454,8 @@ mlcp::~mlcp(){
     free(mW1Z1);
   if (mM)
     delete mM;
+
+    
   if (mW1)
     delete mW1;
   if (mZ1)
@@ -445,11 +501,14 @@ mlcp::~mlcp(){
 
 void mlcp::printGuess(ostream& os){
   if (!mUseGuess || ACE_MUET_LEVEL == ACE_MUET)
-    return;
+    ;//return;
   ACE_MESSAGE("mlcp::printGuess\n");
   initGuess();
-  while (tryGuess())
-    os<<"guess : "<<mCase<<endl;
+  int i=1;
+  while (tryGuess()){
+    os<<i<<" guess : "<<mCase<<endl;
+    i++;
+  }
 }
 
 void mlcp::printInPutABCDab(ostream& os)
@@ -484,8 +543,8 @@ void mlcp::printInPut(ostream& os)
   os<<(*mQ);
 }
 void mlcp::printOutPut(ostream& os){
-  if (ACE_MUET_LEVEL == ACE_MUET )
-    return;
+//   if (ACE_MUET_LEVEL == ACE_MUET )
+//     return;
   os<<"mlcp print output"<<endl;
   os<<"Z1:\n";
   os<<(*mZ1);

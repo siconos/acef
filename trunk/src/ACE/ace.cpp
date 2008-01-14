@@ -13,7 +13,7 @@ void ACE_INIT(){
 }
 void ACE_INIT_TIME(){
   ACE_times[ACE_TIMER_MAIN].setName("main ");
-  ACE_times[ACE_TIMER_SOLVE_GUESS].setName("solver guess ");
+  ACE_times[ACE_TIMER_SOLVE_LU].setName("compute LU ");
   ACE_times[ACE_TIMER_SOLVE_ENUM].setName("solver enum ");
   ACE_times[ACE_TIMER_SOLVE_SIMPLEX].setName("solver simplex ");
   ACE_times[ACE_TIMER_SOLVE_PATH].setName("solver path ");
@@ -23,13 +23,21 @@ void ACE_INIT_TIME(){
   ACE_times[ACE_TIMER_SIMPLEX_GUESS].setName("simplex try previous guess ");
   ACE_times[ACE_TIMER_SIMPLEX_TREE].setName("simplex tree exploration ");
   ACE_times[ACE_TIMER_SIMPLEX_TRY_NODE].setName("simplex try node ");
+  ACE_times[ACE_TIMER_SOLVE_GUESS].setName("solver guess ");
+  ACE_times[ACE_TIMER_SOLVER].setName("mlcp solver  ");
+  ACE_times[ACE_TIMER_LU_DIRECT].setName("lu direct  ");
+  ACE_times[ACE_TIMER_LS_STEP].setName("ls step  ");
+  ACE_times[ACE_TIMER_COMPUTE_VAR].setName("lcp --> netlist  ");
+  
+  
   
 }
 void ACE_STOP_SOLVER_TIME(){
-  ACE_times[ACE_TIMER_SOLVE_GUESS].stop();
   ACE_times[ACE_TIMER_SOLVE_ENUM].stop();
   ACE_times[ACE_TIMER_SOLVE_SIMPLEX].stop();
   ACE_times[ACE_TIMER_SOLVE_PATH].stop();
+  ACE_times[ACE_TIMER_SOLVE_GUESS].stop();
+  ACE_times[ACE_TIMER_SOLVER].stop();
 }
 void ACE_PRINT_TIME(){
   for (int i=0;i <ACE_TIMER_LAST;i++)
