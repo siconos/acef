@@ -1,19 +1,15 @@
  
 
-\section{How get $x' = A_{1x}x +A_{1zs}Z_{s} + A_{1ns}Z_{ns}+A_{1s}$?}
-To get this system, a good set of unknowns must be done. Only the necessary unknowns are added. The
+\section{Examples}
+
+This section illustrates the rules how get $x' = A_{1x}x +A_{1zs}Z_{s} + A_{1ns}Z_{ns}+A_{1s}$? To get this system, a good set of unknowns must be done. Only the necessary unknowns are added. The
 following examples show how this choice could be done.
 \input{example1.tex}
 \input{example2.tex}
 \input{example3.tex}
 \input{example4.tex}
 \input{example5.tex}
-
-\subsection{conclusion}
-The vector x contains inductor's currents and capacitor's tensions. Derivate inductor's current is equal to a
-nodal voltage difference.\\
-About the capacitor's tensions, we use the Minimum Spanning Tree of the capacitor' tension to avoid cycle.\\
-
+\subsection{Automatic circuit equation formulation Algorithm}
 
 \begin{algorithm}
 \caption{fill the matrices : $x'=A_{1x}x+A_{1s}Z_{s}+A_{1ns}Z_{ns}$ }
@@ -55,4 +51,17 @@ available u in MST, return 0.\\
 \STATE $x'=A_{1x}x+A_{1s}Z_{s}+A_{1ns}Z_{ns}$
 \end{algorithmic}
 \end{algorithm}
+
+
+
+\subsection{conclusion}
+The vector x contains inductor's currents and capacitor's tensions. Derivate inductor's current is equal to a
+nodal voltage difference.\\
+About the capacitor's tensions, we use the Minimum Spanning Tree of the capacitor' tension to avoid cycle.\\
+
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "ace"
+%%% End: 
 

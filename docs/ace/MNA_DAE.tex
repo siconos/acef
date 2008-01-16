@@ -1,26 +1,30 @@
 
-\section{Unknowns}
+
+
+\section{The linear non smooth components}
+\subsection{Topology. Choice of smooth and nonsmooth components.}
+\textcolor{red}{\tt TBW}
+\subsection{Unknowns}
 Before go head, the unknowns vector X is subdivided:
 \begin{enumerate}
 \item[--] x contains only the dynamic unknowns(currents in inductor and tensions from capacitor branches)
 \item[--] $Z_{s}$ contains only the non dynamic unknowns(Voltage nodes,... ).
 \item[--] $Z_{ns}$ contains the useful currents and tensions for the non smooth components.
 \end{enumerate}
-
-\section{The non smooth components}
-\subsection{Local formulation}
-For each non smooth component, the complementarity condition is:
-\[\left(\begin{array}{c}
+\subsection{Linear local formulation}
+For each non smooth component, we assume that the behavior can be written as the following the mixed linear  complementarity condition, that is:
+\begin{equation}\left(\begin{array}{c}
 \beta = zns_{i} = A_{i}x+B_{i}\lambda_{i}+C_{i}z_{s} + a_{i}\\
 y_{i}=D_{i}x+E_{i}z_{s}+F_{i}\lambda_{i}+G_{i}zns_{i}+e_{i}\\
 0 \leq y_{i} \, \perp \, \lambda_{i} \geq 0
-\end{array}\right)\]
-Where $zns_{i}$ is a voltage and currents vector. $a_{i},e_{i},\lambda_{i}$ and $y_{i}$ are some vectors. At the end
-of this document, there are the diode and transistor examples.
+\end{array}\right)
+\end{equation}
+where $zns_{i}$ is a voltage and currents vector\textcolor{red}{\tt notation $zns$?}. $a_{i},e_{i},\lambda_{i}$ and $y_{i}$ are some constants vectors which characterizes the components. At the end
+of this document, we will see how ideal diode and piecewise linear models of transistor fits into this formulation.
 
 
-\subsection{Global formulation}
-It consists in writing all the complementary conditions in the same system. Following, an example with 5 non smooth components:
+\subsection{Example of a linear global formulation}
+It consists in writing all the complementary conditions in the equations of the MNA. An example with 5 non smooth components is given by:
 
 \[\left(\begin{array}{c}
   Z_{ns}\\
@@ -160,10 +164,66 @@ Y=D_{1x}x +D_{1zs}Z_{s}+D_{1ns}Z_{ns}+D_{1\lambda}\lambda+D_{1s}\\
 0 \leq Y \, \perp \, \lambda \geq 0
 \end{array}\right)\]
 \newpage
-\section{MNA and complementary conditions}
-This part describes the automatic MLCP formulation from a circuit. It consists in adapting the
-MNA to manage non-smooth model.
+\section{Extended MNA for nonsmooth linear components}
+This part describes the automatic formulation into a Mixed Linear Complementarity System (MLCS) of a circuit. It consists in adapting the MNA to manage non-smooth model.
 
+\subsection{MLCS and MLCP definitions}
+\begin{definition}\index{Complementarity problem ! mixed linear} \index{MLCP}
+  Given the matrices  ${A} \in \RR^{n \times n}$, ${B} \in \RR^{m \times m}$, ${C} \in \RR^{n \times m}$, ${D} \in \RR^{m \times n}$, and the vectors  $ {a} \in \RR^n, {b} \in \RR^m$, the MLCP denoted by $\mathrm{MLCP}(A,B,C,D,a,b)$ consists in finding two vectors $ {u} \in \RR^n$ and  $ {v} \in \RR^m$ such that
+\begin{equation}\label{eq:mlcp1} 
+  \begin{cases}
+    A u + C v + a =0 \\  \\
+    {0} \le {v} \perp     Du +B v +b   \ge {0}
+  \end{cases}.
+\end{equation}
+The  MLCP can be defined equivalently in the following form denoted by $\mathrm{MLCP}(M,q,\mathcal E,\mathcal I)$
+\begin{equation}
+  \label{eq:mlcp2}
+  \begin{cases}
+    w = M z +q \\
+    w_i=0,\forall  i \in \mathcal E \\
+    {0} \le z_i \perp w_i \ge {0}, \forall  i \in \mathcal I 
+ \end{cases}
+\end{equation}
+where  $\mathcal E$ and $\mathcal I$ are finite sets of indices such that $\mathrm{card}(\mathcal E \cup \mathcal I  ) = n$ and $\mathcal E \cap \mathcal I  = \emptyset$.\end{definition}
+The MLCP is a mixture between an LCP and a system of linear equations. The former definition~(\ref{eq:mlcp1}) can be casted into the second one~(\ref{eq:mlcp2}) by introducing
+\begin{equation}
+  \label{eq:mlcp-m}
+  M = \left[
+  \begin{array}{cc}
+   A & C \\
+   D & B
+  \end{array}\right],\quad   q = \left[
+  \begin{array}{c}
+    a \\
+    b
+  \end{array}\right],\quad   z = \left[
+  \begin{array}{c}
+    u \\
+    v
+  \end{array}\right],\quad   w = \left[
+  \begin{array}{c}
+    0\\
+    w_i, \forall  i \in \mathcal I 
+  \end{array}\right]
+\end{equation}
+
+
+
+
+Equivalently, the MLCS can be defined by 
+
+\begin{definition}\index{Complementarity system ! mixed linear} \index{MLCS}
+  Given the matrices  ${A} \in \RR^{n \times n}$, ${B} \in \RR^{m \times m}$, ${C} \in \RR^{n \times m}$, ${D} \in \RR^{m \times n}$, and the vectors  $ {a} \in \RR^n, {b} \in \RR^m$, the MLCP denoted by $\mathrm{MLCP}(A,B,C,D,a,b)$ consists in finding two vectors $ {u} \in \RR^n$ and  $ {v} \in \RR^m$ such that
+\begin{equation}\label{eq:mlcp1} 
+  \begin{cases}
+   x' = A x + C v + a =0 \\  \\
+   {0} \le {v} \perp     Dx +B v +b   \ge {0}
+  \end{cases}.
+\end{equation}
+\end{definition}
+
+\textcolor{red}{\tt Is it sufficient ??}
 \subsection{Hypothesis}
 The MNA assumes smooth branches are explicit functions of current or voltage. It means each smooth
 branch is Voltage Defined (V.D.) or Current Defined (C.D.)\\
@@ -179,17 +239,16 @@ With the same assumption, all branches can be divided into following classes:\\
 
 
 
-\subsection{Smooth equations, DAE system.}
+\subsection{Smooth equations and the DAE system.}
 It is the same physical equations than in the MNA. This part describes the form and the unknowns
 used in our formulation.
-\subsubsection{static equations}
-\begin{enumerate}
-  \item If a node is not connected to a capacitor then the Kirchhoff Current Law (KCL) is static. \\
+
+\begin{enumerate} 
+ \item If a node is not connected to a capacitor then the Kirchhoff Current Law (KCL) is static. \\
   \item The V.D. equation (VDE) : \\
     A V.D. branch give an equation :
     \[V_{i}-V_{j} = \sum_{i}^{}a_{i}V_{i} + \sum_{j\in J}^{}b_{j}I_{j} +   source\]
-    This equation comes from the branch constitution, not from Kirchoff. (ex : U = R*I)
-\subsubsection{dynamic equations}
+    This equation comes from the branch constitution, not from the Kirchhoff Law. (ex : U = R*I)
   \item If a node is connected to a capacitor then the Kirchhoff Current Law is dynamic (KCL).\\
     NB : The current in the capacitor branches is written with :
     \[I = C*\frac{d(V_{i} - V_{j})}{dt}\]
@@ -199,13 +258,16 @@ used in our formulation.
 
 These equations lead to a DAE of the form:
 \[MX'+NX=s(t)\]
-M is singular. But, with the good set of unknowns, it is possible to write a DAE of the form :
+In general cases, the matrix $M$ is singular. But, with a good choice of the set of unknowns, it is possible to write a DAE of the form :
 \[x' = A_{1x}x +A_{1zs}Z_{s} + A_{1ns}Z_{ns}+A_{1s}\]
 \[0  = B_{1x}x+B_{1zs}Z_{s} + B_{1ns}Z_{ns}+B_{1s}\]
 
+\textcolor{red}{\tt Without $Z_{ns}$ ??}
+\subsection{Nonsmooth equations ad MLCP}
+\textcolor{red}{\tt TBW}
 \input{DAE_FORM.tex}
 \newpage
-\section{Matrices formulation}
+\section{Summary of  the Matrix formulation}
 
 The previous section describes how get the following system:
 \[\left(\begin{array}{c}
@@ -228,16 +290,17 @@ Y=D_{2x}x+D_{2zs}Z_{s}+D_{2\lambda}\lambda + D_{2s} &(eq4)\\
 \end{array}\right)\]
 $A_{2s}, B_{2s}$ and $D_{2s}$ are vectors.
 
-\subsection{Moreau time's stepping }
-\[\left(\begin{array}{cc}
-R=A_{1ns}C_{1\lambda}&(eq1)\\
-x'=A_{2x}x +A_{2zs}Z_{s} +R \lambda +A_{2s}&(eq2)\\
-0=B_{2x}x+B_{2zs}Z_{s} + B_{2\lambda}\lambda + B_{2s}&(eq3)\\
-Y=D_{2x}x+D_{2zs}Z_{s}+D_{2\lambda}\lambda + D_{2s} &(eq4)\\
-0 \leq Y \, \perp \, \lambda \geq 0&(\perp)\\
-\end{array}\right)\]
+\section{Sketch of  the Moreau time's stepping }
+\begin{eqnarray}
+R=A_{1ns}C_{1\lambda}\label{eq1}\\
+x'=A_{2x}x +A_{2zs}Z_{s} +R \lambda +A_{2s}&\label{eq2}\\
+0=B_{2x}x+B_{2zs}Z_{s} + B_{2\lambda}\lambda + B_{2s}&\label{eq3}\\
+Y=D_{2x}x+D_{2zs}Z_{s}+D_{2\lambda}\lambda + D_{2s} &\label{eq4}\\
+0 \leq Y \, \perp \, \lambda \geq 0&\label{eqperp}\\
+\end{eqnarray}
 
- eq1 discretisation:
+
+ The time--discretization of the equation~(\ref{eq1}) yields:
 \[x(t_{i+1}) - x(t_{i})=h\theta A_{2x}x(t_{i+1})+h(1-\theta)A_{2x}x(t_{i}) +h\theta
 A_{2zs}Z_{s}(t_{i+1}) +\]
 \[h(1-\theta)A_{2zs}Z_s(t_{i}) +hR\lambda (t_{i+1}) + h\theta 'A_{2s}(t_{i+1}) +
@@ -287,3 +350,8 @@ stepping lead to a MLCP. The following examples describe the method with non smo
 
 
 
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "ace"
+%%% End: 
