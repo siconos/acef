@@ -16,6 +16,31 @@
 <body>
 <div class="app">
 <div class="readyset">
+
+<h2>Project Information</h2>
+<table class="axial" border="1" cellpadding="3" cellspacing="2">
+  <tbody>
+    <tr>
+      <th>Project:</th>
+      <td><a href="index.html">NS-ACEF</a><br />
+      </td>
+    </tr>
+    <tr>
+      <th>Last update:</th>
+      <td>January 16, 2008</td>
+    </tr>
+
+    <tr>
+      <th>Related Documents:</th>
+      <td>
+      <div>  <a href="feature-set.html">Functionalities</a></div>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
 <h2>Features</h2>
 
 <!-- /processimpact -->
@@ -32,8 +57,12 @@
       <td>Parser</td>
     </tr>
     <tr>
+      <th>Release:</th>
+      <td>1</td>
+    </tr>
+    <tr>
       <th>Description:</th>
-      <td>The parser store a Netlist. There are an API to explore the circuit topology.</td>
+      <td>The parser store a Netlist. There is an API to explore the circuit topology.</td>
     </tr>
     <tr>
       <th>Notes and Questions:</th>
@@ -56,6 +85,11 @@
       <th>Functional area(s):</th>
       <td>Parser</td>
     </tr>
+    <tr>
+      <th>Release:</th>
+      <td>2</td>
+    </tr>
+
     <tr>
       <th>Description:</th>
       <td>Sub circuit is a special key in a Netlist. It consists in managing it when the sub circuit is a comparator.</td>
@@ -81,6 +115,10 @@
       <td>Parser</td>
     </tr>
     <tr>
+      <th>Release:</th>
+      <td>2</td>
+    </tr>
+    <tr>
       <th>Description:</th>
       <td>A Netlist has a special key word to define the transient analysis parameters. It consists in reading and
       exporting these parameters.<br />
@@ -90,7 +128,7 @@
     </tr>
     <tr>
       <th>Notes and Questions:</th>
-      <td>In current version, this information is written in an other file.<br />
+      <td>In the release 1, this information is written in an other file.<br />
       </td>
     </tr>
   </tbody>
@@ -109,6 +147,11 @@
       <th>Functional area(s):</th>
       <td>NS-ACEF</td>
     </tr>
+    <tr>
+      <th>Release:</th>
+      <td>1</td>
+    </tr>
+
     </tr>
     <tr>
       <th>Description:</th>
@@ -138,6 +181,10 @@ F-2.001: Diodes</h3>
       <td>NS-ACEF</td>
     </tr>
     <tr>
+      <th>Release:</th>
+      <td>1</td>
+    </tr>
+    <tr>
       <th>Description:</th>
       <td>A diode is a non smooth component, modeled with complementarity conditions. The diode model
       is an ideal diode. The automatic circuit equation formulation leads to a Mixed Linear Complementarity
@@ -154,7 +201,7 @@ F-2.001: Diodes</h3>
 </div>
 <div id="F-2.002">
 <h3><br />
-F-2.002: Transistor MOS<br />
+F-2.002: Ideal transistor MOS<br />
 </h3>
 <table class="axial" border="1" cellpadding="3" cellspacing="2">
   <tbody>
@@ -165,6 +212,10 @@ F-2.002: Transistor MOS<br />
     <tr>
       <th>Functional area(s):</th>
       <td>NS-ACEF</td>
+    </tr>
+    <tr>
+      <th>Release:</th>
+      <td>1</td>
     </tr>
     <tr>
       <th>Description:</th>
@@ -196,13 +247,17 @@ F-2.003: Comparator<br />
       <td>NS-ACEF</td>
     </tr>
     <tr>
+      <th>Release:</th>
+      <td>2</td>
+    </tr>
+    <tr>
       <th>Description:</th>
       <td>A Comparator is a non smooth component, piecewise linear ,modeled with complementarity conditions. <br />
       </td>
     </tr>
     <tr>
       <th>Notes and Questions:</th>
-      <td>There are no parameters in the model.<br />
+      <td>There are no parameters in the model. It requires F-1002.<br />
       </td>
     </tr>
   </tbody>
@@ -222,6 +277,10 @@ F-2.004: Diode, transistor, comparator with parameters<br />
     <tr>
       <th>Functional area(s):</th>
       <td>NS-ACEF</td>
+    </tr>
+    <tr>
+      <th>Release:</th>
+      <td>3</td>
     </tr>
     <tr>
       <th>Description:</th>
@@ -254,9 +313,13 @@ F-2.005: Automatic piecewise linear approximation and L.C.P. formulation.<br />
       <td>NS-ACEF</td>
     </tr>
     <tr>
+      <th>Release:</th>
+      <td>Not plan</td>
+    </tr>
+    <tr>
       <th>Description:</th>
       <td> The goal is to develop a module to build a piecewise linear approximation for any non-smooth component, and
-      write the L.C.P. formulation of this geometry.
+      write the L.C.P. formulation for this geometry.
       </td>
     </tr>
     <tr>
@@ -270,7 +333,7 @@ F-2.005: Automatic piecewise linear approximation and L.C.P. formulation.<br />
 
 <div id="F-2.006">
 <h3><br />
-F-2.006: Use simple piecewise linear approximation to accelerate the M.L.C.P. resolution..<br />
+F-2.006: Multigrid algorithm: Use a more simple piecewise linear approximation to accelerate the M.L.C.P. resolution.<br />
 </h3>
 <table class="axial" border="1" cellpadding="3" cellspacing="2">
   <tbody>
@@ -283,12 +346,15 @@ F-2.006: Use simple piecewise linear approximation to accelerate the M.L.C.P. re
       <td>NS-ACEF</td>
     </tr>
     <tr>
+      <th>Release:</th>
+      <td>3</td>
+    </tr>
+    <tr>
       <th>Description:</th>
       <td> The dimension of the L.C.P. formulation for a transistor is 10. These 10 parameters
       described 5 linear parts in the piecewise linear description. The goal is to use a very simple
       piecewise linear description, with only two parts, to get a smaller M.L.C.P.. We solve this
-      smaller formulation, and the result is used like a "guess point" to solve the initial
-      M.L.C.P.
+      smaller formulation, and the result is projected to solve the initial M.L.C.P.
       </td>
     </tr>
     <tr>
@@ -302,7 +368,39 @@ F-2.006: Use simple piecewise linear approximation to accelerate the M.L.C.P. re
 
 <div id="F-2.007">
 <h3><br />
-F-2.007: Non linear circuit: R,L or C non constant.<br />
+F-2.007: Forecast active set : Use a local piecewise linear approximation to solve a smaller M.L.C.P..<br />
+</h3>
+<table class="axial" border="1" cellpadding="3" cellspacing="2">
+  <tbody>
+    <tr>
+      <th>Priority:</th>
+      <td>Essential</td>
+    </tr>
+    <tr>
+      <th>Functional area(s):</th>
+      <td>ACEF</td>
+    </tr>
+    <tr>
+      <th>Release:</th>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>Description:</th>
+      <td> It consists in looking only around the current physical values to get a smaller M.L.C.P..
+      </td>
+    </tr>
+    <tr>
+      <th>Notes and Questions:</th>
+      <td>A feasibility study must be done.<br />
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<div id="F-2.008">
+<h3><br />
+F-2.008: Non linear circuit: R,L or C non constant.<br />
 </h3>
 <table class="axial" border="1" cellpadding="3" cellspacing="2">
   <tbody>
@@ -313,6 +411,10 @@ F-2.007: Non linear circuit: R,L or C non constant.<br />
     <tr>
       <th>Functional area(s):</th>
       <td>NS-ACEF</td>
+    </tr>
+    <tr>
+      <th>Release:</th>
+      <td>Not plan</td>
     </tr>
     <tr>
       <th>Description:</th>
@@ -328,9 +430,9 @@ F-2.007: Non linear circuit: R,L or C non constant.<br />
 </table>
 </div>
 
-<div id="F-2.008">
+<div id="F-2.009">
 <h3><br />
-F-2.008: Non linear complementarity formulation.<br />
+F-2.009: Non linear complementarity formulation.<br />
 </h3>
 <table class="axial" border="1" cellpadding="3" cellspacing="2">
   <tbody>
@@ -341,6 +443,10 @@ F-2.008: Non linear complementarity formulation.<br />
     <tr>
       <th>Functional area(s):</th>
       <td>NS-ACEF</td>
+    </tr>
+    <tr>
+      <th>Release:</th>
+      <td>Not plan</td>
     </tr>
     <tr>
       <th>Description:</th>
@@ -369,6 +475,10 @@ F-2.008: Non linear complementarity formulation.<br />
       <th>Functional area(s):</th>
       <td>Simulator<br />
       </td>
+    </tr>
+    <tr>
+      <th>Release:</th>
+      <td>1</td>
     </tr>
     <tr>
       <th>Description:</th>
@@ -400,6 +510,10 @@ F-2.008: Non linear complementarity formulation.<br />
       <td>Simulator</td>
     </tr>
     <tr>
+      <th>Release:</th>
+      <td>1</td>
+    </tr>
+    <tr>
       <th>Description:</th>
       <td>It consists in doing the transient analysis. </td>
     </tr>
@@ -425,8 +539,12 @@ F-2.008: Non linear complementarity formulation.<br />
       <td>Simulator</td>
     </tr>
     <tr>
+      <th>Release:</th>
+      <td>1</td>
+    </tr>
+    <tr>
       <th>Description:</th>
-      <td>Some Currents and voltages source are not constant (RAMP, SIN,...). It consists in managing
+      <td>Some currents and voltages source are not constant (RAMP, SIN,...). It consists in managing
       it for the transient analysis.</td>
     </tr>
     <tr>
@@ -450,6 +568,10 @@ F-2.008: Non linear complementarity formulation.<br />
     <tr>
       <th>Functional area(s):</th>
       <td>Simulator</td>
+    </tr>
+    <tr>
+      <th>Release:</th>
+      <td>2</td>
     </tr>
     <tr>
       <th>Description:</th>
@@ -481,6 +603,10 @@ F-2.008: Non linear complementarity formulation.<br />
       </td>
     </tr>
     <tr>
+      <th>Release:</th>
+      <td>3</td>
+    </tr>
+    <tr>
       <th>Description:</th>
       <td>It consists in building the Jacobi matrix from the linear components.   <br />
       </td>
@@ -509,6 +635,10 @@ F-2.008: Non linear complementarity formulation.<br />
       <td>Mixed Simulator</td>
     </tr>
     <tr>
+      <th>Release:</th>
+      <td>3</td>
+    </tr>
+    <tr>
       <th>Description:</th>
       <td>It consists in building a Hessian matrix approximation. </td>
     </tr>
@@ -534,10 +664,15 @@ F-2.008: Non linear complementarity formulation.<br />
       <td>Mixed Simulator</td>
     </tr>
     <tr>
+      <th>Release:</th>
+      <td>3</td>
+    </tr>
+    <tr>
       <th>Description:</th>
       <td>It consists in writing an iterator algorithm using both Newton-Raphson and MLCP formulation. The non smooth
       components are described with a LCP formulation. The mixed solver makes a Newton-Raphson step for the
-      smooth components and solves the LCP formulation. It is possible to formulate a step like a MLCP.</td>
+      smooth components and solves the LCP formulation. It is possible to formulate a step like a
+      MLCP.</td>
     </tr>
     <tr>
       <th>Notes and Questions:</th>
@@ -547,9 +682,11 @@ F-2.008: Non linear complementarity formulation.<br />
   </tbody>
 </table>
 </div>
+
+
 
 <div id="F-5.000">
-<h3>F-5.000: Time discretization<br />
+<h3>F-5.000: MLCP solver<br />
 </h3>
 <table class="axial" border="1" cellpadding="3" cellspacing="2">
   <tbody>
@@ -562,30 +699,8 @@ F-2.008: Non linear complementarity formulation.<br />
       <td>SICONOS</td>
     </tr>
     <tr>
-      <th>Description:</th>
-      <td>It consists in integrating the time discretization in SICONOS.</td>
-    </tr>
-    <tr>
-      <th>Notes and Questions:</th>
-      <td><br />
-      </td>
-    </tr>
-  </tbody>
-</table>
-</div>
-
-<div id="F-5.001">
-<h3>F-5.001: MLCP solver<br />
-</h3>
-<table class="axial" border="1" cellpadding="3" cellspacing="2">
-  <tbody>
-    <tr>
-      <th>Priority:</th>
-      <td>Essential</td>
-    </tr>
-    <tr>
-      <th>Functional area(s):</th>
-      <td>SICONOS</td>
+      <th>Release:</th>
+      <td>1</td>
     </tr>
     <tr>
       <th>Description:</th>
@@ -601,7 +716,7 @@ F-2.008: Non linear complementarity formulation.<br />
 </div>
 
 <div id="F-6.000">
-<h3>F-6.000: Specific electrical heuristic<br />
+<h3>F-6.000: Specific electrical heuristics<br />
 </h3>
 <table class="axial" border="1" cellpadding="3" cellspacing="2">
   <tbody>
@@ -612,6 +727,10 @@ F-2.008: Non linear complementarity formulation.<br />
     <tr>
       <th>Functional area(s):</th>
       <td>NS-ACEF</td>
+    </tr>
+    <tr>
+      <th>Release:</th>
+      <td>Not plan</td>
     </tr>
     <tr>
       <th>Description:</th>
