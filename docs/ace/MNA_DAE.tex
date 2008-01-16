@@ -290,65 +290,6 @@ Y=D_{2x}x+D_{2zs}Z_{s}+D_{2\lambda}\lambda + D_{2s} &(eq4)\\
 \end{array}\right)\]
 $A_{2s}, B_{2s}$ and $D_{2s}$ are vectors.
 
-\section{Sketch of  the Moreau time's stepping }
-\begin{eqnarray}
-R=A_{1ns}C_{1\lambda}\label{eq1}\\
-x'=A_{2x}x +A_{2zs}Z_{s} +R \lambda +A_{2s}&\label{eq2}\\
-0=B_{2x}x+B_{2zs}Z_{s} + B_{2\lambda}\lambda + B_{2s}&\label{eq3}\\
-Y=D_{2x}x+D_{2zs}Z_{s}+D_{2\lambda}\lambda + D_{2s} &\label{eq4}\\
-0 \leq Y \, \perp \, \lambda \geq 0&\label{eqperp}\\
-\end{eqnarray}
-
-
- The time--discretization of the equation~(\ref{eq1}) yields:
-\[x(t_{i+1}) - x(t_{i})=h\theta A_{2x}x(t_{i+1})+h(1-\theta)A_{2x}x(t_{i}) +h\theta
-A_{2zs}Z_{s}(t_{i+1}) +\]
-\[h(1-\theta)A_{2zs}Z_s(t_{i}) +hR\lambda (t_{i+1}) + h\theta 'A_{2s}(t_{i+1}) +
-h(1-\theta ')A_{2s}(t_{i})\]
-We assume $(I-h\theta A_{2x})$ is regular,$W(I-h\theta A_{2x}) = I.$
-\[x(t_{i+1})=Wx_{free}+h\theta WA_{2zs}Z_{s}(t_{i+1})+hWR\lambda (t_{i+1})  (eq5)\]
-With:
-\[x_{free}=(I+h(1-\theta)A_{2x})x(t_{i}) + h(1-\theta )A_{2zs}Zs(t_{i}) + h\theta 'A_{2s}(t_{i+1}) +
-h(1-\theta ')A_{2s}(t_{i})\]
-eq3 discretisation:
-\[0 = B_{2x}x(t_{i+1})+B_{2zs}Z_{s}(t_{i+1}) + B_{2\lambda}\lambda(t_{i+1})+B_{2s}(t_{i+1})\]
-With eq5:
-\[0 = B_{2x}Wx_{free}+B_{2s}(t_{i+1})+(h\theta B_{2x} WA_{2zs}+B_{2zs}) Z_{s}(t_{i+1})+(hB_{2x}WR+B_{2\lambda})\lambda(t_{i+1})\]
-Rename the matrices:
-\[0 = q_{free}+B_{3zs} Z_{s}(t_{i+1})+B_{3\lambda}\lambda(t_{i+1})\]
-
-eq4 discretisation:
-\[Y(t_{i+1})=D_{2x}x(t_{i+1})+D_{2zs}Z_{s}(t_{i+1}) +D_{2\lambda}\lambda(t_{i+1})+D_{2s}(t_{i+1})\]
-With eq5 and rename the matrices:
-\[Y(t_{i+1})=D_{2x}Wx_{free}+ D_{2s}(t_{i+1})+(D_{2zs}+h\theta
-D_{2x}WA_{2zs})Z_{s}(t_{i+1})+(D_{2\lambda} + hD_{2x}WR)\lambda(t_{i+1})\]
-Rename the matrices:
-\[Y(t_{i+1})=p_{free}+D_{3zs}Zs(t_{i+1}) +D_{3\lambda}\lambda (t_{i+1})\]
-
-\paragraph{MLCP}
-description:\\
-
-\[W=\left(\begin{array}{c}W_{1}\\0\end{array}\right)\]
-\[Z=\left(\begin{array}{c}Z_{1}\\Z_{2}\end{array}\right)\]
-\[W=MZ+q\]
-\[0 \leq W_{1} \, \perp \, Z_{1} \geq 0\]
-\paragraph{MLCP instance}
-We identify a MLCP:\\
-\[W_{1} = Y(t_{i+1})\]
-\[Z_{1} = \lambda(t_{i+1})\]
-\[Z_{2} = Z_{s}(t_{i+1})\]
-\[M = \left(\begin{array}{cc}
-  D_{3\lambda}&D_{3zs}\\
-B_{3\lambda}&B_{3zs}
-\end{array}\right)\]
-\[q=\left(\begin{array}{c}
-p_{free}\\
-q_{free}\end{array}\right)\]
-\section{Conclusion}
-This document demonstrates a way to develop an automatic circuit equation formulation. It shows that a Moreau's time
-stepping lead to a MLCP. The following examples describe the method with non smooth circuits.
-
-
 
 
 %%% Local Variables: 
