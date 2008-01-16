@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/>
-  <title>Global architecture</title>
+  <title>Architectural and Detailed Design Document</title>
   <style type="text/css">
 /* <![CDATA[ */ 
 @import "css/readyset.css"; 
@@ -16,14 +16,14 @@
 <body>
 <div class="app">
 <div class="readyset">
-<h1>Global architecture</h1>
+<h1>Architectural Design</h1>
 <div id="releaseinfo">
 <h2>Release Information</h2>
 <table class="axial" border="1" cellpadding="3" cellspacing="2">
   <tbody>
     <tr>
       <th>Project:</th>
-      <td><a href="index.html">ACES</a><br />
+      <td><a href="index.html">NS-ACEF</a><br />
       </td>
     </tr>
     <tr>
@@ -64,7 +64,7 @@
 <!-- /introduction -->
 <div id="usecases">
 <h2>Parser library</h2>
-<p>The parser is an external library. It exports an API used by ACEF.</p>
+<p>The parser is an external library. It exports an API used by NS-ACEF.</p>
 <p>If the input file format change, it will impact only the parser.</p>
 </ul>
 </div>
@@ -76,5 +76,7 @@ It implements two functionalities:
 </ul>
 <h2>SICONOS/NUMERICS</h2>
 Numerics is a library used to solved the MLCP instances.
+<h1>Detailed Design</h1>
+See doxygen documentation of the code.
 </body>
 </html>
