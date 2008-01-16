@@ -15,7 +15,7 @@
 </head>
 
 <body>
-<h1>Automatic Circuit Equation Formulation - Project Overview</h1>
+<h1>Nonsmooth Automatic Circuit Equation Formulation Software NS-ACEF - Project Overview</h1>
 <div class="app">
 <div class="readyset">
 <div id="mission">
@@ -24,35 +24,35 @@
 <h3>What is the purpose and scope of this document ?</h3>
 <p>This document describes the functionalities
 of the software and the major constraints of development and
-exploitation. It plans software developpement.
-It is for users and software framework builders.</p>
+exploitation. It plans the software design and development.
+It concerns users and software framework builders.</p>
 <h3>What is the scope of this project?</h3>
 <p>This project is a part of the following ANR project: </p>
 <ul>
-    <li>Acronym: VAL-AMS</li>
+    <li>Acronym: <a href="http://www-verimag.imag.fr/~tdang/VAL-AMS/" >VAL-AMS</a> High-confidence validation of analog and mixed-signal circuits</li>
     <li>Theme : S&ucirc;ret&eacute; des syst&egrave;mes informatis&eacute;s (Th&egrave;me 2)</li>
   </ul>
 <h3>Goal of the project</h3>
-<p>The goal of the project is to answer to the WP3 work package described in the VAL-AMS
-project:<p>
+<p>The goal of the project is to answer to the work package WP3 described in the <a href="http://www-verimag.imag.fr/~tdang/VAL-AMS/" >VAL-AMS</a>
+documents:<p>
 <ul>
     <li>WP3: Advanced numerical analysis techniques. </li>
     <ol><li>Developing numerical analysis techniques based on the non-smooth approach.</li>
-    <li>Developement of an automatic D.A.E. and L.C.P. formulation tool.</li></ol>
+    <li>Development of an automatic D.A.E. and L.C.P. formulation tool.</li></ol>
   </ul>
 <h3>Project proposal, main software functionalities</h3>
 <p> The first step consists in developing a tool able to get a circuit equation formulation from
-an electrical circuit description. This tool is an Automatique Circuit Equation Formulation software(ACEF).</p>
-<p> Finally, the software must be able to perform the transient analysis.</p>
+an electrical circuit description, that is  a Nonsmooth Automatic Circuit Equation Formulation software (NS-ACEF).</p>
+<p> The second step, the software must be able to perform the transient analysis usins the <a href="http://siconos.gforge.inria.fr"> Siconos </a> platform.</p>
 <h4>Software input</h4>
-The input is an electrical circuit description. SPICE uses a Netlist. A Netlist is a file with an
+The input is an electrical circuit description in the  SPICE format usually called a Netlist. A Netlist is a file with an
 extension <I>.cir</I> contains the circuit description.
-ACEF uses the same Input file format.
+NS-ACEF uses the same Input file format.
 <h4>Software output</h4>
 The software output is the transient analysis and the circuit equations.
-<h4>Relation with siconos</h4>
-<p>ACEF needs SICONOS to solve a Mixte Linear Competentarity Problem (MLCP).</p>
-<center>
+<h4>Relation with <a href="http://siconos.gforge.inria.fr"> Siconos</a></h4>
+<p>NS-ACEF needs SICONOS to time integrate  Complementarity systems (CS) and to solve Complementarity Problems (LCP, MLCP, NCP). The relation with the Siconos Software is sketched in the following figure</p>
+<p></p><center>
 <img src=softOverView.jpg align=top>
 </center>
 
@@ -66,20 +66,20 @@ The software output is the transient analysis and the circuit equations.
     <tr>
       <th>Existing circuit analysis</th>
       <td><a href="MNA.pdf">MNA</a> </td>
-      <td>Presents the Modified Nodal Analysis. MNA is used in SPICE to write circuit equations.</td>
+      <td>Presents the Modified Nodal Analysis (MNA) which is used in SPICE to automatically formulate circuit equations.</td>
     </tr>
     <tr>
       <th>LCP circuit analysis</th>
       <td class="linklist"><a href="ADAPT_MNA.pdf">MNA adaptation</a>
       <a href="ADAP_MNA.html"class="sub"></a>
       </td>
-      <td>Describes how to adapt the MNA for a L.C.P. formulation.</td>
+      <td>Describes how to adapt the MNA for a CS formulation.</td>
     </tr>
     <tr>
       <th>Examples</th>
       <td>
       <a href="DIODEBRIDGE.pdf">Diode bridge </a></td>
-      <td>Applies and valids the previous analysis.</td>
+      <td>Validation the previous analysis.</td>
     </tr>
     
   </tbody>
@@ -90,25 +90,25 @@ The software output is the transient analysis and the circuit equations.
   
  <tbody>
     <tr>
-      <th>Feature</th>
+      <th>Software Requirement Document. </th>
       <td class="linklist"> <a href="feature-set.html">Functionalities</a>
       <a href="features.html" >Feature details</a></td>
-      <td>Project goal</td>
+      <td> Specification and user requirements. List of Software functionalities. It aims to define precisely the software to realize. It
+describes the functionalities and characteristics of the software and the
+constraints of development and exploitation. </td>
     </tr>
     <tr>
-      <th>Specification:</th>
+      <th>Architectural and detailed Design Document:</th>
       <td class="linklist">
       <a href="GlobalArchi.html" >Global architecture</a>
-      <a href="Spec.html" >Specication details</a>
+      <a href="Spec.html" >Details Design and spefication implementation</a>
       </td>
-      <td>It aims to define precisely the software to realize. It
-describes the functionalities and characteristics of the software and the
-constraints of development and exploitation. It defines software global architecture.</td>
+      <td>Definition of the software global architecture. Overview of the detailed implementation</td>
     </tr>
     <tr>
 
     <tr>
-      <th>Tests</th>
+      <th>Quality and Validation Plan</th>
       <td><a href="Tests.html">Tests Plan</a></td>
       <td>Checks that the project is consistent</td>
     </tr>
