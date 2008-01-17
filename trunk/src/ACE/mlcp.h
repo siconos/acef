@@ -89,6 +89,10 @@ private:
   double* mv;
   double* mw;
 
+  Index dim;
+  Index start;
+  Index end;
+
 
 };
 #endif //MLCP_H

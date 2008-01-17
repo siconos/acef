@@ -600,9 +600,9 @@ int mlcp_simplex( double *a, double *b, double *u, double *v, double *w , int *i
 
   /*fill rhs*/
   for (i=0;i<n;i++)
-    rhs[i]=-a[i];
+    rhs[i]=a[i];
   for (i=0;i<m;i++)
-    rhs[n+i]=-b[i];
+    rhs[n+i]=b[i];
   chgrhs ( env,  lp, n+m, ind1toN, rhs);
 
   for (i=0; i<n; i++) objective[i]=0;

@@ -143,7 +143,11 @@ public:
   aceMatrix *mD2l;
   aceMatrix *mD2s;
 
-  
+  aceMatrix *mD2xW;
+  aceMatrix *mB2xW;
+  aceMatrix *mHThetaWA2zs;
+  aceMatrix *mHWR;
+
 
   
   //DISCRETISATION

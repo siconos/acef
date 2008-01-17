@@ -59,7 +59,6 @@ void writeprob(CPXENVptr env, CPXLPptr lp) {
 void lpopt(CPXENVptr env, CPXLPptr lp) {
 	int status;
 	status = CPXlpopt(env, lp);
-	writeprob(env,lp);
 	if (status) {
 		printf ("Failed to optimize LP.\n");
 		throw(1);

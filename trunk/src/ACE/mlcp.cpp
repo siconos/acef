@@ -8,85 +8,94 @@
 
 mlcp::mlcp(unsigned int Dlcp,unsigned int Dlin,int solverType){
 
-   mDlcp = Dlcp;
-   mDlin = Dlin;
-   ACE_CHECK_IERROR(mDlcp+mDlin>0,"mlcp::mlcp dim null");
-   mA=0;
-   mB=0;
-   mC=0;
-   mD=0;
-   ma=0;
-   mb=0;
-   mu=0;
-   mv=0;
-   mw=0;
+  mDlcp = Dlcp;
+  mDlin = Dlin;
+  ACE_CHECK_IERROR(mDlcp+mDlin>0,"mlcp::mlcp dim null");
+  mA=0;
+  mB=0;
+  mC=0;
+  mD=0;
+  ma=0;
+  mb=0;
+  mu=0;
+  mv=0;
+  mw=0;
 
-   mW1=0;
-   mZ1=0;
-   mZ2=0;
-   mQ1=0;
-   mQ2=0;
-   mQ=0;
-   mM11=0;
-   mM12=0;
-   mM21=0;
-   mM22=0;
-   mSolverType=solverType;
-   mTryOnlyGuess = false;
-   mTringGuess = false;
-   mUseGuess = true;
-   if (mSolverType !=ACE_SOLVER_ENUM){
-     mTryOnlyGuess = true;
-     mA=(double *)calloc(mDlin*mDlin,sizeof(double));
-     mC=(double *)calloc(mDlin*mDlcp,sizeof(double));
-     mD=(double *)calloc(mDlcp*mDlin,sizeof(double));
-     mB=(double *)calloc(mDlcp*mDlcp,sizeof(double));
-     ma=(double *)calloc(mDlin,sizeof(double));
-     mb=(double *)calloc(mDlcp,sizeof(double));
-     mu=(double *)calloc(mDlin,sizeof(double));
-     mv=(double *)calloc(mDlcp,sizeof(double));
-     mw=(double *)calloc(mDlcp,sizeof(double));
-   }
+  mW1=0;
+  mZ1=0;
+  mZ2=0;
+  mQ1=0;
+  mQ2=0;
+  mQ=0;
+  mM11=0;
+  mM12=0;
+  mM21=0;
+  mM22=0;
+  mSolverType=solverType;
+  mTryOnlyGuess = false;
+  mTringGuess = false;
+  mUseGuess = true;
+  if (mSolverType !=ACE_SOLVER_ENUM){
+    mTryOnlyGuess = true;
+    mA=(double *)calloc(mDlin*mDlin,sizeof(double));
+    mC=(double *)calloc(mDlin*mDlcp,sizeof(double));
+    mD=(double *)calloc(mDlcp*mDlin,sizeof(double));
+    mB=(double *)calloc(mDlcp*mDlcp,sizeof(double));
+    ma=(double *)calloc(mDlin,sizeof(double));
+    mb=(double *)calloc(mDlcp,sizeof(double));
+    mu=(double *)calloc(mDlin,sizeof(double));
+    mv=(double *)calloc(mDlcp,sizeof(double));
+    mw=(double *)calloc(mDlcp,sizeof(double));
+  }
    
-   mW1Z1=0;
-   mM=0;
-   mCurEnum=8388600;
-   mCmp=0;
-   mMaxEnum = (unsigned long) powl(2,(long)mDlcp);
-   mPourCent=0;
+  mW1Z1=0;
+  mM=0;
+  mCurEnum=8388600;
+  mCmp=0;
+  mMaxEnum = (unsigned long) powl(2,(long)mDlcp);
+  mPourCent=0;
 
-   mM = new aceMatrix(Dlcp+Dlin,Dlcp+Dlin);
-   mTryM = false;
-   mQ= new aceMatrix(Dlcp+Dlin,1);
+  mM = new aceMatrix(Dlcp+Dlin,Dlcp+Dlin);
+  mTryM = false;
+  mQ= new aceMatrix(Dlcp+Dlin,1);
 
-   if (mDlcp){
-     mW1Z1 = (int*)calloc(mDlcp,sizeof(int));
-     //mW1Z1prev = (int*)calloc(mDlcp,sizeof(int));
-     mW1 = new aceMatrix(mDlcp,1);
-     mZ1 = new aceMatrix(mDlcp,1);
-     mQ1=new aceMatrix(mDlcp,1);
-     mM11 = new aceMatrix(mDlcp,mDlcp);
-   }
+  if (mDlcp){
+    mW1Z1 = (int*)calloc(mDlcp,sizeof(int));
+    //mW1Z1prev = (int*)calloc(mDlcp,sizeof(int));
+    mW1 = new aceMatrix(mDlcp,1);
+    mZ1 = new aceMatrix(mDlcp,1);
+    mQ1=new aceMatrix(mDlcp,1);
+    mM11 = new aceMatrix(mDlcp,mDlcp);
+  }
    
-   if (mDlin){
-     mM22 = new aceMatrix(mDlin,mDlin);
-     mZ2 = new aceMatrix(mDlin,1);
-     mQ2 = new aceMatrix(mDlin,1);     
-   }
+  if (mDlin){
+    mM22 = new aceMatrix(mDlin,mDlin);
+    mZ2 = new aceMatrix(mDlin,1);
+    mQ2 = new aceMatrix(mDlin,1);     
+  }
    
-   if (mDlin && mDlcp){
-     mM21 = new aceMatrix(mDlin,mDlcp);
-     mM12 = new aceMatrix(mDlcp,mDlin);
-   }
-   //   mGuess.clear();
-   mGuess.push_back(0);
+  if (mDlin && mDlcp){
+    mM21 = new aceMatrix(mDlin,mDlcp);
+    mM12 = new aceMatrix(mDlcp,mDlin);
+  }
+  //   mGuess.clear();
+  mGuess.push_back(0);
+
+  dim.resize(2);
+  start.resize(4);
+  end.resize(2);
+  dim[0]=mDlin;
+  dim[1]=1;
+  start[0]=mDlcp;
+  start[1]=0;
+  start[2]=0;
+  start[3]=0;
+
+
 }
 void mlcp::addGuess(unsigned long l){
   Itulongs aux = mGuess.begin();
   bool find = false;
-  if (l == 6361085){
-    find =false;
-  }
   while (aux != mGuess.end()){
     unsigned long laux = *aux;
     if (*aux == l){
@@ -131,7 +140,6 @@ bool mlcp::tryGuess(){
   return true;
 }
 void mlcp::initEnum(){
-   mCurEnum=8300000;
 
   mPourCent=0;
   mCmp=0;
@@ -161,8 +169,8 @@ bool mlcp::nextEnum(){
   }
   affectW1Z1(mCurEnum);
   mCurEnum++;
-  if (mCurEnum > 8988600)
-    mCurEnum = 4000000;
+  //  if (mCurEnum > 8988600)
+  //  mCurEnum = 4000000;
   mCmp++;
   
   return true;
@@ -179,6 +187,7 @@ bool mlcp::solveWithPath(){
   mQ2->MatrixToFortran(ma);  
   mQ1->MatrixToFortran(mb);  
   ACE_times[ACE_TIMER_SOLVE_PATH].start();
+  printf("\n\n\n*********************************warnning, signe de mA\n");
   //  res= mlcp_path(&n , &m, mA , mB , mC , mD , ma, mb, mu, mv, mw , 0 , 0 , 0  );
   ACE_times[ACE_TIMER_SOLVE_PATH].stop();
   
@@ -272,7 +281,7 @@ bool mlcp::solveGuessAndIt(){
   }else if(mDlcp==0){//Linear system case
     ACE_MESSAGE("mlcp::solveGuessAndIt : Linear system\n");
     try{
-      (*mQ2)=-1*(*mQ2);
+      //(*mQ2)=-1*(*mQ2);
       //cout <<(*mM22);
       //cout <<(*mQ2);
       mM22->PLUForwardBackwardInPlace(*mQ2);
@@ -295,13 +304,14 @@ bool mlcp::solveGuessAndIt(){
     ACE_times[ACE_TIMER_DIRECT].start();
     mQ->setBlock(0,0,*mQ1);
     mQ->setBlock(mDlcp,0,*mQ2);
-    *mQ=-1*(*mQ);
+    //scal(-1,*mQ,*mQ);
+    //    *mQ=-1*(*mQ);
     ACE_times[ACE_TIMER_LU_DIRECT].start();
     mM->PLUForwardBackwardInPlace(*mQ);
     ACE_times[ACE_TIMER_LU_DIRECT].stop();
     bool check=true;
     for (lin = 0 ; lin <mDlcp; lin++){
-      double aux = mQ->getValue(lin,0);
+      //     double aux = mQ->getValue(lin,0);
       if (mQ->getValue(lin,0) < - ACE_NULL){
 	ACE_MESSAGE("mlcp::solveGuessAndIt not in the cone\n");
 	check=false;
@@ -368,7 +378,7 @@ bool mlcp::solveGuessAndIt(){
       printInPut();
     }
     //
-   *mQ=-1*(*mQ);
+    //*mQ=-1*(*mQ);
    ACE_times[ACE_TIMER_SOLVE_LU].start();
    mM->PLUForwardBackwardInPlace(*mQ);
    ACE_times[ACE_TIMER_SOLVE_LU].stop();
@@ -418,18 +428,19 @@ void   mlcp::fillSolution(){
   int lin;
   for (lin=0;lin<mDlcp;lin++){
     if (mW1Z1[lin]==0){
-      double aux =mQ->getValue(lin,0);
+      //double aux =mQ->getValue(lin,0);
       mW1->setValue(lin,0,0);
-      mZ1->setValue(lin,0,aux);
+      mZ1->setValue(lin,0,mQ->getValue(lin,0));
     }else{
-      double aux =mQ->getValue(lin,0);
+      //double aux =mQ->getValue(lin,0);
       mZ1->setValue(lin,0,0);
-      mW1->setValue(lin,0,aux);
-    }
-    
+      mW1->setValue(lin,0,mQ->getValue(lin,0));
+    }    
   }
-  for (lin=0;lin<mDlin;lin++)
-    mZ2->setValue(lin,0,mQ->getValue(mDlcp+lin,0));
+
+  setBlock(mQ,mZ2,dim,start);
+  //  for (lin=0;lin<mDlin;lin++)
+  // mZ2->setValue(lin,0,mQ->getValue(mDlcp+lin,0));
   if((ACE_MUET_LEVEL != ACE_MUET )&& !mTringGuess)
     printOutPut();
  }

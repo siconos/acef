@@ -306,6 +306,7 @@ void algo::preparStep(){
   int i;
   ACE_DOUBLE time = sls.mStepCmp*sls.mH;
   computeSourcesValues(time);
+
   n = mVsrcs.size();
   for(i=0;i<n;i++)
     mVsrcs[i]->stampTimer();
@@ -318,7 +319,7 @@ void algo::preparStep(){
 void algo::simulate(){
   sls.initSimu();
   mSimuStream = new ofstream(mSimuFile);
-
+  ACE_times[ACE_TIMER_SIMULATION].start();
   preparStep();
   while(sls.step()){
     if (ACE_MUET_LEVEL != ACE_MUET)
@@ -326,6 +327,7 @@ void algo::simulate(){
     sls.printStep(*mSimuStream);
     preparStep();
   }
+  ACE_times[ACE_TIMER_SIMULATION].stop();
   sls.stopSimu();
   mSimuStream->close();
   delete mSimuStream;

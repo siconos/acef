@@ -87,6 +87,12 @@ linearSystem::linearSystem(){
   mLogFrequency=0;
   mLogPrint=0;
   mPourMille=0;
+
+  //
+  mD2xW=0;
+  mB2xW=0;
+  mHThetaWA2zs=0;
+  mHWR=0;
 }
 ////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -124,6 +130,15 @@ void linearSystem::allocMemory(){
   allocB1Matrix();
   allocC1Matrix();
   allocD1Matrix();
+  if (mDimLambda && mDimx){
+    mD2xW=new aceMatrix(mDimLambda,mDimx);
+    mHWR=new aceMatrix(mDimx,mDimLambda);
+  }
+  if (mNbNonDynEquations && mDimx)
+    mB2xW=new aceMatrix(mNbNonDynEquations,mDimx);
+  if (mDimx)
+    mHThetaWA2zs=new aceMatrix(mDimx,mDimzs-1);
+
   
 }
 //x'=A1x*x + A1zs*Zs + A1zns*Zns + A1s
@@ -368,6 +383,15 @@ linearSystem::~linearSystem(){
   freeC1Matrix();
   freeD1Matrix();
   freeDiscretisation();
+  if (mD2xW)
+    delete mD2xW;
+  if (mB2xW)
+    delete mB2xW;
+  if (mHThetaWA2zs)
+    delete mHThetaWA2zs;
+  if (mHWR)
+    delete mHWR;
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -462,36 +486,67 @@ void linearSystem::initSimu(){
       std::cout << "Exception caught." << endl;
       ACE_INTERNAL_ERROR("linearSystem::initSimu");
     }
+  *mD2xW=prod(*mD2x,*mW);
+  *mB2xW=prod(*mB2x,*mW);
+  *mHThetaWA2zs=mH*mTheta*prod(*mW,*mA2zs);
+  *mHWR=mH*prod(*mW,*mR);
+
   mMLCP->initSolver();
 
   
 }
 void linearSystem::preparStep(){
-  
   ExtractAndCompute2Sources();
   if (mDimx && mDimLambda){//both
-    (*mxfree) = (*mxti) + mH*((1-mTheta)*prod(*mA2x,*mxti)+(1-mTheta)*prod(*mA2zs,*mzsti)+mThetap*(*mA2s)+(1-mThetap)*(*mA2sti));
-    (*mPfree) = prod(*mD2x,prod(*mW,*mxfree)) + (*mD2s);
-    (*mQfree) = prod(*mB2x,prod(*mW,*mxfree)) + (*mB2s);
+    //(*mxfree) = (*mxti) + mH*((1-mTheta)*(prod(*mA2x,*mxti)+prod(*mA2zs,*mzsti) + (*mA2sti))+mThetap*(*mA2s));
+    //mxfree->display();
+    prod(*mA2zs,*mzsti,*mxfree);
+    prod(*mA2x,*mxti,*mxfree,false);
+    *mxfree+=*mA2sti;
+    scal((1-mTheta),*mxfree,*mxfree);
+    *mxfree+=mThetap*(*mA2s);
+    scal(mH,*mxfree,*mxfree);
+    *mxfree+=*mxti;
+    //mxfree->display();
+
+
+    
+    //(*mPfree) = prod(*mD2xW,*mxfree) + (*mD2s);
+    prod(*mD2xW,*mxfree,*mPfree);
+    *mPfree+=*mD2s;
+    
+    //(*mQfree) = prod(*mB2xW,*mxfree) + (*mB2s);
+    prod(*mB2xW,*mxfree,*mQfree);
+    *mQfree+=*mB2s;
+
+
+
+    
   } else if(mDimx){//only x
     (*mxfree) = (*mxti) + mH*(1-mTheta)*prod(*mA2x,*mxti)+mH*(1-mTheta)*prod(*mA2zs,*mzsti)+mH*(*mA2s);
-    (*mQfree) = prod(*mB2x,prod(*mW,*mxfree)) + (*mB2s);
+    (*mQfree) = prod(*mB2xW,*mxfree) + (*mB2s);
   }else if (mDimLambda){//only lambda
     (*mPfree) = (*mD2s);
     (*mQfree) = (*mB2s);
   }else{
     (*mQfree) = (*mB2s);
   }
-  *(mMLCP->mQ1)= *mPfree;
-  
-  *(mMLCP->mQ2)= *mQfree;
+  scal(-1,*mPfree,*(mMLCP->mQ1));
+  //  *(mMLCP->mQ1)= *mPfree;  
+  //*(mMLCP->mQ2)= *mQfree;
+  scal(-1,*mQfree,*(mMLCP->mQ2));
 }
 void linearSystem::computeZnstiFromX_Zs(){
   if (mDimLambda==0)
     return;
-  if (mDimx)
-    (*mznsti)=prod(*mC1x,*mxti)+prod(*mC1zs,*mzsti)+prod(*mC1l,*(mMLCP->mZ1))+(*mC1s);
-  else
+  if (mDimx){
+    //(*mznsti)=prod(*mC1x,*mxti)+prod(*mC1zs,*mzsti)+prod(*mC1l,*(mMLCP->mZ1))+(*mC1s);
+    prod(*mC1l,*(mMLCP->mZ1),*mznsti);
+    prod(*mC1zs,*mzsti,*mznsti,false);
+    prod(*mC1x,*mxti,*mznsti,false);
+    *mznsti+=*mC1s;
+    
+  }  else
     (*mznsti)=prod(*mC1zs,*mzsti)+prod(*mC1l,*(mMLCP->mZ1))+(*mC1s);
 }
 bool linearSystem::step(){
@@ -509,14 +564,17 @@ bool linearSystem::step(){
   ACE_times[ACE_TIMER_COMPUTE_VAR].start();
   if (res){
     *mzsti=*(mMLCP->mZ2);
-    if (mDimx)
-      *mxti=prod(*mW,*mxfree)+(mH*mTheta)*prod(*mW,prod(*mA2zs,*mzsti))+mH*prod(*mW,prod(*mR,*(mMLCP->mZ1)));
+    if (mDimx){
+      //*mxti=prod(*mW,*mxfree)+prod(*mHThetaWA2zs,*mzsti)+prod(*mHWR,*(mMLCP->mZ1));
+      prod(*mHWR,*(mMLCP->mZ1),*mxti);
+      prod(*mHThetaWA2zs,*mzsti,*mxti,false);
+      prod(*mW,*mxfree,*mxti,false);
+    }
     computeZnstiFromX_Zs();
   }
   ACE_times[ACE_TIMER_COMPUTE_VAR].stop();
   ACE_times[ACE_TIMER_LS_STEP].stop();
   return res;
-
 }
 void linearSystem::stopSimu(){
   mMLCP->printGuess();
@@ -853,9 +911,18 @@ void linearSystem::ExtractAndCompute2Sources(){
     *mA2sti=*mA2s;
   extractSources();
   if (mDimx && mDimLambda){
-    (*mA2s)=(*mA1s)+prod(*mA1zns,*mC1s);
-    (*mB2s)=(*mB1s)+prod(*mB1zns,*mC1s);
-    (*mD2s)=(*mD1s)+prod(*mD1zns,*mC1s);
+    //(*mA2s)=(*mA1s)+prod(*mA1zns,*mC1s);
+    (*mA2s)+=prod(*mA1zns,*mC1s);
+    //prod(*mA1zns,*mC1s,*mA2s);
+    //(*mA2s)+=(*mA1s);
+    
+    (*mB2s)+=prod(*mB1zns,*mC1s);
+    //prod(*mB1zns,*mC1s,*mB2s);
+    //(*mB2s)+=(*mB1s);
+
+    (*mD2s)+=prod(*mD1zns,*mC1s);
+    //prod(*mD1zns,*mC1s,*mD2s);
+    //(*mD2s)+=(*mD1s);
   }else if (mDimx){
     (*mA2s)=(*mA1s);
     (*mB2s)=(*mB1s);    
