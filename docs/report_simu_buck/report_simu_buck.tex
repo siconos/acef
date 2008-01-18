@@ -825,35 +825,37 @@ Zoom on the start-up of the inverter chain}
 
 \clearpage
 
-
 \chapter{Conclusion}
-A full buck converter supplying both a constant load and a small switching circuit was simulated using
-three different classes of algorithms.
+A full buck converter supplying both a constant load and a small switching circuit was simulated
+using three different classes of algorithms :
 
-
-
-
-The PLECS approach enables to simulate a low number of switches in an acceptable time provided that events
-are not too frequent. When fast clocked circuitry is added, the simulation time rises high, and it probably happens also
+\begin{description}
+\item[The SPICE approach] may lead to failures if the models are very non-linear like diodes or the variable
+capacitances in the MOS level~1 model. Some simulators converge only if the circuit is regularized by
+adding smoothing elements like capacitors. When convergence was reached, CPU time was at least 3~times
+larger than SICONOS on small circuits. On a larger circuit with tens of nodes, SPICE results are better than
+the current SICONOS version, this probably comes mainly from the use of sparse matrices.
+\item[The PLECS approach] enables to simulate a low number of switches in an acceptable time provided that events
+are not too frequent. When fast clocked circuitry is added, CPU time rises high, and it probably happens also
 when the number of switches is increased.\footnote{The evaluation version is limited to 6 switches.}
+Moreover, the models of active devices like MOS transistors are ideal thus forbidding to analyze
+some effects.
+\item[The SICONOS approach] allows to perform simulations in reasonable time, and thus to do quickly parametric studies
+while keeping the modelling of the main characteristics of components. Furthermore, the implementation of the platform
+is far from being optimized. Future major enhancements like sparse matrix techniques or non-linear LCP solvers will very
+likely reduce the CPU time without impairing accuracy.
+\end{description}
 
-
-The SICONOS approach allows to perform simulations in reasonable time, and thus to do quickly parametric studies
-while keeping the modeling of the main characteristics of components. Furthermore, the algorithms currently implemented
-in the platform are initial versions. Future major enhancements will very likely improve the speed without 
-impairing accuracy.
-\\
 The CPU time and convergence results are summarized hereafter :
-\newpage
 
 \begin{tabular}{|p{3cm}|p{3cm}|p{3cm}|p{3cm}|}
 \hline
  & \textbf{SPICE (ELDO)} & \textbf{PLECS} & \textbf{SICONOS} \\
 \hline
-Buck converter &  s  & 135 s to 410 s & 52 s \\
+Buck converter & 363 s  & 135 s to 410 s & 52 s \\
 load : resistor & {\small precise } & {\small very approximate } & {\small slightly approximate }\\
 \hline
-Buck converter &  & 4 hours 8 min & 110 s \\
+Buck converter & 439 s & 4 hours 8 min & 110 s \\
 load : resistor \& inverters & {\small precise }  & {\small very approximate } & {\small slightly approximate }\\
 \hline
 \end{tabular}
