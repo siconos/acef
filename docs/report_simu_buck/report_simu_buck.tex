@@ -93,7 +93,8 @@ This study was focused on the simulation of a buck converter with synchronous re
 by pulse-width modulation, loaded by a resistance or an inverter chain.
 Even if this test case is a simple implementation of such converters, it involves their main functions and
 it is expected that the absolute and comparative results are meaningful enough.
-
+\\
+\\
 5 simulating softwares were used :
 \begin{description}
 \item[SICONOS :] the platform developed at INRIA Rh\^one-Alpes dealing with non-smooth dynamical systems
@@ -327,7 +328,9 @@ The overall result is shown on the figure \ref{fig-buck-resistor-simu-sico-0p2ms
 More details of the start-up phase are shown on the figure \ref{fig-buck-resistor-simu-sico-0p01ms-0p05ns}.
 
 The conduction times of the transistors and the NMOS intrinsic diode are visible.
-The CPU time required to achieve the simulation is 52~seconds on a Pentium~4 processor clocked at 3~GHz.
+\\
+\\
+\textbf{The CPU time required to achieve the simulation is 52~seconds on a Pentium~4 processor clocked at 3~GHz.}
 
 \begin{figure}[hbtp]
 \begin{center}
@@ -420,7 +423,7 @@ involves operations other than Newton-Raphson algorithm.
 coefficient $N~=~1$.
 \item The comparator is modelled as a non linear voltage controlled voltage source defined as $V_{out}~=~1.5~\cdot~(tanh(10~\cdot~V_{in}) + 1)$.
 Thus the 3~segment characteristic used as the non smooth model is regularized to help convergence of SPICE
-(see a comparison of the PWL comparator as used in SICONOS simulations with the SPICE one on figure \ref{fig-comparator-models}).
+(see a comparison of the PWL comparator as used in SICONOS simulations with the SPICE one in figure \ref{fig-comparator-models}).
 \end{itemize}
 
 \begin{figure}[hbtp]
@@ -431,7 +434,7 @@ Thus the 3~segment characteristic used as the non smooth model is regularized to
 \label{fig-comparator-models}
 \end{figure}
 
-The power supply $V_I$ is raised from 0 in $50~ns$ at the beginning to help the convergence. \footnote{This is
+The power supply $V_I$ is raised from 0 in $50~ns$ at the beginning to help the convergence.\footnote{This is
 not required with the SICONOS algorithms that find a consistent initial solution from scratch.}
 The SPICE tolerance values used are $1~nA$ for currents, $1~\mu V$ for voltages and $0.00075$ for relative differences.
 The maximum number of Newton-Raphson iterations is set to 100 (the default values are 10 for NGSPICE, 20 for SMASH and
@@ -589,9 +592,10 @@ are supposed to be controlled by a boolean signal forcing a conducting or blocki
 The power NMOS and PMOS are controlled by opposite signals issued from the feedback loop, thus there is no
 flyback conduction by the NMOS intrinsic diode (see description of the PLECS circuit and the Simulink model in appendix
 \ref{modele-PLECS-buckresistor}).
-
-The CPU time required to achieve the simulation of $200~\mu s$ ranges between $135~s$ and $410~s$ on a 
-Pentium~4 clocked at 3~GHz, depending on the values of the resistors, capacitors and inductor. This should be compared
+\\
+\\
+\textbf{The CPU time required to achieve the simulation of $200~\mu s$ ranges between $135~s$ and $410~s$ on a 
+Pentium~4 clocked at 3~GHz, depending on the values of the resistors, capacitors and inductor.} This should be compared
 to the $52~s$ of the SICONOS simulation, \textbf{obtained independently from these components values}. This demonstrates
 the robustness and efficiency of the time-stepping scheme and the one step solving algorithms of SICONOS. Moreover, the
 short time step (50~ps) used in SICONOS simulations was required to catch some conduction periods of the NMOS intrinsic
@@ -683,9 +687,12 @@ To emulate a large current drawn from the output of the converter, the 2 inverte
 is supposed to be~8000~times large, i.e~8000~chains switching simultaneously as a synchronous
 logic circuit. The transconductance and capacitance are therefore multiplied by~8000. The
 switching frequency of the chain input is~$200~MHz$.
-The CPU time required to achieve the simulation of~$200~\mu s$ with a~50~ps time step
-is 110~seconds on a Pentium~4 clocked at 3~GHz.
-Results are displayed on figures \ref{fig-buck-inverter-simu-sico-0p2ms-0p05ns} and 
+\\
+\\
+\textbf{The CPU time required to achieve the simulation of~$200~\mu s$ with a~50~ps time step
+is 110~seconds on a Pentium~4 clocked at 3~GHz.}
+\\
+Results are displayed in figures \ref{fig-buck-inverter-simu-sico-0p2ms-0p05ns} and 
 \ref{fig-buck-inverter-simu-sico-zoom1}. Figure \ref{fig-buck-inverter-simu-sico-zoom1}
 shows the start-up of the inverters switching.
 \\
@@ -708,18 +715,20 @@ Zoom on the start-up of the inverter chain}
 \label{fig-buck-inverter-simu-sico-zoom1}
 \end{figure}
 
-A 50 inverters long chain was also simulated with transconductance and capacitance multiplied by~320.
+\clearpage
 
-The CPU time required to achieve the simulation of~$200~\mu s$ with a~50~ps time step
-is~2~hours~31~minutes on a Pentium~4 clocked at 3~GHz. The large increase in CPU time is due to
+A 50 inverters long chain was also simulated with transconductance and capacitance multiplied by~320.
+\\
+\textbf{The CPU time required to achieve the simulation of~$200~\mu s$ with a~50~ps time step
+is~2~hours~31~minutes on a Pentium~4 clocked at 3~GHz.}
+\\
+The large increase in CPU time is due to
 the lack of sparse matrix techniques in the current implementation of SICONOS. Sparse matrices
-are widely used in SPICE simulators since electronics circuits yield frequently sparsity
+are widely used in SPICE simulators since electronic circuits yield frequently sparsity
 factors (i.e~ratio of zero terms) of~0.9. For instance, at least 92~\% of the jacobian matrix terms
 are zero in the considered circuit of a buck converter with 50~inverters. The LCP~matrix used in
 SICONOS simulation is also sparse by 92~\%. Obviously, using sparse matrices will greatly reduce
 the SICONOS CPU time since many matrix-vector products are computed.
-
-\clearpage
 
 Figure \ref{fig-buck-50inverter-simu-sico-compdelays} shows a detail of this simulation : it compares
 the switching instants of the chain output $2~\mu s$ after the clock starts and $16~\mu s$ later. $2~\mu s$ after
@@ -741,50 +750,15 @@ Chain delay variation linked to the converter output voltage}
 
 \clearpage
 
-\section{Simulation with PLECS}
-Only 2 inverters could be used due to limitations of the evaluation version.
-The inverter MOS transistors are ideal switches with a $R_{ON}$ value of~$0.54~\Omega$ to match
-approximately the transconductance of the~8000~parallel MOS modelled in SICONOS. The load capacitor
-is set to~$8000~\times~20~fF~=~0.16~nF$ (see description of the PLECS circuit and the Simulink model in appendix
-\ref{modele-PLECS-buckinverters}).
-
-The CPU time required to achieve the simulation of~$200~\mu s$ is~$4~hours~8~min$ on a Pentium~4 clocked at 3~GHz,
-i.e~135~times the SICONOS simulation time with moreover the aforementioned limitation in precision. For instance,
-the ideal representation of the MOS transistors forbid to analyze voltage-depending delays in CMOS inverters, an
-effect that was correctly shown with SICONOS simulation (see \ref{section-simu-siconos-buckinv}).
-
-Results are displayed on figures \ref{fig-buck-inverter-simu-plecs-std0p2ms} and 
-\ref{fig-buck-inverter-simu-plecs-stdzoom}.
-
-\begin{figure}[hbtp]
-\begin{center}
-\includegraphics[scale=0.8,angle=270]{simu_plecs_buckinverters_std0p2ms.eps}
-\end{center}
-\caption[PLECS results, buck \protect\& load resistor \protect\& inverters (first~$200~\mu s$)]
-{PLECS simulation results, buck converter supplying a load resistor and an inverter chain (first~$200~\mu s$)}
-\label{fig-buck-inverter-simu-plecs-std0p2ms}
-\end{figure}
-
-\begin{figure}[hbtp]
-\begin{center}
-\includegraphics[scale=0.8,angle=270]{simu_plecs_buckinverters_stdzoom.eps}
-\end{center}
-\caption[PLECS results, buck \protect\& load resistor \protect\& inverters (zoom)]
-{PLECS simulation results, buck converter supplying a load resistor and an inverter chain\protect\newline
-Zoom on the start-up of the inverter chain}
-\label{fig-buck-inverter-simu-plecs-stdzoom}
-\end{figure}
-
-\clearpage
-
 \section{Simulation with SPICE (ELDO)}
 The circuit was simulated with ELDO, the only available SPICE simulator that converges with
 the buck netlist instantiating as power MOS a classical (level 3) MOS model without requiring to add
 parasitic capacitances. Simulations were done with a~50~ps~time step and no~LTE estimation.
 \\
-The simulation of the buck with a 2 inverters chain takes 439~s on a Pentium~4 clocked at 3~GHz.
 \\
-The simulation of the buck with a 50 inverters chain takes 25~minutes on a Pentium~4 clocked at 3~GHz.
+\textbf{The simulation of the buck with a 2 inverters chain takes 439~s on a Pentium~4 clocked at 3~GHz.}
+\\
+\textbf{The simulation of the buck with a 50 inverters chain takes 25~minutes on a Pentium~4 clocked at 3~GHz.}
 \\
 With 2 inverters only, SICONOS runs 4~times faster whereas with~50~inverters, ELDO runs 6~times faster.
 These are initial results since :
@@ -795,12 +769,12 @@ will benefit from the use of sparse matrix techniques.
 non-linear component by set-valued or piecewise linear functions yielding an LCP. It is possible to mix such
 models with classical smooth models like SPICE ones, resulting in a NLCP. The detailed analysis of an
 inverter chain is better handled if MOS transistors are modelled with classical smooth functions because
-a precise piecewise linear model yield a too large LCP. Best results could be reached by mixing smooth
+a precise piecewise linear model yields a too large LCP. Best results could be reached by mixing smooth
 and non-smooth models. This is possible since both formulations are based on differential equations
 and thanks to NLCP solvers.
 \end{itemize}
 
-Results are displayed on figures \ref{fig-buck-inverter-simu-ELDO-0p2ms-0p05ns} and
+Results are displayed in figures \ref{fig-buck-inverter-simu-ELDO-0p2ms-0p05ns} and
 \ref{fig-buck-inverter-simu-ELDO-zoom1}. Figure \ref{fig-buck-inverter-simu-ELDO-zoom1}
 shows the start-up of the inverters switching.
 \\
@@ -825,11 +799,50 @@ Zoom on the start-up of the inverter chain}
 
 \clearpage
 
+\section{Simulation with PLECS}
+Only 2 inverters could be used due to limitations of the evaluation version.
+The inverter MOS transistors are ideal switches with a $R_{ON}$ value of~$0.54~\Omega$ to match
+approximately the transconductance of the~8000~parallel MOS modelled in SICONOS. The load capacitor
+is set to~$8000~\times~20~fF~=~0.16~nF$ (see description of the PLECS circuit and the Simulink model in appendix
+\ref{modele-PLECS-buckinverters}).
+\\
+\\
+\textbf{The CPU time required to achieve the simulation of~$200~\mu s$ is~$4~hours~8~min$ on a Pentium~4 clocked at 3~GHz},
+i.e~135~times the SICONOS simulation time with moreover the aforementioned limitation in precision. For instance,
+the ideal representation of the MOS transistors forbid to analyze voltage-depending delays in CMOS inverters, an
+effect that was correctly shown with SICONOS simulation (see \ref{section-simu-siconos-buckinv}).
+
+Results are displayed in figures \ref{fig-buck-inverter-simu-plecs-std0p2ms} and 
+\ref{fig-buck-inverter-simu-plecs-stdzoom}.
+
+\begin{figure}[hbtp]
+\begin{center}
+\includegraphics[scale=0.8,angle=270]{simu_plecs_buckinverters_std0p2ms.eps}
+\end{center}
+\caption[PLECS results, buck \protect\& load resistor \protect\& inverters (first~$200~\mu s$)]
+{PLECS simulation results, buck converter supplying a load resistor and an inverter chain (first~$200~\mu s$)}
+\label{fig-buck-inverter-simu-plecs-std0p2ms}
+\end{figure}
+
+\begin{figure}[hbtp]
+\begin{center}
+\includegraphics[scale=0.8,angle=270]{simu_plecs_buckinverters_stdzoom.eps}
+\end{center}
+\caption[PLECS results, buck \protect\& load resistor \protect\& inverters (zoom)]
+{PLECS simulation results, buck converter supplying a load resistor and an inverter chain\protect\newline
+Zoom on the start-up of the inverter chain}
+\label{fig-buck-inverter-simu-plecs-stdzoom}
+\end{figure}
+
 \chapter{Conclusion}
 A full buck converter supplying both a constant load and a small switching circuit was simulated
 using three different classes of algorithms :
 
 \begin{description}
+\item[The SICONOS approach] allows to perform simulations in reasonable time, and thus to do quickly parametric studies
+while keeping the modelling of the main characteristics of components. Furthermore, the implementation of the platform
+is far from being optimized. Future major enhancements like sparse matrix techniques or Non-Linear Complementarity Problem
+solvers will very likely reduce the CPU time without impairing accuracy.
 \item[The SPICE approach] may lead to failures if the models are very non-linear like diodes or the variable
 capacitances in the MOS level~1 model. Some simulators converge only if the circuit is regularized by
 adding smoothing elements like capacitors. When convergence was reached, CPU time was at least 3~times
@@ -840,23 +853,21 @@ are not too frequent. When fast clocked circuitry is added, CPU time rises high,
 when the number of switches is increased.\footnote{The evaluation version is limited to 6 switches.}
 Moreover, the models of active devices like MOS transistors are ideal thus forbidding to analyze
 some effects.
-\item[The SICONOS approach] allows to perform simulations in reasonable time, and thus to do quickly parametric studies
-while keeping the modelling of the main characteristics of components. Furthermore, the implementation of the platform
-is far from being optimized. Future major enhancements like sparse matrix techniques or non-linear LCP solvers will very
-likely reduce the CPU time without impairing accuracy.
 \end{description}
 
+\newpage
 The CPU time and convergence results are summarized hereafter :
-
+\\
+\\
 \begin{tabular}{|p{3cm}|p{3cm}|p{3cm}|p{3cm}|}
 \hline
- & \textbf{SPICE (ELDO)} & \textbf{PLECS} & \textbf{SICONOS} \\
+ & \textbf{SICONOS} & \textbf{SPICE (ELDO)} & \textbf{PLECS} \\
 \hline
-Buck converter & 363 s  & 135 s to 410 s & 52 s \\
-load : resistor & {\small precise } & {\small very approximate } & {\small slightly approximate }\\
+Buck converter & 52 s & 363 s  & 135 s to 410 s \\
+load : resistor & {\small slightly approximate } & {\small precise } & {\small very approximate } \\
 \hline
-Buck converter & 439 s & 4 hours 8 min & 110 s \\
-load : resistor \& inverters & {\small precise }  & {\small very approximate } & {\small slightly approximate }\\
+Buck converter & 110 s & 439 s & 4 hours 8 min \\
+load : resistor \& inverters  & {\small slightly approximate } & {\small precise }  & {\small very approximate }\\
 \hline
 \end{tabular}
 \newline
