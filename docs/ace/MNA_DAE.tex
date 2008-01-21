@@ -214,10 +214,10 @@ The MLCP is a mixture between an LCP and a system of linear equations. The forme
 Equivalently, the MLCS can be defined by 
 
 \begin{definition}\index{Complementarity system ! mixed linear} \index{MLCS}
-  Given the matrices  ${A} \in \RR^{n \times n}$, ${B} \in \RR^{m \times m}$, ${C} \in \RR^{n \times m}$, ${D} \in \RR^{m \times n}$, and the vectors  $ {a} \in \RR^n, {b} \in \RR^m$, the MLCP denoted by $\mathrm{MLCP}(A,B,C,D,a,b)$ consists in finding two vectors $ {u} \in \RR^n$ and  $ {v} \in \RR^m$ such that
+  Given the matrices  ${A} \in \RR^{n \times n}$, ${B} \in \RR^{m \times m}$, ${C} \in \RR^{n \times m}$, ${D} \in \RR^{m \times n}$, and the vectors  $ {a} \in \RR^n, {b} \in \RR^m$, the MLCS denoted by $\mathrm{MLCS}(A,B,C,D,a,b)$ consists in finding two vectors $ {u} \in \RR^n$ and  $ {v} \in \RR^m$ such that
 \begin{equation}\label{eq:mlcp1} 
   \begin{cases}
-   x' = A x + C v + a =0 \\  \\
+   x' = A x + C v + a  \\  \\
    {0} \le {v} \perp     Dx +B v +b   \ge {0}
   \end{cases}.
 \end{equation}
