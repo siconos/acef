@@ -1,9 +1,9 @@
 %!PS-Adobe-2.0 EPSF-2.0
-%%Title: MNA.fig
+%%Title: /scratch/gforge/noselecs/docs/ace/MNA.fig
 %%Creator: fig2dev Version 3.2 Patchlevel 4
-%%CreationDate: Fri Dec 14 08:31:34 2007
+%%CreationDate: Mon Jan 21 15:20:30 2008
 %%For: bonnefon@duparc (Olivier Bonnefon)
-%%BoundingBox: 0 0 502 234
+%%BoundingBox: 0 0 502 227
 %%Magnification: 1.0000
 %%EndComments
 /$F2psDict 200 dict def
@@ -45,7 +45,7 @@ $F2psDict /mtrx matrix put
 
 end
 save
-newpath 0 234 moveto 0 0 lineto 502 0 lineto 502 234 lineto closepath clip newpath
+newpath 0 227 moveto 0 0 lineto 502 0 lineto 502 227 lineto closepath clip newpath
 -79.4 369.7 translate
 1 -1 scale
 
@@ -254,48 +254,6 @@ n 7050 2700 m 7050 2699 l 7050 2695 l 7051 2685 l 7052 2668 l 7053 2645 l
  8247 2746 l 8248 2726 l 8249 2712 l 8250 2704 l 8250 2701 l
 
  8250 2700 l gs col0 s gr 
-/Times-Roman ff 180.00 scf sf
-4050 2700 m
-gs 1 -1 sc (R2) col0 sh gr
-/Times-Roman ff 180.00 scf sf
-9375 4350 m
-gs 1 -1 sc (R5) col0 sh gr
-/Times-Roman ff 180.00 scf sf
-7500 3225 m
-gs 1 -1 sc (L4) col0 sh gr
-/Times-Roman ff 180.00 scf sf
-6525 4200 m
-gs 1 -1 sc (C3) col0 sh gr
-/Times-Roman ff 180.00 scf sf
-1950 3375 m
-gs 1 -1 sc (I1) col0 sh gr
-/Times-Roman ff 180.00 scf sf
-1575 2475 m
-gs 1 -1 sc (V1) col0 sh gr
-/Times-Roman ff 180.00 scf sf
-5925 2475 m
-gs 1 -1 sc (V2) col0 sh gr
-/Times-Roman ff 180.00 scf sf
-9375 2400 m
-gs 1 -1 sc (V3) col0 sh gr
-/Times-Roman ff 180.00 scf sf
-5100 4125 m
-gs 1 -1 sc (U3) col0 sh gr
-/Times-Roman ff 180.00 scf sf
-8775 4275 m
-gs 1 -1 sc (U5) col0 sh gr
-/Times-Roman ff 180.00 scf sf
-2250 4275 m
-gs 1 -1 sc (U1\(t\)) col0 sh gr
-/Times-Roman ff 180.00 scf sf
-6225 3300 m
-gs 1 -1 sc (I3) col0 sh gr
-/Times-Roman ff 180.00 scf sf
-6750 2850 m
-gs 1 -1 sc (I4) col0 sh gr
-/Times-Roman ff 180.00 scf sf
-9225 3375 m
-gs 1 -1 sc (I5) col0 sh gr
 % here ends figure;
 $F2psEnd
 rs

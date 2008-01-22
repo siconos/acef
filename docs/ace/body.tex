@@ -1,7 +1,5 @@
 
 \newpage
-\tableofcontents
-\newpage
 \section*{TO DO LIST}
 \begin{enumerate}
 \item Comparison with other old results on the diode bridge and the buck converter to validate the approach. Otherwise, we suppress the part time's stepping scheme ?
@@ -29,10 +27,66 @@
 \item[--] $N_{I}$ : Number of unknowns.
 \item[--] $N_{E}$ : Number of equations.
 \item[--] $I_{j}$ : Current in the branch number j.
-\item[--] $V_{i}$ : Voltage on node number i. 
+\item[--] $V_{i}$ : Voltage on node number i.
 \end{itemize}
 \include{MNA_SECTION}
 \include{MNA_DAE}
+\section{Validation by time simulation}
+
+\subsection{Sketch of  the Moreau time's stepping}
+\begin{eqnarray}
+R=A_{1ns}C_{1\lambda}\label{eq1}\\
+x'=A_{2x}x +A_{2zs}Z_{s} +R \lambda +A_{2s}&\label{eq2}\\
+0=B_{2x}x+B_{2zs}Z_{s} + B_{2\lambda}\lambda + B_{2s}&\label{eq3}\\
+Y=D_{2x}x+D_{2zs}Z_{s}+D_{2\lambda}\lambda + D_{2s} &\label{eq4}\\
+0 \leq Y \, \perp \, \lambda \geq 0&\label{eqperp}\\
+\end{eqnarray}
+
+
+ The time--discretization of the equation~(\ref{eq1}) yields:
+\[x(t_{i+1}) - x(t_{i})=h\theta A_{2x}x(t_{i+1})+h(1-\theta)A_{2x}x(t_{i}) +h\theta
+A_{2zs}Z_{s}(t_{i+1}) +\]
+\[h(1-\theta)A_{2zs}Z_s(t_{i}) +hR\lambda (t_{i+1}) + h\theta 'A_{2s}(t_{i+1}) +
+h(1-\theta ')A_{2s}(t_{i})\]
+We assume $(I-h\theta A_{2x})$ is regular,$W(I-h\theta A_{2x}) = I.$
+\[x(t_{i+1})=Wx_{free}+h\theta WA_{2zs}Z_{s}(t_{i+1})+hWR\lambda (t_{i+1})  (eq5)\]
+With:
+\[x_{free}=(I+h(1-\theta)A_{2x})x(t_{i}) + h(1-\theta )A_{2zs}Zs(t_{i}) + h\theta 'A_{2s}(t_{i+1}) +
+h(1-\theta ')A_{2s}(t_{i})\]
+eq3 discretisation:
+\[0 = B_{2x}x(t_{i+1})+B_{2zs}Z_{s}(t_{i+1}) + B_{2\lambda}\lambda(t_{i+1})+B_{2s}(t_{i+1})\]
+With eq5:
+\[0 = B_{2x}Wx_{free}+B_{2s}(t_{i+1})+(h\theta B_{2x} WA_{2zs}+B_{2zs}) Z_{s}(t_{i+1})+(hB_{2x}WR+B_{2\lambda})\lambda(t_{i+1})\]
+Rename the matrices:
+\[0 = q_{free}+B_{3zs} Z_{s}(t_{i+1})+B_{3\lambda}\lambda(t_{i+1})\]
+
+eq4 discretisation:
+\[Y(t_{i+1})=D_{2x}x(t_{i+1})+D_{2zs}Z_{s}(t_{i+1}) +D_{2\lambda}\lambda(t_{i+1})+D_{2s}(t_{i+1})\]
+With eq5 and rename the matrices:
+\[Y(t_{i+1})=D_{2x}Wx_{free}+ D_{2s}(t_{i+1})+(D_{2zs}+h\theta
+D_{2x}WA_{2zs})Z_{s}(t_{i+1})+(D_{2\lambda} + hD_{2x}WR)\lambda(t_{i+1})\]
+Rename the matrices:
+\[Y(t_{i+1})=p_{free}+D_{3zs}Zs(t_{i+1}) +D_{3\lambda}\lambda (t_{i+1})\]
+
+\paragraph{MLCP}
+description:\\
+
+\[W=\left(\begin{array}{c}W_{1}\\0\end{array}\right)\]
+\[Z=\left(\begin{array}{c}Z_{1}\\Z_{2}\end{array}\right)\]
+\[W=MZ+q\]
+\[0 \leq W_{1} \, \perp \, Z_{1} \geq 0\]
+\paragraph{MLCP instance}
+We identify a MLCP:\\
+\[W_{1} = Y(t_{i+1})\]
+\[Z_{1} = \lambda(t_{i+1})\]
+\[Z_{2} = Z_{s}(t_{i+1})\]
+\[M = \left(\begin{array}{cc}
+  D_{3\lambda}&D_{3zs}\\
+B_{3\lambda}&B_{3zs}
+\end{array}\right)\]
+\[q=\left(\begin{array}{c}
+p_{free}\\
+q_{free}\end{array}\right)\]
 
 \section{The Buck converter Example}
 \begin{figure}[h]
@@ -40,7 +94,10 @@
  \scalebox{1.0}{
     \input{buck.pstex_t}
  }
-}\end{figure}
+}
+\caption{Buck converter}
+\label{fig-Buck-converter}
+\end{figure}
 $x=^{t}(U_{45},U_{67},U_{08},I_{18}) Z_{s}=^{t}(V_{1},V_{2},V_{3},V_{4},V_{5},V_{6},V_{7},V_{8},V_{9},V_{10},I_{90},I_{20},I_{30},I_{100},I_{40})
 Z_{ns}=^{t}(I_{1},I_{2},I_{3},I_{4},U_{2})$\\
 \underline{$Ax'= Bx+CZ_{s}$}
@@ -226,6 +283,15 @@ l1&l2&l3&l4&l5&l6&l7&l8&l9&l10&l11&l12&l13&l14&l15&l16&l17&l18&l19&l20&l21&l22&l
   \end{array}\right)
   \]
 \normalsize
+\subsection{Simulation}
+
+The simulation computed 4 million steps with a 50 ps fixed time step. The figure \ref{fig-Buck-sim} shows the inductor current of the circuit.
+
+\begin {figure}[h]
+\input{Buck}
+\caption{Buck simulation}
+\label{fig-Buck-sim}
+\end {figure} 
 \newpage
 %*************************************OTHER ANALYSIS
 
@@ -237,7 +303,10 @@ l1&l2&l3&l4&l5&l6&l7&l8&l9&l10&l11&l12&l13&l14&l15&l16&l17&l18&l19&l20&l21&l22&l
  \scalebox{0.7}{
     \input{Bridge.pstex_t}
  }
-}\end{figure}
+}
+ \caption{Diodes bridge}
+\label{fig-Diode-bridge}
+\end{figure}
 
 
 
@@ -322,161 +391,49 @@ Y=\left(\begin{array}{cc}
 \right)
 \]
 
-\subsection{AN}
-C=0.01 F\\
-L=1/120 H\\
-R=33 ohm
+\subsection{Simulation}
+C= 1 uF\\
+L= 10 mH\\
+R= 1000 $\ohm$\\
+The simulation computed 450 steps with a 10 $\micro$s fixed time step. The figure
+\ref{fig-Diode-sim} shows the tension in the resistor branch.
 
-\[
-\left(\begin{array}{c}
-  
-x'=\left(\begin{array}{cc}
-0 &-100\\
-120&0\end{array} \right)x
-+\left(\begin{array}{cc}
-0&-100\\
-0&0\end{array} \right)Z_{s}
-+\left(\begin{array}{cccc}
-0&0&-100&-100\\
-0&0&0&0\end{array} \right)Z_{ns}
+
+\begin {figure}[h]
+\input{diodes}
+\caption{Diode bridges simulation}
+\label{fig-Diode-sim}
+\end {figure} 
+\section {Cost of the automatic circuit equation formulation}
+To evaluate the cost of the automatic circuit equation, we define the following notation:\\
+$N_{b}$ is the number of branches.\\
+$N_{n}$ is the number of nodes. ( $N_{n} < 2N_{b}$ )\\
+N = max\{$N_{b},N_{n}$\}\\
+dim(x) is the number of dynamical variables.\\
 \\
-0=\left(\begin{array}{cc}
-0 &0\\
-0 &0\\
-0 &1\end{array} \right)x
-+\left(\begin{array}{cc}
--0.03&0.03\\
--0.03&0.03\\
-1 &0\end{array} \right)Z_{s}
-+\left(\begin{array}{cccc}
-1&0&0&1\\
-0&+1&1&0\\
-0&0&0&0\end{array} \right)Z_{ns}
-\\
-Z_{ns}=0x+0Z_{s}+Id\lambda\\
-Y=\left(\begin{array}{cc}
-0&0\\
-0&0\\
-1&0\\
-1&0\end{array}\right) x+
-\left(\begin{array}{cc}
-1&0\\
-0&1\\
-0&-1\\
--1&0\end{array}
-\right) Z_{s} + 0Z_{ns} +0\lambda\\
+The costs of the main steps are:\\
 
-0 \leq Y \, \perp \, \lambda \geq 0
+\begin{itemize}
 
-\end{array}
-\right)
-\]
-ie
-\[
-\left(\begin{array}{c}
-R=\left(\begin{array}{cccc}
-0&0&-100&-100\\
-0&0&0&0\end{array} \right) \lambda\\
-  
-x'=\left(\begin{array}{cc}
-0 &-100\\
-120&0\end{array} \right)x
-+\left(\begin{array}{cc}
-0&-100\\
-0&0\end{array} \right)Z_{s}+R\\
-0=\left(\begin{array}{cc}
-0 &0\\
-0 &0\\
-0 &1\\\end{array} \right)x
-+\left(\begin{array}{cc}
--0.03&0.03\\
--0.03&0.03\\
-1&0\end{array} \right)Z_{s}
-+\left(\begin{array}{cccc}
-1&0&0&1\\
-0&-1&-1&0\\
-0&0&0&0\end{array} \right)\lambda\\
-Y=\left(\begin{array}{cc}
-0&0\\
-0&0\\
-1&0\\
-1&0\end{array}\right) x+
-\left(\begin{array}{cc}
-1&0\\
-0&1\\
-0&-1\\
--1&0\end{array}
-\right) Z_{s} +0\lambda\\
+\item[--]To parse the Netlist : \\It consists in reading and storing the Netlist. The cost is O(N).
+\item[--] To build the unknowns vector:\\
+O(N) operations are necessary to build the vector with voltage nodes.\\
+Each components add its own unknowns, it costs O(N).
+\item[--] To get the system $x' = A_{1x}x +A_{1zs}Z_{s} + A_{1ns}Z_{ns}+A_{1s}$:\\
+The Minimum Spanning Tree algorithm complexity is O(Nlog(N))\\
+To reverse the matrix A with a LU factorization: O$(dim(x))^{3}$
+\item[--] Stamping method:\\
+Each component writes its contribution in the table equation, it costs O(N).
+\item[--] Matrix product:\\
+Multiplied two dense matrices costs O($N^{3}$). In our case, the matrices are very sparse. So
+the cost is considerably reduced with a sparse matrices structure.
 
-0 \leq Y \, \perp \, \lambda \geq 0
-
-\end{array}
-\right)
-\]
-
-
-\section{Validation by time simulation}
-
-\subsection{Sketch of  the Moreau time's stepping}
-\begin{eqnarray}
-R=A_{1ns}C_{1\lambda}\label{eq1}\\
-x'=A_{2x}x +A_{2zs}Z_{s} +R \lambda +A_{2s}&\label{eq2}\\
-0=B_{2x}x+B_{2zs}Z_{s} + B_{2\lambda}\lambda + B_{2s}&\label{eq3}\\
-Y=D_{2x}x+D_{2zs}Z_{s}+D_{2\lambda}\lambda + D_{2s} &\label{eq4}\\
-0 \leq Y \, \perp \, \lambda \geq 0&\label{eqperp}\\
-\end{eqnarray}
-
-
- The time--discretization of the equation~(\ref{eq1}) yields:
-\[x(t_{i+1}) - x(t_{i})=h\theta A_{2x}x(t_{i+1})+h(1-\theta)A_{2x}x(t_{i}) +h\theta
-A_{2zs}Z_{s}(t_{i+1}) +\]
-\[h(1-\theta)A_{2zs}Z_s(t_{i}) +hR\lambda (t_{i+1}) + h\theta 'A_{2s}(t_{i+1}) +
-h(1-\theta ')A_{2s}(t_{i})\]
-We assume $(I-h\theta A_{2x})$ is regular,$W(I-h\theta A_{2x}) = I.$
-\[x(t_{i+1})=Wx_{free}+h\theta WA_{2zs}Z_{s}(t_{i+1})+hWR\lambda (t_{i+1})  (eq5)\]
-With:
-\[x_{free}=(I+h(1-\theta)A_{2x})x(t_{i}) + h(1-\theta )A_{2zs}Zs(t_{i}) + h\theta 'A_{2s}(t_{i+1}) +
-h(1-\theta ')A_{2s}(t_{i})\]
-eq3 discretisation:
-\[0 = B_{2x}x(t_{i+1})+B_{2zs}Z_{s}(t_{i+1}) + B_{2\lambda}\lambda(t_{i+1})+B_{2s}(t_{i+1})\]
-With eq5:
-\[0 = B_{2x}Wx_{free}+B_{2s}(t_{i+1})+(h\theta B_{2x} WA_{2zs}+B_{2zs}) Z_{s}(t_{i+1})+(hB_{2x}WR+B_{2\lambda})\lambda(t_{i+1})\]
-Rename the matrices:
-\[0 = q_{free}+B_{3zs} Z_{s}(t_{i+1})+B_{3\lambda}\lambda(t_{i+1})\]
-
-eq4 discretisation:
-\[Y(t_{i+1})=D_{2x}x(t_{i+1})+D_{2zs}Z_{s}(t_{i+1}) +D_{2\lambda}\lambda(t_{i+1})+D_{2s}(t_{i+1})\]
-With eq5 and rename the matrices:
-\[Y(t_{i+1})=D_{2x}Wx_{free}+ D_{2s}(t_{i+1})+(D_{2zs}+h\theta
-D_{2x}WA_{2zs})Z_{s}(t_{i+1})+(D_{2\lambda} + hD_{2x}WR)\lambda(t_{i+1})\]
-Rename the matrices:
-\[Y(t_{i+1})=p_{free}+D_{3zs}Zs(t_{i+1}) +D_{3\lambda}\lambda (t_{i+1})\]
-
-\paragraph{MLCP}
-description:\\
-
-\[W=\left(\begin{array}{c}W_{1}\\0\end{array}\right)\]
-\[Z=\left(\begin{array}{c}Z_{1}\\Z_{2}\end{array}\right)\]
-\[W=MZ+q\]
-\[0 \leq W_{1} \, \perp \, Z_{1} \geq 0\]
-\paragraph{MLCP instance}
-We identify a MLCP:\\
-\[W_{1} = Y(t_{i+1})\]
-\[Z_{1} = \lambda(t_{i+1})\]
-\[Z_{2} = Z_{s}(t_{i+1})\]
-\[M = \left(\begin{array}{cc}
-  D_{3\lambda}&D_{3zs}\\
-B_{3\lambda}&B_{3zs}
-\end{array}\right)\]
-\[q=\left(\begin{array}{c}
-p_{free}\\
-q_{free}\end{array}\right)\]
-
-\subsection{Numerical results}
+\end{itemize}
+For example, the automatic circuit equation formulation of the buck converter needs 0.012 s on a Pentium~4 processor clocked at 3~GHz.
 
 \section{Conclusion}
 This document demonstrates a way to develop an automatic circuit equation formulation. It shows that a Moreau's time
-stepping lead to a MLCP. The following examples describe the method with non smooth circuits.
+stepping lead to a MLCP. The previous examples describe the method with non smooth circuits.
 
 
 %%% Local Variables: 

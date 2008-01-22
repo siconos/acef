@@ -6,8 +6,74 @@ in SPICE to obtain the circuit equation formulation. For more details, we refer 
 
 \subsection{Basics on circuit topology}
 
-{\tt Describe here the basics in circuit topology: Branches, nodes, loop, .....}
+Circuits are basically composed of branches, characterized by a current and a related voltage.
+Moreover, branches are connected to circuit nodes. The physical behavior of the circuit obeys
+Kirchhoff's law. Circuit analysis leads to a mathematical formulation which will be describe in this
+document.
 
+\subsubsection{Circuit branches}
+\begin{figure}[h]
+\centerline{
+ \scalebox{0.6}{
+    \input{Branch.pstex_t}
+ }
+}
+\caption{Basic branch}
+\label{fig-Basic-branch}
+\end{figure}
+In any case, the branch is described by a pair of branch variables: the tension $U_{a}$ and the current $I_{a}$.
+Moreover, the Branch Constitutive Equation can be expressed in a general implicit form:
+\begin{equation}\label{BCE}F(U_{a},I_{a},...)=0\end{equation}
+We will see the different forms of this relation.
+\subsubsection{The Kirchhoff Current Law (KCL)}
+\newtheorem{kcl}{Kcl}
+\begin{kcl}
+At any node in an electrical circuit where charge density is not changing in time, the sum of
+currents flowing towards that node is equal to the sum of currents flowing away from that node.
+\end{kcl}
+The KCL law gives rise to this type of equation:\\
+\begin{equation}
+ \sum_{i} I_{i}=0\label{eq:KCL}
+\end{equation}
+
+\begin{figure}[h]
+\centerline{
+ \scalebox{0.6}{
+    \input{SimpleCircuit.pstex_t}
+ }
+}
+\caption{Circuit and a graph representing its topology}
+\label{fig-Circuit-example}
+\end{figure}
+With the example shown in figure \ref{fig-Circuit-example}, the KCL leads to the following equations:
+\[-I_{1}+I_{2}+I_{3}=0\]
+\[-I_{3}+I_{4}=0\]
+\[I_{1}-I_{2}-I{4}=0\]
+or the matrix formulation :
+\[AI=0\]
+where A is known as the incidence matrix and I is the vector of branch currents.
+\subsubsection{The Kirchhoff Voltage Law (KVL)}
+\newtheorem{kvl}{Kvl}
+\begin{kvl}
+The directed sum of the electrical differences around a closed circuit must be zero.
+\end{kvl}
+With the example shown in figure \ref{fig-Circuit-example}, the KVL leads to the following
+equations:
+\[U_{1}+U_{2}=0\]
+\[-U_{2}+U_{3}+U_{4}=0\]
+\[U_{1}+U_{3}+U_{4}=0\]
+These equations contain redundancy and the system can be written:
+\[\left(\begin{array}{cccc}
+  1&1&0&0\\
+  0&-1&1&1\\
+  \end{array}\right)U=0
+  \]
+  where U is the vector of tensions. The matrix is known as the loop matrix B.
+  \subsubsection{General equations formulation}
+  The physical behavior of an electrical circuit can be describe with the following equations:
+  \[AI=0\]
+  \[BU=0\]
+  \[\textrm{For all branches :} \qquad F(U_{a},I_{a},...)=0 \]
 \subsection{Definition}
 \newtheorem{mur}{Def}
 \begin{mur}
@@ -21,7 +87,7 @@ A capacitor is a current-defined branch because $I_{a}=C\frac{dU_{a}}{dt}$.\\
 \begin{mur}
 The branch is voltage-defined if its voltage is a function of its own current, controlling variable
 or their derivatives:
-\begin{equation}\label{VD}U_{a}=F_{i}(I_{a},U_{b},I_{c},\frac{dU_a}{dt},\frac{dU_b}{dt},\frac{dI_{c}}{dt})\end{equation}
+\begin{equation}\label{VD}U_{a}=F_{u}(I_{a},U_{b},I_{c},\frac{dU_a}{dt},\frac{dU_b}{dt},\frac{dI_{c}}{dt})\end{equation}
 \end{mur}
 Examples : \\
 A resistor is a voltage-defined branch because $U_{a}=RI_{a}$.\\
@@ -31,7 +97,7 @@ The M.N.A. assumes smooth branches are explicit functions of current or voltage.
 \subsection{Unknowns}
 The M.N.A. use the following unknowns:
 \begin{enumerate}
-\item Nodal voltages, {\textcolor{red}{ \tt notation ? $V_i$}}
+\item Nodal voltages
 \item Currents in the V.D. branches
 \item Capacitor's charges and currents
 \item Inductor's flux and currents
@@ -40,16 +106,7 @@ The M.N.A. use the following unknowns:
 These unknowns are the state variables which are assumed to be sufficient to describe the state of the circuit.
 \subsection{Equations}
 The M.N.A. use following equations:
-\subsubsection{The Kirchhoff Current Law (KCL)}
-\newtheorem{kcl}{Kcl}
-\begin{kcl}
-At any node in an electrical circuit where charge density is not changing in time, the sum of
-currents flowing towards that node is equal to the sum of currents flowing away from that node.
-\end{kcl}
-The KCL law gives rise to this type of equation:\\
-\begin{equation}
- \sum_{i} I_{i}=0\label{eq:KCL}
-\end{equation}
+
 
 Current from current-defined branch is replaced with relation~(\ref{CD}). The result is a linear relation between system's unknowns.
 \subsubsection{Law in voltage-defined branches (LVD)}
@@ -88,13 +145,19 @@ After a time discretization procedure, these equations give tow linear relations
 \subsection{A simple MNA example}
 \begin{figure}[h]
 \centerline{
- \scalebox{0.5}{
+ \scalebox{0.6}{
     \input{MNA.pstex_t}
  }
 }
+\caption{Circuit for the MNA example}
+\label{fig-MNA-example}
 \end{figure}
- \textcolor{red}{\tt Pourquoi ne pas avoir de undescores pour les notations}
 \subsubsection{Topology: Branches and nodes definition}
+The first step consists in deciding witch branches are voltage defined and witch are current
+defined. For example, a resistor is a simple branch that can be solved either for the current I=U/R or for the
+voltage U=RI. \\
+After, the list of unknowns can be done. \\
+Finally, the table equations is filled with the physical equations. 
 
  \textcolor{red}{\tt TBW}
 \subsubsection{Branches analysis}
@@ -108,16 +171,16 @@ After a time discretization procedure, these equations give tow linear relations
 \end{enumerate}
 \subsubsection{Unknowns}
 \begin{enumerate}
-\item The voltage nodes : V1,V2,V3.
-\item I1,I4,I5, because the branches 1,4 and 5 are voltage defined.
-\item q3 and I3, because the branch 3 is a capacitor.
-\item $\psi 4$ from the inductor branch
+\item The voltage nodes : $V_{1}$,$V_{2}$,$V_{3}$.
+\item $I_{1}$,$I_{4}$,$I_{5}$, because the branches 1,4 and 5 are voltage defined.
+\item $q_{3}$ and $I_{3}$, because the branch 3 is a capacitor.
+\item $\psi _{4}$ from the inductor branch
 \end{enumerate}
 Therefore the unknowns vector is:\\
-(V1,V2,V3,I1,I3,I4,I5,q3,$\psi 4$)
+($V_{1}$,$V_{2}$,$V_{3}$,$I_{1}$,$I_{3}$,$I_{4}$,$I_{5}$,$q_{3}$,$\psi _{4}$)
 \subsubsection{Table Equations}
 \[\left(\begin{array}{ccccccccccc}
-  &V1&V2&V3&I1&I3&I4&I5&q3&\psi 4\\
+  V_{1}&V_{2}&V_{3}&I_{1}&I_{3}&I_{4}&I_{5}&q_{3}&\psi _{4}\\
   \hline
   \left(\begin{array}{c} KCL1 \end{array}\right)&\frac{-1}{R_{2}}&\frac{1}{R_{2}}&0&-1&0&0&0&0&0\\
   \left(\begin{array}{c} KCL2 \end{array}\right)&\frac{1}{R_{2}}&\frac{-1}{R_{2}}&0&0&-1&0&0&0&0\\
@@ -129,15 +192,15 @@ Therefore the unknowns vector is:\\
   \left(\begin{array}{c} CAP2 \end{array}\right)&0&0&0&0&1&0&0&\frac{-1}{h}&0\\
   \left(\begin{array}{c} IND2 \end{array}\right)&0&1&0&0&0&0&0&0&\frac{-1}{h}\\
 \end{array}\right) \left(\begin{array}{c}
- V1(t+h)\\
- V2(t+h)\\
- V3(t+h)\\
- I1(t+h)\\
- I3(t+h)\\
- I4(t+h)\\
- I5(t+h)\\
- q3(t+h)\\
- \psi 4(t+h)
+ V_{1}(t+h)\\
+ V_{2}(t+h)\\
+ V_{3}(t+h)\\
+ I_{1}(t+h)\\
+ I_{3}(t+h)\\
+ I_{4}(t+h)\\
+ I_{5}(t+h)\\
+ q_{3}(t+h)\\
+ \psi _{4}(t+h)
   \end{array}\right)=
 \left(\begin{array}{c}
   RSH\\

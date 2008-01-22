@@ -14,12 +14,12 @@ Before go head, the unknowns vector X is subdivided:
 \subsection{Linear local formulation}
 For each non smooth component, we assume that the behavior can be written as the following the mixed linear  complementarity condition, that is:
 \begin{equation}\left(\begin{array}{c}
-\beta = zns_{i} = A_{i}x+B_{i}\lambda_{i}+C_{i}z_{s} + a_{i}\\
-y_{i}=D_{i}x+E_{i}z_{s}+F_{i}\lambda_{i}+G_{i}zns_{i}+e_{i}\\
+\beta = Z_{nsi} = A_{i}x+B_{i}\lambda_{i}+C_{i}Z_{s} + a_{i}\\
+y_{i}=D_{i}x+E_{i}Z_{s}+F_{i}\lambda_{i}+G_{i}Z_{nsi}+e_{i}\\
 0 \leq y_{i} \, \perp \, \lambda_{i} \geq 0
 \end{array}\right)
 \end{equation}
-where $zns_{i}$ is a voltage and currents vector\textcolor{red}{\tt notation $zns$?}. $a_{i},e_{i},\lambda_{i}$ and $y_{i}$ are some constants vectors which characterizes the components. At the end
+where $Z_{nsi}$ is a voltage and currents vector\textcolor{red}{\tt notation $zns$?}. $a_{i},e_{i},\lambda_{i}$ and $y_{i}$ are some constants vectors which characterizes the components. At the end
 of this document, we will see how ideal diode and piecewise linear models of transistor fits into this formulation.
 
 
@@ -140,11 +140,11 @@ It consists in writing all the complementary conditions in the equations of the 
 \left(\begin{array}{c}
   Zns\\
   \hline
-   zns_{1} \\
-   zns_{2}\\
-   zns_{3}\\
-   zns_{4}\\
-   zns_{5}\
+   Z_{ns1} \\
+   Z_{ns2}\\
+   Z_{ns3}\\
+   Z_{ns4}\\
+   Z_{ns5}\
 \end{array}\right)+
 \left(\begin{array}{c}
   cst\\

@@ -1,1 +1,4 @@
-ace.tex est le document pricipal.
+
+ace.tex est le document pricipal de l'etude de faisabilite de la mise en equation automatique des circuits.
+
+Le repertoire AceProjectOverview contient les specifications de developpement du module de formulation automatique des circuits.
