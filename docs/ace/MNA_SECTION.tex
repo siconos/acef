@@ -142,6 +142,54 @@ and the  dynamic relation is given by
 \end{equation}
 After a time discretization procedure, these equations give tow linear relations between system's unknowns.
 \newpage
+\subsection{Stamps method}
+The stamps method is an algorithmic method used to fill the table equation from the components. It
+consists in writing a sub-table for each type of component, this sub-table is the contribution of the component in the tableau equation.\\
+Following, there are stamp examples.
+\subsubsection{Resistor stamp}
+\[\left(\begin{array}{cccc}
+&V_{i}&V_{j}&RSH\\
+  \hline
+  KCL(i)&\frac{-1}{R}&\frac{1}{R}&\\
+  KCL(j)&\frac{1}{R}&\frac{-1}{R}&\\
+  \end{array}\right)
+\]
+Where R is the branch's resistance.
+\subsubsection{Conductance stamp}
+\[\left(\begin{array}{ccccc}
+&V_{i}&V_{j}&I_{a}&RSH\\
+  \hline
+  KCL(i)&&&1&\\
+  KCL(j)&&&-1&\\
+  LVD&G&-G&1&\\
+  \end{array}\right)
+\]
+Where G is the branch's conductance.
+\subsubsection{Voltage source stamp}
+\[\left(\begin{array}{ccccc}
+&V_{i}&V_{j}&I_{a}&RSH\\
+  \hline
+  KCL(i)&&&1\\
+  KCL(j)&&&-1\\
+  LVD&1&-1&&E
+  \end{array}\right)
+\]
+\subsubsection{Current controlled voltage source stamp}
+\[\left(\begin{array}{cccccc}
+&V_{i}&V_{j}&I_{a}&I_{b}&RSH\\
+  \hline
+  KCL(i)&&&1&\\
+  KCL(j)&&&-1&\\
+  LVD&1&-1&&\gamma
+  \end{array}\right)
+\]
+With $U_{a} = \gamma I_{b}$.
+\subsection{General form of the MNA}
+The result of the MNA is a system like :
+\[MX'=AX+c\]
+where X is the vector of unknowns, and M a matrix. Generally, M is not regular. Indeed, some variables
+are not dynamic, for example the current in a resistor.
+\newpage
 \subsection{A simple MNA example}
 \begin{figure}[h]
 \centerline{
@@ -159,7 +207,6 @@ voltage U=RI. \\
 After, the list of unknowns can be done. \\
 Finally, the table equations is filled with the physical equations. 
 
- \textcolor{red}{\tt TBW}
 \subsubsection{Branches analysis}
 
 \begin{enumerate}
@@ -167,7 +214,7 @@ Finally, the table equations is filled with the physical equations.
 \item Branch 2 is looked as current defined ($I_{2}=\frac{U_{2}}{R}$).
 \item Branch 3 is current defined.
 \item Branch 4 is voltage defined.
-\item Branch 5 is looked as voltage defined ($U_{5}=RIU_{5}$).
+\item Branch 5 is looked as voltage defined ($U_{5}=RI_{5}$).
 \end{enumerate}
 \subsubsection{Unknowns}
 \begin{enumerate}
@@ -220,48 +267,6 @@ Therefore the unknowns vector is:\\
 Each time step consists in solving a system 9x9.
 
 
-\subsection{Stamp method}
-The stamp method is an algorithmic method used to fill the table equation from the components. It
-consists in writing a sub-table for each type of component, this sub-table is the contribution of the component in the tableau equation.\\
-Following, there are stamp examples.
-\subsubsection{Resistor stamp}
-\[\left(\begin{array}{cccc}
-&V_{i}&V_{j}&RSH\\
-  \hline
-  KCL(i)&\frac{-1}{R}&\frac{1}{R}&\\
-  KCL(j)&\frac{1}{R}&\frac{-1}{R}&\\
-  \end{array}\right)
-\]
-Where R is the branch's resistance.
-\subsubsection{Conductance stamp}
-\[\left(\begin{array}{ccccc}
-&V_{i}&V_{j}&I_{a}&RSH\\
-  \hline
-  KCL(i)&&&1&\\
-  KCL(j)&&&-1&\\
-  LVD&G&-G&1&\\
-  \end{array}\right)
-\]
-Where G is the branch's conductance.
-\subsubsection{Voltage source stamp}
-\[\left(\begin{array}{ccccc}
-&V_{i}&V_{j}&I_{a}&RSH\\
-  \hline
-  KCL(i)&&&1\\
-  KCL(j)&&&-1\\
-  LVD&1&-1&&E
-  \end{array}\right)
-\]
-\subsubsection{Current controlled voltage source stamp}
-\[\left(\begin{array}{cccccc}
-&V_{i}&V_{j}&I_{a}&I_{b}&RSH\\
-  \hline
-  KCL(i)&&&1&\\
-  KCL(j)&&&-1&\\
-  LVD&1&-1&&\gamma
-  \end{array}\right)
-\]
-With $U_{a} = \gamma I_{b}$.
 
 
 %%% Local Variables: 

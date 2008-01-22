@@ -1,10 +1,4 @@
 
-\newpage
-\section*{TO DO LIST}
-\begin{enumerate}
-\item Comparison with other old results on the diode bridge and the buck converter to validate the approach. Otherwise, we suppress the part time's stepping scheme ?
-\item Evaluation of the cost of the automatic formualtion
-\end{enumerate}
  \newpage
  \section{Aim of this document}
  The goal of this document is a feasibility study to develop an automatic circuit equation
@@ -43,26 +37,28 @@ Y=D_{2x}x+D_{2zs}Z_{s}+D_{2\lambda}\lambda + D_{2s} &\label{eq4}\\
 \end{eqnarray}
 
 
- The time--discretization of the equation~(\ref{eq1}) yields:
+ The time--discretization of the equation~(\ref{eq2}) yields:
 \[x(t_{i+1}) - x(t_{i})=h\theta A_{2x}x(t_{i+1})+h(1-\theta)A_{2x}x(t_{i}) +h\theta
 A_{2zs}Z_{s}(t_{i+1}) +\]
 \[h(1-\theta)A_{2zs}Z_s(t_{i}) +hR\lambda (t_{i+1}) + h\theta 'A_{2s}(t_{i+1}) +
 h(1-\theta ')A_{2s}(t_{i})\]
 We assume $(I-h\theta A_{2x})$ is regular,$W(I-h\theta A_{2x}) = I.$
-\[x(t_{i+1})=Wx_{free}+h\theta WA_{2zs}Z_{s}(t_{i+1})+hWR\lambda (t_{i+1})  (eq5)\]
+\begin{eqnarray}
+x(t_{i+1})=Wx_{free}+h\theta WA_{2zs}Z_{s}(t_{i+1})+hWR\lambda (t_{i+1}) &\label{eq5}
+\end{eqnarray}
 With:
 \[x_{free}=(I+h(1-\theta)A_{2x})x(t_{i}) + h(1-\theta )A_{2zs}Zs(t_{i}) + h\theta 'A_{2s}(t_{i+1}) +
 h(1-\theta ')A_{2s}(t_{i})\]
-eq3 discretisation:
+equation~(\ref{eq3}) discretisation:
 \[0 = B_{2x}x(t_{i+1})+B_{2zs}Z_{s}(t_{i+1}) + B_{2\lambda}\lambda(t_{i+1})+B_{2s}(t_{i+1})\]
-With eq5:
+With equation~(\ref{eq5}):
 \[0 = B_{2x}Wx_{free}+B_{2s}(t_{i+1})+(h\theta B_{2x} WA_{2zs}+B_{2zs}) Z_{s}(t_{i+1})+(hB_{2x}WR+B_{2\lambda})\lambda(t_{i+1})\]
 Rename the matrices:
 \[0 = q_{free}+B_{3zs} Z_{s}(t_{i+1})+B_{3\lambda}\lambda(t_{i+1})\]
 
-eq4 discretisation:
+equation~(\ref{eq4}) discretisation:
 \[Y(t_{i+1})=D_{2x}x(t_{i+1})+D_{2zs}Z_{s}(t_{i+1}) +D_{2\lambda}\lambda(t_{i+1})+D_{2s}(t_{i+1})\]
-With eq5 and rename the matrices:
+With equation~(\ref{eq5}) and rename the matrices:
 \[Y(t_{i+1})=D_{2x}Wx_{free}+ D_{2s}(t_{i+1})+(D_{2zs}+h\theta
 D_{2x}WA_{2zs})Z_{s}(t_{i+1})+(D_{2\lambda} + hD_{2x}WR)\lambda(t_{i+1})\]
 Rename the matrices:
@@ -88,215 +84,34 @@ B_{3\lambda}&B_{3zs}
 p_{free}\\
 q_{free}\end{array}\right)\]
 
-\section{The Buck converter Example}
-\begin{figure}[h]
-\centerline{
- \scalebox{1.0}{
-    \input{buck.pstex_t}
- }
-}
-\caption{Buck converter}
-\label{fig-Buck-converter}
-\end{figure}
-$x=^{t}(U_{45},U_{67},U_{08},I_{18}) Z_{s}=^{t}(V_{1},V_{2},V_{3},V_{4},V_{5},V_{6},V_{7},V_{8},V_{9},V_{10},I_{90},I_{20},I_{30},I_{100},I_{40})
-Z_{ns}=^{t}(I_{1},I_{2},I_{3},I_{4},U_{2})$\\
-\underline{$Ax'= Bx+CZ_{s}$}
-\[\left(\begin{array}{c}
-  \\
-KCL(4)\\KCL(7)\\KCL(8)\\I_{18}
-\end{array}\right)
-\left(\begin{array}{cccc}
-  U_{45}'&U_{67}'&U_{08}'&I_{18}'\\
-  \hline
-  C21&0&0&0\\
-  0&-C11&0&0\\
-  0&0&C&0\\
-  0&0&0&L\\  
-\end{array}\right)x'=
-\left(\begin{array}{cccc}
-  U_{45}&U_{67}&U_{08}&I_{18}\\
-  \hline
-  0&0&0&0\\
-  0&0&0&0\\
-  0&0&0&1\\
-  0&0&0&0\\
-\end{array}\right)x+\]
-\[
-\left(\begin{array}{ccccccccccccccc}
-  V_{1}&V_{2}&V_{3}&V_{4}&V_{5}&V_{6}&V_{7}&V_{8}&V_{9}&V_{10}&I_{90}&I_{20}&I_{30}&I_{100}&I_{40}\\
-  \hline
-  0&0&0&0&0&0&0&0&0&0&0&0&0&0&-1\\
-  0&0&0&0&0&0&-\frac{1}{R11}&\frac{1}{R11}&0&0&0&0&0&0&0\\
-  0&0&0&0&0&\frac{1}{R12}&\frac{1}{R11}&\frac{-1}{Rload}-\frac{1}{R11}-\frac{1}{R12}&0&0&0&0&0&0&0\\
-  1&0&0&0&0&0&0&0&0&0&0&0&0&0&0
-\end{array}\right)Z_{s}+0Z_{ns}\]
-\underline{$Ex+FZ_{s}+GZ_{ns}=s$}
-\[
-\left(\begin{array}{c}
-  \\
-KCL(1)\\KCL(2)\\KCL(3)\\KCL(5)\\KCL(6)\\KCL(9)\\KCL(10)\\VD_{100}\\VD_{2}\\VD_{30}\\VD_{90}\\VD_{40}\\U_{45}\\U_{67}\\U_{08}
-\end{array}\right)
-\left(\begin{array}{cccc}
-  U_{45}&U_{67}&U_{08}&I_{18}\\
-  \hline
-  0&0&0&-1\\
-  0&0&0&0\\
-  0&0&0&0\\
-  0&0&0&0\\
-  0&0&0&0\\
-  0&0&0&0\\
-  0&0&0&0\\
-  0&0&0&0\\
-  0&0&0&0\\
-  0&0&0&0\\
-  0&0&0&0\\
-  0&0&0&0\\
-  1&0&0&0\\
-  0&1&0&0\\
-  0&0&1&0\\
-\end{array}\right)x+\]
-\[
-\left(\begin{array}{ccccccccccccccc}
-  V_{1}&V_{2}&V_{3}&V_{4}&V_{5}&V_{6}&V_{7}&V_{8}&V_{9}&V_{10}&I_{90}&I_{20}&I_{30}&I_{100}&I_{40}\\
-  \hline
-  0&0&0&0&0&0&0&0&0&0&0&0&0&0&0\\
-  0&0&0&0&0&0&0&0&0&0&0&1&0&0&0\\
-  0&0&0&0&0&0&0&0&0&0&0&0&1&0&0\\
-  0&0&0&0&-\frac{1}{R21}&\frac{1}{R21}&0&0&0&0&0&0&0&0&-1\\
-  0&0&0&0&\frac{1}{R21}&-\frac{1}{R12}-\frac{1}{R21}&\frac{1}{R11}&\frac{1}{R12}-\frac{1}{R11}&0&0&0&0&0&0&0\\
-  0&0&0&0&0&0&0&0&0&0&1&0&0&0&0\\
-  0&0&0&0&0&0&0&0&0&0&0&0&0&-1&0\\
-  0&0&0&0&0&0&0&0&0&1&0&0&0&0&0\\
-  0&1&0&0&0&0&0&0&0&0&0&0&0&0&0\\
-  0&0&1&0&0&0&0&0&0&0&0&0&0&0&0\\
-  0&0&0&0&0&0&0&0&1&0&0&0&0&0&0\\
-  0&0&0&1&0&-G2&0&0&G2&0&0&0&0&0&0\\
-  0&0&0&-1&1&0&0&0&0&0&0&0&0&0&0\\
-  0&0&0&0&0&-1&1&0&0&0&0&0&0&0&0\\
-  0&0&0&0&0&0&0&1&0&0&0&0&0&0&0\\
-\end{array}\right)Z_{s}+\]
-\[
-\left(\begin{array}{ccccc}
-  I_{1}&I_{2}&I_{3}&I_{4}&U_{2}\\
-  \hline
-  1&-1&-1&1&0\\
-  0&0&0&0&0\\
-  0&0&0&0&0\\
-  0&0&0&0&0\\
-  0&0&0&0&0\\
-  0&0&0&0&0\\
-  0&1&1&0&0\\
-  0&0&0&0&0\\
-  0&0&0&0&-1\\
-  0&0&0&0&0\\
-  0&0&0&0&0\\
-  0&0&0&0&0\\
-  0&0&0&0&0\\
-  0&0&0&0&0\\
-  0&0&0&0&0\\
-\end{array}\right)Z_{ns}=
-\left(\begin{array}{c}
-  \\
-0\\0\\0\\0\\0\\0\\0\\V1\\0\\Vramp\\Vref\\0\\0\\0\\0
-\end{array}\right)\]
-$N_{I}=N_{E}-4=24$
-\newpage
-And the non smooth equations:dim(Y)=dim($\lambda$ )=10.\\
-\underline{$Z_{ns}=B\lambda$}\\
-With B=
-\tiny
-\[
-\left(\begin{array}{cccccccccccccccccccccccc}
-l1&l2&l3&l4&l5&l6&l7&l8&l9&l10&l11&l12&l13&l14&l15&l16&l17&l18&l19&l20&l21&l22&l23&l24\\
-\hline
-0.09&0.22&0.46&1.16&2.89&-0.09&-0.22&-0.46&-1.16&-2.89&0&0&0&0&0&0&0&0&0&0&0&0&0&0\\
-0&0&0&0&0&0&0&0&0&0&1&0&0&0&0&0&0&0&0&0&0&0&0&0\\
-0&0&0&0&0&0&0&0&0&0&0&1&0&0&0&0&0&0&0&0&0&0&0&0\\
-0&0&0&0&0&0&0&0&0&0&0&0&0.09&0.22&0.46&1.16&2.89&-0.09&-0.22&-0.46&-1.16&-2.89&0&0\\
-0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&25&-25
-\end{array}\right)
-\]
-\small
-\underline{$Y=D\lambda$+Ex+s}
-\[\left(\begin{array}{c}
-  \\Y1\\Y2\\Y3\\Y4\\Y5\\Y6\\Y7\\Y8\\Y9\\Y10\\Y11\\Y12\\Y13\\Y14\\Y15\\Y16\\Y17\\Y18\\Y19\\Y20\\Y21\\Y22\\Y23\\Y24
- \end{array}\right)=
-\left(\begin{array}{cccccccccccccccccccccccc}
-  \\
-  \hline
-1&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0\\
-0&1&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0\\
-0&0&1&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0\\
-0&0&0&1&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0\\
-0&0&0&0&1&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0\\
-0&0&0&0&0&1&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0\\
-0&0&0&0&0&0&1&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0\\
-0&0&0&0&0&0&0&1&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0\\
-0&0&0&0&0&0&0&0&1&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0\\
-0&0&0&0&0&0&0&0&0&1&0&0&0&0&0&0&0&0&0&0&0&0&0&0\\
-0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0\\
-0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0\\
-0&0&0&0&0&0&0&0&0&0&0&0&1&0&0&0&0&0&0&0&0&0&0&0\\
-0&0&0&0&0&0&0&0&0&0&0&0&0&1&0&0&0&0&0&0&0&0&0&0\\
-0&0&0&0&0&0&0&0&0&0&0&0&0&0&1&0&0&0&0&0&0&0&0&0\\
-0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&1&0&0&0&0&0&0&0&0\\
-0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&1&0&0&0&0&0&0&0\\
-0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&1&0&0&0&0&0&0\\
-0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&1&0&0&0&0&0\\
-0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&1&0&0&0&0\\
-0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&1&0&0&0\\
-0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&1&0&0\\
-0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&1&0\\
-0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&1
-\end{array}\right)\lambda+\]
-\[
-\left(\begin{array}{ccccccccccccccc}
-  V_{1}&V_{2}&V_{3}&V_{4}&V_{5}&V_{6}&V_{7}&V_{8}&V_{9}&V_{10}&I_{90}&I_{20}&I_{30}&I_{100}&I_{40}\\
-  \hline
-  0&-b&0&0&0&0&0&0&0&3&0&0&0&0&0\\
-  0&-b&0&0&0&0&0&0&0&3&0&0&0&0&0\\
-  0&-b&0&0&0&0&0&0&0&3&0&0&0&0&0\\
-  0&-b&0&0&0&0&0&0&0&3&0&0&0&0&0\\
-  0&-b&0&0&0&0&0&0&0&3&0&0&0&0&0\\
-  b&-b&0&0&0&0&0&0&0&0&0&0&0&0&0\\
-  b&-b&0&0&0&0&0&0&0&0&0&0&0&0&0\\
-  b&-b&0&0&0&0&0&0&0&0&0&0&0&0&0\\
-  b&-b&0&0&0&0&0&0&0&0&0&0&0&0&0\\
-  b&-b&0&0&0&0&0&0&0&0&0&0&0&0&0\\
-  1&0&0&0&0&0&0&0&0&0&0&0&0&0&0\\
-  -1&0&0&0&0&0&0&0&0&1&0&0&0&0&0\\
-  0&-b&0&0&0&0&0&0&0&3&0&0&0&0&0\\
-  0&-b&0&0&0&0&0&0&0&3&0&0&0&0&0\\
-  0&-b&0&0&0&0&0&0&0&3&0&0&0&0&0\\
-  0&-b&0&0&0&0&0&0&0&3&0&0&0&0&0\\
-  0&-b&0&0&0&0&0&0&0&3&0&0&0&0&0\\
-  b&-b&0&0&0&0&0&0&0&0&0&0&0&0&0\\
-  b&-b&0&0&0&0&0&0&0&0&0&0&0&0&0\\
-  b&-b&0&0&0&0&0&0&0&0&0&0&0&0&0\\
-  b&-b&0&0&0&0&0&0&0&0&0&0&0&0&0\\
-  b&-b&0&0&0&0&0&0&0&0&0&0&0&0&0\\
-  0&0&-1&1&0&0&0&0&0&0&0&0&0&0&0\\
-  0&0&-1&1&0&0&0&0&0&0&0&0&0&0&0\\
-\end{array}\right)Z_{s}=
-\left(\begin{array}{c}
-  \\h1\\h2\\h3\\h4\\h5\\h6\\h7\\h8\\h9\\h10\\0\\0\\h1\\h2\\h3\\h4\\h5\\h6\\h7\\h8\\h9\\h10\\-0.1\\0.1
-  \end{array}\right)
-  \]
-\normalsize
-\subsection{Simulation}
+\section {Cost of the automatic circuit equation formulation}
+To evaluate the cost of the automatic circuit equation, we define the following notation:\\
+$N_{b}$ is the number of branches.\\
+$N_{n}$ is the number of nodes. ( $N_{n} < 2N_{b}$ )\\
+N = max\{$N_{b},N_{n}$\}\\
+dim(x) is the number of dynamical variables.\\
+\\
+The costs of the main steps are:\\
 
-The simulation computed 4 million steps with a 50 ps fixed time step. The figure \ref{fig-Buck-sim} shows the inductor current of the circuit.
+\begin{itemize}
 
-\begin {figure}[h]
-\input{Buck}
-\caption{Buck simulation}
-\label{fig-Buck-sim}
-\end {figure} 
-\newpage
-%*************************************OTHER ANALYSIS
+\item[--]To parse the Netlist : \\It consists in reading and storing the Netlist. The cost is O(N).
+\item[--] To build the unknowns vector:\\
+O(N) operations are necessary to build the vector with voltage nodes.\\
+Each components add its own unknowns, it costs O(N).
+\item[--] To get the system $x' = A_{1x}x +A_{1zs}Z_{s} + A_{1ns}Z_{ns}+A_{1s}$:\\
+The Minimum Spanning Tree algorithm complexity is O(Nlog(N))\\
+To reverse the matrix A with a LU factorization: O$(dim(x))^{3}$
+\item[--] Stamping method:\\
+Each component writes its contribution in the table equation, it costs O(N).
+\item[--] Matrix product:\\
+Multiplied two dense matrices costs O($N^{3}$). In our case, the matrices are very sparse. So
+the cost is considerably reduced with a sparse matrices structure.
 
-%EXAMPLE SECTION************************************************************************************
-\section{The Diodes bridge example}
+\end{itemize}
+For example, the automatic circuit equation formulation of the buck converter needs 0.012 s on a Pentium~4 processor clocked at 3~GHz.
+
+\section{The diodes bridge example}
 
 \begin{figure}[h]
 \centerline{
@@ -404,32 +219,218 @@ The simulation computed 450 steps with a 10 $\micro$s fixed time step. The figur
 \caption{Diode bridges simulation}
 \label{fig-Diode-sim}
 \end {figure} 
-\section {Cost of the automatic circuit equation formulation}
-To evaluate the cost of the automatic circuit equation, we define the following notation:\\
-$N_{b}$ is the number of branches.\\
-$N_{n}$ is the number of nodes. ( $N_{n} < 2N_{b}$ )\\
-N = max\{$N_{b},N_{n}$\}\\
-dim(x) is the number of dynamical variables.\\
-\\
-The costs of the main steps are:\\
 
-\begin{itemize}
 
-\item[--]To parse the Netlist : \\It consists in reading and storing the Netlist. The cost is O(N).
-\item[--] To build the unknowns vector:\\
-O(N) operations are necessary to build the vector with voltage nodes.\\
-Each components add its own unknowns, it costs O(N).
-\item[--] To get the system $x' = A_{1x}x +A_{1zs}Z_{s} + A_{1ns}Z_{ns}+A_{1s}$:\\
-The Minimum Spanning Tree algorithm complexity is O(Nlog(N))\\
-To reverse the matrix A with a LU factorization: O$(dim(x))^{3}$
-\item[--] Stamping method:\\
-Each component writes its contribution in the table equation, it costs O(N).
-\item[--] Matrix product:\\
-Multiplied two dense matrices costs O($N^{3}$). In our case, the matrices are very sparse. So
-the cost is considerably reduced with a sparse matrices structure.
+\section{The Buck converter example}
+\begin{figure}[h]
+\centerline{
+ \scalebox{1.0}{
+    \input{buck.pstex_t}
+ }
+}
+\caption{Buck converter}
+\label{fig-Buck-converter}
+\end{figure}
+\subsection{Unknowns}
+$x=^{t}(U_{45},U_{67},U_{08},I_{18}) Z_{s}=^{t}(V_{1},V_{2},V_{3},V_{4},V_{5},V_{6},V_{7},V_{8},V_{9},V_{10},I_{90},I_{20},I_{30},I_{100},I_{40})
+Z_{ns}=^{t}(I_{1},I_{2},I_{3},I_{4},U_{2})$\\
+\subsection{Matrices formulation}
+\underline{To get $Ax'= Bx+CZ_{s}$}
+\[\left(\begin{array}{c}
+  \\
+KCL(4)\\KCL(7)\\KCL(8)\\I_{18}
+\end{array}\right)
+\left(\begin{array}{cccc}
+  U_{45}'&U_{67}'&U_{08}'&I_{18}'\\
+  \hline
+  C21&0&0&0\\
+  0&-C11&0&0\\
+  0&0&C&0\\
+  0&0&0&L\\  
+\end{array}\right)x'=
+\left(\begin{array}{cccc}
+  U_{45}&U_{67}&U_{08}&I_{18}\\
+  \hline
+  0&0&0&0\\
+  0&0&0&0\\
+  0&0&0&1\\
+  0&0&0&0\\
+\end{array}\right)x+\]
+\[
+\left(\begin{array}{ccccccccccccccc}
+  V_{1}&V_{2}&V_{3}&V_{4}&V_{5}&V_{6}&V_{7}&V_{8}&V_{9}&V_{10}&I_{90}&I_{20}&I_{30}&I_{100}&I_{40}\\
+  \hline
+  0&0&0&0&0&0&0&0&0&0&0&0&0&0&-1\\
+  0&0&0&0&0&0&-\frac{1}{R11}&\frac{1}{R11}&0&0&0&0&0&0&0\\
+  0&0&0&0&0&\frac{1}{R12}&\frac{1}{R11}&\frac{-1}{Rload}-\frac{1}{R11}-\frac{1}{R12}&0&0&0&0&0&0&0\\
+  1&0&0&0&0&0&0&0&0&0&0&0&0&0&0
+\end{array}\right)Z_{s}+0Z_{ns}\]
+\underline{To build the system $Ex+FZ_{s}+GZ_{ns}=s$}
+\[
+\left(\begin{array}{c}
+  \\
+KCL(1)\\KCL(2)\\KCL(3)\\KCL(5)\\KCL(6)\\KCL(9)\\KCL(10)\\VD_{100}\\VD_{2}\\VD_{30}\\VD_{90}\\VD_{40}\\U_{45}\\U_{67}\\U_{08}
+\end{array}\right)
+\left(\begin{array}{cccc}
+  U_{45}&U_{67}&U_{08}&I_{18}\\
+  \hline
+  0&0&0&-1\\
+  0&0&0&0\\
+  0&0&0&0\\
+  0&0&0&0\\
+  0&0&0&0\\
+  0&0&0&0\\
+  0&0&0&0\\
+  0&0&0&0\\
+  0&0&0&0\\
+  0&0&0&0\\
+  0&0&0&0\\
+  0&0&0&0\\
+  1&0&0&0\\
+  0&1&0&0\\
+  0&0&1&0\\
+\end{array}\right)x+\]
+\[
+\left(\begin{array}{ccccccccccccccc}
+  V_{1}&V_{2}&V_{3}&V_{4}&V_{5}&V_{6}&V_{7}&V_{8}&V_{9}&V_{10}&I_{90}&I_{20}&I_{30}&I_{100}&I_{40}\\
+  \hline
+  0&0&0&0&0&0&0&0&0&0&0&0&0&0&0\\
+  0&0&0&0&0&0&0&0&0&0&0&1&0&0&0\\
+  0&0&0&0&0&0&0&0&0&0&0&0&1&0&0\\
+  0&0&0&0&-\frac{1}{R21}&\frac{1}{R21}&0&0&0&0&0&0&0&0&-1\\
+  0&0&0&0&\frac{1}{R21}&-\frac{1}{R12}-\frac{1}{R21}&\frac{1}{R11}&\frac{1}{R12}-\frac{1}{R11}&0&0&0&0&0&0&0\\
+  0&0&0&0&0&0&0&0&0&0&1&0&0&0&0\\
+  0&0&0&0&0&0&0&0&0&0&0&0&0&-1&0\\
+  0&0&0&0&0&0&0&0&0&1&0&0&0&0&0\\
+  0&1&0&0&0&0&0&0&0&0&0&0&0&0&0\\
+  0&0&1&0&0&0&0&0&0&0&0&0&0&0&0\\
+  0&0&0&0&0&0&0&0&1&0&0&0&0&0&0\\
+  0&0&0&1&0&-G2&0&0&G2&0&0&0&0&0&0\\
+  0&0&0&-1&1&0&0&0&0&0&0&0&0&0&0\\
+  0&0&0&0&0&-1&1&0&0&0&0&0&0&0&0\\
+  0&0&0&0&0&0&0&1&0&0&0&0&0&0&0\\
+\end{array}\right)Z_{s}+\]
+\[
+\left(\begin{array}{ccccc}
+  I_{1}&I_{2}&I_{3}&I_{4}&U_{2}\\
+  \hline
+  1&-1&-1&1&0\\
+  0&0&0&0&0\\
+  0&0&0&0&0\\
+  0&0&0&0&0\\
+  0&0&0&0&0\\
+  0&0&0&0&0\\
+  0&1&1&0&0\\
+  0&0&0&0&0\\
+  0&0&0&0&-1\\
+  0&0&0&0&0\\
+  0&0&0&0&0\\
+  0&0&0&0&0\\
+  0&0&0&0&0\\
+  0&0&0&0&0\\
+  0&0&0&0&0\\
+\end{array}\right)Z_{ns}=
+\left(\begin{array}{c}
+  \\
+0\\0\\0\\0\\0\\0\\0\\V1\\0\\Vramp\\Vref\\0\\0\\0\\0
+\end{array}\right)\]
+$N_{I}=N_{E}-4=24$
+\newpage
+And the non smooth equations:dim(Y)=dim($\lambda$ )=10.\\
+\underline{$Z_{ns}=B\lambda$}\\
+With B=
+\tiny
+\[
+\left(\begin{array}{cccccccccccccccccccccccc}
+0.09&0.2&0.4&1.1&2.8&-0.09&-0.2&-0.4&-1.1&-2.8&0&0&0&0&0&0&0&0&0&0&0&0&0&0\\
+0&0&0&0&0&0&0&0&0&0&1&0&0&0&0&0&0&0&0&0&0&0&0&0\\
+0&0&0&0&0&0&0&0&0&0&0&1&0&0&0&0&0&0&0&0&0&0&0&0\\
+0&0&0&0&0&0&0&0&0&0&0&0&0.09&0.2&0.4&1.1&2.8&-0.09&-0.2&-0.4&-1.1&-2.8&0&0\\
+0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&25&-25
+\end{array}\right)\]
 
-\end{itemize}
-For example, the automatic circuit equation formulation of the buck converter needs 0.012 s on a Pentium~4 processor clocked at 3~GHz.
+\small
+\underline{$Y=D\lambda$+Ex+s}
+\[\left(\begin{array}{c}
+  \\Y1\\Y2\\Y3\\Y4\\Y5\\Y6\\Y7\\Y8\\Y9\\Y10\\Y11\\Y12\\Y13\\Y14\\Y15\\Y16\\Y17\\Y18\\Y19\\Y20\\Y21\\Y22\\Y23\\Y24
+ \end{array}\right)=
+\left(\begin{array}{cccccccccccccccccccccccc}
+  \\
+  \hline
+1&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0\\
+0&1&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0\\
+0&0&1&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0\\
+0&0&0&1&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0\\
+0&0&0&0&1&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0\\
+0&0&0&0&0&1&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0\\
+0&0&0&0&0&0&1&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0\\
+0&0&0&0&0&0&0&1&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0\\
+0&0&0&0&0&0&0&0&1&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0\\
+0&0&0&0&0&0&0&0&0&1&0&0&0&0&0&0&0&0&0&0&0&0&0&0\\
+0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0\\
+0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0\\
+0&0&0&0&0&0&0&0&0&0&0&0&1&0&0&0&0&0&0&0&0&0&0&0\\
+0&0&0&0&0&0&0&0&0&0&0&0&0&1&0&0&0&0&0&0&0&0&0&0\\
+0&0&0&0&0&0&0&0&0&0&0&0&0&0&1&0&0&0&0&0&0&0&0&0\\
+0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&1&0&0&0&0&0&0&0&0\\
+0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&1&0&0&0&0&0&0&0\\
+0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&1&0&0&0&0&0&0\\
+0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&1&0&0&0&0&0\\
+0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&1&0&0&0&0\\
+0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&1&0&0&0\\
+0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&1&0&0\\
+0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&1&0\\
+0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&0&1
+\end{array}\right)\lambda+\]
+\[
+\left(\begin{array}{ccccccccccccccc}
+  V_{1}&V_{2}&V_{3}&V_{4}&V_{5}&V_{6}&V_{7}&V_{8}&V_{9}&V_{10}&I_{90}&I_{20}&I_{30}&I_{100}&I_{40}\\
+  \hline
+  0&-b&0&0&0&0&0&0&0&3&0&0&0&0&0\\
+  0&-b&0&0&0&0&0&0&0&3&0&0&0&0&0\\
+  0&-b&0&0&0&0&0&0&0&3&0&0&0&0&0\\
+  0&-b&0&0&0&0&0&0&0&3&0&0&0&0&0\\
+  0&-b&0&0&0&0&0&0&0&3&0&0&0&0&0\\
+  b&-b&0&0&0&0&0&0&0&0&0&0&0&0&0\\
+  b&-b&0&0&0&0&0&0&0&0&0&0&0&0&0\\
+  b&-b&0&0&0&0&0&0&0&0&0&0&0&0&0\\
+  b&-b&0&0&0&0&0&0&0&0&0&0&0&0&0\\
+  b&-b&0&0&0&0&0&0&0&0&0&0&0&0&0\\
+  1&0&0&0&0&0&0&0&0&0&0&0&0&0&0\\
+  -1&0&0&0&0&0&0&0&0&1&0&0&0&0&0\\
+  0&-b&0&0&0&0&0&0&0&3&0&0&0&0&0\\
+  0&-b&0&0&0&0&0&0&0&3&0&0&0&0&0\\
+  0&-b&0&0&0&0&0&0&0&3&0&0&0&0&0\\
+  0&-b&0&0&0&0&0&0&0&3&0&0&0&0&0\\
+  0&-b&0&0&0&0&0&0&0&3&0&0&0&0&0\\
+  b&-b&0&0&0&0&0&0&0&0&0&0&0&0&0\\
+  b&-b&0&0&0&0&0&0&0&0&0&0&0&0&0\\
+  b&-b&0&0&0&0&0&0&0&0&0&0&0&0&0\\
+  b&-b&0&0&0&0&0&0&0&0&0&0&0&0&0\\
+  b&-b&0&0&0&0&0&0&0&0&0&0&0&0&0\\
+  0&0&-1&1&0&0&0&0&0&0&0&0&0&0&0\\
+  0&0&-1&1&0&0&0&0&0&0&0&0&0&0&0\\
+\end{array}\right)Z_{s}=
+\left(\begin{array}{c}
+  \\h1\\h2\\h3\\h4\\h5\\h6\\h7\\h8\\h9\\h10\\0\\0\\h1\\h2\\h3\\h4\\h5\\h6\\h7\\h8\\h9\\h10\\-0.1\\0.1
+  \end{array}\right)
+  \]
+\normalsize
+\subsection{Simulation}
+
+The simulation computed 4 million steps with a 50 ps fixed time step. The figure \ref{fig-Buck-sim} shows the inductor current of the circuit.
+
+\begin {figure}[h]
+\input{Buck}
+\caption{Buck simulation}
+\label{fig-Buck-sim}
+\end {figure} 
+\newpage
+%*************************************OTHER ANALYSIS
+
+%EXAMPLE SECTION************************************************************************************
+
+
 
 \section{Conclusion}
 This document demonstrates a way to develop an automatic circuit equation formulation. It shows that a Moreau's time

@@ -3,7 +3,9 @@
 
 \section{The linear non smooth components}
 \subsection{Topology. Choice of smooth and nonsmooth components.}
-\textcolor{red}{\tt TBW}
+The stamp method is used for the linear components. About the non smooth components, a piecewise
+linear modeling describes the component's behavior. This geometry is written with linear
+complementarity conditions. 
 \subsection{Unknowns}
 Before go head, the unknowns vector X is subdivided:
 \begin{enumerate}
@@ -19,7 +21,7 @@ y_{i}=D_{i}x+E_{i}Z_{s}+F_{i}\lambda_{i}+G_{i}Z_{nsi}+e_{i}\\
 0 \leq y_{i} \, \perp \, \lambda_{i} \geq 0
 \end{array}\right)
 \end{equation}
-where $Z_{nsi}$ is a voltage and currents vector\textcolor{red}{\tt notation $zns$?}. $a_{i},e_{i},\lambda_{i}$ and $y_{i}$ are some constants vectors which characterizes the components. At the end
+where $Z_{nsi}$ is a voltage and currents vector. $a_{i},e_{i},\lambda_{i}$ and $y_{i}$ are some constants vectors which characterizes the components. At the end
 of this document, we will see how ideal diode and piecewise linear models of transistor fits into this formulation.
 
 
@@ -211,19 +213,36 @@ The MLCP is a mixture between an LCP and a system of linear equations. The forme
 
 
 
-Equivalently, the MLCS can be defined by 
+Equivalently, the MLCS can be defined by an implicit system
 
 \begin{definition}\index{Complementarity system ! mixed linear} \index{MLCS}
-  Given the matrices  ${A} \in \RR^{n \times n}$, ${B} \in \RR^{m \times m}$, ${C} \in \RR^{n \times m}$, ${D} \in \RR^{m \times n}$, and the vectors  $ {a} \in \RR^n, {b} \in \RR^m$, the MLCS denoted by $\mathrm{MLCS}(A,B,C,D,a,b)$ consists in finding two vectors $ {u} \in \RR^n$ and  $ {v} \in \RR^m$ such that
-\begin{equation}\label{eq:mlcp1} 
+  Given the matrices  ${M} \in \RR^{n \times n}$, ${A} \in \RR^{n \times n}$, ${B} \in \RR^{m \times
+  m}$, ${C} \in \RR^{n \times m}$, ${D} \in \RR^{m \times n}$, and the vectors  $ {a} \in \RR^n, {b}
+  \in \RR^m$, the implicit MLCS denoted by $\mathrm{IMLCS}(M,A,B,C,D,a,b)$ consists in finding two vectors $ {x} \in \RR^n$ and  $ {v} \in \RR^m$ such that
+\begin{equation}\label{eq:mlcs1} 
   \begin{cases}
-   x' = A x + C v + a  \\  \\
+   M x' = A x + C v + a  \\  \\
    {0} \le {v} \perp     Dx +B v +b   \ge {0}
   \end{cases}.
 \end{equation}
 \end{definition}
 
-\textcolor{red}{\tt Is it sufficient ??}
+or an explicit system
+\begin{definition}\index{Complementarity system ! mixed linear} \index{MLCS}
+  Given the matrices   ${A_{x}} \in \RR^{n \times n}$, ${A_{z}} \in \RR^{n \times
+  p}$, ${A_{v}} \in \RR^{n \times m}$, ${B_{x}} \in \RR^{p \times n}$, ${B_{z}} \in \RR^{p \times
+  p}$, ${B_{v}} \in \RR^{p \times m}$, ${C_{x}} \in \RR^{m \times n}$, ${C_{z}} \in \RR^{m \times p}$,${C_{v}} \in \RR^{m \times m}$, and
+  the vectors  $ {a} \in \RR^n$,$ {b}  \in \RR^p$,$ {c}  \in \RR^m$, the explicit MLCS denoted by
+  $\mathrm{EMLCS}(A_{x},A_{z},A_{v},B_{x},B_{z},B_{v},C_{x},C_{z},C_{v},a,b,c)$ consists in finding three vectors $ {x}
+  \in \RR^n$, $ {z} \in \RR^p$ and  $ {v} \in \RR^m$ such that
+\begin{equation}\label{eq:mlcs2} 
+  \begin{cases}
+   x' = A_{x} x +A_{z} z +A_{v} v + a  \\
+   0 = B_{x} x +B_{z} z + B_{v} v +b \\ \\
+   {0} \le {v} \perp     C_{x} x+ C_{z}z +C_{v} v +c   \ge {0}
+  \end{cases}.
+\end{equation}
+\end{definition}
 \subsection{Hypothesis}
 The MNA assumes smooth branches are explicit functions of current or voltage. It means each smooth
 branch is Voltage Defined (V.D.) or Current Defined (C.D.)\\
@@ -258,15 +277,21 @@ used in our formulation.
 
 These equations lead to a DAE of the form:
 \[MX'+NX=s(t)\]
+
 In general cases, the matrix $M$ is singular. But, with a good choice of the set of unknowns, it is possible to write a DAE of the form :
 \[x' = A_{1x}x +A_{1zs}Z_{s} + A_{1ns}Z_{ns}+A_{1s}\]
 \[0  = B_{1x}x+B_{1zs}Z_{s} + B_{1ns}Z_{ns}+B_{1s}\]
 
-\textcolor{red}{\tt Without $Z_{ns}$ ??}
-\subsection{Nonsmooth equations ad MLCP}
-\textcolor{red}{\tt TBW}
+\subsection{Nonsmooth equations and MLCS}
+With the linear complementary condition, the system becomes an explicit MLCS of the form :
+\[x' = A_{1x}x +A_{1zs}Z_{s} + A_{1ns}Z_{ns}+A_{1s}\]
+\[0  = B_{1x}x+B_{1zs}Z_{s} + B_{1ns}Z_{ns}+B_{1s}\]
+\[Z_{ns}= C_{1x}x+C_{1zs}Z_{s}+C_{1\lambda}\lambda +C_{1s}\]
+\[Y=D_{1x}x +D_{1zs}Z_{s}+D_{1ns}Z_{ns}+D_{1\lambda}\lambda+D_{1s}\]
+\[0 \leq Y \, \perp \, \lambda \geq 0\]
 \input{DAE_FORM.tex}
 \newpage
+
 \section{Summary of  the Matrix formulation}
 
 The previous section describes how get the following system:
@@ -278,15 +303,15 @@ Y=D_{1x}x +D_{1zs}Z_{s}+D_{1ns}Z_{ns}+D_{1\lambda}\lambda+D_{1s}\\
 0 \leq Y \, \perp \, \lambda \geq 0
 \end{array}\right)\]
 Substitute $Z_{ns}$:
-\[\left(\begin{array}{cc}
-R=A_{1ns}C_{1\lambda}&(eq1)\\
+\[\left(\begin{array}{c}
+R=A_{1ns}C_{1\lambda}\\
 x'=(A_{1x}+A_{1ns}C_{1x})x +(A_{1zs}+A_{1ns}C_{1zs})Z_{s} +R\lambda+A_{1s} + A_{1ns}C_{1s}\\
-x'=A_{2x}x +A_{2zs}Z_{s} +R \lambda +A_{2s}&(eq2)\\
+x'=A_{2x}x +A_{2zs}Z_{s} +R \lambda +A_{2s}\\
 0=(B_{1x}+B_{1ns}C_{1x})x+(B_{1zs}+B_{1ns}C_{1s})Z_{s} + B_{1ns}C_{1\lambda}\lambda +B_{1s} + B_{1ns}C_{1s} \\
-0=B_{2x}x+B_{2zs}Z_{s} + B_{2\lambda}\lambda + B_{2s}&(eq3)\\
-Y=(D_{1x}+D_{1ns}C_{1x})x+(D_{1zs}+D_{1ns}C_{1s})Z_{s}+(D_{1\lambda}+D_{1ns}C_{1\lambda})\lambda +D_{1s}+D_{1ns}C_{1s}=\\
-Y=D_{2x}x+D_{2zs}Z_{s}+D_{2\lambda}\lambda + D_{2s} &(eq4)\\
-0 \leq Y \, \perp \, \lambda \geq 0&(\perp)\\
+0=B_{2x}x+B_{2zs}Z_{s} + B_{2\lambda}\lambda + B_{2s}\\
+Y=(D_{1x}+D_{1ns}C_{1x})x+(D_{1zs}+D_{1ns}C_{1s})Z_{s}+(D_{1\lambda}+D_{1ns}C_{1\lambda})\lambda +D_{1s}+D_{1ns}C_{1s}\\
+Y=D_{2x}x+D_{2zs}Z_{s}+D_{2\lambda}\lambda + D_{2s} \\
+0 \leq Y \, \perp \, \lambda \geq 0\\
 \end{array}\right)\]
 $A_{2s}, B_{2s}$ and $D_{2s}$ are vectors.
 
