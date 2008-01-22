@@ -17,7 +17,9 @@
 
 \RRdate{06 Juillet 2007}
 %%
-\RRauthor{Pascal Denoyelle \thanks{Pascal.Denoyelle@inria.fr}}
+\RRauthor{Pascal Denoyelle \thanks{Pascal.Denoyelle@inria.fr}
+          \and
+          Vincent Acary \thanks{Vincent.Acary@inria.fr}}
 %%
 %\authorhead{Pascal Denoyelle}
 %%
@@ -313,8 +315,14 @@ x' & = & A x + B \lambda + b(t) \\
 y  & = & C x + D \lambda + F u(t) + e\\
 0 \leq y & \perp & \lambda \geq 0
 \end{eqnarray*}
-with $b(t)$ and $u(t)$ source terms.
-
+with $b(t)$ and $u(t)$ source terms :
+\[
+b(t) = \left( \begin{array}{c} 0 \\ -\frac{Vth_{DNMOS}}{L} \\ 0 \\ 0 \\ \frac{A}{\tau_p} V_{ref}(t) \end{array} \right)
+\]
+and
+\[
+F u(t) = \left( \begin{array}{c} - V_{ramp}(t) \\ - V_{ramp}(t) \\ 0 \\ \vdots \\ 0 \end{array} \right)
+\]
 \section{Simulation as a non-smooth dynamical system with SICONOS}
 \label{results-buck-SICO}
 The start-up of the converter was simulated thanks to the SICONOS platform developed at INRIA.
