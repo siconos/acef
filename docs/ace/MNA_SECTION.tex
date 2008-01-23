@@ -189,6 +189,22 @@ The result of the MNA is a system like :
 \[MX'=AX+c\]
 where X is the vector of unknowns, and M a matrix. Generally, M is not regular. Indeed, some variables
 are not dynamic, for example the current in a resistor.
+Moreover, If the circuit contains some non-linear components, for example non constant resistors or capacitors,
+the matrices M and A will not be constant. In any case, the system can be written as an implicit DAE:
+\begin{eqnarray}
+F[X,X',t]=0&\label{eq-mna-dae}
+\end{eqnarray}
+
+\subsection {Discretization and resolution}
+
+The discretization of the equation ~(\ref{eq-mna-dae}) consists in using the Differentiation Formula
+or the Backward Differentiation Formula. It leads to a nonlinear algebraic equation:
+\begin{eqnarray}
+F[x_{n},z(x_{n},x_{n-1},x_{n-2},...),t_{n}]=0
+\end{eqnarray}
+
+This equation is linearized and solved using the Newton-Raphson iterations.
+
 \newpage
 \subsection{A simple MNA example}
 \begin{figure}[h]
