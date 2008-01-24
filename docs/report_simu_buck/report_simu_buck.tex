@@ -309,7 +309,7 @@ One gets :
 \cdot \left( \begin{array}{c} 1 \\ \vdots \\ 1 \end{array} \right) + vecHyp\\
 \end{eqnarray*}
 \\
-All dynamical and non-smooth equations are then written in the form
+All dynamical and non-smooth equations are then written in the form of an affine complementarity system~(ACS)
 \begin{eqnarray*}
 x' & = & A x + B \lambda + b(t) \\
 y  & = & C x + D \lambda + F u(t) + e\\
@@ -323,6 +323,8 @@ and
 \[
 F u(t) = \left( \begin{array}{c} - V_{ramp}(t) \\ - V_{ramp}(t) \\ 0 \\ \vdots \\ 0 \end{array} \right)
 \]
+Matrix D belongs to class~P0 but has no symmetry property.
+
 \section{Simulation as a non-smooth dynamical system with SICONOS}
 \label{results-buck-SICO}
 The start-up of the converter was simulated thanks to the SICONOS platform developed at INRIA.
@@ -421,14 +423,27 @@ Thus the CPU time measured is increased with respect to a compiled version of th
 An estimation of the CPU time with a compiled simplified model is given by multiplying the MOS level 3 CPU time
 by the ratio of the Newton-Raphson iterations required respectively during the simulations with each model.
 An additional correction should be done to reflect that the computation of the jacobian matrix entries
-linked to a compiled simplified model would require less time than with a MOS level 3 model and that computation
-involves operations other than Newton-Raphson algorithm.
+linked to a compiled simplified model would require less time than with a MOS level 3 model. Even if the SPICE simulation
+includes other operations, jacobian matrix loading time is indeed known to be generally predominant.
 \end{description}
 
 
 \begin{itemize}
 \item Power MOSFETS intrinsic diodes are modelled by the classical Shockley equation with an emission
-coefficient $N~=~1$.
+coefficient $N~=~1$ :
+\[ I = I_S.({e^{\frac{q.V}{N.k.T}} - 1}) \qquad \textrm{when} \quad V > -5.N.\frac{k.T}{q} \]
+\[ I = -I_S \qquad  \textrm{when} \quad V < -5.N.\frac{k.T}{q} \]
+with
+\[
+\begin{array}{ll}
+V\,,\,I & \textrm{voltage across the diode and current through the diode}\\
+I_S & \textrm{saturation current, default value $10^{-14}$~A}\\
+q & \textrm{electron charge $1.6\,10^{-19}$~C}\\
+k & \textrm{Boltzmann constant $1.38\,10^{-23}\,J.K^{-1}$}\\
+T & \textrm{temperature in K}\\
+N & \textrm{emission coefficient}
+\end{array}
+\]
 \item The comparator is modelled as a non linear voltage controlled voltage source defined as $V_{out}~=~1.5~\cdot~(tanh(10~\cdot~V_{in}) + 1)$.
 Thus the 3~segment characteristic used as the non smooth model is regularized to help convergence of SPICE
 (see a comparison of the PWL comparator as used in SICONOS simulations with the SPICE one in figure \ref{fig-comparator-models}).
@@ -436,11 +451,13 @@ Thus the 3~segment characteristic used as the non smooth model is regularized to
 
 \begin{figure}[hbtp]
 \begin{center}
-\includegraphics[scale=1.2,angle=0]{comparators.eps}
+\includegraphics[scale=1.0,angle=0]{comparators.eps}
 \end{center}
 \caption{Comparison of PWL and SPICE (tanh based) comparator models}
 \label{fig-comparator-models}
 \end{figure}
+
+\clearpage
 
 The power supply $V_I$ is raised from 0 in $50~ns$ at the beginning to help the convergence.\footnote{This is
 not required with the SICONOS algorithms that find a consistent initial solution from scratch.}
@@ -466,14 +483,14 @@ The following tables displays the results with the standard and the sliding mode
 \hline
 simulator & model & time steps & NR iterations & CPU time (s) & CPU time estimation (s)\\
 \hline
-NGSPICE & simple  & 4000000 & 8024814 & 632 & 370\\
-NGSPICE & level 3 & 4000000 & 8302904 & 383 & \\
+NGSPICE & simple  & 4000000 & 8024814 & 632 & 357\\
+NGSPICE & level 3 & 4000000 & 8304237 & 370 & \\
 \hline
-SMASH   & simple  & 4000404 & 8073070 & 230 & 178\\
-SMASH   & level 3 & 4000313 & 8052858 & 178 & \\
+SMASH   & simple  & 4000404 & 8073070 & 230 & 172\\
+SMASH   & level 3 & 4000323 & 8059868 & 172 & \\
 \hline
-ELDO    & simple  & 4000000 & 4547579 & 388 & 354\\
-ELDO    & level 3 & 4000000 & 4658412 & 363 & \\
+ELDO    & simple  & 4000000 & 4547579 & 388 & 355\\
+ELDO    & level 3 & 4000000 & 4554452 & 356 & \\
 \hline
 \end{tabular}
 \begin{tabular}{|l|c|r|r|r|r|}
@@ -482,19 +499,22 @@ ELDO    & level 3 & 4000000 & 4658412 & 363 & \\
 \hline
 simulator & model & time steps & NR iterations & CPU time (s) & CPU time estimation (s)\\
 \hline
-NGSPICE & simple  & 4000000 & 8070324 & 638 & \\
-NGSPICE & level 3 & failed & failed & failed & \\
+NGSPICE & simple  & 4000000 & 8070324 & 638 & 358\\
+NGSPICE & level 3 & 4000000 & 8669053 & 385 & \\
 \hline
-SMASH   & simple  & 4000252 & 8239697 & 234 & 180\\
-SMASH   & level 3 & 4000121 & 8191656 & 179 & \\
+SMASH   & simple  & 4000252 & 8239697 & 234 & 176\\
+SMASH   & level 3 & 4000131 & 8220181 & 176 & \\
 \hline
-ELDO    & simple  & 4000000 & 5861226 & 438 & 361\\
-ELDO    & level 3 & 4000000 & 6062189 & 374 & \\
+ELDO    & simple  & 4000000 & 5861226 & 438 & 365\\
+ELDO    & level 3 & 4000000 & 5888994 & 367 & \\
 \hline
 \end{tabular}
 \\
 \\
 These results shall be compared to the 52~s~CPU time achieved with the non-smooth dynamics.
+Depending on the model and the SPICE simulator, the (estimated) CPU time is from~3.3~to~7.4
+larger than with SICONOS.\\
+
 Moreover, it was necessary to add a parasitic capacitor on the connection between the PMOS and NMOS
 transistors to allow the convergence of the SMASH simulator with both models of MOS
 and of the NGSPICE simulator with the MOS level 3 model.
@@ -523,8 +543,23 @@ More details of the start-up phase are shown on the figure \ref{fig-buck-resisto
 \clearpage
 The detailed analysis of a ramp cycle with standard component values and sliding mode related values as shown on
 \ref{fig-buck-resistor-simu-sico-std} and \ref{fig-buck-resistor-simu-sico-lowLC-badcomp} are displayed on
-figures \ref{fig-buck-resistor-simu-ngspice-std} and \ref{fig-buck-resistor-simu-ngspice-lowLC-badcomp}.
-SICONOS and NGSPICE simplified model results are very close.
+figures \ref{fig-buck-resistor-simu-ngspice-std} and \ref{fig-buck-resistor-simu-ngspice-lowLC-badcomp}.\\
+
+The overall functioning during one ramp in the standard case is now described
+(see~\ref{fig-buck-resistor-simu-sico-std} and~\ref{fig-buck-resistor-simu-ngspice-std}):\\
+At the end of the previous ramp period (time~$196.6~\mu s$),
+the fast falling ramp signal crosses the error signal which results in the end of the NMOS conduction period
+and the beginning of the PMOS one. During the very short time (around~250~ps) when no MOS conducts, the NMOS intrinsic
+diode allows the current to flow through the inductance : this yields the spike on the NMOS diode current visible
+on the top chart of~\ref{fig-buck-resistor-simu-sico-std}~and~\ref{fig-buck-resistor-simu-ngspice-std}.
+In the middle of the ramp period (time~$197.7~\mu s$),
+the slowly rising ramp signal crosses the error signal which results in the end of the PMOS conduction period
+and the beginning of the NMOS one. There is also an intermediate period when no MOS conducts and the NMOS intrinsic
+diode acts as freewheeling (or flyback). It lasts longer due to the slower variation of voltages. These diode
+conducting periodes are also visible on the bottom chart on the PMOS drain potential : during NMOS diode conduction,
+this potential is clamped to~$-0.8~V$ according to the diode threshold voltage.\\
+
+One can notice that SICONOS and NGSPICE simplified model results are very close.
 
 \begin{figure}[hbtp]
 \begin{center}
@@ -548,10 +583,9 @@ exhibiting a sliding mode}
 \end{figure}
 
 \clearpage
-Figure \ref{fig-compar-Sah-level3} shows the differences related to the simplified versus level 3 MOS models,
+Figure \ref{fig-compar-Sah-level3} shows the results over one ramp period with the simplified versus level 3 MOS models,
 where both simulations were performed with ELDO (the only SPICE simulator converging with the level 3 model
-without extra capacitor). The simulations differ by details on the conduction period of the NMOS transistor and 
-intrinsic diode.
+without extra capacitor). There is no noticeable difference.
 
 \begin{figure}[hbtp]
 \begin{center}
@@ -561,7 +595,6 @@ intrinsic diode.
 {Simplified vs. level 3 MOS models ELDO results (one ramp in steady state)}
 \label{fig-compar-Sah-level3}
 \end{figure}
-
 
 \clearpage
 
