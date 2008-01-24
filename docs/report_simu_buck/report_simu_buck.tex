@@ -394,7 +394,8 @@ steady state with $L~=~4~\mu H$, $C~=~10~\mu F$}
 \end{center}
 \caption[SICONOS results, buck \protect\& load resistor , steady state , sliding mode]
 {SICONOS simulation results, buck converter with a load resistor\protect\newline
-steady state with $L~=~4~\mu H$, $C~=~10~\mu F$ , $R_{11}~=~10~K\Omega$, $R_{21}~=~8~M\Omega$, $C_{11}~=~10~pF$\protect\newline
+steady state with $L~=~4~\mu H$, $C~=~10~\mu F$ , $R_{11}~=~10~K\Omega$, $R_{21}~=~8~M\Omega$, $C_{11}~=~10~pF$
+%\protect\newline
 exhibiting a sliding mode}
 \label{fig-buck-resistor-simu-sico-lowLC-badcomp}
 \end{figure}
@@ -577,7 +578,8 @@ steady state with standard parameters}
 \end{center}
 \caption[NGSPICE results, buck \protect\& load resistor , steady state , sliding mode]
 {NGSPICE simulation results, buck converter with a load resistor\protect\newline
-steady state with $L~=~4~\mu H$, $C~=~10~\mu F$ , $R_{11}~=~10~K\Omega$, $R_{21}~=~8~M\Omega$, $C_{11}~=~10~pF$\protect\newline
+steady state with $L~=~4~\mu H$, $C~=~10~\mu F$ , $R_{11}~=~10~K\Omega$, $R_{21}~=~8~M\Omega$, $C_{11}~=~10~pF$
+%\protect\newline
 exhibiting a sliding mode}
 \label{fig-buck-resistor-simu-ngspice-lowLC-badcomp}
 \end{figure}
@@ -637,7 +639,9 @@ flyback conduction by the NMOS intrinsic diode (see description of the PLECS cir
 \\
 \textbf{The CPU time required to achieve the simulation of $200~\mu s$ ranges between $135~s$ and $410~s$ on a 
 Pentium~4 clocked at 3~GHz, depending on the values of the resistors, capacitors and inductor.} This should be compared
-to the $52~s$ of the SICONOS simulation, \textbf{obtained independently from these components values}. This demonstrates
+to the $52~s$ of the SICONOS simulation, \textbf{obtained independently from these components values}.
+The CPU time is therefore from~2.6 to~7.9 times larger than with SICONOS.
+This demonstrates
 the robustness and efficiency of the time-stepping scheme and the one step solving algorithms of SICONOS. Moreover, the
 short time step (50~ps) used in SICONOS simulations was required to catch some conduction periods of the NMOS intrinsic
 diode. As explained above, these phenomena are not simulated with the present PLECS circuit.
@@ -676,7 +680,8 @@ standard parameters (zoom view of steady state)}
 \end{center}
 \caption[PLECS results, buck \protect\& load resistor , sliding mode]
 {PLECS simulation results, buck converter with a load resistor\protect\newline
-$L~=~4~\mu H$, $C~=~10~\mu F$ , $R_{11}~=~10~K\Omega$, $R_{21}~=~8~M\Omega$, $C_{11}~=~10~pF$\protect\newline
+$L~=~4~\mu H$, $C~=~10~\mu F$ , $R_{11}~=~10~K\Omega$, $R_{21}~=~8~M\Omega$, $C_{11}~=~10~pF$
+%\protect\newline
 exhibiting a sliding mode}
 \label{fig-buck-resistor-simu-plecs-0p2ms-sliding}
 \end{figure}
@@ -687,7 +692,8 @@ exhibiting a sliding mode}
 \end{center}
 \caption[PLECS results, buck \protect\& load resistor , steady state , sliding mode]
 {PLECS simulation results, buck converter with a load resistor\protect\newline
-$L~=~4~\mu H$, $C~=~10~\mu F$ , $R_{11}~=~10~K\Omega$, $R_{21}~=~8~M\Omega$, $C_{11}~=~10~pF$\protect\newline
+$L~=~4~\mu H$, $C~=~10~\mu F$ , $R_{11}~=~10~K\Omega$, $R_{21}~=~8~M\Omega$, $C_{11}~=~10~pF$
+%\protect\newline
 exhibiting a sliding mode (zoom view of ``steady'' state)}
 \label{fig-buck-resistor-simu-plecs-zoom-sliding}
 \end{figure}
@@ -719,6 +725,9 @@ Their parameters are:
 \item[Threshold voltage:] $-0.6~V$ for the PMOS and $0.6~V$ for the NMOS
 \item[Output capacitive load :] $20~fF$
 \end{description}
+
+This yields the same kind of affine complementarity system as
+the single buck converter. Matrix~D belongs again to the P0-class.\\
 
 Two chain lengths were tested :
 
@@ -797,15 +806,17 @@ the buck netlist instantiating as power MOS a classical (level 3) MOS model with
 parasitic capacitances. Simulations were done with a~50~ps~time step and no~LTE estimation.
 \\
 \\
-\textbf{The simulation of the buck with a 2 inverters chain takes 439~s on a Pentium~4 clocked at 3~GHz.}
+\textbf{The simulation of the buck with a 2 inverters chain takes 441~s on a Pentium~4 clocked at 3~GHz.}
 \\
 \textbf{The simulation of the buck with a 50 inverters chain takes 25~minutes on a Pentium~4 clocked at 3~GHz.}
 \\
 With 2 inverters only, SICONOS runs 4~times faster whereas with~50~inverters, ELDO runs 6~times faster.
 These are initial results since :
 \begin{itemize}
-\item as explained in \ref{section-simu-siconos-buckinv}, the SICONOS run time
-will benefit from the use of sparse matrix techniques.
+\item as explained in section \ref{section-simu-siconos-buckinv}, the SICONOS run time
+will benefit from the use of sparse matrix techniques. It is expected that this will significantly
+reduce the time of computation, since there are many calculations in the SICONOS engine that
+could benefit from adding a specific sparse solver.
 \item the present representation of the circuit as a non-smooth dynamical system replaces every
 non-linear component by set-valued or piecewise linear functions yielding an LCP. It is possible to mix such
 models with classical smooth models like SPICE ones, resulting in a NLCP. The detailed analysis of an
@@ -883,12 +894,14 @@ using three different classes of algorithms :
 \item[The SICONOS approach] allows to perform simulations in reasonable time, and thus to do quickly parametric studies
 while keeping the modelling of the main characteristics of components. Furthermore, the implementation of the platform
 is far from being optimized. Future major enhancements like sparse matrix techniques or Non-Linear Complementarity Problem
-solvers will very likely reduce the CPU time without impairing accuracy.
+solvers will very likely reduce the CPU time without impairing the accuracy.
 \item[The SPICE approach] may lead to failures if the models are very non-linear like diodes or the variable
 capacitances in the MOS level~1 model. Some simulators converge only if the circuit is regularized by
 adding smoothing elements like capacitors. When convergence was reached, CPU time was at least 3~times
 larger than SICONOS on small circuits. On a larger circuit with tens of nodes, SPICE results are better than
-the current SICONOS version, this probably comes mainly from the use of sparse matrices.
+the current SICONOS version. This probably comes mainly from the use of sparse matrices and various other
+implementation tricks which are not present in SICONOS, which is a software package whose development started
+few years ago in an academic context.
 \item[The PLECS approach] enables to simulate a low number of switches in an acceptable time provided that events
 are not too frequent. When fast clocked circuitry is added, CPU time rises high, and it probably happens also
 when the number of switches is increased.\footnote{The evaluation version is limited to 6 switches.}
@@ -904,10 +917,10 @@ The CPU time and convergence results are summarized hereafter :
 \hline
  & \textbf{SICONOS} & \textbf{SPICE (ELDO)} & \textbf{PLECS} \\
 \hline
-Buck converter & 52 s & 363 s  & 135 s to 410 s \\
+Buck converter & 52 s & 356 s  & 135 s to 410 s \\
 load : resistor & {\small slightly approximate } & {\small precise } & {\small very approximate } \\
 \hline
-Buck converter & 110 s & 439 s & 4 hours 8 min \\
+Buck converter & 110 s & 441 s & 4 hours 8 min \\
 load : resistor \& inverters  & {\small slightly approximate } & {\small precise }  & {\small very approximate }\\
 \hline
 \end{tabular}
