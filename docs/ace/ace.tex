@@ -17,7 +17,7 @@
 %\authorhead{Pascal Denoyelle}
 %%
 \RRtitle{
-	Formulation automatique des équations des circuits electriques non r\'eguliers
+	Formulation automatique des équations des circuits electriques non réguliers
 		}
 %% English title
 \RRetitle{
@@ -29,16 +29,26 @@
 \RRnote{}
 %%
 \RRresume{
-TBW
+Les circuits aujourd'hui fabriqués ne peuvent plus être simulés dans un délai acceptable. En effet
+les composants au comportement fortement non régulier posent des problèmes de convergences aux
+méthodes itératives. Une autre approche consiste à modéliser ces composants avec des fonctions
+linéaires par morceaux. Puis les équations électriques sont reformulées avec des conditions de
+complémentarités. La résolution du systèmes se fait alors avec des algorithmes adaptés. L'efficacité
+de cette approche a était démontrée sur des circuits particuliers. Le but de ce document est de
+montré qu'il est possible d'obtenir ce système d'équations et de complémentarité de manière automatique.
 }
 \RRNo{0000001}
 \RRabstract{
-TBW
+An electrical circuit composed of a lot of non-smooth components can not be simulated in a short time. Because the non-smooth components are incompatible
+with the iterative methods. An other approach is to modeling these components with some
+piecewise linear functions. The resolution of this system leads to a Linear Complementarity Problem
+solved with efficient algorithms. This approach has been validated with some electrical circuits. The
+aim of this document is to demonstrate that it is possible to program an automatic circuit equation formulation.
 }
 %%
-\RRmotcle{}
+\RRmotcle{Simulation, circuits électriques, probléme de complémentarité, Analyse nodale modifiée, système~dynamique~non-régulier}
 
-\RRkeyword{}
+\RRkeyword{Simulation, circuits equation, Linear Complementarity Problem, Modified Nodal Analysis, non-smooth~dynamical~system}
 
 %%
 \RRprojet{BIPOP}  % cas d'un seul projet
@@ -51,7 +61,7 @@ TBW
 \usepackage{showlabels}
 \begin{document}
 \makeRT  %cas d'un rapport technique.
-
+ 
 \tableofcontents
 \input{body.tex}
 \clearpage
