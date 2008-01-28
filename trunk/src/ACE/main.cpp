@@ -1,8 +1,8 @@
 #include"ace.h"
 #include "algo.h"
 int main(int argc, char **argv){
-  if (argc<3){
-    printf("usage : toto file.cir ENUM|SIMPLEX|PATH 10\n");
+  if (argc<5){
+    printf("usage : toto file.cir ENUM|SIMPLEX|PATH 10 DENSE|SPARSE\n");
     return 0;
   }
   if (!strcmp(argv[2],"ENUM")){
@@ -15,18 +15,19 @@ int main(int argc, char **argv){
     printf("usage : toto file.cir ENUM|SIMPLEX|PATH 10\n");
     return 0;
   }
-  if (argc == 3)
+  if (!strcmp(argv[3],"0"))
     ACE_MUET_LEVEL=0;
-  else{
-    if (!strcmp(argv[3],"0"))
-      ACE_MUET_LEVEL=0;
-    else if (!strcmp(argv[3],"1"))
-      ACE_MUET_LEVEL=1;
-    else if (!strcmp(argv[3],"2"))
-      ACE_MUET_LEVEL=2;
-    else
-      ACE_MUET_LEVEL=10;
-  }
+  else if (!strcmp(argv[3],"1"))
+    ACE_MUET_LEVEL=1;
+  else if (!strcmp(argv[3],"2"))
+    ACE_MUET_LEVEL=2;
+  else
+    ACE_MUET_LEVEL=10;
+  
+  if (!strcmp(argv[4],"SPARSE"))
+    ACE_MAT_TYPE=SPARSE;
+  else
+    ACE_MAT_TYPE=DENSE;
     
   ACE_times[ACE_TIMER_MAIN].start();
   ACE_INIT();

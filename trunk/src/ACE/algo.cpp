@@ -238,12 +238,16 @@ void algo::perform(){
  // sls.printEquations();
  
  //compute matrix: x'=A1x * mx + A1zs * mZs + A1zns * mZns;
+ ACE_times[ACE_TIMER_TEST_1].start();
  sls.computedxdt();
+ ACE_times[ACE_TIMER_TEST_1].stop();
  // sls.printA1();
  stampAfterInvertion();
  ACE_MESSAGE("final equation ;\n");
  //sls.printEquations();
+ ACE_times[ACE_TIMER_TEST_2].start();
  sls.buildLinearSystem();
+ ACE_times[ACE_TIMER_TEST_2].stop();
  sls.set2matrix();
 
  

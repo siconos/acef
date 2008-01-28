@@ -12,6 +12,7 @@
 #include "equationvd.h"
 #include "equationten.h"
 #include "aceMatrix.h"
+#include "aceVector.h"
 #include "mlcp.h"
 using namespace std;
 // Class linearSystem
@@ -101,47 +102,49 @@ public:
   aceMatrix *mB;
   aceMatrix *mC;
   aceMatrix *mD;
-  aceMatrix *ms;
+  aceVector *ms;
+  aceMatrix *mMatBuf1;
+  aceMatrix *mMatBuf2;
 
   //x'=A1x*x + A1zs*Zs + A1zns*Zns + A1s
   aceMatrix *mA1x;
   aceMatrix *mA1zs;
   aceMatrix *mA1zns;
-  aceMatrix *mA1s;
+  aceVector *mA1s;
   //0 = B1x*x + B1zs*Zs + B1zns*Zns + B1s
   aceMatrix *mB1x;
   aceMatrix *mB1zs;
   aceMatrix *mB1zns;
-  aceMatrix *mB1s;
+  aceVector *mB1s;
 
   //Zns = C1x*x + C1s*Zs + C1l*lamdba + C1s
   aceMatrix *mC1x;
   aceMatrix *mC1zs;
   aceMatrix *mC1l;
-  aceMatrix *mC1s;
+  aceVector *mC1s;
 
   //Y = D1x*x + D1s*Zs + D1ns*Zns + D1l*lambda +D1s
   aceMatrix *mD1x;
   aceMatrix *mD1zs;
   aceMatrix *mD1zns;
   aceMatrix *mD1l;
-  aceMatrix *mD1s;
+  aceVector *mD1s;
 
   aceMatrix *mR;
   aceMatrix *mA2x;
   aceMatrix *mA2zs;
-  aceMatrix *mA2s;
-  aceMatrix *mA2sti;
+  aceVector *mA2s;
+  aceVector *mA2sti;
 
   aceMatrix *mB2x;
   aceMatrix *mB2zs;
   aceMatrix *mB2l;
-  aceMatrix *mB2s;
+  aceVector *mB2s;
 
   aceMatrix *mD2x;
   aceMatrix *mD2zs;
   aceMatrix *mD2l;
-  aceMatrix *mD2s;
+  aceVector *mD2s;
 
   aceMatrix *mD2xW;
   aceMatrix *mB2xW;
@@ -151,18 +154,20 @@ public:
 
   
   //DISCRETISATION
-  aceMatrix *mxti;
-  aceMatrix *mzsti;
-  aceMatrix *mznsti;
-  aceMatrix *mxfree;
+  aceVector *mxti;
+  aceVector *mzsti;
+  aceVector *mznsti;
+  aceVector *mxfree;
 
   aceMatrix *mW;
   aceMatrix *mD3l;
   aceMatrix *mD3zs;
   aceMatrix *mB3l;
   aceMatrix *mB3zs;
-  aceMatrix *mPfree;
-  aceMatrix *mQfree;
+  aceVector *mPfree;
+  aceVector *mQfree;
+  aceVector *mPAux;
+  aceMatrix *mPxAux;
 
   ACE_DOUBLE mTheta;
   ACE_DOUBLE mThetap;
@@ -190,7 +195,10 @@ protected:
 private:
   void buildABCDs();
   void extractDynBockInMat(aceMatrix * m, int IndexBegin, int IndexEnd);
+  void extractDynBockInVect(aceVector * V);
   void extractNonDynBockInMat(aceMatrix * m, int IndexBegin, int IndexEnd);
+  void extractNonDynBockInVect(aceVector * V);
+
   void allocA1Matrix();
   void freeA1Matrix();
   void allocB1Matrix();

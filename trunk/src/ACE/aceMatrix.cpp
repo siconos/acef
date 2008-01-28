@@ -1,5 +1,5 @@
 #include "aceMatrix.h"
-
+#include "ace.h"
 
 
 aceMatrix::aceMatrix ( unsigned int row, unsigned int col, UBLAS_TYPE typ, unsigned int upper, unsigned int lower):
@@ -8,15 +8,57 @@ SimpleMatrix(row,col,typ,upper,lower)
   ;
 }
 
+void aceMatrix::set(const aceMatrix& M){
+  unsigned int lin,col;
+  ACE_times[ACE_TIMER_TEST].start();
+  zero();
+  for (lin = 0; lin < dimRow;lin++){
+    for (col = 0; col < dimCol;col++){
+      double v = M.getValue(lin,col);
+      if (fabs(v) > ACE_NULL_COEF_MAT){
+	setValue(lin,col,v);
+      }
+    }
+  }
+  ACE_times[ACE_TIMER_TEST].stop();
+}
+void aceMatrix::setValueIfNotNull(unsigned int lin, unsigned int col , double v){
+  if (fabs(v) > ACE_NULL_COEF_MAT){
+    setValue(lin,col,v);
+  }else{
+    if (num==1)
+      setValue(lin,col,0);
+    else{
+      double *d=(*mat.Sparse).find_element(lin,col);
+      if (d)
+	(*mat.Sparse).erase_element(lin,col);
+    }
+  }
+}
 
 void aceMatrix::display(ostream& os) const{
-  os <<"["<<dimRow<<","<<dimCol<<"]"<<endl;
-  for (unsigned int i=0;i<dimRow;i++){
-    for (unsigned int j=0;j<dimCol;j++){
-      os <<"\t"<<((SimpleMatrix&)*this)(i,j);
+  if (num == 1){
+    os <<"DENSE MATRIX ["<<dimRow<<","<<dimCol<<"]"<<endl;
+    for (unsigned int i=0;i<dimRow;i++){
+      for (unsigned int j=0;j<dimCol;j++){
+	os <<"\t"<<getValue(i,j);
+      }
+      os <<"\n";
     }
-    os <<"\n";
-  }
+  }else if (num ==4){
+    os <<"SPARSE MATRIX ["<<dimRow<<","<<dimCol<<"]"<<endl;
+    for (unsigned int i=0;i<dimRow;i++){
+      for (unsigned int j=0;j<dimCol;j++){
+	double *d=(*mat.Sparse).find_element(i,j);
+	if (d)
+	  os <<"\t"<<*d;
+	else
+	  os <<"\t"<<"N";
+      }
+      os <<"\n";
+    }
+  }else
+    os<<"unknown matrix type !!!!!\n";
       
 }
 
@@ -36,7 +78,7 @@ ostream & operator<<(ostream &f, const aceMatrix &Mat)
 void aceMatrix::MatrixToFortran(double * t){
   for (unsigned int i=0; i < dimRow; i++)
     for (unsigned int j=0; j < dimCol; j++)
-      t[j*dimRow+i]=((SimpleMatrix&)*this)(i,j);
+      t[j*dimRow+i]=getValue(i,j);
     
 }
 void aceMatrix::FortranToMatrix(double * t){

@@ -596,8 +596,6 @@ int mlcp_simplex( double *a, double *b, double *u, double *v, double *w , int *i
   
   /* Variables declaration */
   double objval;
-
-
   /*fill rhs*/
   for (i=0;i<n;i++)
     rhs[i]=a[i];
@@ -610,6 +608,9 @@ int mlcp_simplex( double *a, double *b, double *u, double *v, double *w , int *i
   chgobj (env, lp, ncols, ind1toN, objective);
 
     /* optimize with objective to find feasible point */
+  print_double_array("a",a,n);
+  print_double_array("b",b,m);
+  //print_sparse_matrix(matbeg,matcnt,matind,matval,objective,rhs,sense,lb,ub);
 
   ACE_times[ACE_TIMER_SIMPLEX_FIRST].start();
   lpopt(env, lp);

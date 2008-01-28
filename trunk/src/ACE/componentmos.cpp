@@ -97,8 +97,8 @@ void componentMOS::stamp(){
   
   //hyp
   for(ind=0;ind < mN;ind++){
-      algo::sls.mD1s->setValue(mIndiceStartLambda+ind,0,mHyp[ind]);
-      algo::sls.mD1s->setValue(mIndiceStartLambda+mN+ind,0,mHyp[ind]);
+      algo::sls.mD1s->setValue(mIndiceStartLambda+ind,mHyp[ind]);
+      algo::sls.mD1s->setValue(mIndiceStartLambda+mN+ind,mHyp[ind]);
     }
 
   

@@ -56,22 +56,23 @@ mlcp::mlcp(unsigned int Dlcp,unsigned int Dlin,int solverType){
   mPourCent=0;
 
   mM = new aceMatrix(Dlcp+Dlin,Dlcp+Dlin);
+
   mTryM = false;
-  mQ= new aceMatrix(Dlcp+Dlin,1);
+  mQ= new aceVector(Dlcp+Dlin);
 
   if (mDlcp){
     mW1Z1 = (int*)calloc(mDlcp,sizeof(int));
     //mW1Z1prev = (int*)calloc(mDlcp,sizeof(int));
-    mW1 = new aceMatrix(mDlcp,1);
-    mZ1 = new aceMatrix(mDlcp,1);
-    mQ1=new aceMatrix(mDlcp,1);
+    mW1 = new aceVector(mDlcp);
+    mZ1 = new aceVector(mDlcp);
+    mQ1=new aceVector(mDlcp);
     mM11 = new aceMatrix(mDlcp,mDlcp);
   }
    
   if (mDlin){
     mM22 = new aceMatrix(mDlin,mDlin);
-    mZ2 = new aceMatrix(mDlin,1);
-    mQ2 = new aceMatrix(mDlin,1);     
+    mZ2 = new aceVector(mDlin);
+    mQ2 = new aceVector(mDlin);     
   }
    
   if (mDlin && mDlcp){
@@ -184,16 +185,16 @@ bool mlcp::solveWithPath(){
   mM11->MatrixToFortran(mB);  
   mM21->MatrixToFortran(mC);  
   mM12->MatrixToFortran(mD);  
-  mQ2->MatrixToFortran(ma);  
-  mQ1->MatrixToFortran(mb);  
+  mQ2->VectorToFortran(ma);  
+  mQ1->VectorToFortran(mb);  
   ACE_times[ACE_TIMER_SOLVE_PATH].start();
   printf("\n\n\n*********************************warnning, signe de mA\n");
   //  res= mlcp_path(&n , &m, mA , mB , mC , mD , ma, mb, mu, mv, mw , 0 , 0 , 0  );
   ACE_times[ACE_TIMER_SOLVE_PATH].stop();
   
-  mZ1->FortranToMatrix(mv);
-  mZ2->FortranToMatrix(mu);
-  mW1->FortranToMatrix(mw);
+  mZ1->FortranToVector(mv);
+  mZ2->FortranToVector(mu);
+  mW1->FortranToVector(mw);
   return res;
 
 }
@@ -220,18 +221,20 @@ bool mlcp::solveWithSimplex(){
   int m = mDlcp;
   bool res;
 
-  mQ2->MatrixToFortran(ma);  
-  mQ1->MatrixToFortran(mb);
-  
+  mQ2->VectorToFortran(ma);  
+  mQ1->VectorToFortran(mb);
+  //  cout<<"**mQ1\n"<<*mQ1;
+  //  cout<<"**mQ2\n"<<*mQ2;
+
   ACE_times[ACE_TIMER_SOLVE_SIMPLEX].start();
   res= mlcp_simplex(ma, mb, mu, mv, mw , 0 , 0 , 0  );
   mCase = getConfigLCP();
   addGuess(mCase);
   ACE_times[ACE_TIMER_SOLVE_SIMPLEX].stop();
 
-  mZ1->FortranToMatrix(mv);
-  mZ2->FortranToMatrix(mu);
-  mW1->FortranToMatrix(mw);
+  mZ1->FortranToVector(mv);
+  mZ2->FortranToVector(mu);
+  mW1->FortranToVector(mw);
   
   return res;
 }
@@ -270,6 +273,7 @@ bool mlcp::solve(){
   ACE_STOP_SOLVER_TIME();
   return res;
 }
+
 bool mlcp::solveGuessAndIt(){
   bool onlyOne = true;
 
@@ -286,7 +290,7 @@ bool mlcp::solveGuessAndIt(){
       //cout <<(*mQ2);
       mM22->PLUForwardBackwardInPlace(*mQ2);
       for (lin=0;lin<mDlin;lin++)
-	mZ2->setValue(lin,0,mQ2->getValue(lin,0));
+	mZ2->setValue(lin,mQ2->getValue(lin));
       return true;
     }
     catch(SiconosException e)
@@ -302,8 +306,8 @@ bool mlcp::solveGuessAndIt(){
   }
   if (mTryM){
     ACE_times[ACE_TIMER_DIRECT].start();
-    mQ->setBlock(0,0,*mQ1);
-    mQ->setBlock(mDlcp,0,*mQ2);
+    mQ->setBlock(0,*mQ1);
+    mQ->setBlock(mDlcp,*mQ2);
     //scal(-1,*mQ,*mQ);
     //    *mQ=-1*(*mQ);
     ACE_times[ACE_TIMER_LU_DIRECT].start();
@@ -312,7 +316,7 @@ bool mlcp::solveGuessAndIt(){
     bool check=true;
     for (lin = 0 ; lin <mDlcp; lin++){
       //     double aux = mQ->getValue(lin,0);
-      if (mQ->getValue(lin,0) < - ACE_NULL){
+      if (mQ->getValue(lin) < - ACE_NULL){
 	ACE_MESSAGE("mlcp::solveGuessAndIt not in the cone\n");
 	check=false;
 	break;//pas dans le cone!
@@ -332,8 +336,8 @@ bool mlcp::solveGuessAndIt(){
     mM->setBlock(0,mDlcp,*mM12);
     mM->setBlock(mDlcp,0,*mM21);
     mM->setBlock(mDlcp,mDlcp,*mM22);
-    mQ->setBlock(0,0,*mQ1);
-    mQ->setBlock(mDlcp,0,*mQ2);
+    mQ->setBlock(0,*mQ1);
+    mQ->setBlock(mDlcp,*mQ2);
     printInPutABCDab();
   }
   initEnum();
@@ -341,8 +345,8 @@ bool mlcp::solveGuessAndIt(){
     //if(!mTringGuess){
     mM->setBlock(0,mDlcp,*mM12);
     mM->setBlock(mDlcp,mDlcp,*mM22);
-    mQ->setBlock(0,0,*mQ1);
-    mQ->setBlock(mDlcp,0,*mQ2);
+    mQ->setBlock(0,*mQ1);
+    mQ->setBlock(mDlcp,*mQ2);
     
     if(ACE_MUET_LEVEL !=10)
       printInPut();
@@ -385,8 +389,8 @@ bool mlcp::solveGuessAndIt(){
    mTryM=true;
    bool check=true;
    for (lin = 0 ; lin <mDlcp; lin++){
-     double aux = mQ->getValue(lin,0);
-     if (mQ->getValue(lin,0) < - ACE_NULL){
+     double aux = mQ->getValue(lin);
+     if (mQ->getValue(lin) < - ACE_NULL){
        ACE_MESSAGE("mlcp::solveGuessAndIt not in the cone\n");
        check=false;
        break;//pas dans le cone!
@@ -425,31 +429,31 @@ bool mlcp::solveGuessAndIt(){
  }
 }
 void   mlcp::fillSolution(){
-  int lin;
+  unsigned int lin;
   for (lin=0;lin<mDlcp;lin++){
     if (mW1Z1[lin]==0){
       //double aux =mQ->getValue(lin,0);
-      mW1->setValue(lin,0,0);
-      mZ1->setValue(lin,0,mQ->getValue(lin,0));
+      mW1->setValue(lin,0);
+      mZ1->setValue(lin,mQ->getValue(lin));
     }else{
       //double aux =mQ->getValue(lin,0);
-      mZ1->setValue(lin,0,0);
-      mW1->setValue(lin,0,mQ->getValue(lin,0));
+      mZ1->setValue(lin,0);
+      mW1->setValue(lin,mQ->getValue(lin));
     }    
   }
 
-  setBlock(mQ,mZ2,dim,start);
-  //  for (lin=0;lin<mDlin;lin++)
-  // mZ2->setValue(lin,0,mQ->getValue(mDlcp+lin,0));
+  //  setBlock(mQ,mZ2,dim,start);
+  for (lin=0;lin<mDlin;lin++)
+    mZ2->setValue(lin,mQ->getValue(mDlcp+lin));
   if((ACE_MUET_LEVEL != ACE_MUET )&& !mTringGuess)
     printOutPut();
  }
-void mlcp::addGuess(aceMatrix *Z){
+void mlcp::addGuess(aceVector *Z){
   unsigned long cur2pow=1;
   unsigned long res=0;
   
   for (unsigned int lin=0;lin<mDlcp;lin++){
-    if (Z->getValue(lin,0)<ACE_INF)
+    if (Z->getValue(lin)<ACE_INF)
       res+=cur2pow;
     cur2pow=2*cur2pow;
   }

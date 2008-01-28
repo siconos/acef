@@ -7,6 +7,8 @@ char ACE_name[12]="ace";
 aceTime ACE_times[ACE_TIMER_LAST];
 int ACE_SOLVER_TYPE=0;
 int ACE_MUET_LEVEL=0;
+UBLAS_TYPE ACE_MAT_TYPE=DENSE;
+
 
 void ACE_INIT(){
   ACE_INIT_TIME();
@@ -29,7 +31,11 @@ void ACE_INIT_TIME(){
   ACE_times[ACE_TIMER_LS_STEP].setName("ls step  ");
   ACE_times[ACE_TIMER_COMPUTE_VAR].setName("lcp --> netlist  ");
   ACE_times[ACE_TIMER_SIMULATION].setName("Simulation  ");
+  ACE_times[ACE_TIMER_PROD_MAT].setName("Prod mat  ");
   ACE_times[ACE_TIMER_TEST].setName("test  ");
+  ACE_times[ACE_TIMER_TEST_1].setName("computedxdt  ");
+  ACE_times[ACE_TIMER_TEST_2].setName("test_2  ");
+  ACE_times[ACE_TIMER_TEST_3].setName("test_3  ");
   
   
   

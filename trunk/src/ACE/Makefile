@@ -113,7 +113,7 @@ else
 	CXX    = g++
 	SPECIAL_CPP_OPTION = -Wno-deprecated
 endif
-CXXFLAGS     = -Wall $(SPECIAL_CPP_OPTION) -I$(INCLUDE_DIR) -I$(INCLUDE_SICONOS_DIR) -I$(CPLEXINCDIR) -I$(CONCERTINCDIR) -c
+CXXFLAGS     =  -g -Wall $(SPECIAL_CPP_OPTION) -I$(INCLUDE_DIR) -I$(INCLUDE_SICONOS_DIR) -I$(CPLEXINCDIR) -I$(CONCERTINCDIR) -c
 ADD_OPT      = #-lntl -lgmp -lm  # Optionnal option for the linker
 # Specifies the list of directories that make should search
 VPATH        = $(INCLUDE_DIR):$(INCLUDE_SICONOS_DIR):$(OBJ_DIR)
@@ -163,7 +163,7 @@ include $(MAKEDEP_FILE)
 
 # Generation of the final binary (see $(EXE))
 $(EXE) : $(OBJ) $(ALL_SRC)
-	$(CXX) -o $@ $(ABSOBJ) $(ADD_OPT)
+	$(CXX) -g -o $@ $(ABSOBJ) $(ADD_OPT)
 	@$(MAKE) help
 
 # Help rule - print help message

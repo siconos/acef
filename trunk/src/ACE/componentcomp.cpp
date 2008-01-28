@@ -66,13 +66,13 @@ void componentCOMP::stamp(){
   algo::sls.mD1l->setValue(mIndiceStartLambda,mIndiceStartLambda,1);
   algo::sls.mD1l->setValue(mIndiceStartLambda+1,mIndiceStartLambda+1,1);
   //+-epsilon
-  algo::sls.mD1s->setValue(mIndiceStartLambda,0,mEpsilon);
-  algo::sls.mD1s->setValue(mIndiceStartLambda+1,0,-mEpsilon);
+  algo::sls.mD1s->setValue(mIndiceStartLambda,mEpsilon);
+  algo::sls.mD1s->setValue(mIndiceStartLambda+1,-mEpsilon);
 
   //Zns = Vplus +(d11 d12)lambda
   algo::sls.mC1l->setValue(mIndiceStartZns,mIndiceStartLambda,mD11);
   algo::sls.mC1l->setValue(mIndiceStartZns,mIndiceStartLambda+1,mD12);
-  algo::sls.mC1s->setValue(mIndiceStartZns,0,mVplus);
+  algo::sls.mC1s->setValue(mIndiceStartZns,mVplus);
 }
 void componentCOMP::print(){
   componentNLINEAR::print();

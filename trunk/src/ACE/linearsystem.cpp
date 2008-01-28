@@ -78,6 +78,8 @@ linearSystem::linearSystem(){
   mB3l=0;
   mB3zs=0;
   mPfree=0;
+  mPAux=0;
+  mPxAux=0;
   mQfree=0;
   mMLCP=0;
 
@@ -131,13 +133,13 @@ void linearSystem::allocMemory(){
   allocC1Matrix();
   allocD1Matrix();
   if (mDimLambda && mDimx){
-    mD2xW=new aceMatrix(mDimLambda,mDimx);
-    mHWR=new aceMatrix(mDimx,mDimLambda);
+    mD2xW=new aceMatrix(mDimLambda,mDimx,ACE_MAT_TYPE);
+    mHWR=new aceMatrix(mDimx,mDimLambda,ACE_MAT_TYPE);
   }
   if (mNbNonDynEquations && mDimx)
-    mB2xW=new aceMatrix(mNbNonDynEquations,mDimx);
+    mB2xW=new aceMatrix(mNbNonDynEquations,mDimx,ACE_MAT_TYPE);
   if (mDimx)
-    mHThetaWA2zs=new aceMatrix(mDimx,mDimzs-1);
+    mHThetaWA2zs=new aceMatrix(mDimx,mDimzs-1,ACE_MAT_TYPE);
 
   
 }
@@ -148,14 +150,17 @@ void linearSystem::allocA1Matrix(){
 
   
   if (mDimx != 0 ){
-    mA = new aceMatrix(mDimx,mDimx);
-    mB= new aceMatrix(mDimx,mDimx);
-    
-    if (mDimzs-1>0)
-      mC=new aceMatrix(mDimx,mDimzs-1);
+    mA = new aceMatrix(mDimx,mDimx,ACE_MAT_TYPE);
+    mB= new aceMatrix(mDimx,mDimx,ACE_MAT_TYPE);
+    mPxAux=new aceMatrix(mDimx,mDimx);
+
+    if (mDimzs-1>0){
+      mC=new aceMatrix(mDimx,mDimzs-1,ACE_MAT_TYPE);
+      mMatBuf1=new aceMatrix(mDimx,mDimzs-1,ACE_MAT_TYPE);
+    }
     if (mDimzns)
-      mD=new aceMatrix(mDimx,mDimzns);
-    ms=new aceMatrix(mDimx,1);
+      mD=new aceMatrix(mDimx,mDimzns,ACE_MAT_TYPE);
+    ms=new aceVector(mDimx,ACE_MAT_TYPE);
     
     mA1x = mB;
     mA1zs= mC;
@@ -171,6 +176,8 @@ void linearSystem::freeA1Matrix(){
     delete mB;
   if (mC)
     delete mC;
+  if (mMatBuf1)
+    delete mMatBuf1;
   if (mD)
     delete mD;
   if (ms)
@@ -183,12 +190,12 @@ void linearSystem::allocB1Matrix(){
     return;
   ACE_CHECK_IERROR(mB1zs ==0,"linearSystem::allocB1Matrix again");
   if (mDimx)
-    mB1x=new aceMatrix(mNbNonDynEquations,mDimx);
+    mB1x=new aceMatrix(mNbNonDynEquations,mDimx,ACE_MAT_TYPE);
   if (mDimzs-1>0)
-    mB1zs=new aceMatrix(mNbNonDynEquations,mDimzs-1);
+    mB1zs=new aceMatrix(mNbNonDynEquations,mDimzs-1,ACE_MAT_TYPE);
   if (mDimzns)
-    mB1zns=new aceMatrix(mNbNonDynEquations,mDimzns);
-  mB1s=new aceMatrix(mNbNonDynEquations,1);
+    mB1zns=new aceMatrix(mNbNonDynEquations,mDimzns,ACE_MAT_TYPE);
+  mB1s=new aceVector(mNbNonDynEquations,ACE_MAT_TYPE);
 }
 void linearSystem::freeB1Matrix(){
   if (mB1x)
@@ -206,12 +213,12 @@ void linearSystem::allocC1Matrix(){
   if (!mDimzns)
     return;
   if (mDimx)
-    mC1x=new aceMatrix(mDimzns,mDimx);
+    mC1x=new aceMatrix(mDimzns,mDimx,ACE_MAT_TYPE);
   if (mDimzs-1>0)
-    mC1zs=new aceMatrix(mDimzns,mDimzs-1);
+    mC1zs=new aceMatrix(mDimzns,mDimzs-1,ACE_MAT_TYPE);
   if(mDimLambda)
-    mC1l = new aceMatrix(mDimzns,mDimLambda);
-  mC1s = new aceMatrix(mDimzns,1);
+    mC1l = new aceMatrix(mDimzns,mDimLambda,ACE_MAT_TYPE);
+  mC1s = new aceVector(mDimzns,ACE_MAT_TYPE);
 
 }
 void linearSystem::freeC1Matrix(){
@@ -229,15 +236,17 @@ void linearSystem::allocD1Matrix(){
   if (!mDimLambda)
     return;
   if (mDimx)
-    mD1x=new aceMatrix(mDimLambda,mDimx);
+    mD1x=new aceMatrix(mDimLambda,mDimx,ACE_MAT_TYPE);
   if (mDimzs-1>0)
-    mD1zs=new aceMatrix(mDimLambda,mDimzs-1);
+    mD1zs=new aceMatrix(mDimLambda,mDimzs-1,ACE_MAT_TYPE);
   if (mDimzns)
-    mD1zns=new aceMatrix(mDimLambda,mDimzns);
-  mD1l = new aceMatrix(mDimLambda,mDimLambda);
-  mD1s = new aceMatrix(mDimLambda,1);
-  if (mDimx)
-    mR = new aceMatrix(mDimx,mDimLambda);
+    mD1zns=new aceMatrix(mDimLambda,mDimzns,ACE_MAT_TYPE);
+  mD1l = new aceMatrix(mDimLambda,mDimLambda,ACE_MAT_TYPE);
+  mD1s = new aceVector(mDimLambda,ACE_MAT_TYPE);
+  if (mDimx){
+    mR = new aceMatrix(mDimx,mDimLambda,ACE_MAT_TYPE);
+    mMatBuf2 = new aceMatrix(mDimx,mDimLambda,ACE_MAT_TYPE);
+  }
 
 }
 void linearSystem::set2matrix(){
@@ -247,35 +256,44 @@ void linearSystem::set2matrix(){
   
   mB2x=mB1x;
   mB2zs=mB1zs;
-  mB2l=new aceMatrix(mNbNonDynEquations,mDimLambda);
+  mB2l=new aceMatrix(mNbNonDynEquations,mDimLambda,ACE_MAT_TYPE);
 
   mD2x=mD1x;
   mD2zs=mD1zs;
   mD2l=mD1l;
   mA2s=mA1s;
   if (mDimx)
-    mA2sti = new aceMatrix(mDimx,1);
+    mA2sti = new aceVector(mDimx,ACE_MAT_TYPE);
   mB2s=mB1s;
   mD2s=mD1s;
 
   if (mDimzns){
     if (mDimx){
-      *mR=prod(*mA1zns,*mC1l);
-      *mA2x = *mA1x + prod(*mA1zns,*mC1x);
+      prod(*mA1zns,*mC1l,*mR);
+      //      *mA2x = *mA1x + prod(*mA1zns,*mC1x);
+      prod(*mA1zns,*mC1x,*mA2x,false);
       if (mDimzs)
-	*mA2zs = *mA1zs + prod(*mA1zns,*mC1zs);
+	//*mA2zs = *mA1zs + prod(*mA1zns,*mC1zs);
+	prod(*mA1zns,*mC1zs,*mA1zs,false);
     }
     if (mNbNonDynEquations){
       if (mDimx)
-	*mB2x = *mB1x + prod(*mB1zns,*mC1x);
+	//	*mB2x = *mB1x + prod(*mB1zns,*mC1x);
+	prod(*mB1zns,*mC1x,*mB1x,false);
       if (mDimzs)
-	*mB2zs = *mB1zs + prod(*mB1zns,*mC1zs);
+	//	*mB2zs = *mB1zs + prod(*mB1zns,*mC1zs);
+	prod(*mB1zns,*mC1zs,*mB1zs,false);
       if (mDimx)
-	*mD2x=*mD1x + prod(*mD1zns,*mC1x);
-      *mD2zs=*mD1zs+prod(*mD1zns,*mC1zs);
-      *mD2l=*mD1l + prod(*mD1zns,*mC1l);
+	//	*mD2x=*mD1x + prod(*mD1zns,*mC1x);
+	prod(*mD1zns,*mC1x,*mD1x,false);
+      //      *mD2zs=*mD1zs+prod(*mD1zns,*mC1zs);
+      prod(*mD1zns,*mC1zs,*mD1zs,false);
+      //      *mD2l=*mD1l + prod(*mD1zns,*mC1l);
+      prod(*mD1zns,*mC1l,*mD1l,false);
 
-      *mB2l=prod(*mB1zns,*mC1l);
+      //      *mB2l=prod(*mB1zns,*mC1l);
+      prod(*mB1zns,*mC1l,*mB2l,true);
+
     }
   }
 
@@ -293,6 +311,8 @@ void linearSystem::freeD1Matrix(){
     delete mD1s;
   if (mR)
     delete mR;
+  if (mMatBuf2)
+    delete mMatBuf2;
   if (mB2l)
     delete mB2l;
   if (mA2sti)
@@ -302,27 +322,30 @@ void linearSystem::freeD1Matrix(){
 
 void linearSystem::allocDiscretisation(){
   if(mDimx){
-    mxti = new aceMatrix(mDimx,1);
-    mxfree = new aceMatrix(mDimx,1);
-    mW = new aceMatrix(mDimx,mDimx);
+    mxti = new aceVector(mDimx,ACE_MAT_TYPE);
+    mxfree = new aceVector(mDimx,ACE_MAT_TYPE);
+    mW = new aceMatrix(mDimx,mDimx,ACE_MAT_TYPE);
   }
   
-  mzsti = new aceMatrix(mDimzs-1,1);
+  mzsti = new aceVector(mDimzs-1,ACE_MAT_TYPE);
   if(mDimzns)
-    mznsti = new aceMatrix(mDimzns,1);
+    mznsti = new aceVector(mDimzns,ACE_MAT_TYPE);
   if (mB2zs)
-    mB3zs = new aceMatrix(mNbNonDynEquations,mDimzs-1);
+    mB3zs = new aceMatrix(mNbNonDynEquations,mDimzs-1,ACE_MAT_TYPE);
   if (mNbNonDynEquations && mDimLambda)
-    mB3l=new aceMatrix(mNbNonDynEquations,mDimLambda);
+    mB3l=new aceMatrix(mNbNonDynEquations,mDimLambda,ACE_MAT_TYPE);
   if (mNbNonDynEquations)
-    mQfree = new aceMatrix(mNbNonDynEquations,1);
+    mQfree = new aceVector(mNbNonDynEquations,ACE_MAT_TYPE);
 
   if (mDimLambda)
-    mD3zs = new aceMatrix(mDimLambda,mDimzs-1);
+    mD3zs = new aceMatrix(mDimLambda,mDimzs-1,ACE_MAT_TYPE);
   if (mDimLambda)
-    mD3l = new aceMatrix(mDimLambda,mDimLambda);
-  if (mDimLambda)
-    mPfree = new aceMatrix(mDimLambda,1);
+    mD3l = new aceMatrix(mDimLambda,mDimLambda,ACE_MAT_TYPE);
+  if (mDimLambda){
+    mPfree = new aceVector(mDimLambda,ACE_MAT_TYPE);
+    mPAux = new aceVector(mDimLambda,ACE_MAT_TYPE);
+
+  }
 }
 void linearSystem::freeDiscretisation(){
   if (mxti)
@@ -345,6 +368,10 @@ void linearSystem::freeDiscretisation(){
     delete mB3zs;
   if (mPfree)
     delete mPfree;
+  if (mPAux)
+    delete mPAux;
+  if (mPxAux)
+    delete mPxAux;
   if (mQfree)
     delete mQfree;
 }
@@ -422,14 +449,14 @@ void linearSystem::readInitialValue(){
     cout << "x\n";
     for (i=0;i<mDimx;i++){
       pin >> aux;
-      mxti->setValue(i,0,aux);
+      mxti->setValueIfNotNull(i,aux);
       cout << aux<<"\t";
     }
     
     cout << "\nzs\n";
     for (i=0;i<mDimzs-1;i++){
       pin >> aux ;
-      mzsti->setValue(i,0,aux);
+      mzsti->setValueIfNotNull(i,aux);
       cout << aux<<"\t";
     }
     cout <<"\n";
@@ -455,13 +482,40 @@ void linearSystem::initSimu(){
   try{
     //ACE_CHECK_IERROR(mDimx >0 && mDimLambda >0,"linearSystem::initSimu case no x or no lambda not yet implemented");
     if (mDimx){
-      *mW = SimpleMatrix(mDimx,mDimx,IDENTITY) - mH*mTheta*(*mA2x);
-      mW->PLUInverseInPlace();
-      *mB3zs = *mB2zs + mH*mTheta*prod(*mB2x,prod(*mW,*mA2zs)) ;
-      *mD3zs = *mD2zs+mH*mTheta*prod(*mD2x,prod(*mW,*mA2zs));
+      mW->zero();
+      for(int i = 0; i < mDimx;i++)	mW->setValue(i,i,1.0);
+      *mW -=  mH*mTheta*(*mA2x);
+      if (ACE_MAT_TYPE == SPARSE){
+	mPxAux->set(*mW);
+	mPxAux->PLUInverseInPlace();
+	mW->set(*mPxAux);
+      }else{
+	mW->PLUInverseInPlace();
+      }
+      
+      //*mB3zs = *mB2zs + mH*mTheta*prod(*mB2x,prod(*mW,*mA2zs)) ;
+      prod(*mW,*mA2zs,*mMatBuf1,true);
+      prod(*mB2x,*mMatBuf1,*mB3zs,true);
+      scal(mH*mTheta,*mB3zs,*mB3zs);
+      *mB3zs+=*mB2zs;
+      
+      //*mD3zs = *mD2zs+mH*mTheta*prod(*mD2x,prod(*mW,*mA2zs));
+      prod(*mD2x,*mMatBuf1,*mD3zs,true);
+      scal(mH*mTheta,*mD3zs,*mD3zs);
+      *mD3zs+=*mD2zs;
+
+      
       if (mDimLambda){
-	*mB3l = mH*prod(*mB2x,prod(*mW,*mR))+*mB2l;
-	*mD3l = mH*prod(*mD2x,prod(*mW,*mR))+*mD2l;
+	//*mB3l = mH*prod(*mB2x,prod(*mW,*mR))+*mB2l;
+	prod(*mW,*mR,*mMatBuf2,true);
+	prod(*mB2x,*mMatBuf2,*mB3l,true);
+	scal(mH,*mB3l,*mB3l);
+	*mB3l+=*mB2l;
+	     
+	//*mD3l = mH*prod(*mD2x,prod(*mW,*mR))+*mD2l;
+	prod(*mD2x,*mMatBuf2,*mD3l,true);
+	scal(mH,*mD3l,*mD3l);
+	*mD3l+=*mD2l;
       }
     }else{
       *mD3zs = *mD2zs;
@@ -486,10 +540,16 @@ void linearSystem::initSimu(){
       std::cout << "Exception caught." << endl;
       ACE_INTERNAL_ERROR("linearSystem::initSimu");
     }
-  *mD2xW=prod(*mD2x,*mW);
-  *mB2xW=prod(*mB2x,*mW);
-  *mHThetaWA2zs=mH*mTheta*prod(*mW,*mA2zs);
-  *mHWR=mH*prod(*mW,*mR);
+  //  *mD2xW=prod(*mD2x,*mW);
+  prod(*mD2x,*mW,*mD2xW,true);
+  //*mB2xW=prod(*mB2x,*mW);
+  prod(*mB2x,*mW,*mB2xW,true);
+  //*mHThetaWA2zs=mH*mTheta*prod(*mW,*mA2zs);
+  prod(*mW,*mA2zs,*mHThetaWA2zs,true);
+  scal(mH*mTheta,*mHThetaWA2zs,*mHThetaWA2zs);
+  //*mHWR=mH*prod(*mW,*mR);
+  prod(*mW,*mR,*mHWR,true);
+  scal(mH,*mHWR,*mHWR);
 
   mMLCP->initSolver();
 
@@ -500,8 +560,8 @@ void linearSystem::preparStep(){
   if (mDimx && mDimLambda){//both
     //(*mxfree) = (*mxti) + mH*((1-mTheta)*(prod(*mA2x,*mxti)+prod(*mA2zs,*mzsti) + (*mA2sti))+mThetap*(*mA2s));
     //mxfree->display();
-    prod(*mA2zs,*mzsti,*mxfree);
-    prod(*mA2x,*mxti,*mxfree,false);
+    axpy_prod(*mA2zs,*mzsti,*mxfree,true);
+    axpy_prod(*mA2x,*mxti,*mxfree,false);
     *mxfree+=*mA2sti;
     scal((1-mTheta),*mxfree,*mxfree);
     *mxfree+=mThetap*(*mA2s);
@@ -512,11 +572,11 @@ void linearSystem::preparStep(){
 
     
     //(*mPfree) = prod(*mD2xW,*mxfree) + (*mD2s);
-    prod(*mD2xW,*mxfree,*mPfree);
+    axpy_prod(*mD2xW,*mxfree,*mPfree,true);
     *mPfree+=*mD2s;
     
     //(*mQfree) = prod(*mB2xW,*mxfree) + (*mB2s);
-    prod(*mB2xW,*mxfree,*mQfree);
+    axpy_prod(*mB2xW,*mxfree,*mQfree,true);
     *mQfree+=*mB2s;
 
 
@@ -531,21 +591,42 @@ void linearSystem::preparStep(){
   }else{
     (*mQfree) = (*mB2s);
   }
-  scal(-1,*mPfree,*(mMLCP->mQ1));
-  //  *(mMLCP->mQ1)= *mPfree;  
-  //*(mMLCP->mQ2)= *mQfree;
-  scal(-1,*mQfree,*(mMLCP->mQ2));
+//   cout<<"mQfree\n";
+//   (mQfree)->display();
+  if(ACE_MAT_TYPE == SPARSE){
+    (mMLCP->mQ1)->set(*(mPfree));
+    scal(-1,*(mMLCP->mQ1),*(mMLCP->mQ1));
+    //  *(mMLCP->mQ1)= *mPfree;  
+    //*(mMLCP->mQ2)= *mQfree;
+    (mMLCP->mQ2)->set(*(mQfree));
+    scal(-1,*(mMLCP->mQ2),*(mMLCP->mQ2));
+  }else{
+    scal(-1,*mPfree,*(mMLCP->mQ1));
+    scal(-1,*mQfree,*(mMLCP->mQ2));
+    //  *(mMLCP->mQ1)= *mPfree;  
+    //*(mMLCP->mQ2)= *mQfree;
+  }
+//   cout<<"mMLCP->mQ1\n";
+//   (mMLCP->mQ1)->display();
+//   cout<<"mMLCP->mQ2\n";
+//   (mMLCP->mQ2)->display();
+
 }
 void linearSystem::computeZnstiFromX_Zs(){
   if (mDimLambda==0)
     return;
   if (mDimx){
     //(*mznsti)=prod(*mC1x,*mxti)+prod(*mC1zs,*mzsti)+prod(*mC1l,*(mMLCP->mZ1))+(*mC1s);
-    prod(*mC1l,*(mMLCP->mZ1),*mznsti);
+    ACE_times[ACE_TIMER_PROD_MAT].start();
+    if (ACE_MAT_TYPE==SPARSE)
+      prod(*mC1l,*mPAux,*mznsti);
+    else
+      prod(*mC1l,*(mMLCP->mZ1),*mznsti);
+
     prod(*mC1zs,*mzsti,*mznsti,false);
     prod(*mC1x,*mxti,*mznsti,false);
+    ACE_times[ACE_TIMER_PROD_MAT].stop();    
     *mznsti+=*mC1s;
-    
   }  else
     (*mznsti)=prod(*mC1zs,*mzsti)+prod(*mC1l,*(mMLCP->mZ1))+(*mC1s);
 }
@@ -563,13 +644,28 @@ bool linearSystem::step(){
   bool res = mMLCP->solve();
   ACE_times[ACE_TIMER_COMPUTE_VAR].start();
   if (res){
-    *mzsti=*(mMLCP->mZ2);
+    //*mzsti=*(mMLCP->mZ2);
+    if (ACE_MAT_TYPE == SPARSE)
+      mzsti->set(*(mMLCP->mZ2));
+    else
+      *mzsti=*(mMLCP->mZ2);
     if (mDimx){
       //*mxti=prod(*mW,*mxfree)+prod(*mHThetaWA2zs,*mzsti)+prod(*mHWR,*(mMLCP->mZ1));
-      prod(*mHWR,*(mMLCP->mZ1),*mxti);
+      if (ACE_MAT_TYPE == SPARSE){
+	mPAux->set(*(mMLCP->mZ1));
+	//cout<<"mHWR "<<(*mHWR);
+	//cout<<"mPAux "<<(*mPAux);
+	prod(*mHWR,*mPAux,*mxti);
+      }else{
+	prod(*mHWR,*(mMLCP->mZ1),*mxti);
+      }
+      //cout<<"mHThetaWA2zs "<<(*mHThetaWA2zs);
+      //cout<<"mW "<<(*mW);
+      ACE_times[ACE_TIMER_PROD_MAT].start();
       prod(*mHThetaWA2zs,*mzsti,*mxti,false);
       prod(*mW,*mxfree,*mxti,false);
-    }
+      ACE_times[ACE_TIMER_PROD_MAT].stop();
+  }
     computeZnstiFromX_Zs();
   }
   ACE_times[ACE_TIMER_COMPUTE_VAR].stop();
@@ -757,7 +853,18 @@ void linearSystem::computedxdt(){
   if(!mA)
     return;
   try{
-    mA->PLUInverseInPlace();
+    cout<<"mA\n"<<(*mA);
+    if (ACE_MAT_TYPE == SPARSE){
+      //*aaux=*mA;
+      mPxAux->set(*mA);
+      cout<<"mPxAux\n"<<(*mPxAux);
+      mPxAux->PLUInverseInPlace();
+      cout<<"mPxAux-1\n"<<(*mPxAux);
+      mA->set(*mPxAux);
+    }else{
+      mA->PLUInverseInPlace();
+    }
+    cout<<"mA-1\n"<<(*mA);
   }
   catch(SiconosException e)
     {
@@ -774,11 +881,14 @@ void linearSystem::computedxdt(){
 
   try{
     if (mA)
-      (*mA1x)=prod(*mA,*mB);
+      //(*mA1x)=prod(*mA,*mB);
+      prod(*mA,*mB,*mA1x,true);
     if (mC)
-      (*mA1zs)=prod(*mA,*mC);
+      //(*mA1zs)=prod(*mA,*mC);
+      prod(*mA,*mC,*mA1zs,true);
     if (mD)
-      (*mA1zns)=prod(*mA,*mD);
+      //(*mA1zns)=prod(*mA,*mD);
+      prod(*mA,*mD,*mA1zns,true);
     
     // (*mA1s)=prod(*mA,*ms);
   }
@@ -802,20 +912,20 @@ void linearSystem::getlinefromdxdt(int line, ACE_DOUBLE * coefs){
   int idStart =0;
   int i=0;
   for (i =idStart; i < mDimx;i++){
-    coefs[i]= (*mA1x)(line,i-idStart);
+    coefs[i]= mA1x->getValue(line,i-idStart);
   }
   idStart+=mDimx;
   coefs[idStart]=0;//Because V0
   for (i =idStart+1; i < idStart+mDimzs;i++){
-    coefs[i]= (*mA1zs)(line,i-idStart-1);
+    coefs[i]= mA1zs->getValue(line,i-idStart-1);
   }
   idStart+=mDimzs;
   for (i =idStart; i < idStart+mDimzns;i++){
-    coefs[i]= (*mA1zns)(line,i-idStart);
+    coefs[i]= mA1zns->getValue(line,i-idStart);
   }
   idStart+=mDimzns;
   ACE_CHECK_IERROR(idStart+mDimx == mNbUnknowns,"linearSystem::getlinefromdxdt idStart +mDimx == mNbUnknowns");
-  coefs[idStart]=(*mA1s)(line,0);
+  coefs[idStart]=mA1s->getValue(line);
 
 }
 //Ax'=Bx+CZs+DZns+s
@@ -863,7 +973,7 @@ void linearSystem::extractDynBockInMat(aceMatrix * m, int IndexBegin, int IndexE
       line = mIND[i]->mLine;
       ACE_CHECK_IERROR(line>=0 && coefs,"linearSystem::extractDynBockInMat Ind");
       for(j=IndexBegin;j<IndexEnd;j++){
-	m->setValue(line,j-IndexBegin,coefs[j]);
+	m->setValueIfNotNull(line,j-IndexBegin,coefs[j]);
       }
     }
     int nbCap = mCAP.size();
@@ -872,7 +982,7 @@ void linearSystem::extractDynBockInMat(aceMatrix * m, int IndexBegin, int IndexE
       line = mCAP[i]->mLine;
       ACE_CHECK_IERROR(line>=0 && coefs,"linearSystem::extractDynBockInMat  Cap");
       for(j=IndexBegin;j<IndexEnd;j++){
-	m->setValue(line,j-IndexBegin,coefs[j]);
+	m->setValueIfNotNull(line,j-IndexBegin,coefs[j]);
       }
     }
     int nbKcl = mKCL.size();
@@ -882,22 +992,64 @@ void linearSystem::extractDynBockInMat(aceMatrix * m, int IndexBegin, int IndexE
 	line = mKCL[i]->mLine;
 	ACE_CHECK_IERROR(line>=0 && coefs,"linearSystem::extractDynBockInMat  Kcl");
 	for(j=IndexBegin;j<IndexEnd;j++){
-	  m->setValue(line,j-IndexBegin,coefs[j]);
+	  m->setValueIfNotNull(line,j-IndexBegin,coefs[j]);
 	}
       }
     }
 }
+
+
+//copy in m the double contains in dynamique equation from IndexBegin to IndexEnd
+void linearSystem::extractDynBockInVect(aceVector * V){
+  ACE_CHECK_IERROR(V,"linearSystem::extractDynBockInMat v null");
+  
+  
+    int nbInd = mIND.size();
+    int i,j=0;
+    int line=0;
+    j=mNbUnknowns;
+    for (i=0;i<nbInd;i++){
+      ACE_DOUBLE * coefs=mIND[i]->mCoefs;
+      line = mIND[i]->mLine;
+      ACE_CHECK_IERROR(line>=0 && coefs,"linearSystem::extractDynBockInMat Ind");
+      V->setValueIfNotNull(line,coefs[j]);
+    }
+    int nbCap = mCAP.size();
+    for (i=0;i<nbCap;i++){
+      ACE_DOUBLE * coefs=mCAP[i]->mCoefs;    
+      line = mCAP[i]->mLine;
+      ACE_CHECK_IERROR(line>=0 && coefs,"linearSystem::extractDynBockInMat  Cap");
+      V->setValueIfNotNull(line,coefs[j]);
+    }
+    int nbKcl = mKCL.size();
+    for (i=0;i<nbKcl;i++){
+      if (mKCL[i]->mIsDyn){
+	ACE_DOUBLE * coefs=mKCL[i]->mCoefs;    
+	line = mKCL[i]->mLine;
+	ACE_CHECK_IERROR(line>=0 && coefs,"linearSystem::extractDynBockInMat  Kcl");
+	V->setValueIfNotNull(line,coefs[j]);
+      }
+    }
+}
+
 
 ///////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////SOURCES must be call each step
 void linearSystem::extractSources(){
   //BUILD s
-  extractNonDynBockInMat(mB1s,mNbUnknowns,mNbUnknowns+1);
+  extractNonDynBockInVect(mB1s);
+//   cout<<"extractSources input\n"<<"mB1s";
+//   cout<<*mB1s;
+//   cout<<"mA\n"<<*mA;
+//   cout<<"ms\n"<<*ms;
   if (mDimx){
-    extractDynBockInMat(ms,mNbUnknowns,mNbUnknowns+1);
-    (*mA1s)=prod(*mA,*ms);
+    extractDynBockInVect(ms);
+    //(*mA1s)=prod(*mA,*ms);
+    prod(*mA,*ms,*mA1s,true);
   }
+//   cout<<"extractSources output\n"<<"mA1s";
+//   cout<<*mA1s;
   /*  cout<<"vecteur source s:";
   if (ms)
     cout<<(*ms);
@@ -910,26 +1062,43 @@ void linearSystem::ExtractAndCompute2Sources(){
   if (mDimx)
     *mA2sti=*mA2s;
   extractSources();
+//   cout<<"ExtractAndCompute2Sources input:\n";
+//   cout<<"mA1zns\n";
+//   cout<<*mA1zns;
+//   cout<<"mA2s\n";
+//   cout<<*mA2s;
+//   cout<<"mC1s\n";
+//   cout<<*mC1s;
+
   if (mDimx && mDimLambda){
     //(*mA2s)=(*mA1s)+prod(*mA1zns,*mC1s);
-    (*mA2s)+=prod(*mA1zns,*mC1s);
+    prod(*mA1zns,*mC1s,*mA2s,false);
     //prod(*mA1zns,*mC1s,*mA2s);
     //(*mA2s)+=(*mA1s);
     
-    (*mB2s)+=prod(*mB1zns,*mC1s);
+    prod(*mB1zns,*mC1s,*mB2s,false);
     //prod(*mB1zns,*mC1s,*mB2s);
     //(*mB2s)+=(*mB1s);
 
-    (*mD2s)+=prod(*mD1zns,*mC1s);
+    prod(*mD1zns,*mC1s,*mD2s,false);
     //prod(*mD1zns,*mC1s,*mD2s);
     //(*mD2s)+=(*mD1s);
   }else if (mDimx){
     (*mA2s)=(*mA1s);
     (*mB2s)=(*mB1s);    
   }else if (mDimLambda){
-    (*mB2s)=(*mB1s)+prod(*mB1zns,*mC1s);
-    (*mD2s)=(*mD1s)+prod(*mD1zns,*mC1s);    
+    //(*mB2s)=(*mB1s)+prod(*mB1zns,*mC1s);
+    prod(*mB1zns,*mC1s,*mB2s,false);
+    //(*mD2s)=(*mD1s)+prod(*mD1zns,*mC1s);
+    prod(*mD1zns,*mC1s,*mD2s,false);
   }
+//   cout<<"ExtractAndCompute2Sources output:\n";
+//   cout<<"mA2s\n";
+//   cout<<*mA2s;
+//   cout<<"mB2s\n";
+//   cout<<*mB2s;
+//   cout<<"mD2s\n";
+//   cout<<*mD2s;
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -955,7 +1124,40 @@ void linearSystem::buildLinearSystem(){
   ACE_CHECK_IERROR(istart == mNbUnknowns,"linearSystem::buildLinearSystem istart == mNbUnknowns");
 }
 
+//copy in m the double contains in none dynamique equation from IndexBegin to IndexEnd
+void linearSystem::extractNonDynBockInVect(aceVector * V){
+  ACE_CHECK_IERROR(V,"linearSystem::extractNonDynBockInMat v null");
+  
+  int line=0;
+  int i,j;
+  j=mNbUnknowns;
+  int nbKcl = mKCL.size();
+  for (i=1;i<nbKcl;i++){
+    if (!mKCL[i]->mIsDyn){
+      ACE_DOUBLE * coefs=mKCL[i]->mCoefs;    
+      ACE_CHECK_IERROR(coefs,"linearSystem::extractNonDynBockInMat  Kcl");
+      V->setValueIfNotNull(line,coefs[j]);
+      line++;
+    }
+  }
+  int nVD = mVD.size();
+  for (i=0;i<nVD;i++){
+      ACE_DOUBLE * coefs=mVD[i]->mCoefs;    
+      ACE_CHECK_IERROR(coefs,"linearSystem::extractNonDynBockInMat  VD");
+      V->setValueIfNotNull(line,coefs[j]);
+      line++;
+  }
 
+  int nTEN = mTEN.size();
+  for (i=0;i<nTEN;i++){
+      ACE_DOUBLE * coefs=mTEN[i]->mCoefs;    
+      ACE_CHECK_IERROR(coefs,"linearSystem::extractNonDynBockInMat  TEN");
+      V->setValueIfNotNull(line,coefs[j]);
+      line++;
+  }
+
+  ACE_CHECK_IERROR(mNbNonDynEquations == line,"linearSystem::extractNonDynBockInMat number equation!");
+}
 //copy in m the double contains in none dynamique equation from IndexBegin to IndexEnd
 void linearSystem::extractNonDynBockInMat(aceMatrix * m, int IndexBegin, int IndexEnd){
   ACE_CHECK_IERROR(m,"linearSystem::extractNonDynBockInMat m null");
@@ -971,7 +1173,7 @@ void linearSystem::extractNonDynBockInMat(aceMatrix * m, int IndexBegin, int Ind
       ACE_DOUBLE * coefs=mKCL[i]->mCoefs;    
       ACE_CHECK_IERROR(coefs,"linearSystem::extractNonDynBockInMat  Kcl");
       for(j=IndexBegin;j<IndexEnd;j++){
-	m->setValue(line,j-IndexBegin,coefs[j]);
+	m->setValueIfNotNull(line,j-IndexBegin,coefs[j]);
       }
       line++;
     }
@@ -981,7 +1183,7 @@ void linearSystem::extractNonDynBockInMat(aceMatrix * m, int IndexBegin, int Ind
       ACE_DOUBLE * coefs=mVD[i]->mCoefs;    
       ACE_CHECK_IERROR(coefs,"linearSystem::extractNonDynBockInMat  VD");
       for(j=IndexBegin;j<IndexEnd;j++){
-	m->setValue(line,j-IndexBegin,coefs[j]);
+	m->setValueIfNotNull(line,j-IndexBegin,coefs[j]);
       }
       line++;
   }
@@ -991,7 +1193,7 @@ void linearSystem::extractNonDynBockInMat(aceMatrix * m, int IndexBegin, int Ind
       ACE_DOUBLE * coefs=mTEN[i]->mCoefs;    
       ACE_CHECK_IERROR(coefs,"linearSystem::extractNonDynBockInMat  TEN");
       for(j=IndexBegin;j<IndexEnd;j++){
-	m->setValue(line,j-IndexBegin,coefs[j]);
+	m->setValueIfNotNull(line,j-IndexBegin,coefs[j]);
       }
       line++;
   }
@@ -1053,20 +1255,20 @@ void linearSystem::printStep(ostream& os){
     os << "xt("<<mStepCmp*mH<<")\t";
     if (mxti)
       for (i=0;i<mDimx;i++)
-	os << mxti->getValue(i,0)<<"\t";
+	os << mxti->getValue(i)<<"\t";
     os << "zs("<<mStepCmp*mH<<")\t";
     if (mzsti)
       for (i=0;i<mDimzs-1;i++)
-	os << mzsti->getValue(i,0)<<"\t";
+	os << mzsti->getValue(i)<<"\t";
   
     os << "zns("<<mStepCmp*mH<<")\t";
     if (mznsti)
       for (i=0;i<mDimzns;i++)
-	os << mznsti->getValue(i,0)<<"\t";
+	os << mznsti->getValue(i)<<"\t";
     os<<"\n";
   }else{
     if (mStepCmp%mLogPrint==0){
-      os <<mStepCmp*mH<<"\t"<<mxti->getValue(4,0)<<"\n";
+      os <<mStepCmp*mH<<"\t"<<mxti->getValue(4)<<"\n";
     }
   }
 }

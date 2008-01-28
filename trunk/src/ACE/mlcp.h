@@ -6,6 +6,7 @@
 #define MLCP_H
 #include "ace.h"
 #include "aceMatrix.h"
+#include "aceVector.h"
 #include <list>
 
 
@@ -23,13 +24,13 @@ public:
   bool solve();
   void stopSolver();
   bool initSolver();
-  void addGuess(aceMatrix *mZ);
+  void addGuess(aceVector *mZ);
 
   void addGuess(unsigned long l);
   void setCurrentConfig(unsigned long l);
-  aceMatrix *mW1;
-  aceMatrix *mZ1;
-  aceMatrix *mZ2;
+  aceVector *mW1;
+  aceVector *mZ1;
+  aceVector *mZ2;
   int* mW1Z1;
   unsigned int mDlcp;
   unsigned int mDlin;
@@ -47,9 +48,9 @@ public:
   double mPourCent;
   
   
-  aceMatrix *mQ1;
-  aceMatrix *mQ2;
-  aceMatrix *mQ;
+  aceVector *mQ1;
+  aceVector *mQ2;
+  aceVector *mQ;
   aceMatrix *mM11;
   aceMatrix *mM12;
   aceMatrix *mM21;

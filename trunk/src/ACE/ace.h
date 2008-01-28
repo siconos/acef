@@ -7,8 +7,10 @@
 class unknown;
 class equation;
 class component;
+#include "SiconosAlgebra.h"
 
 #define ACE_INF 0.00000000000000001
+#define ACE_NULL_COEF_MAT 0.00000000000000001
 #define ACE_NULL 0.000001
 #define ACE_DOUBLE double
 #define ACE_BIG_FLOAT 1e9
@@ -60,8 +62,12 @@ class component;
 #define ACE_TIMER_SIMPLEX_TREE 14
 #define ACE_TIMER_SIMPLEX_TRY_NODE 15
 #define ACE_TIMER_COMPUTE_VAR 16
-#define ACE_TIMER_TEST 17
-#define ACE_TIMER_LAST 18
+#define ACE_TIMER_PROD_MAT 17
+#define ACE_TIMER_TEST 18
+#define ACE_TIMER_TEST_1 19
+#define ACE_TIMER_TEST_2 20
+#define ACE_TIMER_TEST_3 21
+#define ACE_TIMER_LAST 22
 
 typedef std::vector<unknown *> unknowns;
 typedef std::vector<equation *> equations;
@@ -74,6 +80,7 @@ typedef std::vector<component *>::iterator componentsIt;
 extern char ACE_name[];
 extern aceTime ACE_times[];
 extern int ACE_SOLVER_TYPE;
+extern UBLAS_TYPE ACE_MAT_TYPE;
 extern int ACE_MUET_LEVEL; //0 verbose .... 10 muet
 #define ACE_MUET 10
 
