@@ -560,8 +560,8 @@ void linearSystem::preparStep(){
   if (mDimx && mDimLambda){//both
     //(*mxfree) = (*mxti) + mH*((1-mTheta)*(prod(*mA2x,*mxti)+prod(*mA2zs,*mzsti) + (*mA2sti))+mThetap*(*mA2s));
     //mxfree->display();
-    axpy_prod(*mA2zs,*mzsti,*mxfree,true);
-    axpy_prod(*mA2x,*mxti,*mxfree,false);
+    prod(*mA2zs,*mzsti,*mxfree,true);
+    prod(*mA2x,*mxti,*mxfree,false);
     *mxfree+=*mA2sti;
     scal((1-mTheta),*mxfree,*mxfree);
     *mxfree+=mThetap*(*mA2s);
@@ -572,11 +572,11 @@ void linearSystem::preparStep(){
 
     
     //(*mPfree) = prod(*mD2xW,*mxfree) + (*mD2s);
-    axpy_prod(*mD2xW,*mxfree,*mPfree,true);
+    prod(*mD2xW,*mxfree,*mPfree,true);
     *mPfree+=*mD2s;
     
     //(*mQfree) = prod(*mB2xW,*mxfree) + (*mB2s);
-    axpy_prod(*mB2xW,*mxfree,*mQfree,true);
+    prod(*mB2xW,*mxfree,*mQfree,true);
     *mQfree+=*mB2s;
 
 
@@ -619,9 +619,9 @@ void linearSystem::computeZnstiFromX_Zs(){
     //(*mznsti)=prod(*mC1x,*mxti)+prod(*mC1zs,*mzsti)+prod(*mC1l,*(mMLCP->mZ1))+(*mC1s);
     ACE_times[ACE_TIMER_PROD_MAT].start();
     if (ACE_MAT_TYPE==SPARSE)
-      prod(*mC1l,*mPAux,*mznsti);
+      prod(*mC1l,*mPAux,*mznsti,true);
     else
-      prod(*mC1l,*(mMLCP->mZ1),*mznsti);
+      prod(*mC1l,*(mMLCP->mZ1),*mznsti,true);
 
     prod(*mC1zs,*mzsti,*mznsti,false);
     prod(*mC1x,*mxti,*mznsti,false);
@@ -655,9 +655,9 @@ bool linearSystem::step(){
 	mPAux->set(*(mMLCP->mZ1));
 	//cout<<"mHWR "<<(*mHWR);
 	//cout<<"mPAux "<<(*mPAux);
-	prod(*mHWR,*mPAux,*mxti);
+	prod(*mHWR,*mPAux,*mxti,true);
       }else{
-	prod(*mHWR,*(mMLCP->mZ1),*mxti);
+	prod(*mHWR,*(mMLCP->mZ1),*mxti,true);
       }
       //cout<<"mHThetaWA2zs "<<(*mHThetaWA2zs);
       //cout<<"mW "<<(*mW);
