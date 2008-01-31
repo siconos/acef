@@ -1,0 +1,157 @@
+*Delta Sigma 2
+**************************************
+
+.model amPli  opa
++ level=1 cin=0 rs=0.1 gain=10000 vsat=5
+
+
+.subckt sw h  e s
+s1 h e s 1k
+.ends
+
+.subckt capa05 a b
+c1 a b 0.5pf
+.ends
+
+.subckt inverseur e s
+.modlogic inv vhi=2.5 vlo=-2.5 vthi=0.5 vtlo=-1 tpd=0.5n cin=0.01p
+inv1 e s inv
+.ends
+
+
+
+.subckt compmacro he hbasc hbascb inp inm   q qb
+
+	x1 he inp compinp sw
+	x2 he inm compinm sw
+	
+	comp compinp compinm  compout vhi=2.5 vlo=-2.5
+	ccPp  compinp 0 0.01pf
+	ccPm  compinm 0 0.01pf
+	ccout compout 0 0.01pf
+	
+	x3 hbasc  compout ebasc sw
+	
+	xinv1 ebasc qb inverseur
+	xinv2 qb  q1     inverseur
+	xinv3 qb  q     inverseur
+
+	x4 hbascb  q1 ebasc sw
+.ends
+
+
+
+
+* premier integrateur 
+
+* vinp1
+s101 h1 a10  spg1	1k
+s102 h2 a10  0  	1k
+s103 h1 b10  0	 	1k
+s104 h2 b10  en1 	1k
+
+c10 a10  b10 		2.0p 
+
+*eqp1
+s105 h1 c10 d10 	1k
+s106 h2 c10 0		1k
+
+c11 c10 b10 		2.0p
+
+s107 q1  mvref d10 	1k 
+s108 q1b pvref d10 	1k 
+
+s109 q1  pvref d11 	1k 
+s110 q1b mvref d11 	1k 
+
+
+s121 h1 a11  sng1  	1k
+s122 h2 a11  0   	1k
+s123 h1 b11  0  	1k
+s124 h2 b11  ep1  	1k
+
+c13 a11  b11 		2.0p
+
+*eqn1
+s125 h1 c11  d11 	1k
+s126 h2 c11 0		1k
+
+c14 c11 b11 		2.0p
+
+opa1        ep1 en1 sp1  sn1 		ampli
+cint10          en1    sp1 		4.0pf
+cint11          ep1    sn1 		4.0pf
+*.ends int1
+
+
+* deuxieme integrateur
+
+* ep2
+s201 h2 a20  sp1 	1k
+s202 h1 a20  0  	1k
+s203 h2 b20  0	 	1k
+s204 h1 b20  en2  	1k
+
+c20 a20  b20 		0.5p
+
+*eqp2
+s205 h2 c20 d20 	1k
+s206 h1 c20 0		1k
+
+c21 c20 b20 		0.5p
+
+
+s207 q1  mvref d20 	1k 
+s208 q1b pvref d20 	1k 
+
+s209 q1  pvref d21 	1k 
+s210 q1b mvref d21 	1k 
+
+
+* en2
+s211 h2 a21  sn1 	1k
+s212 h1 a21  0   	1k
+s213 h2 b21  0   	1k
+s214 h1 b21  ep2 	1k
+
+c23 a21  b21 	 	0.5p
+
+*eqn2
+s215 h2 c21 d21 	1k
+s216 h1 c21 0		1k
+
+c24 c21 b21 		0.5p
+
+opa2        ep2 en2 sp2  sn2 	ampli
+cint20          en2    sp2 	1pf
+cint21          ep2    sn2 	1pf
+*.ends int2
+
+xcomp1	h1 h2 h2b sp2  sn2 q1 q1b 			compmacro
+
+
+***********************************************
+*	simulation
+*
+vinp spg1 0 sin(0  0.5  2560 0 0)
+vinn sng1 0 sin(0 -0.5  2560 0 0)
+
+vrefm mvref 0 -1
+vrefp pvref 0  1
+
+Vh1  h1  0  pulse (-5  5  109n 1n  1n  88n  200n)
+Vh2  h2  0  pulse (-5  5  9n   1n  1n  88n  200n)
+Vh2b h2b 0  pulse (-5  5  100n 1n  1n  88n  200n)
+
+*.options STEP=0.1n
+.tran 0 400u
+
+
+.plot tran v(h1)
+*.plot tran v(h2)
+*.plot tran v(h2b)
+.plot tran v(spg1, sng1)
+.plot tran v(sp1,sn1)
+.plot tran v(sp2,sn2)
+*.plot tran v(xcomp1.compout)
+.plot tran   V(Q1)

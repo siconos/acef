@@ -1,0 +1,91 @@
+BuckLoadedInvCh50
+
+.include InverterChain50.ckt
+
+*ValimI 1 0 3
+ValimI 1 0 PULSE(0 3 0 50e-9)
+
+*ValimI nalimI 0 PULSE(0 3 0 100e-9)
+*ValimIripple 1 nalimI SIN(0 0.5 200 0 0)
+
+.model nmos nmos level=3 tox=100e-09 vto=2.0 kp=10.0 is=0 js=0 delta=0 eta=0 gamma=0
+.model pmos pmos level=3 tox=100e-09 vto=-2.0 kp=10.0 is=0 js=0 delta=0 eta=0 gamma=0
+mosnswitch 9 7 0 0 nmos w=0.0001 l=0.0001
+mospswitch 10 7 1 1 pmos w=0.0001 l=0.0001
+
+Vmesnswitch 9 2 0
+Vmespswitch 10 2 0
+
+L1 2 3 10u
+C1 3 0 22u
+Rload 3 0 10.0
+
+*Cpar9   9 0 1p
+*Cpar10 10 0 1p
+*Cpar2 2 0 1p
+* these values of L1,C1 give a sliding mode
+* L1 2 3 4u
+* C1 3 0 10u
+
+.MODEL DIODEDEF D N=1
+
+Dnswitch 0 2 DIODEDEF
+Dpswitch 2 1 DIODEDEF
+
+Vramp 6 0 PULSE(0 2.25 0 1.655e-6 10e-9 1e-9 1.6667e-6)
+
+Vref 4 0 PULSE(0 1.8 0 0.1e-3)
+
+* first set of compensator parameters R11 R21 C11
+R11 3 12 15.58E3
+R21 13 11 5.613E6
+C11 12 11 20E-12
+
+* second set of compensator parameters R11 R21 C11
+* R11 3 12 10E3
+* R21 13 11 8E6
+* C11 12 11 10E-12
+
+R12 3 11 227.8E3
+C21 5 13 1.9E-12
+
+* amplifier
+Eampli 14 0 4 11 10000.0
+Ramp 14 5 1
+Camp 5 0 5.305E-9
+
+* comparator
+Ecomp 7 0 VALUE={ 1.5*(tanh(10.0*V(6,5)) + 1.0) }
+
+Vckin ckin 0 PULSE(0 1.8 150e-6 0.5e-9 0.5e-9 2e-9 5e-9)
+
+xchain ckin ckout 3 0 inverterchain50
+
+.defwave sumcurrents2=i(Vmesnswitch)+i(Vmespswitch)+i(Dnswitch)-i(L1)-i(Dpswitch)
+
+.option ABSTOL=1e-9 VNTOL=1e-6 RELTOL=7.5e-4
+*.options STEP=0.05n
+.option HMIN=10p HMAX=50p
+.option BE
+*.option EPS=1e-8
+.option LVLTIM=0
+.option ITL4=100
+
+.tran 0 200u
+
+.plot tran v(6)
+.plot tran v(2)
+.plot tran i(L1)
+.plot tran v(3)
+.plot tran v(7)
+.plot tran v(5)
+.plot tran id(Dpswitch)
+.plot tran id(Dnswitch)
+.plot tran i(ValimI)
+.plot tran i(Vmespswitch)
+.plot tran i(Vmesnswitch)
+.plot tran w(sumcurrents2)
+.plot tran v(ckin)
+.plot tran v(ckout)
+
+.end
