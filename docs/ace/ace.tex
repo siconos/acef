@@ -12,7 +12,12 @@
 
 \RRdate{\today}
 %%
-\RRauthor{Vincent Acary, Olivier Bonnefon, Pascal Denoyelle \thanks{firstname.lastname@inria.fr}}
+\RRauthor{Vincent Acary, Olivier Bonnefon, Pascal Denoyelle \thanks{firstname.lastname@inria.fr}\\[2cm]
+\fbox{
+ % \begin{minipage}{1.0\linewidth}
+    \Large \bf VAL-AMS. ANR Project ANR-06-SETIN-018-0.}\\[1cm]\fbox{Deliverable 5}
+%\end{minipage}
+}
 %%
 %\authorhead{Pascal Denoyelle}
 %%
@@ -28,27 +33,23 @@
 %%
 \RRnote{}
 %%
-\RRresume{
-Les circuits aujourd'hui fabriqués ne peuvent plus être simulés dans un délai acceptable. En effet
-les composants au comportement fortement non régulier posent des problèmes de convergences aux
-méthodes itératives. Une autre approche consiste à modéliser ces composants avec des fonctions
-linéaires par morceaux. Puis les équations électriques sont reformulées avec des conditions de
-complémentarités. La résolution du systèmes se fait alors avec des algorithmes adaptés. L'efficacité
-de cette approche a était démontrée sur des circuits particuliers. Le but de ce document est de
-montré qu'il est possible d'obtenir ce système d'équations et de complémentarité de manière automatique.
+\RRresume{D'une manière générale,
+les composants au comportement fortement non linéaire ou idéalisé par des fonctions linéaires pas morceaux posent des problèmes de convergences aux
+méthodes itératives comme Newton--Raphson au cours de la simulation numérique des circuits. Une nouvelle approche consiste à modéliser ces composants avec des fonctions
+linéaires par morceaux, possiblement multi--valuées pour formuler un problème de complémentarité et de le résoudre avec des méthodes adaptées.  
+L'efficacité
+de cette approche a été démontrée sur des circuits particuliers. Le but de ce document est de
+montrer qu'il est possible d'obtenir ce système d'équations et de complémentarité de manière automatique en étendant l'approche standard de la MNA (Modified Nodal Analysis).
 }
 \RRNo{0000001}
 \RRabstract{
-An electrical circuit composed of a lot of non-smooth components can not be simulated in a short time. Because the non-smooth components are incompatible
-with the iterative methods. An other approach is to modeling these components with some
-piecewise linear functions. The resolution of this system leads to a Linear Complementarity Problem
-solved with efficient algorithms. This approach has been validated with some electrical circuits. The
-aim of this document is to demonstrate that it is possible to program an automatic circuit equation formulation.
+ Generally speaking, stiff non linear components and idealized components such as diodes or  piecewise linear components result in troubles in  iterative methods such as Newton-Raphson for the numerical simulation of electrical circuits. A novel approach is to model these components with some
+piecewise linear functions or nonsmooth multi-valued functions and to formulate the one--step problem as a Complementarity Problems together with the choice of a  suitable algorithm to solve it. This approach has been validated with some electrical circuits. The aim of this document is to demonstrate that it is possible to implement an automatic circuit equation formulation taking into account nonsmooth components by extending the standard MNA (Modified Nodal Analysis).
 }
 %%
 \RRmotcle{Simulation, circuits électriques, probléme de complémentarité, Analyse nodale modifiée, système~dynamique~non-régulier}
 
-\RRkeyword{Simulation, circuits equation, Linear Complementarity Problem, Modified Nodal Analysis, non-smooth~dynamical~system}
+\RRkeyword{Simulation, circuits equation, Complementarity Problem, Modified Nodal Analysis, non-smooth~dynamical~system}
 
 %%
 \RRprojet{BIPOP}  % cas d'un seul projet

@@ -184,6 +184,34 @@ Where G is the branch's conductance.
   \end{array}\right)
 \]
 With $U_{a} = \gamma I_{b}$.
+
+\subsection{Smooth equations and the DAE system.}
+It is the same physical equations than in the MNA. This part describes the form and the unknowns
+used in our formulation.
+
+\begin{enumerate} 
+ \item If a node is not connected to a capacitor then the Kirchhoff Current Law (KCL) is static. \\
+  \item The V.D. equation (VDE) : \\
+    A V.D. branch give an equation :
+    \[V_{i}-V_{j} = \sum_{i}^{}a_{i}V_{i} + \sum_{j\in J}^{}b_{j}I_{j} +   source\]
+    This equation comes from the branch constitution, not from the Kirchhoff Law. (ex : U = R*I)
+  \item If a node is connected to a capacitor then the Kirchhoff Current Law is dynamic (KCL).\\
+    NB : The current in the capacitor branches is written with :
+    \[I = C*\frac{d(V_{i} - V_{j})}{dt}\]
+  \item The inductor law (IL) : 
+     \[V_{i} - V_{j} = L*\frac{dI}{dt}\]
+\end{enumerate}
+
+These equations lead to a DAE of the form:
+\[MX'+NX=s(t)\]
+
+In general cases, the matrix $M$ is singular, it is a implicit DAE. But, with a good choice of the set of unknowns, it is
+possible to write an explicit DAE of the form :
+\[x' = A_{1x}x +A_{1zs}Z_{s} + A_{1ns}Z_{ns}+A_{1s}\]
+\[0  = B_{1x}x+B_{1zs}Z_{s} + B_{1ns}Z_{ns}+B_{1s}\]
+
+
+
 \subsection{General form of the MNA}
 The result of the MNA is a system like :
 \[MX'=AX+c\]
@@ -204,6 +232,9 @@ F[x_{n},z(x_{n},x_{n-1},x_{n-2},...),t_{n}]=0
 \end{eqnarray}
 
 This equation is linearized and solved using the Newton-Raphson iterations.
+
+
+
 
 \newpage
 \subsection{A simple MNA example}

@@ -2,7 +2,7 @@
  \newpage
  \section{Aim of this document}
  The goal of this document is a feasibility study to develop an automatic circuit equation
- formulation and software taking into account eventual non smooth components. It consists in including in the standard framework of SPICE piecewise linear laws  and complementarity conditions. The first part studies the modified nodal analysis(M.N.A). As a starttig point, the
+ formulation and software taking into account eventual non smooth components. It consists in including in the standard framework of SPICE piecewise linear laws  and complementarity conditions. The first part studies the modified nodal analysis(M.N.A). As a starting point, the
  MNA will be used and we will see how it is adapted to manage the non smooth components.
  \section{Notations}
 \begin{itemize}
@@ -10,9 +10,9 @@
   \item[--] V denotes a potential at node.
   \item[--] q denotes a charge in a capacitor.
   \item[--] $\psi$ denotes a flux in a inductor.
-  \item[--] Indice $_{a}$ denotes the current branch.
-  \item[--] Indice $_{b}$ denotes the other branch whose voltage is a controlling variable.
-  \item[--] Indice $_{c}$ denotes the other branch whose current is a controlling variable.
+  \item[--] Indices $_{a}$ denotes the current branch.
+  \item[--] Indices $_{b}$ denotes the other branch whose voltage is a controlling variable.
+  \item[--] Indices $_{c}$ denotes the other branch whose current is a controlling variable.
 \item[--] CD : Current Defined
 \item[--] VD : Voltage Defined
 \item[--] MNA : Modify Nodal Analysis
@@ -23,11 +23,11 @@
 \item[--] $I_{j}$ : Current in the branch number j.
 \item[--] $V_{i}$ : Voltage on node number i.
 \end{itemize}
-\include{MNA_SECTION}
-\include{MNA_DAE}
+\include{StandardMNA}
+\include{ExtendedMNA}
 \section{Validation by time simulation}
 
-\subsection{Sketch of  the Moreau time's stepping}
+\subsection{Sketch of  the Moreau time--stepping scheme}
 \begin{eqnarray}
 R=A_{1ns}C_{1\lambda}\label{eq1}\\
 x'=A_{2x}x +A_{2zs}Z_{s} +R \lambda +A_{2s}&\label{eq2}\\
@@ -49,14 +49,14 @@ x(t_{i+1})=Wx_{free}+h\theta WA_{2zs}Z_{s}(t_{i+1})+hWR\lambda (t_{i+1}) &\label
 With:
 \[x_{free}=(I+h(1-\theta)A_{2x})x(t_{i}) + h(1-\theta )A_{2zs}Zs(t_{i}) + h\theta 'A_{2s}(t_{i+1}) +
 h(1-\theta ')A_{2s}(t_{i})\]
-equation~(\ref{eq3}) discretisation:
+equation~(\ref{eq3}) discretization:
 \[0 = B_{2x}x(t_{i+1})+B_{2zs}Z_{s}(t_{i+1}) + B_{2\lambda}\lambda(t_{i+1})+B_{2s}(t_{i+1})\]
 With equation~(\ref{eq5}):
 \[0 = B_{2x}Wx_{free}+B_{2s}(t_{i+1})+(h\theta B_{2x} WA_{2zs}+B_{2zs}) Z_{s}(t_{i+1})+(hB_{2x}WR+B_{2\lambda})\lambda(t_{i+1})\]
 Rename the matrices:
 \[0 = q_{free}+B_{3zs} Z_{s}(t_{i+1})+B_{3\lambda}\lambda(t_{i+1})\]
 
-equation~(\ref{eq4}) discretisation:
+equation~(\ref{eq4}) discretization:
 \[Y(t_{i+1})=D_{2x}x(t_{i+1})+D_{2zs}Z_{s}(t_{i+1}) +D_{2\lambda}\lambda(t_{i+1})+D_{2s}(t_{i+1})\]
 With equation~(\ref{eq5}) and rename the matrices:
 \[Y(t_{i+1})=D_{2x}Wx_{free}+ D_{2s}(t_{i+1})+(D_{2zs}+h\theta
