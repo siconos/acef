@@ -141,7 +141,7 @@ and the  dynamic relation is given by
    V_{i}-V_{j}=\frac{d\psi _{a}}{dt} \tag{IND2}
 \end{equation}
 After a time discretization procedure, these equations give tow linear relations between system's unknowns.
-\newpage
+
 \subsection{Stamps method}
 The stamps method is an algorithmic method used to fill the table equation from the components. It
 consists in writing a sub-table for each type of component, this sub-table is the contribution of the component in the tableau equation.\\
@@ -194,12 +194,12 @@ used in our formulation.
   \item The V.D. equation (VDE) : \\
     A V.D. branch give an equation :
     \[V_{i}-V_{j} = \sum_{i}^{}a_{i}V_{i} + \sum_{j\in J}^{}b_{j}I_{j} +   source\]
-    This equation comes from the branch constitution, not from the Kirchhoff Law. (ex : U = R*I)
+    This equation comes from the branch constitution, not from the Kirchhoff Law. (ex : U = RI)
   \item If a node is connected to a capacitor then the Kirchhoff Current Law is dynamic (KCL).\\
     NB : The current in the capacitor branches is written with :
-    \[I = C*\frac{d(V_{i} - V_{j})}{dt}\]
+    \[I = C\frac{d(V_{i} - V_{j})}{dt}\]
   \item The inductor law (IL) : 
-     \[V_{i} - V_{j} = L*\frac{dI}{dt}\]
+     \[V_{i} - V_{j} = L\frac{dI}{dt}\]
 \end{enumerate}
 
 These equations lead to a DAE of the form:

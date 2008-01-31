@@ -51,7 +51,7 @@
 <h3>Parser Implementation</h3>
 <p>To develop a Netlist parser without using any existing code is a very big and long work. </p>
 <p>A quicker solution is
-      to use the NGSPICE's parser. It consists in extracting the parser and building a library. NGSPICE is
+      to use the  parser of NGSPICE. It consists in extracting the parser and building a library. NGSPICE is
       under BSD license.<a href="http://ngspice.sourceforge.net">(Ngspice legal issues)</a>.
    </p>
    <p>Programming language is C.</p>
@@ -98,7 +98,7 @@ It is a C++ module. Following the class diagram of mains class.
 </center>
 <p>Each electrical component has a component instance in ACEF.</p>
 <p>Component add its equations and unknowns. The main advantage is only that useful unknowns are added in
-the system. For example, current through a comparator is null, so this current doesn't appear in the
+the system. For example, current through a comparator is null, so this current does not appear in the
 system.
 Stamp method consists in writing component's contribution in the table equation.</p>
 <p>componentNLINEAR stamp methods is overloaded to fill the linear complementarity matrix formulation.</p>
@@ -106,7 +106,7 @@ Stamp method consists in writing component's contribution in the table equation.
 <center>
 <img src=equation.jpeg align=top>
 </center>
-<p>The components build the equation instances. A equation is a line(menber myLine) in the table
+<p>The components build the equation instances. A equation is a line (member myLine) in the table
 equations.
 The component stamp method uses equation instances to fill the table equations.</p>
 <h3>Linear system class</h3>
