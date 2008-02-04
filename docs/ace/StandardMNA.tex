@@ -1,6 +1,5 @@
 
- 
-\section{Introduction, Modified Nodal Analysis}
+\section{Element of Automatic Circuit Equation Generation}
 This part is a short overview about the Modified Nodal Analysis(MNA). The MNA is the method used
 in SPICE to obtain the circuit equation formulation. For more details, we refer the reader to [1][2].%~\cite{Ogrodzki1994,chua1991}.
 
@@ -11,7 +10,33 @@ Moreover, branches are connected to circuit nodes. The physical behavior of the 
 Kirchhoff's law. Circuit analysis leads to a mathematical formulation which will be describe in this
 document.
 
-\subsubsection{Circuit branches}
+
+
+\begin{figure}[h]
+\centerline{
+ \scalebox{0.6}{
+    \input{SimpleCircuit.pstex_t}
+ }
+}
+\label{fig-Circuit-example}
+\caption{Circuit and a graph representing its topology}
+\end{figure}
+With the example shown in figure \ref{fig-Circuit-example}, the KCL leads to the following equations:
+\[-I_{1}+I_{2}+I_{3}=0\]
+\[-I_{3}+I_{4}=0\]
+\[I_{1}-I_{2}-I{4}=0\]
+or the matrix formulation :
+\[AI=0\]
+where A is known as the incidence matrix and I is the vector of branch currents.
+
+\begin{ndrva}
+  \begin{itemize}
+\item Add the definition of various Matrices in network analysis A, B, C, D
+\item Add conditions under which the choice of these matrices is easy or obvious
+  \end{itemize}
+\end{ndrva}
+
+\subsection{Branch Constitutive Equation (BCE)}
 \begin{figure}[h]
 \centerline{
  \scalebox{0.6}{
@@ -22,36 +47,28 @@ document.
 \label{fig-Basic-branch}
 \end{figure}
 In any case, the branch is described by a pair of branch variables: the tension $U_{a}$ and the current $I_{a}$.
+
+
+
+
 Moreover, the Branch Constitutive Equation can be expressed in a general implicit form:
 \begin{equation}\label{BCE}F(U_{a},I_{a},...)=0\end{equation}
 We will see the different forms of this relation.
+\subsection{Kirchhoff's Laws}
+
 \subsubsection{The Kirchhoff Current Law (KCL)}
 \newtheorem{kcl}{Kcl}
 \begin{kcl}
 At any node in an electrical circuit where charge density is not changing in time, the sum of
-currents flowing towards that node is equal to the sum of currents flowing away from that node.
+currents flowing towards that node is equal to the sum  of currents flowing away from that node.
 \end{kcl}
 The KCL law gives rise to this type of equation:\\
 \begin{equation}
  \sum_{i} I_{i}=0\label{eq:KCL}
 \end{equation}
 
-\begin{figure}[h]
-\centerline{
- \scalebox{0.6}{
-    \input{SimpleCircuit.pstex_t}
- }
-}
-\caption{Circuit and a graph representing its topology}
-\label{fig-Circuit-example}
-\end{figure}
-With the example shown in figure \ref{fig-Circuit-example}, the KCL leads to the following equations:
-\[-I_{1}+I_{2}+I_{3}=0\]
-\[-I_{3}+I_{4}=0\]
-\[I_{1}-I_{2}-I{4}=0\]
-or the matrix formulation :
-\[AI=0\]
-where A is known as the incidence matrix and I is the vector of branch currents.
+
+
 \subsubsection{The Kirchhoff Voltage Law (KVL)}
 \newtheorem{kvl}{Kvl}
 \begin{kvl}
@@ -69,12 +86,21 @@ These equations contain redundancy and the system can be written:
   \end{array}\right)U=0
   \]
   where U is the vector of tensions. The matrix is known as the loop matrix B.
-  \subsubsection{General equations formulation}
+
+
+
+\subsection{General equations formulation. The Sparse Tableau Analysis (STA)}
+
   The physical behavior of an electrical circuit can be describe with the following equations:
   \[AI=0\]
   \[BU=0\]
   \[\textrm{For all branches :} \qquad F(U_{a},I_{a},...)=0 \]
-\subsection{Definition}
+
+\section{The Modified Nodal Analysis (MNA)}
+
+\subsection{Current--defined and Voltage--defined Branches}
+
+
 \newtheorem{mur}{Def}
 \begin{mur}
 The branch is current-defined if its currents is a function of its own voltage, controlling variable
@@ -92,9 +118,14 @@ or their derivatives:
 Examples : \\
 A resistor is a voltage-defined branch because $U_{a}=RI_{a}$.\\
 A inductor is a voltage-defined branch because $U_{a}=L\frac{dI_{a}}{dt}$.\\
-\subsection{Hypothesis}
+
+
+\subsection{Blanket Assumption of the MNA}
+
 The M.N.A. assumes smooth branches are explicit functions of current or voltage. It means each branch is either Voltage Defined (V.D.) or Current Defined (C.D.)\\
-\subsection{Unknowns}
+
+
+\subsection{Choices of Unknowns}
 The M.N.A. use the following unknowns:
 \begin{enumerate}
 \item Nodal voltages
@@ -104,15 +135,21 @@ The M.N.A. use the following unknowns:
 \item Currents control
 \end{enumerate}
 These unknowns are the state variables which are assumed to be sufficient to describe the state of the circuit.
-\subsection{Equations}
+
+
+\subsection{Typical Branch Constitutive Equations}
 The M.N.A. use following equations:
 
 
 Current from current-defined branch is replaced with relation~(\ref{CD}). The result is a linear relation between system's unknowns.
-\subsubsection{Law in voltage-defined branches (LVD)}
+\paragraph{Law in voltage-defined branches (LVD)}
 It consists in replacing $U_{a}$ with $V_{i}-V_{j}$ in the relation \ref{VD} and we obtain a linear relation between system's unknowns.
 \[V_{i}-V_{j}=F_{i}(I_{a},U_{b},I_{c},\frac{dU_a}{dt},\frac{dU_b}{dt},\frac{dI_{c}}{dt})\]
-\subsubsection{Capacitor laws (CAP)}
+
+
+
+
+\paragraph{Capacitor laws (CAP)}
 In a capacitor branch, the voltage is defined by 
 \begin{equation}
  q_{a}=CU_{a} 
@@ -130,7 +167,7 @@ I_{a}=\frac{dq_{a}}{dt} \label{eq:CAP2}\tag{CAP2}
 
 
 After a time discretisation, these equations give to linear relations between system's unknowns.
-\subsubsection{Inductor laws (IND)}
+\paragraph{Inductor laws (IND)}
 A relation between inductor flux and current is defined by
 \begin{equation}
 \psi _{a}=LI_{a}\label{eq:IND1}\tag{IND1}
@@ -185,7 +222,8 @@ Where G is the branch's conductance.
 \]
 With $U_{a} = \gamma I_{b}$.
 
-\subsection{Smooth equations and the DAE system.}
+
+\subsection{From the STA to the DAE system of the MNA.}
 It is the same physical equations than in the MNA. This part describes the form and the unknowns
 used in our formulation.
 
@@ -210,8 +248,30 @@ possible to write an explicit DAE of the form :
 \[x' = A_{1x}x +A_{1zs}Z_{s} + A_{1ns}Z_{ns}+A_{1s}\]
 \[0  = B_{1x}x+B_{1zs}Z_{s} + B_{1ns}Z_{ns}+B_{1s}\]
 
+\begin{ndrva}
+  \begin{itemize}
+  \item Add the splitting of the Matrix $A$ with $A_C$, $A_L$, $A_R$, $A_V$ and $A_I$ to obtain
+    \begin{equation}
+      \label{eq:MNA-DAE}
+      \begin{array}{l}
+      A_c \Frac{d q(A_c^T e )}{dt} + a_R g(A_R^te) + A_Lj_L+A_Ij_s =0 \\
+      \Frac{d \phi(j_L)}{dt} - A_L^T e =0 \\
+      A_V^Te-v_s =0
+    \end{array}
+    \end{equation}
+  \end{itemize}
+\end{ndrva}
 
+\subsection{DAE index and topological analysis}
 
+\begin{ndrva}
+  \begin{itemize}\item 
+    Review the work of \cite{Tischendorf1999,
+      Gunther.Feldmann1993,Estevez.Tischendorf2000,Bachle.ebert2005a,Bachle.ebert2005b} \\
+  
+   \item  Order \cite{Estevez.Tischendorf2000} and interesting references in \cite{Gunther.Feldmann1993}
+  \end{itemize}
+\end{ndrva}
 \subsection{General form of the MNA}
 The result of the MNA is a system like :
 \[MX'=AX+c\]
