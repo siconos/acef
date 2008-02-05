@@ -1,0 +1,51 @@
+\section{Install, run and doc}
+\frame
+{
+  \frametitle{Installation of the platform}
+
+  
+  \begin{itemize}
+  \item<1-> Autoconf, automake and libtool utilities for each package (Numerics, Kernel and Front-End): 
+    configure.ac and Makefile.am files distributed with the software. 
+
+  \item<2-> one "simple" way to install the platform: configure ; make ; make install. \\
+
+  \item<3->Required or optional external libraries: lapack++, libxml2, cppunit ...
+  \end{itemize}
+
+}
+
+
+\frame{
+\frametitle{Running a simulation}
+
+  \begin{itemize}
+  \item direct c++ program writing
+  \item mixed c++ program writing and xml input  
+  \item python or scilab interface
+  \end{itemize}
+
+  $\Rightarrow$ input files: one main program (.cpp, .py ...), one plugin file (yourPlugin.cpp) and one xml input file. 
+}
+
+
+\frame{
+\frametitle{Help and Documentation}
+
+  \begin{itemize}
+  \item<1-> Doxygen tools for automatic documentation in Numerics and Kernel
+  \item<2-> Users, developers and theoretical manuals (in process ...)
+  \item<3-> web pages, Bug tracker, forum ... on Gforge.  
+  \end{itemize}
+}
+
+   
+
+
+
+   
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: t
+%%% End: 

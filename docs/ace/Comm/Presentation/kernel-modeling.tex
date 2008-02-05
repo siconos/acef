@@ -1,0 +1,195 @@
+\begin{frame}
+  \frametitle{Modeling Principle:}
+  \begin{center}
+    \psfrag{NSDS}[][]{\FontVince{Non Smooth Dynamical system}}
+    \psfrag{DS}[][]{\FontVince{Dynamical system}}
+    \psfrag{DSeq}[][]{\FontVince{$\dot x = f(x,t) + r$}}
+    \psfrag{NSLAW}[][]{\FontVince{Non Smooth Law}}
+    \psfrag{NSLAWeq}[][]{\FontVince{$0 \leq y \perp \lambda \geq 0$}}
+    \psfrag{OUTeq}[][]{\FontVince{$y = h(x)$}}
+    \psfrag{INeq}[][]{\FontVince{$r = g(\lambda)$}}
+    \psfrag{RELATION}[][]{\FontVince{Input/Output Relation}}
+    \psfrag{INTERACTION}[][]{\FontVince{Non Smooth Interaction}}
+    \includegraphics<1>[width=0.7\textwidth]{./figures/MP1.eps}
+    \psfrag{NSDS}[][]{\FontVince{Non Smooth Dynamical system}}
+    \psfrag{DS}[][]{\FontVince{Dynamical system}}
+    \psfrag{DSeq}[][]{\FontVince{$\dot x = f(x,t) + r$}}
+    \psfrag{NSLAW}[][]{\FontVince{Non Smooth Law}}
+    \psfrag{NSLAWeq}[][]{\FontVince{$0 \leq y \perp \lambda \geq 0$}}
+    \psfrag{OUTeq}[][]{\FontVince{$y = h(x)$}}
+    \psfrag{INeq}[][]{\FontVince{$r = g(\lambda)$}}
+    \psfrag{RELATION}[][]{\FontVince{Input/Output Relation}}
+    \psfrag{INTERACTION}[][]{\FontVince{Non Smooth Interaction}}
+    \includegraphics<2>[width=0.7\textwidth]{./figures/MP2.eps}
+    \psfrag{DS}[][]{\FontVince{Dynamical system}}
+    \psfrag{DSeq}[][]{\FontVince{$\dot x = f(x,t) + r$}}
+    \psfrag{NSLAW}[][]{\FontVince{Non Smooth Law}}
+    \psfrag{NSLAWeq}[][]{\FontVince{$0 \leq y \perp \lambda \geq 0$}}
+    \psfrag{OUTeq}[][]{\FontVince{$y = h(x)$}}
+    \psfrag{INeq}[][]{\FontVince{$r = g(\lambda)$}}
+    \psfrag{RELATION}[][]{\FontVince{Input/Output Relation}}
+    \psfrag{INTERACTION}[][]{\FontVince{Non Smooth Interaction}}
+    \includegraphics<3>[width=0.7\textwidth]{./figures/MP3.eps}
+    \psfrag{NSDS}[][]{\FontVince{Non Smooth Dynamical system}}
+    \psfrag{DS}[][]{\FontVince{Dynamical system}}
+    \psfrag{DSeq}[][]{\FontVince{$\dot x = f(x,t) + r$}}
+    \psfrag{NSLAW}[][]{\FontVince{Non Smooth Law}}
+    \psfrag{NSLAWeq}[][]{\FontVince{$0 \leq y \perp \lambda \geq 0$}}
+    \psfrag{OUTeq}[][]{\FontVince{$y = h(x)$}}
+    \psfrag{INeq}[][]{\FontVince{$r = g(\lambda)$}}
+    \psfrag{RELATION}[][]{\FontVince{Input/Output Relation}}
+    \psfrag{INTERACTION}[][]{\FontVince{Non Smooth Interaction}}
+    \includegraphics<4>[width=0.7\textwidth]{./figures/Modeling-Principle.eps}
+  \end{center}
+\end{frame}
+\frame
+{
+\frametitle{Kernel Modeling Part}
+Siconos Non Smooth Dynamical System:
+%\vspace{-0.5cm}
+\begin{columns}
+  \begin{column}[t]{5cm}
+    \begin{center}%\begin{figure*}
+        \includegraphics[width=0.8\textwidth]{./figures/NSDS_global.eps}\\
+        % \caption{A Non Smooth Dynamical System}
+        % \end{figure*}
+      \end{center}
+  \end{column}
+  \begin{column}[t]{5cm}
+    \vspace{1cm}
+    \begin{itemize}
+    \item {\it Dynamical System}: a set of ODEs
+    \item {\it Interaction}: a set of relations (ie constraints) and a non-smooth law
+      \pause
+    \item {\it Topology}: link with the simulation, handles relative degrees, index sets ...
+    \end{itemize}
+  \end{column}
+\end{columns}
+% Non Smooth Dynamical System: a set of Dynamical Systems, and a set of potential Interactions between those
+% Dynamical Systems. 
+\vspace{0.3cm}
+Simplified Modeling Tools class diagram:
+\begin{center}%\begin{figure}
+  \includegraphics[width=0.75\textwidth]{./figures/ClassDiagrams/ReducedModelingToolsCD.eps}\\
+  % \end{figure}
+\end{center}
+}
+
+\frame
+{
+\frametitle{Dynamical Systems in Siconos/Kernel}
+ \begin{center}\includegraphics[width=0.45\textwidth]{./figures/ClassDiagrams/DynamicalSystems.eps}\end{center}
+ \begin{itemize}
+ \item Parent Class \textcolor{blue}{\textbf{DynamicalSystem}}
+   \begin{equation*}\label{DS}
+     \dot x = f(x,\dot x,t)+ T(x) u(x,t) + r
+   \end{equation*}
+   \pause
+ \item Derived Classes
+   \begin{itemize}
+   \item \textcolor{blue}{\textbf{LinearDS}} Linear Dynamical Systems
+     \begin{equation*}\label{LDS}
+       \dot x = A(t)x + Tu(t) + b(t) + r
+     \end{equation*}
+   \item \textcolor{blue}{\textbf{LagrangianDS}} Lagrangian Dynamical Systems
+     \begin{equation*}\label{LagrangianDS}
+       M(q)\ddot q + NNL(q,\dot q) + F_{int}(\dot q, q,t) = F_{ext}(t) + T(q)u(q,t) + p
+     \end{equation*}
+   \item \textcolor{blue}{\textbf{LagrangianLinearTIDS}} Lagrangian Linear Time Invariant Systems 
+     \begin{equation*}
+       M\ddot q + C\dot q +Kq = F_{ext}(t) + Tu(t) + p 
+     \end{equation*}
+   \end{itemize}
+ \end{itemize}
+
+ {\it Note: all operators ( $f(x,t)$, $M(q)$, ...) can be set either as matrices (when constant) or with a user-defined external function (plug-in).}
+}
+
+\frame
+{
+\frametitle{Relations}
+ \begin{center}\includegraphics[width=0.5\textwidth]{./figures/ClassDiagrams/Relations.eps}\end{center}
+ \begin{itemize}
+ \item Parent Class \textcolor{blue}{\textbf{Relation}} 
+   \begin{equation*}\begin{array}{lcc}
+       y = h(x,t,...) &,& r = g(\lambda,t,...) 
+     \end{array}\end{equation*}
+   \pause
+ \item Derived Classes:
+   \begin{itemize}
+   \item \textcolor{blue}{\textbf{LinearTIR}} Linear Time Invariant Relation
+     \begin{eqnarray*}\label{LinearTIR}
+       y = Cx + Fu +D\lambda +e, & r = B\lambda 
+     \end{eqnarray*}
+   \item \textcolor{blue}{\textbf{LagrangianR}} Lagrangian Relation
+     \begin{eqnarray*}\label{LagrangianR}
+       \dot y = H(q,t,\ldots) \dot q, &p= H^t(q,t,\ldots) \lambda 
+     \end{eqnarray*}
+   \item \textcolor{blue}{\textbf{LagrangianLinearR}} Lagrangian Linear Relation
+     \begin{eqnarray*}
+       \dot y=H \dot q + b, & p= H^t \lambda 
+     \end{eqnarray*}
+   \end{itemize}
+ \end{itemize}
+}
+\frame
+{
+\frametitle{Non Smooth laws}
+ \begin{center}\includegraphics[width=0.5\textwidth]{./figures/ClassDiagrams/NSL.eps}\end{center}
+\begin{itemize}
+\item Parent Class \textcolor{blue}{\textbf{NonSmoothLaw}} 
+\item Derived Classes
+  \begin{itemize}
+  \item \textcolor{blue}{\textbf{ComplementarityConditionNSL}} Complementarity condition or unilateral contact
+    \begin{eqnarray*}
+      0 \leq y \perp \lambda\geq 0
+    \end{eqnarray*}
+  \item \textcolor{blue}{\textbf{Relay}} condition.
+    \begin{eqnarray*}
+      \begin{cases}
+        \dot y =0, |\lambda | \leq 1\\
+        \dot y \neq 0, \lambda =  \sign( y )\\
+      \end{cases}    
+    \end{eqnarray*}
+  \item \textcolor{blue}{\textbf{NewtonImpactLawNSL}}  Newton impact Law.
+    \begin{eqnarray*}
+      \label{eq:13}
+      \text{if } y(t)=0,\quad   0 \leq \dot y(t^+) +e   \dot y(t^-) \perp \lambda\geq 0
+    \end{eqnarray*}
+  \item  \textcolor{blue}{\textbf{NewtonImpactFrictionNSL}}  Newton impact and Friction (Coulomb) Law.
+  \end{itemize}
+\end{itemize}
+}
+
+
+\frame
+{
+\frametitle{C++ description of a Model}
+\begin{itemize}
+\item \textcolor{blue}{Dynamical Systems definition:} \\[3mm]
+\FontVince{ DynamicalSystem * DS1 = new LagrangianLinearTIDS(nDof,q0,v0,Mass);\\
+    DS1$\rightarrow$setComputeFExtFunction("BallPlugin.so", "ballFExt");\\[3mm] 
+}  
+\pause
+\item \textcolor{blue}{Interactions definition:} non smooth law and relation: \\[3mm]
+\FontVince{NonSmoothLaw * nslaw = new NewtonImpactNSL(e);}\\
+\FontVince{ Relation * relation = new LagrangianLinearR(H,b);\\
+Interaction * inter = new Interaction(name, listOfDS,dim, nslaw, relation);}\\[3mm]
+\pause
+\item \textcolor{blue}{Non Smooth Dynamical System and Model} \\
+\FontVince{ NonSmoothDynamicalSystem * nsds = new NonSmoothDynamicalSystem(allDS, allInteractions);\\
+Model * theModel = new Model(t0,T); \\
+theModel$\rightarrow$setNonSmoothDynamicalSystemPtr(nsds);}\\[3mm]
+\end{itemize}
+\pause
+or in a simpler way, xml loading:\\
+
+\FontVince{ Model * = new Model(nameOfXMLFile);}\\
+
+$<SiconosModel>$\\
+...\\
+$< DS\_Definition >$$<LagrangianLinearTIDS number=1>$\\
+$<ndof> 3</\ ndof>$\\
+$<q0 vectorSize=3> 1.0 \ 0.0 \ 0.0< /\ q0>$\\
+...
+}

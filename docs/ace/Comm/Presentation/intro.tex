@@ -1,0 +1,46 @@
+\frame
+{
+  \frametitle{Plan}
+  \pause
+\vspace{1cm}
+  \begin{block}{Constraints and Requirements:}
+    \begin{itemize}
+    \item various applications fields (Mechanics, Electronics \ldots) and corresponding modeling habits and formulations
+    \item various mathematical and numerical tools
+    \item various skills in computer science (from the high perfomance computing to the Matlab users)
+      \pause
+    \item links and interfaces with existing softwares:
+      \begin{itemize}
+      \item low-level numerical libraries (BLAS, LAPACK, ODEPACK, \ldots)
+      \item Matlab or Scilab dedicated user toolbox
+      \item simulation tools for an application field: Scicos, Simulink, FEM and DEM Sofware (LMGC90, \ldots), Hybrid Modeling Language (Modelica, \ldots)
+      \end{itemize} 
+    \end{itemize}
+  \end{block}
+}
+
+\frame
+{
+  \frametitle{Siconos components diagram}
+  \begin{center}\includegraphics[width=0.4\textwidth]{./figures/kernelInterfaces.eps}\end{center}
+  \pause
+  \begin{itemize}
+  \item <2-> \emph{SICONOS/\textcolor{blue}{Numerics} API C:} \\
+    shared dynamic library that provides low-level solvers and algorithms in C and fortran. \\
+      Sources:  NSSpack (LCP, Friction ...), odepack (Lsodar ...).
+  \item <3-> \emph{SICONOS/\textcolor{blue}{Kernel:}} 
+%    \begin{itemize} 
+    %\item 
+API C++: compiled command files with high level methods (C++ Constructors and/or XML file data loading.) \\
+      $\Rightarrow$ from $simulation\rightarrow run()$ to $DynamicalSystem\rightarrow computeFext(t)$ \ldots ... 
+%    \item API C++: shared dynamic library available for others modeling environments.
+    %\item API C : shared dynamic library in low-level environment.
+ %   \end{itemize}
+  \item <4-> \emph{SICONOS/\textcolor{blue}{Frond-End}}: ``user-friendly'' interface providing a more interactive way of using the platform.
+    \begin{itemize}
+    \item API C++ with interactive environment Python scripting (Swig wrapper).
+    \item API C: Scilab and Matlab interfaces.
+    \end{itemize}
+  \item<5-> \emph{User Plug-In}: to allow user to add specific dedicated functions or toolboxes.
+  \end{itemize}
+}

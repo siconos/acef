@@ -1,0 +1,201 @@
+\frame
+{
+\frametitle{Simulation tools in Siconos/Kernel}
+  \begin{center}
+     \includegraphics[width=0.55\textwidth]{./figures/ClassDiagrams/SimulationToolsCD0.eps}
+\end{center}
+\pause
+\vspace{0.5cm}\textcolor{blue}{Simulation description in C++ input file:} \\[3mm]
+\FontVince{Simulation* s = new TimeStepping(theModel);\\
+TimeDiscretisation * t = new TimeDiscretisation(timeStep,s); \\
+OneStepIntegrator * OSI = new Moreau(listOfDS,theta,s); \\
+OneStepNSProblem * osnspb = new LCP(s, "LCP",Lemke,parameters);}
+\pause
+%\onslide<3>{
+%\vspace{0.5cm}
+%\it{Other simulation type:  Equilibrium and steady-state analysis. (not yet implemented) }\\
+\begin{block}{Unitary Relation and Index Sets}
+UR: $y^{i} = h(q, ...)$.  \\
+Index Sets: set of Unitary Relations (UR).  
+\begin{itemize}
+\item $I_0 = \{ UR_\alpha \}$ all unilateral constraints in the system, ie all the potential interactions/relations of the systems. 
+\item $I_i = \{ UR_\alpha, \alpha \in I_{i-1}, y^{(i-1)} = 0 \}\subset I_{i-1}$
+\end{itemize}
+\end{block}}
+
+\frame
+{
+\frametitle{Simulation tools in Siconos/Kernel}
+  \begin{center}
+     \includegraphics[width=0.5\textwidth]{./figures/ClassDiagrams/SimulationToolsCD1.eps}\\
+\pause
+\vspace{0.5cm}
+    \includegraphics[width=0.5\textwidth]{./figures/ClassDiagrams/SimulationToolsCD3.eps}
+\end{center}
+\vspace{0.5cm}
+%\pause
+%\it{Other simulation type:  Equilibrium and steady-state analysis. (not yet implemented) }\\
+}
+\frame
+{
+  \textcolor{blue}{\textit{OneStepIntegrator}}:
+  \begin{itemize}
+  \item \textcolor{blue}{\textbf{Moreau}}:  Moreau's Time-stepping integrator      
+  \item \textcolor{blue}{\textbf{Lsodar}}:  Numerical integration scheme based on the Livermore Solver for Ordinary Differential Equations with root finding.
+  \end{itemize}
+  \vspace{1cm}
+  \textcolor{blue}{\textit{OnestepNSproblem}}:  Numerical one step non smooth problem formulation and solver.
+  \begin{itemize}
+  \item \textcolor{blue}{\textbf{LCP}} Linear Complementarity Problem
+    \begin{eqnarray*}
+      \begin{cases}
+        w=Mz+q \\
+        0 \leq w \perp z\geq 0
+      \end{cases}
+    \end{eqnarray*}
+  \item \textcolor{blue}{\textbf{FrictionContact2D(3D)}}  Two(three)-dimensional contact friction problem
+  \item \textcolor{blue}{\textbf{QP}} Quadratic programming problem
+    \begin{eqnarray*}
+      \begin{cases} 
+        \min  \frac{1}{2}z^T Q z+z^Tp \\
+        z \geq 0
+      \end{cases}
+    \end{eqnarray*}
+  \item \textcolor{blue}{\textbf{Relay}}  
+  \end{itemize}
+}
+\frame
+{
+\begin{block}{Moreau Time-Stepping}
+One Step of Integration: (Start from state at time $t_i$, $q_i, v_i, y_i ...$ known). \\
+\begin{itemize}
+\item compute free state (ie without non smooth part) $\Rightarrow q_{free}, v_{free}$
+\item update index sets: compute $y_p = y_i + 0.5*{\dot y}_i$, if $y_p<0$, add the corresponding UR in $I_1$
+\item build and solve LCP ``impact'' (ie at velocity level) for Unitary Relations in $I_1$ $\Rightarrow (\lambda, y)_{i+1}$
+\item compute non smooth part $p_{i+1} = f(\lambda_{i+1},...)$
+\item update state of the Dynamical Systems: $(q,v)_{i+1}=function(q_{free}, v_{free}, p_{i+1},...) $
+\item update output $y_{i+1}= h(q_{i+1}, ...)$
+\end{itemize}
+\end{block}
+\vspace{1cm}
+\pause
+\it{In Siconos C++ input file:\\[2mm]}
+\FontVince{
+    while(currentTimeStep < max)	\\
+      \{\\
+        s$\rightarrow$computeFreeStep();\\
+	s$\rightarrow$updateIndexSets();\\
+	s$\rightarrow$computeOneStepNSProblem();\\
+	s$\rightarrow$update\\
+\}}	
+}
+\frame
+{
+\begin{block}{Event-Driven}
+EventsManager: member of EventDriven simulation class, a list of all possible Events. \\
+Events: Time Discretisation or Non Smooth.\\[3mm]
+Start = current event, known. 
+\begin{itemize}
+\item Computation of the temporary values of $(y_{k+1},{\dot y}_{k+1})$ by performing the time-integration of the smooth dynamics up to an event (lsodar with roots finding).
+\item Compute the temporary index-sets 
+\item if {$I_1-I_2 \neq \emptyset$} (\textit{impacts occur}) then \\
+build, solve the LCP impact and update the index-sets 
+\item if {$I_2 \neq \emptyset$} then
+build and solve the LCP at acceleration level, and update index sets. \\
+\end{itemize}
+\end{block}
+\pause
+\it{In Siconos C++ input file:\\[2mm]}
+
+\FontVince{
+while(eventsManager$\rightarrow$hasNextEvent())\\
+      \{\\
+	s$\rightarrow$advanceToEvent();\\
+	eventsManager$\rightarrow$processEvents();\\
+	\}
+}
+}
+
+
+
+%% \frame
+%% {
+%% \frametitle{Event-Driven for Lagrangian Systems and Multi-Contacts Case.}
+
+%% bilateral smooth dynamics:
+%% \begin{equation*}
+%% %  \label{eq:smooth-dyna-acceleration-bila-multi}
+%%   \begin{cases}
+%%     M(q) \gamma^{+} + F_{int}(\cdot, q, v)= F_{ext} +  \nabla_q h(q)^T \lambda^+\\ \\
+%%     \Gamma^+_\n = \nabla_q h(q) \gamma^+ + \dot{ \nabla_q h(q)} v^+    \\ \\
+%%     \lambda^{+,\alpha} = 0,   \quad \forall \alpha \in I_0 \setminus I_2 \\ \\
+%%     \Gamma^{+,\alpha}_{\n} =0   \quad \forall \alpha \in I_2
+%%   \end{cases}
+%% \end{equation*}
+%% LCP impact:
+%% \begin{equation*}
+%%   % \label{eq:impact-equations+law-mixed-multi}
+%%   \begin{cases}
+%%     M(q(t_i))(v^{+}(t_i)- v^{-}(t_i)) = p_i, \\
+%%     U_\n^{+}(t_i) = \nabla_q h(q(t_i)) v^{+}(t_i) \\
+%%     % U_\n^{-}(t_i) =  \nabla_q g(q(t_i)) v^{-}(t_i) \\
+%%     p_i =   \nabla_q^T h(q(t_i)) P_{\n,i}\\ \\
+%%     P^\alpha_{\n,i}=0;U_\n^{\alpha,+}(t_i)=U_\n^{\alpha,-}(t_i),  \quad \forall \alpha \in I_0 \setminus I_1 \\ \\
+%%     0\leq  U_\n^{+,\alpha}(t_i)+ e U_\n^{-,\alpha}(t_i) \perp P^\alpha_{\n,i} \geq 0,  \quad \forall \alpha \in I_1 
+%%   \end{cases}
+%% \end{equation*}
+%% LCP acceleration:
+%% \begin{equation*}
+%% %  \label{eq:smooth-dyna-acceleration-comp-multi}
+%%   \begin{cases}
+%%     M(q) \gamma^{+} + F_{int}(\cdot, q, v)= F_{ext} +  \nabla_q h(q)^T \lambda^+\\ \\
+%%     \Gamma^+_\n = \nabla_q h(q) \gamma^+ + \dot{ \nabla_q h(q)} v^+    \\ \\
+    
+%%     \lambda^{+,\alpha} = 0,   \quad \forall \alpha \in I \setminus I_2 \\ \\
+
+%%     0 \leq \Gamma^{+,\alpha}_{\n} \perp \lambda^{+,\alpha} \geq 0  \quad \forall \alpha \in I_2
+%%   \end{cases}
+%% \end{equation*}
+%% This bilateral dynamics is integrated up to an event given by the root-finding of the following function :
+%% \begin{equation*}
+%%   \label{eq:rootfinding}
+%%   \begin{cases}
+%%     g^{\alpha} =0,\quad \forall \alpha \in I \setminus I_s \\ \\
+%%     F^{+,\alpha} = 0, \quad \forall \alpha \in I_s
+%%   \end{cases}
+%% \end{equation*}
+%% }
+
+%% \frame
+%% {
+%%   \frametitle{Event Driven algorithm}
+%%  % \begin{algorithm}
+%%   %  \begin{algorithmic}
+%%    %   {
+%%     %    \REQUIRE The value of the local at the beginning of the time step $[t_k,t_{k+1}]$, i.e, $(g_{k},U_{\n,k},I_{c,k},I_{s,k}),$
+%% %         \ENSURE  $(g_{k+1},U_{\n,k+1},I_{c,k+1},I_{s,k+1})$     
+%% %         \STATE Computation of the  temporary values of $(g_{k+1},U_{\n,k+1})$ by performing the time-integration of the system~(\ref{eq:smooth-dyna-acceleration-bila-multi}) according to $I_{c,k}$ and $I_{s,k}$  up to an event.
+%% %         \STATE Compute the temporary index-set $I_{c,k+1}$ and $I_{s,k+1}$ with the temporary values of $(g_{k+1},U_{\n,k+1})$
+%% %         \IF{$I_{c,k+1} \smallsetminus I_{s,k+1} \neq \emptyset$}
+%% %         \STATE //\textit{Impacts occur.}
+%% %         \STATE Solve the LCP~(\ref{eq:impact-equations+law-mixed-multi}).
+%% %         \STATE Update the index-set $I_{c,k+1}$ and temporary $I_{s,k+1}$
+%% %         \STATE Check that $I_{c,k+1} \smallsetminus I_{s,k+1}  =\emptyset$
+%% %         \ENDIF
+%% %         \IF{$I_{s,k+1} \neq \emptyset$}
+%% %         \STATE Solve the LCP~(\ref{eq:smooth-dyna-acceleration-comp-multi})
+%% %         \FOR{$\alpha \in I_{s,k+1}$}
+%% %         \IF{$\Gamma_{\n,\alpha,k+1} >0, F_{\alpha,k+1} = 0 $}
+%% %         \STATE remove $\alpha$ from $I_{s,k+1}$ and $I_{c,k+1}$
+%% %         \ELSIF{$\Gamma_{\n,\alpha,k+1} =0, F_{\alpha,k+1}=0$}
+%% %         \STATE Undetermined case.
+%% %         \ENDIF
+%% %         \ENDFOR
+%% %         \ENDIF
+%% %         \STATE // Go to the next time step
+%%      % }
+%%     %\end{algorithmic}
+%%     %\caption{Event -driven procedure with one contact}
+%%     %\label{Algo:ED-multicontact}
+%%   %\end{algorithm}
+%% }

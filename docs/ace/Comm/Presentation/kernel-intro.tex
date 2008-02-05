@@ -1,0 +1,16 @@
+\frame
+{
+\frametitle{Kernel Components}
+\begin{block}{Kernel}
+C++ stand-alone dynamic library, based on Numerics (simulation part)
+\end{block}
+\begin{center}\includegraphics[width=0.5\textwidth]{./figures/kernelInterfaces2.eps}\end{center}
+\pause
+\begin{itemize}
+\item {\it Modeling} and {\it Simulation} clearly separated and independent \\
+  (communicate through object {\it Model}) $\Rightarrow$ easiest handling for user  
+\item data I/O: xml management, independent package (possibly removed in a "light" version ...)
+\item User plug-in 
+\item Utils: matrices, vectors, exceptions, handling.  
+\end{itemize}
+}

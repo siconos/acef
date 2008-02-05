@@ -1,0 +1,91 @@
+\frame{
+%\frametitle{Bouncing Ball(s)}
+\emph{Model:} Lagrangian Linear Time Invariant Dynamical Systems with Lagrangian Linear Relations, Newton Impact Law. \\
+\emph{Simulation:} Moreau's Time Stepping or Event Driven. 
+\begin{columns}
+  \begin{column}[t]{5.8cm}
+    \begin{block}{Bouncing Ball}
+      \begin{center}
+        \includegraphics[width=0.7\textwidth, angle=-90]{./figures/BouncingBall.eps}
+        % \caption{A Non Smooth Dynamical System}
+        % \end{figure*}
+      \end{center}
+    \end{block}
+  \end{column}
+  \begin{column}[t]{5.8cm}
+    \begin{block}{Beads column}
+      \begin{center}
+        \includegraphics[width=0.7\textwidth, angle=-90]{./figures/MultiBeads.eps}
+      \end{center}
+    \end{block}
+  \end{column}
+\end{columns}
+}
+\frame
+{
+  \frametitle{A 4 diodes bridge wave rectifier.}
+  \emph{Model:} Linear Dynamical System with Linear Relations, Complementarity Condition Non Smooth Law. \\
+  \emph{Simulation:} Moreau's Time Stepping
+  \begin{columns}
+    \begin{column}[t]{6cm}
+      \begin{center}
+        \includegraphics[width=1\textwidth]{./figures/DiodeBridge.eps}
+      \end{center}
+    \end{column}
+    \begin{column}[t]{6cm}
+      \begin{center}  
+        \includegraphics[width=1.\textwidth]{./figures/comp_SMASH_SICONOS_TRAP1us.eps}
+      \end{center}
+    \end{column}
+  \end{columns}
+  Comparison between the SICONOS Platform (Non Smooth LCS model) and SPICE simulator (Smooth Diode model). \\
+}
+
+
+\frame
+{
+  \frametitle{Woodpecker toy (sample from Michael Moeller (CR10))}
+  \emph{Model:} Lagrangian Linear Dynamical System, Lagrangian Linear Relations, Newton impact-friction law. \\
+  \emph{Simulation:} Moreau's Time Stepping
+  \begin{columns}
+    \begin{column}[t]{6cm}
+      \begin{center}
+        \includegraphics[width=0.5\textwidth]{./figures/woodpeckerphoto.eps}\\
+        \includegraphics[width=0.5\textwidth]{./figures/woodpeckermodel.eps}\\
+      \end{center}
+    \end{column}
+    \begin{column}[t]{6.5cm}
+      \begin{center}  
+        \psfrag{phi_S(t)}[][]{$\phi_S(t)$}
+        \psfrag{phi_M(t)}[][]{$\phi_M(t)$}
+        \psfrag{omega_M(t)}[][]{$\Omega_M(t)$}
+        \psfrag{omega_S(t)}[][]{$\Omega_S(t)$}
+        \psfrag{omega_M(phi_M)}[][]{$\Omega_M(\phi_M)$}
+        \psfrag{omega_S(phi_S)}[][]{$\Omega_S(\phi_S)$}
+       \includegraphics[width=1.0\textwidth]{./figures/woodpecker.eps}\\
+      \end{center}
+    \end{column}
+  \end{columns}
+}
+
+\frame
+{
+  \frametitle{A Robotic Arm (Pa10)}
+  \emph{Model:} Lagrangian Non Linear Dynamical System with Lagrangian Non Linear Relations, Newton impact. \\
+  \emph{Simulation:} Moreau's Time Stepping
+  \begin{columns}
+    \begin{column}[t]{6cm}
+      \begin{center}
+        \includegraphics[width=0.6\textwidth]{./figures/pos0.ps}\\
+        \includegraphics[width=0.6\textwidth]{./figures/pos1.eps}\\
+      \end{center}
+    \end{column}
+    \begin{column}[t]{6cm}
+      \begin{center}  
+        \includegraphics[width=0.6\textwidth]{./figures/pos2.eps}\\
+        \includegraphics[width=0.6\textwidth]{./figures/pos3.eps}\\
+      \end{center}
+    \end{column}
+  \end{columns}
+}
+

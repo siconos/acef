@@ -1,0 +1,20 @@
+
+\frame
+{
+\frametitle{MNA and DAE}
+ \begin{block}{MNA leads to a DAE of the form:}
+\[C(X)X'+J(X)-S(t)=0\]
+With
+\begin{itemize}
+\item C(X) describing the dynamic elements.
+\item J(X) describing the static ones.
+\item S(t) describing the independent sources.
+\end{itemize}
+Index of the DAE : 0,1,2.
+  \end{block}
+In SPICE,the discretization of this equation is linearized and solved using the Newton-Raphson
+  iterations.\\
+  But, the non-smooth components such as diodes or transistors, result in troubles in this iterative
+  method. A novel approach is to model this components with piecewise linear function and to
+  formulate the problem as a Complementary Problem.
+}

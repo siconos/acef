@@ -1,0 +1,53 @@
+\frame
+{
+\newtheorem{mur}{A Current-Defined Branch (CD)}
+\begin{mur}
+The branch is current-defined if its currents is a function of its own voltage, controlling variable
+or their time--derivatives:
+\begin{equation}\label{CD}I_{a}=F_{i}(U_{a},U_{b},I_{c},\frac{dU_a}{dt},\frac{dU_b}{dt},\frac{dI_{c}}{dt})\end{equation}
+\end{mur}
+\newtheorem{mur_}{A Voltage-Defined Branch (VD)}
+\begin{mur_}
+The branch is voltage-defined if its voltage is a function of its own current, controlling variable
+or their derivatives:
+\begin{equation}\label{VD}U_{a}=F_{u}(I_{a},U_{b},I_{c},\frac{dU_a}{dt},\frac{dU_b}{dt},\frac{dI_{c}}{dt})\end{equation}
+\end{mur_}
+Examples : \\
+A resistor is a voltage-defined branch because $U_{a}=RI_{a}$.\\
+A inductor is a voltage-defined branch because $U_{a}=L\frac{dI_{a}}{dt}$.\\
+A capacitor is a current-defined branch because $I_{a}=C\frac{dU_{a}}{dt}$.\\
+
+ \begin{block}{MNA Hypothesis:}
+The M.N.A. assumes smooth branches are explicit functions of current or voltage. It means each
+branch is either Voltage Defined or Current Defined.
+  \end{block}
+}
+\frame
+{
+\frametitle{MNA unknowns}
+ \begin{block}{The vector of unknowns contains:}
+\begin{itemize}
+\item All node potentials $V_{i}$
+\item Currents through all voltage defined branches
+\end{itemize}
+\end{block}
+
+ \begin{block}{The following equations are written:}
+\begin{itemize}
+\item The KCL is applied to every node.
+\item The Branch Constitutive Equation for all voltage defined branches.
+\end{itemize}
+\end{block}
+Example:
+  \begin{figure}[h]
+   \centerline{
+   \scalebox{0.5}{
+    \input{LC.pstex_t}
+  }
+ } 
+ \end{figure}
+
+The vector of unknowns is :$(V_{1},I_{L})^{t}$
+\[CV_{1}'-I_{C}=0 \qquad LI_{L}'+V_{1}=0\]
+
+}

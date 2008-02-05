@@ -1,0 +1,31 @@
+\frame
+{
+ \frametitle{Other usefull tools ...}
+  % \begin{center}\includegraphics[width=0.9\textwidth]{./figures/ClassDiagrams/utilsClassDiagram.eps}\end{center}
+ \begin{block}{Siconos Algebra}
+   Matrices and vectors handling. Based on lapack++. \\
+   Next release: migration to Boost C++ library
+   $\Rightarrow$ sparse, band, block \ldots matrices. 
+ \end{block}
+ \pause
+ \begin{block}{Data input/output}
+   use xml schemes and libxml2 library. Next release: introduce Factory methods to make xml management optional.
+ \end{block}
+ \pause
+ \begin{block}{Install}
+   \begin{itemize}
+   \item Autoconf, automake and libtool utilities for each package (Numerics, Kernel and Front-End): 
+     configure.ac and Makefile.am files distributed with the software. \\
+     $\Rightarrow$ platform independent. Future: MacOS and Windows (...) 
+   \item One "simple" way to install the platform: configure ; make ; make install. 
+   \item Required or optional external libraries: lapack++ (boost++), libxml2, cppunit ...
+   \end{itemize}
+ \end{block}
+ \pause
+ \begin{block}{Running a simulation}
+   \begin{itemize}
+   \item Direct c++ program writing.
+   \item Python (Swig $\rightarrow$ Boost), Scilab or Matlab (API C) interfaces. 
+   \end{itemize}
+ \end{block}
+}

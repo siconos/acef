@@ -1,0 +1,30 @@
+
+\frame
+{
+\begin{block}{Mixed Linear Complementary System}
+  Given the matrices   ${A_{x}} \in \RR^{n \times n}$, ${A_{z}} \in \RR^{n \times
+  p}$, ${A_{v}} \in \RR^{n \times m}$, ${B_{x}} \in \RR^{p \times n}$, ${B_{z}} \in \RR^{p \times
+  p}$, ${B_{v}} \in \RR^{p \times m}$, ${C_{x}} \in \RR^{m \times n}$, ${C_{z}} \in \RR^{m \times p}$,${C_{v}} \in \RR^{m \times m}$, and
+  the vectors  $ {a} \in \RR^n$,$ {b}  \in \RR^p$,$ {c}  \in \RR^m$, the explicit MLCS denoted by
+  $\mathrm{EMLCS}(A_{x},A_{z},A_{v},B_{x},B_{z},B_{v},C_{x},C_{z},C_{v},a,b,c)$ consists in finding three vectors $ {x}
+  \in \RR^n$, $ {z} \in \RR^p$ and  $ {v} \in \RR^m$ such that
+\begin{equation}\label{eq:mlcs2} 
+  \begin{cases}
+   x' = A_{x} x +A_{z} z +A_{v} v + a  \\
+   0 = B_{x} x +B_{z} z + B_{v} v +b \\ \\
+   {0} \le {v} \perp     C_{x} x+ C_{z}z +C_{v} v +c   \ge {0}
+  \end{cases}.
+\end{equation}
+\end{block}
+The time discretization of a MLCS leads to :
+\begin{block}{Mixed Linear Complementary Problem}
+  Given the matrices  ${A} \in \RR^{n \times n}$, ${B} \in \RR^{m \times m}$, ${C} \in \RR^{n \times m}$, ${D} \in \RR^{m \times n}$, and the vectors  $ {a} \in \RR^n, {b} \in \RR^m$, the MLCP denoted by $\mathrm{MLCP}(A,B,C,D,a,b)$ consists in finding two vectors $ {u} \in \RR^n$ and  $ {v} \in \RR^m$ such that
+\begin{equation}\label{eq:mlcp1} 
+  \begin{cases}
+    A u + C v + a =0 \\  \\
+    {0} \le {v} \perp     Du +B v +b   \ge {0}
+  \end{cases}.
+\end{equation}
+\end{block}
+At each step, SICONOS solves a MLCP.
+}

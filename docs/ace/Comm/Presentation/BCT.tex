@@ -1,0 +1,135 @@
+\frame
+{
+  \frametitle{Circuit branch}
+\begin{figure}[h]
+\centerline{
+ \scalebox{0.4}{
+    \input{Branch.pstex_t}
+ }
+}
+\caption{Basic branch}
+\end{figure}
+A branch is described by a pair of branch variables: the tension $U_{a}$ and the current $I_{a}$.
+Moreover, the Branch Constitutive Equation can be expressed in a general implicit form:
+\begin{equation}\label{BCE}F(U_{a},I_{a},...)=0\end{equation}
+Some examples with a resistor, a capacitor and a current source:
+\[U_{a}=RI_{a} \qquad I_{a}=C\frac{dU_{a}}{dt} \qquad I_{a}=\alpha U_{b}\]
+We will see the different forms of this relation.
+  }
+
+\frame
+{
+\newtheorem{kcl}{The Kirchhoff Current Law (KCL)}
+\begin{kcl}
+At any node in an electrical circuit where charge density is not changing in time, the sum of
+currents flowing towards that node is equal to the sum of currents flowing away from that node.
+\end{kcl}
+\begin{figure}[h]
+\centerline{
+ \scalebox{0.35}{
+    \input{SimpleCircuit.pstex_t}
+ }
+}
+\end{figure}
+With this example 
+\[-I_{1}+I_{2}+I_{3}=0\]
+\[-I_{3}+I_{4}=0\]
+\[I_{1}-I_{2}-I_{4}=0\]
+or the matrix formulation :
+\[AI=0\]
+where A is known as the incidence matrix and I is the vector of branch currents.
+
+}
+\frame
+{
+\newtheorem{kvl}{The Kirchhoff Voltage Law (KVL)}
+\begin{kvl}
+The directed sum of the electrical differences around a closed circuit must be zero.
+\end{kvl}
+\begin{figure}[h]
+\centerline{
+ \scalebox{0.35}{
+    \input{SimpleCircuit.pstex_t}
+ }
+}
+\end{figure}
+With this example 
+\[U_{1}+U_{2}=0\]
+\[ -U_{2}+U_{3}+U_{4}=0\]
+\[ U_{1}+U_{3}+U_{4}=0\]
+or the matrix formulation :
+\[BU=0\]
+where B is known as the loop matrix and U is the vector of branch tensions.
+}
+
+\frame
+{
+\begin{block}{Relation between A and B}
+\[BA^{t}=0\]
+\end{block}
+Proof:
+\[B=\left(\begin{array}{c}b_{1}\\.\\.\\b_{n_{b}}\end{array}\right)
+\qquad A=\left(\begin{array}{c}KCL_{1}\\.\\.\\KCL_{n_{n}}\end{array}\right)\]
+Let p $\in \lbrace 1,n_{b} \rbrace $ and q $\in \lbrace 1,n_{n} \rbrace $. We proof that $b_{p}.KCL_{q}^{t}=0$.
+\begin{enumerate}
+\item The node $_{q}$ is not on the loop $_{p}$, then $b_{p}$ and $KCL_{q}$ have not common non null coordinate.
+\item The node $_{q}$ is on the loop $_{p}$:
+\begin{figure}[h]
+\centerline{
+ \scalebox{0.5}{
+    \input{loop.pstex_t}
+ }
+}
+\end{figure}
+\[b_{p}=(...1...-1...)\qquad KCL_{q}=(...1...1...)\]
+The other coordinates are not simultaneous not null. Therefore :
+\[b_{p}.KCL_{q}^{t}=0\]
+\end{enumerate}
+
+}
+\frame
+{
+\frametitle{An other KVL formulation}
+\begin{figure}[h]
+\centerline{
+ \scalebox{0.5}{
+    \input{branchb.pstex_t}
+ }
+}
+\end{figure}
+It consists in writing :
+\[\forall p \in \lbrace 1,n_{b} \rbrace \qquad U_{p}=V_{j_{p}}-V_{k_{p}}\]
+This system of equation implies BU=0.
+\begin{block}{The matrix formulation is:}
+\[U-A^{t}V=0\]
+where V is the vector of nodes potential and U the vector of branches tensions.\\
+\end{block}
+$\Rightarrow$ In further consideration, BU=0 is eliminated.\\
+Example:
+\[U_{1}=V_{1} - V_{0} \qquad U_{2} = V_{0}-V_{1}\]
+\[U_{3}=V_{2} - V_{1} \qquad U_{4} = V_{0}-V_{2}\]
+}
+
+
+\frame
+{
+  \begin{block}{The Sparse Tableau Approach STA leads to the following system:}
+  \[AI=0 \qquad U-A^{t}V=0\]
+  \[\textrm{For all branches :} \qquad F(U_{a},I_{a},...)=0 \]
+  \end{block}  
+
+
+Example:
+  \begin{figure}[h]
+   \centerline{
+   \scalebox{0.5}{
+    \input{LC.pstex_t}
+  }
+ } 
+ \end{figure}
+ The vector of unknowns: $(I_{L},I_{C},U_{L},U_{C},V_{1})^{t}$
+ \[-I_{L} + I_{C} = 0 \qquad (KCL1)\]
+ \[U_{L} + V_{1} = 0 \qquad U_{C} -V_{1}=0\qquad (KVL)\]
+ \[CU_{C}'-I_{C}=0 \qquad LI_{L}'-U_{L}=0\qquad (BCE)\]
+ 
+  }
