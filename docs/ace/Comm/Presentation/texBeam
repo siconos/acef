@@ -1,0 +1,15 @@
+#! /bin/csh -f
+latex $1.tex
+bibtex $1
+if(-e $2.gdf) then
+glosstex $1.aux $2.gdf
+glosstex $1.aux $2.gdf
+glosstex $1.aux $2.gdf
+glosstex $1.aux $2.gdf
+makeindex $1.gxs -o $1.glx -s glosstex.ist
+endif
+latex $1.tex
+latex $1.tex
+dvips $1.dvi -t a4r -u +psfonts.cmz -o 
+ps2pdf $1.ps
+#gv $1.ps &
