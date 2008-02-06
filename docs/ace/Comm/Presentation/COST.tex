@@ -1,0 +1,26 @@
+
+\frame
+{
+\frametitle{Cost evaluation}
+Let
+\begin{itemize}
+\item $N_{b}$ the number of branches.
+\item $N_{n}$ the number of nodes.
+\item N = max\{$N_{b},N_{n}$\}
+\end{itemize}
+
+\begin{block}{The costs of the automatic circuit equation formulation:}
+
+\begin{itemize}
+\item To parse the Netlist : It consists in reading and storing the Netlist. O(N).
+\item A topological analysis to build the unknowns vector:
+The Minimum Spanning Tree algorithm complexity is O(Nlog(N))
+\item Stamping method:
+Each component writes its contribution in the table equation. O(N).
+\item Matrix product:
+Multiplied two dense matrices costs O($N^{3}$).
+\end{itemize}
+\end{block}
+
+
+}
