@@ -1,0 +1,50 @@
+\documentclass[8pt,xcolor*pst]{beamer}
+\input{packages-slides.tex}
+\input{macro.tex}
+\input{env-std-slides.tex}
+%hideothersubsections
+%\usetheme[hideothersubsections,width=1.5cm]{Franck}
+\usetheme[]{Franck}
+%\useoutertheme[headline=empty]{miniframes}
+\title{Automatic circuit equation formulation for non-smooth electrical circuits}
+\author{Vincent Acary, Olivier Bonnefon, Pascal Denoyelle}
+\date{February 07, 2008}
+\institute{INRIA Rh\^one-Alpes}
+%\includeonly{
+%test
+%}
+
+\newcommand{\FontVince}[1]{{\usefont{T1}{pag}{m}{n}\fontsize{7.74pt}{7pt}\selectfont #1}}
+\newcommand{\FontSmall}[1]{{\usefont{T1}{pag}{m}{n}\fontsize{7.74pt}{4pt}\selectfont #1}}
+\begin{document}
+
+\frame{\titlepage}
+%\section{Outline}
+\frame{\tableofcontents}%[pausesections]}
+\section{Basics on circuit topology}
+\include{BCT}
+\section{Modified Nodal Analysis}
+\include{MNA}
+\section{MNA and DAE}
+\include{MNADAE}
+\section{Piecewise Linear modeling}
+\include{PLM}
+\section{Extend MNA for non-smooth components}
+\include{EMNA}
+\section{MLCS and MLCP}
+\include{MLCSMLCP}
+\section{Cost of the automatic equation formulation}
+\include{COST}
+\section{Simulation}
+\include{SIM}
+\section{Conclusion}
+\include{PER}
+
+
+\def\newblock{}
+
+\end{document}
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: Lecture1
+%%% End: 

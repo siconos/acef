@@ -1,0 +1,38 @@
+\bibpunct{(}{)}{\phantom{ }; }{a}{,}{,}
+%\bibpunct{(}{)}{\hspace{1.em}; }{a}{,}{,}
+
+\makeatother
+
+{\newtheorem{ndr1va}{\textbf{\textsc{Redaction note V.A.}}}[section]}
+
+\newenvironment{ndrva}%
+{%
+\noindent\begin{ndr1va}\hrule\vspace{1em}%
+}%
+{%
+\begin{flushright}%
+\  \\
+%\vspace{-1.5em}\ding{111}
+\end{flushright}%
+\vspace{-1.5em}\hrule
+\end{ndr1va}%
+}
+\makeatletter
+
+\newtheorem{remark1}{Remark}
+\newenvironment{remark}%
+{%
+\noindent\begin{remark1}\hrule\vspace{1em}%
+}%
+{%
+\begin{flushright}%
+\  \\
+%\vspace{-1.5em}\ding{111}
+\end{flushright}%
+\vspace{-1.5em}\hrule
+\end{remark1}%
+}
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: t
+%%% End: 
