@@ -1,9 +1,9 @@
 %!PS-Adobe-2.0 EPSF-2.0
 %%Title: Branch.fig
 %%Creator: fig2dev Version 3.2 Patchlevel 4
-%%CreationDate: Mon Jan 21 17:09:55 2008
+%%CreationDate: Wed Feb  6 13:30:50 2008
 %%For: bonnefon@duparc (Olivier Bonnefon)
-%%BoundingBox: 0 0 65 181
+%%BoundingBox: 0 0 129 199
 %%Magnification: 1.0000
 %%EndComments
 /$F2psDict 200 dict def
@@ -45,8 +45,8 @@ $F2psDict /mtrx matrix put
 
 end
 save
-newpath 0 181 moveto 0 0 lineto 65 0 lineto 65 181 lineto closepath clip newpath
--53.3 207.5 translate
+newpath 0 199 moveto 0 0 lineto 129 0 lineto 129 199 lineto closepath clip newpath
+-40.5 219.8 translate
 1 -1 scale
 
 /cp {closepath} bind def

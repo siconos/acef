@@ -32,9 +32,9 @@ currents flowing towards that node is equal to the sum of currents flowing away 
 }
 \end{figure}
 With this example 
-\[-I_{1}+I_{2}+I_{3}=0\]
-\[-I_{3}+I_{4}=0\]
-\[I_{1}-I_{2}-I_{4}=0\]
+\[-I_{1}+I_{2}+I_{3}=0 \qquad (KCL1)\]
+\[-I_{3}+I_{4}=0 \qquad (KCL2)\]
+\[I_{1}-I_{2}-I_{4}=0 \qquad (KCL0)\]
 or the matrix formulation :
 \[AI=0\]
 where A is known as the incidence matrix and I is the vector of branch currents.
@@ -67,13 +67,12 @@ where B is known as the loop matrix and U is the vector of branch tensions.
 \begin{block}{Relation between A and B}
 \[BA^{t}=0\]
 \end{block}
+\pause
 Proof:
-\[B=\left(\begin{array}{c}b_{1}\\.\\.\\b_{n_{b}}\end{array}\right)
+\[B=\left(\begin{array}{c}b_{1}\\.\\.\\b_{n_{l}}\end{array}\right)
 \qquad A=\left(\begin{array}{c}KCL_{1}\\.\\.\\KCL_{n_{n}}\end{array}\right)\]
-Let p $\in \lbrace 1,n_{b} \rbrace $ and q $\in \lbrace 1,n_{n} \rbrace $. We proof that $b_{p}.KCL_{q}^{t}=0$.
-\begin{enumerate}
-\item The node $_{q}$ is not on the loop $_{p}$, then $b_{p}$ and $KCL_{q}$ have not common non null coordinate.
-\item The node $_{q}$ is on the loop $_{p}$:
+Let p $\in \lbrace 1,n_{l} \rbrace $ and q $\in \lbrace 1,n_{n} \rbrace $. We proof that
+$b_{p}.KCL_{q}^{t}=0$.
 \begin{figure}[h]
 \centerline{
  \scalebox{0.5}{
@@ -81,6 +80,10 @@ Let p $\in \lbrace 1,n_{b} \rbrace $ and q $\in \lbrace 1,n_{n} \rbrace $. We pr
  }
 }
 \end{figure}
+
+\begin{enumerate}
+\item The node $_{q}$ is not on the loop $_{p}$, then $b_{p}$ and $KCL_{q}$ have not common non null coordinate.
+\item The node $_{q}$ is on the loop $_{p}$:
 \[b_{p}=(...1...-1...)\qquad KCL_{q}=(...1...1...)\]
 The other coordinates are not simultaneous not null. Therefore :
 \[b_{p}.KCL_{q}^{t}=0\]
@@ -114,8 +117,9 @@ Example:
 \frame
 {
   \begin{block}{The Sparse Tableau Approach STA leads to the following system:}
-  \[AI=0 \qquad U-A^{t}V=0\]
-  \[\textrm{For all branches :} \qquad F(U_{a},I_{a},...)=0 \]
+  \[AI=0 \qquad (KCL)\]
+  \[U-A^{t}V=0 \qquad (KVL)\]
+  \[\textrm{For all branches :} \qquad F(U_{a},I_{a},...)=0 \qquad(BCE) \]
   \end{block}  
 
 

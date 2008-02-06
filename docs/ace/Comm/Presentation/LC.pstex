@@ -1,9 +1,9 @@
 %!PS-Adobe-2.0 EPSF-2.0
-%%Title: /scratch/gforge/noselecs/docs/ace/Comm/Presentation/LC.fig
+%%Title: LC.fig
 %%Creator: fig2dev Version 3.2 Patchlevel 4
-%%CreationDate: Mon Feb  4 14:14:12 2008
+%%CreationDate: Wed Feb  6 14:17:43 2008
 %%For: bonnefon@duparc (Olivier Bonnefon)
-%%BoundingBox: 0 0 240 81
+%%BoundingBox: 0 0 240 95
 %%Magnification: 1.0000
 %%EndComments
 /$F2psDict 200 dict def
@@ -45,8 +45,8 @@ $F2psDict /mtrx matrix put
 
 end
 save
-newpath 0 81 moveto 0 0 lineto 240 0 lineto 240 81 lineto closepath clip newpath
--35.3 95.2 translate
+newpath 0 95 moveto 0 0 lineto 240 0 lineto 240 95 lineto closepath clip newpath
+-35.3 108.7 translate
 1 -1 scale
 
 /cp {closepath} bind def
@@ -172,6 +172,30 @@ n 1050 1050 m
 % Polyline
 n 1050 1050 m
  1125 975 l gs col0 s gr 
+% Polyline
+n 2400 1575 m
+ 2400 1725 l gs col0 s gr 
+% Polyline
+n 2175 1725 m
+ 2550 1725 l gs col0 s gr 
+% Polyline
+n 2175 1725 m
+ 2100 1800 l gs col0 s gr 
+% Polyline
+n 2250 1725 m
+ 2175 1800 l gs col0 s gr 
+% Polyline
+n 2325 1725 m
+ 2250 1800 l gs col0 s gr 
+% Polyline
+n 2400 1725 m
+ 2325 1800 l gs col0 s gr 
+% Polyline
+n 2475 1725 m
+ 2400 1800 l gs col0 s gr 
+% Polyline
+n 2550 1725 m
+ 2475 1800 l gs col0 s gr 
 /Times-Roman ff 180.00 scf sf
 1800 1425 m
 gs 1 -1 sc (L) col0 sh gr

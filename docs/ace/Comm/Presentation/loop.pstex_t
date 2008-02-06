@@ -1,5 +1,5 @@
 \begin{picture}(0,0)%
-\includegraphics{loop.pstex}%
+\includegraphics{/scratch/gforge/noselecs/docs/ace/Comm/Presentation/loop.pstex}%
 \end{picture}%
 \setlength{\unitlength}{3947sp}%
 %
@@ -9,5 +9,5 @@
   \fontfamily{#3}\fontseries{#4}\fontshape{#5}%
   \selectfont}%
 \fi\endgroup%
-\begin{picture}(1974,2274)(1039,-2098)
+\begin{picture}(8045,2274)(593,-2173)
 \end{picture}%
