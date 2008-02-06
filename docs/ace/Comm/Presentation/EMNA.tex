@@ -6,14 +6,14 @@
  formulation.
 
  \begin{block}{Unknowns}
- Before go head, the unknowns vector X is subdivided:
+ Before go ahead, the unknowns vector X is decomposed in:
 \begin{itemize}
-\item x contains only the dynamic unknowns(currents in inductor and tensions from capacitor branches)
-\item $Z_{s}$ contains only the non dynamic unknowns(Voltage nodes,... ).
+\item x which contains only the dynamic unknowns(currents in inductor and tensions from capacitor branches)
+\item $Z_{s}$ which contains only the non dynamic unknowns(Voltage nodes,... ).
 \end{itemize}
   \end{block}
   
- \begin{block}{With a good choice of unknowns,it leads to the following system:}
+ \begin{block}{A good choice of unknowns yields the following system:}
  
  \begin{eqnarray}
 x'=A_{2x}x +A_{2zs}Z_{s} +R \lambda +A_{2s}&\label{eq2}\\
@@ -26,3 +26,8 @@ Y=D_{2x}x+D_{2zs}Z_{s}+D_{2\lambda}\lambda + D_{2s} &\label{eq4}\\
 
 
 }
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "main"
+%%% End: 

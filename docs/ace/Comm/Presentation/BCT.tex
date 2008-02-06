@@ -11,7 +11,7 @@
 \end{figure}
 A branch is described by a pair of branch variables: the tension $U_{a}$ and the current $I_{a}$.
 Moreover, the Branch Constitutive Equation can be expressed in a general implicit form:
-\begin{equation}\label{BCE}F(U_{a},I_{a},...)=0\end{equation}
+\begin{equation}\label{BCE}F(U_{a},I_{a},\frac{dU_{a}}{dt},\frac{dI_{a}}{dt},...)=0\end{equation}
 Some examples with a resistor, a capacitor and a current source:
 \[U_{a}=RI_{a} \qquad I_{a}=C\frac{dU_{a}}{dt} \qquad I_{a}=\alpha U_{b}\]
 We will see the different forms of this relation.
@@ -82,7 +82,7 @@ $b_{p}.KCL_{q}^{t}=0$.
 \end{figure}
 
 \begin{enumerate}
-\item The node $_{q}$ is not on the loop $_{p}$, then $b_{p}$ and $KCL_{q}$ have not common non null coordinate.
+\item The node $_{q}$ is not on the loop $_{p}$, then $b_{p}$ and $KCL_{q}$ have no common non null coordinate.
 \item The node $_{q}$ is on the loop $_{p}$:
 \[b_{p}=(...1...-1...)\qquad KCL_{q}=(...1...1...)\]
 The other coordinates are not simultaneous not null. Therefore :
@@ -137,3 +137,8 @@ Example:
  \[CU_{C}'-I_{C}=0 \qquad LI_{L}'-U_{L}=0\qquad (BCE)\]
  
   }
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "main"
+%%% End: 
