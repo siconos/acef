@@ -36,6 +36,14 @@ void ACE_INIT_TIME(){
   ACE_times[ACE_TIMER_TEST_1].setName("computedxdt  ");
   ACE_times[ACE_TIMER_TEST_2].setName("test_2  ");
   ACE_times[ACE_TIMER_TEST_3].setName("test_3  ");
+  ACE_times[ACE_TIMER_TEST_4].setName("test_4  ");
+  ACE_times[ACE_TIMER_TEST_5].setName("test_5  ");
+  ACE_times[ACE_TIMER_TEST_6].setName("test_6  ");
+  ACE_times[ACE_TIMER_TEST_7].setName("test_7  ");
+  ACE_times[ACE_TIMER_TEST_8].setName("test_8  ");
+  ACE_times[ACE_TIMER_TEST_9].setName("test_9  ");
+  ACE_times[ACE_TIMER_TEST_10].setName("test_10  ");
+  ACE_times[ACE_TIMER_TEST_11].setName("test_11  ");
   
   
   

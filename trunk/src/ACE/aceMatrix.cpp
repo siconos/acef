@@ -1,5 +1,6 @@
 #include "aceMatrix.h"
 #include "ace.h"
+#include <fstream>
 
 
 aceMatrix::aceMatrix ( unsigned int row, unsigned int col, UBLAS_TYPE typ, unsigned int upper, unsigned int lower):
@@ -61,6 +62,29 @@ void aceMatrix::display(ostream& os) const{
     os<<"unknown matrix type !!!!!\n";
       
 }
+aceMatrix * aceMatrix::load(char * file,UBLAS_TYPE typ){
+  int i,j;
+  aceMatrix *res=0;
+  double aux;
+  try{
+    ifstream pin(file);
+    ACE_CHECK_IERROR(pin,"aceMatrix::load error no file");
+    pin >>i;
+    pin >>j;
+    res = new aceMatrix(i,j,typ);
+    for (int ii=0;ii<i;ii++)
+      for (int jj=0;jj<j;jj++){
+	pin>>aux;
+	res->setValueIfNotNull(ii,jj,aux);
+      }
+  }
+  catch(...)
+    {
+      std::cout << "Exception caught." << endl;
+      ACE_INTERNAL_ERROR("aceMatrix::load");
+    }
+  return res;
+}
 
 aceMatrix& aceMatrix::operator = (const SimpleMatrix& m)
 {
@@ -92,4 +116,18 @@ void aceMatrix::MatrixToPath(int * I,int * J,double * t){
 }
 void aceMatrix::PathToMatrix(int * I,int * J,double * t){
   ;
+}
+void ACEprod(const aceMatrix& A, const aceMatrix& B, aceMatrix& C, bool init)
+{
+//   if (init && ACE_MAT_TYPE == DENSE && &A!=&C && &B!=&C)
+//     gemm(A,B,C);
+//   else
+    prod(A,B,C,init);
+}
+void ACEprod(const aceMatrix& A, const aceVector& x, aceVector& b, bool init)
+{
+//   if (init && ACE_MAT_TYPE == DENSE)
+//     gemv(A,x,b);
+//   else
+    prod(A,x,b,init);
 }

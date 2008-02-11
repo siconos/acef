@@ -67,7 +67,15 @@ class component;
 #define ACE_TIMER_TEST_1 19
 #define ACE_TIMER_TEST_2 20
 #define ACE_TIMER_TEST_3 21
-#define ACE_TIMER_LAST 22
+#define ACE_TIMER_TEST_4 22
+#define ACE_TIMER_TEST_5 23
+#define ACE_TIMER_TEST_6 24
+#define ACE_TIMER_TEST_7 25
+#define ACE_TIMER_TEST_8 26
+#define ACE_TIMER_TEST_9 27
+#define ACE_TIMER_TEST_10 28
+#define ACE_TIMER_TEST_11 29
+#define ACE_TIMER_LAST 30
 
 typedef std::vector<unknown *> unknowns;
 typedef std::vector<equation *> equations;

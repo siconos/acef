@@ -6,6 +6,25 @@ When possible, current go from Neg node to Pos node(for KCL law).
 tension = V_neg - V_pos
 stamp() to write : Ax'=Bx+CZs+DZns+s
                     0 =Ex+FZs+DZns+t
+Convetion:
+
+       UAB
+   <---------- 
+  A    ____    B
+--|---|    |->-|---
+       ----  I
+UAB = VA-VB
+
+here:
+       UNP
+   <---------- 
+  N    ____    P
+--|---|    |->-|---
+       ----  I
+UNP = VN-VP
+EXEMPLE
+UNP = RI
+
 **************************************************************************/
 
 #ifndef COMPONENT_H

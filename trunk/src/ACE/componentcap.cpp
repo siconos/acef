@@ -40,13 +40,19 @@ void componentCAP::stampBeforeInvertion(){
       mTenEq->mCoefs[algo::sls.getIndexUnknown(ACE_TYPE_V,mData.nodePos)]-=1;
     }
     if (algo::sls.KCL(mData.nodeNeg)->mIsDyn){
-      algo::sls.KCL(mData.nodeNeg)->mCoefs[mU->mDynIndex]+=mData.value;
+      if (mI)
+	algo::sls.KCL(mData.nodeNeg)->mCoefs[mI->mIndex]-=1;
+      else
+	algo::sls.KCL(mData.nodeNeg)->mCoefs[mU->mDynIndex]+=mData.value;
       dyn = true;
     }else{
       ;//stamp KCL with current(afterinvertion)
     }
     if (algo::sls.KCL(mData.nodePos)->mIsDyn){
-      algo::sls.KCL(mData.nodePos)->mCoefs[mU->mDynIndex]-=mData.value;
+      if (mI)
+	algo::sls.KCL(mData.nodePos)->mCoefs[mI->mIndex]+=1;
+      else
+	algo::sls.KCL(mData.nodePos)->mCoefs[mU->mDynIndex]-=mData.value;
       dyn = true;
     }else{
        ;//stamp KCL with current(afterinvertion)

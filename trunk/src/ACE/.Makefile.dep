@@ -24,9 +24,12 @@ aceMatrix.o: aceMatrix.cpp aceMatrix.h \
   /scratch/install/include/Siconos/boost/numeric/bindings/traits/matrix_traits.hpp \
   /scratch/install/include/Siconos/boost/numeric/bindings/atlas/cblas_inc.hpp \
   /scratch/install/include/Siconos/SiconosMatrixException.h \
-  /scratch/install/include/Siconos/SiconosException.h ace.h extern.h \
-  includes/parser.h /scratch/install/include/Siconos/SiconosAlgebra.h \
-  acetime.h
+  /scratch/install/include/Siconos/SiconosException.h aceVector.h \
+  /scratch/install/include/Siconos/SimpleVector.h \
+  /scratch/install/include/Siconos/SiconosVector.h \
+  /scratch/install/include/Siconos/SiconosVectorException.h ace.h \
+  extern.h includes/parser.h \
+  /scratch/install/include/Siconos/SiconosAlgebra.h acetime.h
 acetime.o: acetime.cpp acetime.h
 aceVector.o: aceVector.cpp aceVector.h \
   /scratch/install/include/Siconos/SimpleVector.h \

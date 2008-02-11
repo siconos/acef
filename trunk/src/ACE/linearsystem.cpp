@@ -269,30 +269,30 @@ void linearSystem::set2matrix(){
 
   if (mDimzns){
     if (mDimx){
-      prod(*mA1zns,*mC1l,*mR);
+      ACEprod(*mA1zns,*mC1l,*mR);
       //      *mA2x = *mA1x + prod(*mA1zns,*mC1x);
-      prod(*mA1zns,*mC1x,*mA2x,false);
+      ACEprod(*mA1zns,*mC1x,*mA2x,false);
       if (mDimzs)
 	//*mA2zs = *mA1zs + prod(*mA1zns,*mC1zs);
-	prod(*mA1zns,*mC1zs,*mA1zs,false);
+	ACEprod(*mA1zns,*mC1zs,*mA1zs,false);
     }
     if (mNbNonDynEquations){
       if (mDimx)
 	//	*mB2x = *mB1x + prod(*mB1zns,*mC1x);
-	prod(*mB1zns,*mC1x,*mB1x,false);
+	ACEprod(*mB1zns,*mC1x,*mB1x,false);
       if (mDimzs)
 	//	*mB2zs = *mB1zs + prod(*mB1zns,*mC1zs);
-	prod(*mB1zns,*mC1zs,*mB1zs,false);
+	ACEprod(*mB1zns,*mC1zs,*mB1zs,false);
       if (mDimx)
 	//	*mD2x=*mD1x + prod(*mD1zns,*mC1x);
-	prod(*mD1zns,*mC1x,*mD1x,false);
+	ACEprod(*mD1zns,*mC1x,*mD1x,false);
       //      *mD2zs=*mD1zs+prod(*mD1zns,*mC1zs);
-      prod(*mD1zns,*mC1zs,*mD1zs,false);
+      ACEprod(*mD1zns,*mC1zs,*mD1zs,false);
       //      *mD2l=*mD1l + prod(*mD1zns,*mC1l);
-      prod(*mD1zns,*mC1l,*mD1l,false);
+      ACEprod(*mD1zns,*mC1l,*mD1l,false);
 
       //      *mB2l=prod(*mB1zns,*mC1l);
-      prod(*mB1zns,*mC1l,*mB2l,true);
+      ACEprod(*mB1zns,*mC1l,*mB2l,true);
 
     }
   }
@@ -494,26 +494,26 @@ void linearSystem::initSimu(){
       }
       
       //*mB3zs = *mB2zs + mH*mTheta*prod(*mB2x,prod(*mW,*mA2zs)) ;
-      prod(*mW,*mA2zs,*mMatBuf1,true);
-      prod(*mB2x,*mMatBuf1,*mB3zs,true);
+      ACEprod(*mW,*mA2zs,*mMatBuf1,true);
+      ACEprod(*mB2x,*mMatBuf1,*mB3zs,true);
       scal(mH*mTheta,*mB3zs,*mB3zs);
       *mB3zs+=*mB2zs;
       
-      //*mD3zs = *mD2zs+mH*mTheta*prod(*mD2x,prod(*mW,*mA2zs));
-      prod(*mD2x,*mMatBuf1,*mD3zs,true);
-      scal(mH*mTheta,*mD3zs,*mD3zs);
-      *mD3zs+=*mD2zs;
+      if (mDimLambda){
+	//*mD3zs = *mD2zs+mH*mTheta*prod(*mD2x,prod(*mW,*mA2zs));
+	ACEprod(*mD2x,*mMatBuf1,*mD3zs,true);
+	scal(mH*mTheta,*mD3zs,*mD3zs);
+	*mD3zs+=*mD2zs;
 
       
-      if (mDimLambda){
 	//*mB3l = mH*prod(*mB2x,prod(*mW,*mR))+*mB2l;
-	prod(*mW,*mR,*mMatBuf2,true);
-	prod(*mB2x,*mMatBuf2,*mB3l,true);
+	ACEprod(*mW,*mR,*mMatBuf2,true);
+	ACEprod(*mB2x,*mMatBuf2,*mB3l,true);
 	scal(mH,*mB3l,*mB3l);
 	*mB3l+=*mB2l;
 	     
 	//*mD3l = mH*prod(*mD2x,prod(*mW,*mR))+*mD2l;
-	prod(*mD2x,*mMatBuf2,*mD3l,true);
+	ACEprod(*mD2x,*mMatBuf2,*mD3l,true);
 	scal(mH,*mD3l,*mD3l);
 	*mD3l+=*mD2l;
       }
@@ -540,16 +540,20 @@ void linearSystem::initSimu(){
       std::cout << "Exception caught." << endl;
       ACE_INTERNAL_ERROR("linearSystem::initSimu");
     }
-  //  *mD2xW=prod(*mD2x,*mW);
-  prod(*mD2x,*mW,*mD2xW,true);
+  if (mDimLambda){
+    //  *mD2xW=prod(*mD2x,*mW);
+    ACEprod(*mD2x,*mW,*mD2xW,true);
+  }
   //*mB2xW=prod(*mB2x,*mW);
-  prod(*mB2x,*mW,*mB2xW,true);
+  ACEprod(*mB2x,*mW,*mB2xW,true);
   //*mHThetaWA2zs=mH*mTheta*prod(*mW,*mA2zs);
-  prod(*mW,*mA2zs,*mHThetaWA2zs,true);
+  ACEprod(*mW,*mA2zs,*mHThetaWA2zs,true);
   scal(mH*mTheta,*mHThetaWA2zs,*mHThetaWA2zs);
   //*mHWR=mH*prod(*mW,*mR);
-  prod(*mW,*mR,*mHWR,true);
-  scal(mH,*mHWR,*mHWR);
+  if (mDimLambda){
+    ACEprod(*mW,*mR,*mHWR,true);
+    scal(mH,*mHWR,*mHWR);
+  }
 
   mMLCP->initSolver();
 
@@ -560,8 +564,8 @@ void linearSystem::preparStep(){
   if (mDimx && mDimLambda){//both
     //(*mxfree) = (*mxti) + mH*((1-mTheta)*(prod(*mA2x,*mxti)+prod(*mA2zs,*mzsti) + (*mA2sti))+mThetap*(*mA2s));
     //mxfree->display();
-    prod(*mA2zs,*mzsti,*mxfree,true);
-    prod(*mA2x,*mxti,*mxfree,false);
+    ACEprod(*mA2zs,*mzsti,*mxfree,true);
+    ACEprod(*mA2x,*mxti,*mxfree,false);
     *mxfree+=*mA2sti;
     scal((1-mTheta),*mxfree,*mxfree);
     *mxfree+=mThetap*(*mA2s);
@@ -570,13 +574,12 @@ void linearSystem::preparStep(){
     //mxfree->display();
 
 
-    
     //(*mPfree) = prod(*mD2xW,*mxfree) + (*mD2s);
-    prod(*mD2xW,*mxfree,*mPfree,true);
+    ACEprod(*mD2xW,*mxfree,*mPfree,true);
     *mPfree+=*mD2s;
     
     //(*mQfree) = prod(*mB2xW,*mxfree) + (*mB2s);
-    prod(*mB2xW,*mxfree,*mQfree,true);
+    ACEprod(*mB2xW,*mxfree,*mQfree,true);
     *mQfree+=*mB2s;
 
 
@@ -601,7 +604,8 @@ void linearSystem::preparStep(){
     (mMLCP->mQ2)->set(*(mQfree));
     scal(-1,*(mMLCP->mQ2),*(mMLCP->mQ2));
   }else{
-    scal(-1,*mPfree,*(mMLCP->mQ1));
+    if (mDimLambda)
+      scal(-1,*mPfree,*(mMLCP->mQ1));
     scal(-1,*mQfree,*(mMLCP->mQ2));
     //  *(mMLCP->mQ1)= *mPfree;  
     //*(mMLCP->mQ2)= *mQfree;
@@ -619,12 +623,12 @@ void linearSystem::computeZnstiFromX_Zs(){
     //(*mznsti)=prod(*mC1x,*mxti)+prod(*mC1zs,*mzsti)+prod(*mC1l,*(mMLCP->mZ1))+(*mC1s);
     ACE_times[ACE_TIMER_PROD_MAT].start();
     if (ACE_MAT_TYPE==SPARSE)
-      prod(*mC1l,*mPAux,*mznsti,true);
+      ACEprod(*mC1l,*mPAux,*mznsti,true);
     else
-      prod(*mC1l,*(mMLCP->mZ1),*mznsti,true);
+      ACEprod(*mC1l,*(mMLCP->mZ1),*mznsti,true);
 
-    prod(*mC1zs,*mzsti,*mznsti,false);
-    prod(*mC1x,*mxti,*mznsti,false);
+    ACEprod(*mC1zs,*mzsti,*mznsti,false);
+    ACEprod(*mC1x,*mxti,*mznsti,false);
     ACE_times[ACE_TIMER_PROD_MAT].stop();    
     *mznsti+=*mC1s;
   }  else
@@ -655,15 +659,18 @@ bool linearSystem::step(){
 	mPAux->set(*(mMLCP->mZ1));
 	//cout<<"mHWR "<<(*mHWR);
 	//cout<<"mPAux "<<(*mPAux);
-	prod(*mHWR,*mPAux,*mxti,true);
+	ACEprod(*mHWR,*mPAux,*mxti,true);
       }else{
-	prod(*mHWR,*(mMLCP->mZ1),*mxti,true);
+	if (mDimLambda)
+	  ACEprod(*mHWR,*(mMLCP->mZ1),*mxti,true);
+	else
+	  mxti->zero();
       }
       //cout<<"mHThetaWA2zs "<<(*mHThetaWA2zs);
       //cout<<"mW "<<(*mW);
       ACE_times[ACE_TIMER_PROD_MAT].start();
-      prod(*mHThetaWA2zs,*mzsti,*mxti,false);
-      prod(*mW,*mxfree,*mxti,false);
+      ACEprod(*mHThetaWA2zs,*mzsti,*mxti,false);
+      ACEprod(*mW,*mxfree,*mxti,false);
       ACE_times[ACE_TIMER_PROD_MAT].stop();
   }
     computeZnstiFromX_Zs();
@@ -882,13 +889,13 @@ void linearSystem::computedxdt(){
   try{
     if (mA)
       //(*mA1x)=prod(*mA,*mB);
-      prod(*mA,*mB,*mA1x,true);
+      ACEprod(*mA,*mB,*mA1x,true);
     if (mC)
       //(*mA1zs)=prod(*mA,*mC);
-      prod(*mA,*mC,*mA1zs,true);
+      ACEprod(*mA,*mC,*mA1zs,true);
     if (mD)
       //(*mA1zns)=prod(*mA,*mD);
-      prod(*mA,*mD,*mA1zns,true);
+      ACEprod(*mA,*mD,*mA1zns,true);
     
     // (*mA1s)=prod(*mA,*ms);
   }
@@ -1046,7 +1053,7 @@ void linearSystem::extractSources(){
   if (mDimx){
     extractDynBockInVect(ms);
     //(*mA1s)=prod(*mA,*ms);
-    prod(*mA,*ms,*mA1s,true);
+    ACEprod(*mA,*ms,*mA1s,true);
   }
 //   cout<<"extractSources output\n"<<"mA1s";
 //   cout<<*mA1s;
@@ -1072,15 +1079,15 @@ void linearSystem::ExtractAndCompute2Sources(){
 
   if (mDimx && mDimLambda){
     //(*mA2s)=(*mA1s)+prod(*mA1zns,*mC1s);
-    prod(*mA1zns,*mC1s,*mA2s,false);
+    ACEprod(*mA1zns,*mC1s,*mA2s,false);
     //prod(*mA1zns,*mC1s,*mA2s);
     //(*mA2s)+=(*mA1s);
     
-    prod(*mB1zns,*mC1s,*mB2s,false);
+    ACEprod(*mB1zns,*mC1s,*mB2s,false);
     //prod(*mB1zns,*mC1s,*mB2s);
     //(*mB2s)+=(*mB1s);
 
-    prod(*mD1zns,*mC1s,*mD2s,false);
+    ACEprod(*mD1zns,*mC1s,*mD2s,false);
     //prod(*mD1zns,*mC1s,*mD2s);
     //(*mD2s)+=(*mD1s);
   }else if (mDimx){
@@ -1088,9 +1095,9 @@ void linearSystem::ExtractAndCompute2Sources(){
     (*mB2s)=(*mB1s);    
   }else if (mDimLambda){
     //(*mB2s)=(*mB1s)+prod(*mB1zns,*mC1s);
-    prod(*mB1zns,*mC1s,*mB2s,false);
+    ACEprod(*mB1zns,*mC1s,*mB2s,false);
     //(*mD2s)=(*mD1s)+prod(*mD1zns,*mC1s);
-    prod(*mD1zns,*mC1s,*mD2s,false);
+    ACEprod(*mD1zns,*mC1s,*mD2s,false);
   }
 //   cout<<"ExtractAndCompute2Sources output:\n";
 //   cout<<"mA2s\n";
@@ -1250,7 +1257,7 @@ void linearSystem::printSystem2(ostream& os){
 }
 void linearSystem::printStep(ostream& os){
   int i;
-  bool printALL = false;
+  bool printALL = true;
   if (printALL){
     os << "xt("<<mStepCmp*mH<<")\t";
     if (mxti)

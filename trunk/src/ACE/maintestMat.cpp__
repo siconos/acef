@@ -1,0 +1,154 @@
+#include"ace.h"
+#include "algo.h"
+
+#include "aceMatrix.h"
+#include "aceVector.h"
+#include "SimpleMatrix.h"
+
+#include <boost/numeric/ublas/matrix_proxy.hpp>
+#include "boost/numeric/bindings/atlas/clapack.hpp"
+#include "boost/numeric/bindings/traits/ublas_matrix.hpp"
+#include "boost/numeric/bindings/atlas/cblas1.hpp"
+#include "boost/numeric/bindings/atlas/cblas2.hpp"
+#include "boost/numeric/bindings/atlas/cblas3.hpp"
+#include <boost/numeric/ublas/io.hpp>
+#include <boost/numeric/ublas/operation.hpp> 
+#include <boost/numeric/ublas/vector_proxy.hpp>
+#include <boost/numeric/ublas/operation_sparse.hpp>
+
+
+#define NBSIZES 4
+#define SIZE0 5
+#define SIZE1 30
+#define SIZE2 100
+#define SIZE3 1000
+
+static int size =0;
+
+void fillMatrix(aceMatrix * M ){
+  for (int i=0;i<size;i++){
+    M->setValue(i,i,0.99);
+    if (i < size-1)
+      M->setValue(i,i+1,0.99);
+    if (i > 1)
+      M->setValue(i,i-1,0.99);
+  }
+}
+
+int main(int argc, char **argv){
+  int sizes[NBSIZES];
+  int i=0;
+  aceMatrix * M1;
+  aceMatrix * M2;
+  aceMatrix * M3;
+  aceMatrix * A;
+  aceVector * x;
+  aceVector * b;
+  if (argc<1){
+    printf("usage : test DENSE|SPARSE\n");
+    return 0;
+  }
+
+  if (!strcmp(argv[1],"SPARSE")){
+    cout<<"test with SPARSE matrix\n";
+    ACE_MAT_TYPE=SPARSE;
+  } else{
+    cout<<"test with DENSE matrix\n";
+    ACE_MAT_TYPE=DENSE;
+  }
+
+  ACE_INIT();
+  
+  ACE_times[ACE_TIMER_TEST].setName("SimpleMat gemv(A.x,b) ");
+  ACE_times[ACE_TIMER_TEST_1].setName("SimpleMat gemm(M1.M2,M3) ");
+  ACE_times[ACE_TIMER_TEST_2].setName("SimpleMat prod(M1.M2,M3) ");
+  ACE_times[ACE_TIMER_TEST_3].setName("SimpleMat prod(A.x.b) ");
+  ACE_times[ACE_TIMER_TEST_4].setName("SimpleMat axpy_prod(A.x.b) ");
+  ACE_times[ACE_TIMER_TEST_5].setName("ublas nolias(M3)=prod(M1.M2) ");
+  ACE_times[ACE_TIMER_TEST_6].setName("ublas axpy_prod(M1,M2,M3)");
+  ACE_times[ACE_TIMER_TEST_7].setName("SPARSE ublas sparse_prod(M1.M2.M3) ");
+  ACE_times[ACE_TIMER_TEST_8].setName("ublas noalias(b)=prod(A,x)  ");
+  ACE_times[ACE_TIMER_TEST_9].setName("ublas axpy_prod(A,x,b)  ");
+  ACE_times[ACE_TIMER_TEST_10].setName("atlas gemm (M1.M2.M3) ");
+  ACE_times[ACE_TIMER_TEST_11].setName("ublas opb_prod(M1.M2.M3)  ");
+  ACE_times[ACE_TIMER_PROD_MAT].setName("atlas gemv(A.x.b)  ");
+  
+  M1=aceMatrix::load("mat1.dat",ACE_MAT_TYPE);
+  M2=aceMatrix::load("mat2.dat",ACE_MAT_TYPE);
+  A=aceMatrix::load("matA.dat",ACE_MAT_TYPE);
+  x=aceVector::load("matx.dat",ACE_MAT_TYPE);
+  M3=new aceMatrix(M1->getDimRow(),M2->getDimCol(),ACE_MAT_TYPE);
+  b=new aceVector(x->dimRow,ACE_MAT_TYPE);
+  for (int k=0;k<100;k++){
+    //SIMPLE MATRIX
+    ACE_times[ACE_TIMER_TEST_2].start();
+    prod(*M1,*M2,*M3);
+    ACE_times[ACE_TIMER_TEST_2].stop();
+    ACE_times[ACE_TIMER_TEST_3].start();
+    prod(*A,*x,*b);
+    ACE_times[ACE_TIMER_TEST_3].stop();
+    ACE_times[ACE_TIMER_TEST_4].start();
+    axpy_prod(*A,*x,*b,true);
+    ACE_times[ACE_TIMER_TEST_4].stop();
+
+
+    
+    if (ACE_MAT_TYPE == SPARSE){
+      ACE_times[ACE_TIMER_TEST_5].start();
+      noalias(*(M3->getSparsePtr())) = prod(*(M1->getSparsePtr()),*(M2->getSparsePtr()));
+      ACE_times[ACE_TIMER_TEST_5].stop();
+      ACE_times[ACE_TIMER_TEST_7].start();
+      sparse_prod(*(M1->getSparsePtr()),*(M2->getSparsePtr()),*(M3->getSparsePtr()));
+      ACE_times[ACE_TIMER_TEST_7].stop();
+      ACE_times[ACE_TIMER_TEST_8].start();
+      noalias(*(b->getSparsePtr())) = prod(*(A->getSparsePtr()),*(x->getSparsePtr()));
+      ACE_times[ACE_TIMER_TEST_8].stop();
+    }
+    if (ACE_MAT_TYPE == DENSE){
+      ACE_times[ACE_TIMER_TEST_1].start();
+      gemm(*M1,*M2,*M3);
+      ACE_times[ACE_TIMER_TEST_1].stop();
+      ACE_times[ACE_TIMER_TEST_5].start();
+      noalias(*(M3->getDensePtr())) = prod(*(M1->getDensePtr()),*(M2->getDensePtr()));
+      ACE_times[ACE_TIMER_TEST_5].stop();
+      ACE_times[ACE_TIMER_TEST_6].start();
+      ublas::axpy_prod(*(M1->getDensePtr()),*(M2->getDensePtr()),*(M3->getDensePtr()),true);
+      ACE_times[ACE_TIMER_TEST_6].stop();
+      ACE_times[ACE_TIMER_TEST_9].start();
+      ublas::axpy_prod(*(A->getDensePtr()),*(x->getDensePtr()),*(b->getDensePtr()),true);
+      ACE_times[ACE_TIMER_TEST_9].stop();
+      ACE_times[ACE_TIMER_TEST_8].start();
+      noalias(*(b->getDensePtr())) = prod(*(A->getDensePtr()),*(x->getDensePtr()));
+      ACE_times[ACE_TIMER_TEST_8].stop();
+
+
+      ACE_times[ACE_TIMER_TEST_10].start();
+      atlas::gemm(*(M1->getDensePtr()),*(M2->getDensePtr()),*(M3->getDensePtr()));
+      ACE_times[ACE_TIMER_TEST_10].stop();
+      ACE_times[ACE_TIMER_TEST_11].start();
+      opb_prod(*(M1->getDensePtr()),*(M2->getDensePtr()),*(M3->getDensePtr()));
+      ACE_times[ACE_TIMER_TEST_11].stop();
+
+      ACE_times[ACE_TIMER_TEST].start();
+      gemv(*A,*x,*b);
+      ACE_times[ACE_TIMER_TEST].stop();
+      ACE_times[ACE_TIMER_PROD_MAT].start();
+      atlas::gemv(*(A->getDensePtr()),*(x->getDensePtr()),*(b->getDensePtr()));
+      ACE_times[ACE_TIMER_PROD_MAT].stop();
+
+
+      
+    }
+  
+
+  }
+  delete M1;
+  delete M2;
+  delete M3;
+  delete A;
+  delete x;
+  delete b;
+  ACE_PRINT_TIME();
+  return 0;
+ 
+}

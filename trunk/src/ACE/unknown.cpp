@@ -31,7 +31,7 @@ void unknown::print(){
       if (mType == ACE_TYPE_I)
 	printf("\t%s_%s%d_%d",mComponent->mName,type,mComponent->mNodeNeg,mComponent->mNodePos);
       else
-	printf("\t%s_%s%d_%d",mComponent->mName,type,mComponent->mNodePos,mComponent->mNodeNeg);
+	printf("\t%s_%s%d_%d",mComponent->mName,type,mComponent->mNodeNeg,mComponent->mNodePos);
     }else{
       printf("\t%s",type);
     }

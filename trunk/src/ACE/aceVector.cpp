@@ -1,5 +1,6 @@
 #include "aceVector.h"
 #include "ace.h"
+#include <fstream>
 
 
 aceVector::aceVector ( unsigned int row, UBLAS_TYPE typ):
@@ -9,7 +10,7 @@ SimpleVector(row,typ)
 }
 
 void aceVector::set(const aceVector& V){
-  unsigned int lin,col;
+  unsigned int lin;
   ACE_times[ACE_TIMER_TEST].start();
   zero();
   for (lin = 0; lin < dimRow;lin++){
@@ -54,6 +55,27 @@ void aceVector::display(ostream& os) const{
   }else
     os<<"unknown vector type !!!!!\n";
       
+}
+aceVector * aceVector::load(char * file,UBLAS_TYPE typ){
+  int i,cur;
+  aceVector *res=0;
+  double aux;
+  try{
+    ifstream pin(file);
+    ACE_CHECK_IERROR(pin,"aceVector::load error no file");
+    pin >>i;
+    res = new aceVector(i,typ);
+    for (cur=0;cur<i;cur++){
+      pin>>aux;
+      res->setValueIfNotNull(cur,aux);
+    }
+  }
+  catch(...)
+    {
+      std::cout << "Exception caught." << endl;
+      ACE_INTERNAL_ERROR("aceVector::load");
+    }
+  return res;
 }
 
 aceVector& aceVector::operator = (const SimpleVector& m)

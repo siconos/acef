@@ -27,7 +27,7 @@ private:
   long mCall;
   timeval mStart;
   long mCumul;
-  char mName[64];
+  char mName[128];
   bool mIsRunning;
     
 

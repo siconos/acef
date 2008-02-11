@@ -235,7 +235,7 @@ void algo::perform(){
  printComponents();
  sls.preparForStamp();
  stamp();
- // sls.printEquations();
+ //  sls.printEquations();
  
  //compute matrix: x'=A1x * mx + A1zs * mZs + A1zns * mZns;
  ACE_times[ACE_TIMER_TEST_1].start();
@@ -244,7 +244,7 @@ void algo::perform(){
  // sls.printA1();
  stampAfterInvertion();
  ACE_MESSAGE("final equation ;\n");
- //sls.printEquations();
+ sls.printEquations();
  ACE_times[ACE_TIMER_TEST_2].start();
  sls.buildLinearSystem();
  ACE_times[ACE_TIMER_TEST_2].stop();
