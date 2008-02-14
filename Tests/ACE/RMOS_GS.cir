@@ -1,0 +1,15 @@
+RMOSi_GS.CIR - SIMPLE CIRCUIT MOS test
+*
+Vramp 1 0 PULSE(0 -5 -0 0.5 0.6 3 0.5)
+*
+
+.model nmos nmos level=1 tox=100e-09 vto=2.0 kp=10.0
+M1	1	0	0	0	nmos	w=0.0001	l=0.0001
+
+*
+* ANALYSIS
+.TRAN 	0.01S  1S
+* VIEW RESULTS
+.PRINT	TRAN 	V(1)
+.PROBE
+
