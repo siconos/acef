@@ -2,10 +2,7 @@
   			componentmos.cpp 
 
 Convention:
-current go from Neg node to Pos node ==> current =<0
-tension = V_neg - V_pos ==> tension >=0
-stamp() to write : Ax'=Bx+CZs+DZns+s
-                    0 =Ex+FZs+DZns+t
+\
 **************************************************************************/
 
 #include "componentmos.h"
@@ -13,16 +10,21 @@ stamp() to write : Ax'=Bx+CZs+DZns+s
 
 
 
-componentMOS::componentMOS(dataMOS1 *d)
+componentMOS::componentMOS(dataMOS1 *d,int NbHyp)
 :componentNLINEAR(){
+
   ACE_CHECK_IERROR(d,"componentMOS::componentMOS : Mos data null");
+  ACE_CHECK_IERROR(NbHyp>=0,"componentMOS::componentMOS : NbHyp <0");
   mType = ACE_TYPE_MOS;
 
   mData =(*d);
   mNodeD=mData.drain;
   mNodeG=mData.gate;
   mNodeS=mData.source;
-  //process parameters
+  if (NbHyp)
+    mNbHyp=NbHyp;
+  else
+    mNbHyp=5;
   mB=mData.k/2.0;
   mMode = mData.mode;
   ACE_CHECK_IWARNING(mMode == 1 || mMode == -1,"componentMOS mode value not 1 or -1.");
@@ -34,24 +36,56 @@ componentMOS::componentMOS(dataMOS1 *d)
 
   mName = mData.name;
   ACE_CHECK_ERROR(mNodeD>=0 && mNodeG>=0 && mNodeS >=0,"componentMOS::componentMOS");
-  mN=5;
-  mDimlambda=mN*2;
+
+  //process parameters
+  double VI = 3.0;	// Power supply
+  double Vt0 = mData.vt;
+  double Kval = mData.k;
+  double HalfK = Kval/2.0;
+  double ractolpwl;
+  double widthhyp;
+  mHyp = (ACE_DOUBLE *) calloc(mNbHyp,sizeof(ACE_DOUBLE));
+  mCoefs = (ACE_DOUBLE *) calloc(mNbHyp,sizeof(ACE_DOUBLE));
+
+
+  if (mNbHyp > 1 && NbHyp)
+    {
+      ractolpwl = (VI-Vt0)/(2.0 * (1.0 + (sqrt(2.0)*(NbHyp - 1))));
+      widthhyp = 2.0*sqrt(2.0)*ractolpwl;
+
+      mHyp[0] = mMode*Vt0;
+      mHyp[1] = mMode*Vt0+(1.0 + sqrt(2.0))*ractolpwl;
+
+      mCoefs[0] = 2.0*ractolpwl*HalfK;
+      mCoefs[1] = 2.0*widthhyp*HalfK;
+      for (unsigned int i = 2;i < mNbHyp;i++) 
+        {
+	  mHyp[i] = mHyp[i-1] + widthhyp;
+	  mCoefs[i] = 2.0*widthhyp*HalfK;
+        }
+
+    } else {
+    mHyp[0] = mMode*Vt0;
+    mCoefs[0] = 2.0*HalfK*(VI-Vt0)/(1.0 + sqrt(2.0));
+  }
+  
+  mDimlambda=mNbHyp*2;
   mDimZns=1;
   mIndiceStartZns=-1;
   mIndiceStartLambda=-1;
 
-  mCoefs = (ACE_DOUBLE *) calloc(mN,sizeof(ACE_DOUBLE));
-  mHyp = (ACE_DOUBLE *) calloc(mN,sizeof(ACE_DOUBLE));
-  mCoefs[0]=0.09;
-  mCoefs[1]=0.2238;
-  mCoefs[2]=0.4666;
-  mCoefs[3]=1.1605;
-  mCoefs[4]=2.8863;
-  mHyp[0]=mB*mMode*mVt;
-  mHyp[1]=mB*(mMode*mVt+0.1);
-  mHyp[2]=mB*(mMode*mVt+0.2487);
-  mHyp[3]=mB*(mMode*mVt+0.6185);
-  mHyp[4]=mB*(mMode*mVt+1.5383);
+  if (!NbHyp){
+    mCoefs[0]=0.09*mB;
+    mCoefs[1]=0.2238*mB;
+    mCoefs[2]=0.4666*mB;
+    mCoefs[3]=1.1605*mB;
+    mCoefs[4]=2.8863*mB;
+    mHyp[0]=mMode*mVt;
+    mHyp[1]=(mMode*mVt+0.1);
+    mHyp[2]=(mMode*mVt+0.2487);
+    mHyp[3]=(mMode*mVt+0.6185);
+    mHyp[4]=(mMode*mVt+1.5383);
+  }
   
 }
 
@@ -70,25 +104,25 @@ void componentMOS::stamp(){
   algo::sls.KCL(mNodePos)->mCoefs[i]+=mMode*1;
 
   //Zns = B*lamdba
-  for (ind=0;ind < mN;ind++){
+  for (ind=0;ind < mNbHyp;ind++){
     algo::sls.mC1l->setValue(mIndiceStartZns,mIndiceStartLambda+ind,mCoefs[ind]);
-    algo::sls.mC1l->setValue(mIndiceStartZns,mIndiceStartLambda+mN+ind,-mCoefs[ind]);
+    algo::sls.mC1l->setValue(mIndiceStartZns,mIndiceStartLambda+mNbHyp+ind,-mCoefs[ind]);
   }
   
   //Y=C*zs+I*lambda+hyp
 
   //C*zs
   if (mNodeD){
-    for(ind=0;ind < mN;ind++)
-      algo::sls.mD1zs->setValue(mIndiceStartLambda+mN+ind,mNodeD-1,mMode*mB);
+    for(ind=0;ind < mNbHyp;ind++)
+      algo::sls.mD1zs->setValue(mIndiceStartLambda+mNbHyp+ind,mNodeD-1,mMode);
   }
   if (mNodeG){
     for(ind=0;ind < mDimlambda;ind++)
-      algo::sls.mD1zs->setValue(mIndiceStartLambda+ind,mNodeG-1,-mMode*mB);
+      algo::sls.mD1zs->setValue(mIndiceStartLambda+ind,mNodeG-1,-mMode);
   }
   if (mNodeS){
-    for(ind=0;ind < mN;ind++)
-      algo::sls.mD1zs->setValue(mIndiceStartLambda+ind,mNodeS-1,mMode*mB);
+    for(ind=0;ind < mNbHyp;ind++)
+      algo::sls.mD1zs->setValue(mIndiceStartLambda+ind,mNodeS-1,mMode);
   }
 
   //I*lambda
@@ -96,9 +130,9 @@ void componentMOS::stamp(){
     algo::sls.mD1l->setValue(mIndiceStartLambda+ind,mIndiceStartLambda+ind,1);
   
   //hyp
-  for(ind=0;ind < mN;ind++){
+  for(ind=0;ind < mNbHyp;ind++){
       algo::sls.mD1s->setValue(mIndiceStartLambda+ind,mHyp[ind]);
-      algo::sls.mD1s->setValue(mIndiceStartLambda+mN+ind,mHyp[ind]);
+      algo::sls.mD1s->setValue(mIndiceStartLambda+mNbHyp+ind,mHyp[ind]);
     }
 
   

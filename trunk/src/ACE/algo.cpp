@@ -164,7 +164,7 @@ void algo::perform(){
  initComponentList("Mos1");
  dataMOS1 mos;
  while(nextComponent(&mos)){
-   componentMOS *c=new componentMOS(&mos);
+   componentMOS *c=new componentMOS(&mos,2);
    mMos.push_back(c);
    c->addUnknowns();
    c->addEquations();

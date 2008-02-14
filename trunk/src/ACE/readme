@@ -1,2 +1,3 @@
 version 52 : les sparse matrices
-version 53 : SPARSE matrices without axpy_prod`
+version 53 : SPARSE matrices without axpy_prod
+version 71 : before index reduction`

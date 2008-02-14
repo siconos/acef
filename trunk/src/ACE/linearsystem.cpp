@@ -540,17 +540,19 @@ void linearSystem::initSimu(){
       std::cout << "Exception caught." << endl;
       ACE_INTERNAL_ERROR("linearSystem::initSimu");
     }
-  if (mDimLambda){
+  if (mDimLambda && mDimx){
     //  *mD2xW=prod(*mD2x,*mW);
     ACEprod(*mD2x,*mW,*mD2xW,true);
   }
-  //*mB2xW=prod(*mB2x,*mW);
-  ACEprod(*mB2x,*mW,*mB2xW,true);
-  //*mHThetaWA2zs=mH*mTheta*prod(*mW,*mA2zs);
-  ACEprod(*mW,*mA2zs,*mHThetaWA2zs,true);
-  scal(mH*mTheta,*mHThetaWA2zs,*mHThetaWA2zs);
+  if (mDimx){
+    //*mB2xW=prod(*mB2x,*mW);
+    ACEprod(*mB2x,*mW,*mB2xW,true);
+    //*mHThetaWA2zs=mH*mTheta*prod(*mW,*mA2zs);
+    ACEprod(*mW,*mA2zs,*mHThetaWA2zs,true);
+    scal(mH*mTheta,*mHThetaWA2zs,*mHThetaWA2zs);
+  }
   //*mHWR=mH*prod(*mW,*mR);
-  if (mDimLambda){
+  if (mDimLambda && mDimx){
     ACEprod(*mW,*mR,*mHWR,true);
     scal(mH,*mHWR,*mHWR);
   }
@@ -1257,7 +1259,7 @@ void linearSystem::printSystem2(ostream& os){
 }
 void linearSystem::printStep(ostream& os){
   int i;
-  bool printALL = true;
+  bool printALL = false;
   if (printALL){
     os << "xt("<<mStepCmp*mH<<")\t";
     if (mxti)
