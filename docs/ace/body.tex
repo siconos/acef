@@ -130,7 +130,7 @@ For example, the automatic circuit equation formulation of the buck converter ne
 
 x = $^{t}(U_{1},I_{7})$,
 $Z_{ns}=^{t}(I_{2},I_{3},I_{4},I_{5}$),
-$Z_{s} = ^{t}(V_{2},V_{3})$
+$Z_{s} = ^{t}(V_{1},V_{2},V_{3})$
 \subsection{Diode non smooth model instance}
 
 \[ \beta = z_{i} = I_{i}\]
@@ -149,11 +149,11 @@ $Z_{s} = ^{t}(V_{2},V_{3})$
 0&0\\
 1&0\\
 1&0\end{array}\right) x+
-\left(\begin{array}{cc}
-1&0\\
-0&1\\
-0&-1\\
--1&0\end{array}
+\left(\begin{array}{ccc}
+0&1&0\\
+0&0&1\\
+0&0&-1\\
+0&-1&0\end{array}
 \right) Z_{s} + 0Z_{ns} +0\lambda\]
 
 \[0 \leq Y \, \perp \, \lambda \geq 0\]
@@ -166,10 +166,10 @@ $Z_{s} = ^{t}(V_{2},V_{3})$
   
 x'=\left(\begin{array}{cc}
 0 &\frac{-1}{C}\\
-\frac{1}{L}&0\end{array} \right)x
-+\left(\begin{array}{cc}
-0&\frac{-1}{C}\\
-0&0\end{array} \right)Z_{s}
+0&0\end{array} \right)x
++\left(\begin{array}{ccc}
+0&0&0\\
+\frac{1}{L}&0&0\end{array} \right)Z_{s}
 +\left(\begin{array}{cccc}
 0&0&\frac{1}{C}&\frac{-1}{C}\\
 0&0&0&0\end{array} \right)Z_{ns}
@@ -177,27 +177,23 @@ x'=\left(\begin{array}{cc}
 0=\left(\begin{array}{cc}
 0 &0\\
 0 &0\\
-0 &1\end{array} \right)x
-+\left(\begin{array}{cc}
-\frac{-1}{R}&\frac{1}{R}\\
-\frac{-1}{R}&\frac{1}{R}\\
-1&0\end{array} \right)Z_{s}
+1 &0\end{array} \right)x
++\left(\begin{array}{ccc}
+0&\frac{1}{R}&\frac{-1}{R}\\
+0&\frac{-1}{R}&\frac{1}{R}\\
+0&1&0\end{array} \right)Z_{s}
 +\left(\begin{array}{cccc}
 1&0&0&1\\
 0&+1&1&0\\
 0&0&0&0\end{array} \right)Z_{ns}
 \\
 Z_{ns}=Dx+0Z_{s}+Id\lambda\\
-Y=\left(\begin{array}{cc}
-0&0\\
-0&0\\
-1&0\\
-1&0\end{array}\right) x+
-\left(\begin{array}{cc}
-1&0\\
-0&1\\
-0&-1\\
--1&0\end{array}
+Y=0x+
+\left(\begin{array}{ccc}
+0&1&0\\
+0&0&1\\
+1&0&-1\\
+1&-1&0\end{array}
 \right) Z_{s} + 0Z_{ns} +0\lambda\\
 
 0 \leq Y \, \perp \, \lambda \geq 0
