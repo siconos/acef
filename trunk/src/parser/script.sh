@@ -8,11 +8,11 @@
 # "-static" in the names of your
 # object files or static libraries.
 
-gcc -Wall -g -c -o parser.o parser.c
+gcc -Wall  -c -o parser.o parser.c
 
 # Create static library.
 
 ar rcs parser.a parser.o
 
-gcc -g -c test.c
-gcc -g -o test test.o -ldl
+gcc  -c test.c
+gcc  -o test test.o -ldl

@@ -75,7 +75,6 @@
 #include <list>
 #include <cmath>
 #include <ctime>
-#include "ace.h"
 static int n=0;
 static int m=0;
 static int nrows = 0;
@@ -109,9 +108,11 @@ static  const double tolComp = 1e-12; 		/* tolerance to consider that complement
 static  const double tolNegVar = 1e-9; 		
 static  const int nIterMax = 1000000;		/* max number of nodes to consider in tree search */
 static  const int logFrequency = 10000;	/* print log every ... iterations */
+static int VERBOSE=0;
 
 
 #define USE_GUESS false
+#define BIG_FLOAT 1e9
 
 
 
@@ -120,17 +121,19 @@ struct node {
 	int *rstat;		/* [nrows] current row basis (for restart) */
 	char *choice;			/* [m] for choices made so far: n = 'no choice', v = 'v->0', w = 'w->0' */
 	void print() const {
-	  if (ACE_MUET_LEVEL >= ACE_MUET )
-	    ;//return;
-
-		int i;
-		printf("Choice= ");
-		for (i=0; i<m; i++) printf("%c", choice[i]);
-		printf("\n");
+	  if (VERBOSE ){
+	    int i;
+	    printf("Choice= ");
+	    for (i=0; i<m; i++) printf("%c", choice[i]);
+	    printf("\n");
+	  }
 	};
 };
 unsigned long getConfigLCP(){
   return configLCP;
+}
+void setVerbose(int v){
+  VERBOSE=v;
 }
 void computeConfig(const node* _node,double x[]){
   int i;
@@ -159,7 +162,7 @@ void computeConfig(const node* _node,double x[]){
       case 'w':
 	break;
       default:
-	if (ACE_MUET_LEVEL < ACE_MUET)
+	if (VERBOSE)
 	  printf("error\n");
       }
       cur2pow=2*cur2pow;
@@ -193,8 +196,9 @@ static ListNode sList;
 /* auxiliary functions used to call cplex */
 #include "auxFun.h"
 
+
 void print_double_array(char * name,double *t, int nn){
-  if (ACE_MUET_LEVEL >= ACE_MUET)
+  if (!VERBOSE)
     return;
   int sizeLine = 10;
   int i = 0;
@@ -206,7 +210,7 @@ void print_double_array(char * name,double *t, int nn){
   printf(")\n");
 }
 void print_int_array(char * name,int *t, int nn){
-  if (ACE_MUET_LEVEL >= ACE_MUET)
+  if (!VERBOSE)
     return;
   int sizeLine = 10;
   int i = 0;
@@ -218,7 +222,7 @@ void print_int_array(char * name,int *t, int nn){
   printf(")\n");
 }
 void print_sparse_matrix(int *matbeg,int *matcnt,int *matind,double *matval,double *objective,double *rhs,char *sense,double *lb,double *ub){
-  if (ACE_MUET_LEVEL >= ACE_MUET)
+  if (!VERBOSE)
     return;
   print_int_array("matbeg",matbeg,ncols);
   print_int_array("matcnt",matcnt,ncols);
@@ -230,7 +234,7 @@ void print_sparse_matrix(int *matbeg,int *matcnt,int *matind,double *matval,doub
 }
 void printSolution(double x[]){
   int i;
-  if (ACE_MUET_LEVEL < ACE_MUET || true){
+  if (VERBOSE){
     printf("\n----- Getting a solution:\n");
     
     for (i=0; i<n; i++) {
@@ -291,23 +295,23 @@ int      preparUppBnd(node* currentNode){
 	branchingIndex = (2*rand() < RAND_MAX ? branchingIndex : i);
       }
 					
-      newUppBnd[i] = ACE_BIG_FLOAT;//CPX_INFBOUND;
-      newUppBnd[m+i] = ACE_BIG_FLOAT;//CPX_INFBOUND;
+      newUppBnd[i] = BIG_FLOAT;//CPX_INFBOUND;
+      newUppBnd[m+i] = BIG_FLOAT;//CPX_INFBOUND;
       objective[i]=0;
       objective[m+i]=0;
       break;
     case 'v':
       newUppBnd[i] = 0;
-      newUppBnd[m+i] = ACE_BIG_FLOAT;//CPX_INFBOUND;
+      newUppBnd[m+i] = BIG_FLOAT;//CPX_INFBOUND;
       //    nFixed++;
       break;
     case 'w':
-      newUppBnd[i] = ACE_BIG_FLOAT;//CPX_INFBOUND;
+      newUppBnd[i] = BIG_FLOAT;//CPX_INFBOUND;
       newUppBnd[m+i] = 0;
       //    nFixed++;
       break;
     default:
-      if (ACE_MUET_LEVEL < ACE_MUET)
+      if (VERBOSE)
 	printf("Choice should be either n,v or w (here: %c)\n", currentNode->choice[i]);
       return -1;
     }
@@ -337,12 +341,12 @@ void tryNode(node * pNode,double& objval,char v_or_w){
   }else{
       printf("trynode error\n");
     }
-ACE_times[ACE_TIMER_SIMPLEX_TRY_NODE].start();
+  //ACE_times[ACE_TIMER_SIMPLEX_TRY_NODE].start();
     /* reload basis */
     copybase (env, lp, pNode->cstat, pNode->rstat);
     /* minimize v_i */
     lpopt(env, lp);
-    ACE_times[ACE_TIMER_SIMPLEX_TRY_NODE].stop();
+    //    ACE_times[ACE_TIMER_SIMPLEX_TRY_NODE].stop();
     /* retrieve sol */
     getsolution (env, lp, &objval, x);
 }
@@ -383,8 +387,117 @@ void fillSolution(double u[],double v[],double w[],double x[]){
   for( i = 0 ; i < n ; ++i ) {u[i] = x[i]; }
 }
 
-void mlcp_simplex_init(int *nn , int* mm, double *A , double *B , double *C , double *D){
+void mlcp_simplex_init_with_M(int *nn , int* mm, double *M ){
+    /* Variables declaration */
 
+  int i,j,linNumber,colNumber,curbeg;
+  
+  /* Variables declaration */
+
+  n = *nn;
+  m = *mm;
+  nnz=m;
+  nrows = n+m;
+  ncols = n+m+m;
+  x=(double*) calloc(ncols,sizeof(double));
+
+
+  /*SPARSE matrix, count non nul values*/
+  /*i line*/
+  /*j col*/
+  linNumber = n+m;
+  colNumber = n+m;
+  for (i=0;i<linNumber;i++)
+    for (j=0;j<colNumber;j++){
+      if (M[j*linNumber+i]!=0.0)
+	nnz++;
+    }
+  /*nnz contains the number of non nul values*/
+  if (!nnz || !nrows || !ncols)
+    return ;
+
+  matbeg = (int*)calloc(ncols+1,sizeof(int));/*The last value is not used.*/
+  matcnt = (int*)calloc(ncols,sizeof(int));
+  objective = (double*)calloc(ncols,sizeof(double));
+  sense = (char*)calloc(nrows,sizeof(char));
+  lb = (double*)calloc(ncols,sizeof(double));
+  ub = (double*)calloc(ncols,sizeof(double));
+  matind= (int*)calloc(nnz,sizeof(int));
+  matval= (double*)calloc(nnz,sizeof(double));
+  rhs=(double*)calloc(nrows,sizeof(double));
+  
+  ind1toN=(int*)calloc(ncols,sizeof(int));
+  upper = (char*) calloc(2*m,sizeof(char));
+  lower = (char*) calloc(2*m,sizeof(char));
+  newUppBnd = (double*)calloc( 2*m,sizeof(double));
+  vwIndices = (int*)calloc( 2*m,sizeof(int));
+  memset(upper,'U',2*m*sizeof(char));
+  memset(lower,'L',2*m*sizeof(char));
+
+
+  for (i=0;i<ncols;i++)
+    ind1toN[i]=i;
+
+  /*INITIAL */
+  for (i=0; i<n; i++) objective[i]=0;
+  for (i=n; i<ncols; i++) objective[i]=0;
+  
+  for (i=0; i<n; i++) { /* first n vars = u, no bounds */
+    lb[i] = -CPX_INFBOUND;
+    ub[i] =  CPX_INFBOUND;
+  }
+  for (i=n; i<n+2*m; i++) {
+    lb[i] = 0;
+    ub[i] = CPX_INFBOUND;
+  }
+  for (i=0; i<nrows; i++) {
+    sense[i] = 'E';
+  }
+  /*fill sprase matrix*/
+  curbeg=0;
+  matbeg[0]=0;
+  colNumber = n+m;
+  /*Value from A and D*/
+  for (j=0;j<colNumber;j++){
+    linNumber=n+m;
+    /*Values from A*/
+    for (i=0;i<linNumber;i++)
+      if(M[j*linNumber+i]!=0.0){
+	matval[curbeg] = M[j*linNumber+i];
+	matind[curbeg]=i;
+	curbeg++;
+      }
+    matbeg[j+1]=curbeg;
+    matcnt[j]=matbeg[j+1]-matbeg[j];
+  }
+
+
+  matcnt[n+m]=1;
+  for (i=1;i< m;i++){
+    matbeg[n+m+i]=curbeg+i;
+    matcnt[n+m+i]=1;
+  }
+  for (i=0;i< m;i++){
+    matval[nnz-i-1]=-1;
+    matind[nnz-i-1]=n+m-1-i;
+  }
+
+
+  //print_sparse_matrix( matbeg,matcnt,matind,matval,objective,rhs,sense,lb,ub);
+
+  /*READY TO SOLVE*/
+	
+  /* open cplex, create prob, load data, write to file */
+  env = openCPLEX();
+  lp = createprob(env);
+  copylp(env, lp, ncols, nrows, CPX_MIN, objective, rhs, sense, matbeg, matcnt, matind, matval, lb, ub);
+  preparUppBnd(0);
+  //writeprob(env,lp);
+  /* optimize with null objective to find feasible point */
+  lpopt(env, lp);
+}
+
+void mlcp_simplex_init(int *nn , int* mm, double *A , double *B , double *C , double *D){
 
   /* Variables declaration */
 
@@ -576,7 +689,6 @@ void mlcp_simplex_stop(){
 
 
 
-
 int mlcp_simplex( double *a, double *b, double *u, double *v, double *w , int *info ,	 int *iparamMLCP , double *dparamMLCP  )
 { 
   /* Parameters */
@@ -612,10 +724,10 @@ int mlcp_simplex( double *a, double *b, double *u, double *v, double *w , int *i
   print_double_array("b",b,m);
   //print_sparse_matrix(matbeg,matcnt,matind,matval,objective,rhs,sense,lb,ub);
 
-  ACE_times[ACE_TIMER_SIMPLEX_FIRST].start();
+  //  ACE_times[ACE_TIMER_SIMPLEX_FIRST].start();
   lpopt(env, lp);
   getsolution (env, lp, &objval, x);
-  ACE_times[ACE_TIMER_SIMPLEX_FIRST].stop();
+  //  ACE_times[ACE_TIMER_SIMPLEX_FIRST].stop();
   if( checkSolution(x)){
     computeConfig(0,x);
     //printf("No iterations\n");
@@ -646,7 +758,7 @@ int mlcp_simplex( double *a, double *b, double *u, double *v, double *w , int *i
   if (USE_GUESS){
     Itlist curIt = sList.begin();
     while(curIt != sList.end() ){
-      ACE_times[ACE_TIMER_SIMPLEX_GUESS].start();
+      //      ACE_times[ACE_TIMER_SIMPLEX_GUESS].start();
       double objval;
       //printf("last node :");
       //curIt->print();
@@ -654,25 +766,25 @@ int mlcp_simplex( double *a, double *b, double *u, double *v, double *w , int *i
       tryNode(&(*curIt),objval,'v');
       if (checkSolution(x)){
 	fillSolution(u,v,w,x);
-	ACE_times[ACE_TIMER_SIMPLEX_GUESS].stop();
+	//	ACE_times[ACE_TIMER_SIMPLEX_GUESS].stop();
 	return 1;
       }
       tryNode(&(*curIt),objval,'w');
       if (checkSolution(x)){
 	fillSolution(u,v,w,x);
-	ACE_times[ACE_TIMER_SIMPLEX_GUESS].stop();
+	//	ACE_times[ACE_TIMER_SIMPLEX_GUESS].stop();
 	return 1;
       }
       curIt++;
     }
-    ACE_times[ACE_TIMER_SIMPLEX_GUESS].stop();
+    //    ACE_times[ACE_TIMER_SIMPLEX_GUESS].stop();
 
     resetList();
   }
   for (i=0; i<n; i++) objective[i]=0;
   for (i=n; i<ncols; i++) objective[i]=0;
   chgobj (env, lp, ncols, ind1toN, objective);
-  ACE_times[ACE_TIMER_SIMPLEX_TREE].start();
+  //  ACE_times[ACE_TIMER_SIMPLEX_TREE].start();
   while(!tree.empty() && nIter < nIterMax ) {
     nIter++;
     mySet::iterator currentNode = tree.begin();
@@ -692,7 +804,7 @@ int mlcp_simplex( double *a, double *b, double *u, double *v, double *w , int *i
 	 The current node is probably a solution, up to roundoff errors...	*/
       printf("Warning : Node without any free variable was found. It might be a solution, or close.\n");
       
-      if (ACE_MUET_LEVEL < ACE_MUET){
+      if (VERBOSE){
 	printf("Node without any free variable was found. It might be a solution, or close.\n");
 	for (i=0; i<m; i++) printf("%c", currentNode->choice[i]);
 	printf("\n");
@@ -742,12 +854,12 @@ int mlcp_simplex( double *a, double *b, double *u, double *v, double *w , int *i
     tree.erase(currentNode);
 		
     /* disp some log */
-    if (nIter%logFrequency==0 && ACE_MUET_LEVEL < ACE_MUET) printf("iter %i : tree size is now %i \n", nIter, tree.size());
+    if (nIter%logFrequency==0 && VERBOSE) printf("iter %i : tree size is now %i \n", nIter, tree.size());
   }
-  ACE_times[ACE_TIMER_SIMPLEX_TREE].stop();
+  //  ACE_times[ACE_TIMER_SIMPLEX_TREE].stop();
 
   /* display results */
-  if (ACE_MUET_LEVEL < ACE_MUET)
+  if (VERBOSE)
     printf("%i iterations , tree size is %i\n", nIter, tree.size());
   while (!tree.empty()){
     mySet::iterator currentNode = tree.begin();

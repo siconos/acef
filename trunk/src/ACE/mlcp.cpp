@@ -31,12 +31,16 @@ mlcp::mlcp(unsigned int Dlcp,unsigned int Dlin,int solverType){
   mM12=0;
   mM21=0;
   mM22=0;
+  mMd =0;
   mSolverType=solverType;
   mTryOnlyGuess = false;
   mTringGuess = false;
   mUseGuess = true;
   if (mSolverType !=ACE_SOLVER_ENUM){
     mTryOnlyGuess = true;
+    
+    mMd=(double *)calloc((mDlcp+mDlin)*(mDlcp+mDlin),sizeof(double));
+
     mA=(double *)calloc(mDlin*mDlin,sizeof(double));
     mC=(double *)calloc(mDlin*mDlcp,sizeof(double));
     mD=(double *)calloc(mDlcp*mDlin,sizeof(double));
@@ -208,11 +212,20 @@ bool mlcp::initSolver(){
   if (ACE_SOLVER_TYPE == ACE_SOLVER_SIMPLEX){
     int n = (int)mDlin;
     int m = (int)mDlcp;
-    mM22->MatrixToFortran(mA);  
-    mM11->MatrixToFortran(mB);  
-    mM21->MatrixToFortran(mC);  
-    mM12->MatrixToFortran(mD);  
-    mlcp_simplex_init(&n,&m,mA,mB,mC,mD);
+    
+//     mM22->MatrixToFortran(mA);  
+//     mM11->MatrixToFortran(mB);  
+//     mM21->MatrixToFortran(mC);  
+//     mM12->MatrixToFortran(mD);
+    
+    mM->setBlock(0,0,*mM11);
+    mM->setBlock(0,mDlcp,*mM12);
+    mM->setBlock(mDlcp,0,*mM21);
+    mM->setBlock(mDlcp,mDlcp,*mM22);
+    
+    mM->MatrixToFortran(mMd);
+    mlcp_simplex_init_with_M(&n,&m,mMd);
+    //        mlcp_simplex_init(&n,&m,mA,mB,mC,mD);
   }
   return true;
 }
@@ -492,6 +505,8 @@ mlcp::~mlcp(){
   if (mM22)
     delete mM22;
   mGuess.clear();
+  if (mMd)
+    free(mMd);
   if (mA)
     free(mA);
   if(mB)

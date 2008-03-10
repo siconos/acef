@@ -84,6 +84,7 @@ private:
   bool mTryOnlyGuess;
 
   //
+  double* mMd;
   double* mA;
   double* mB;
   double* mC;

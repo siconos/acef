@@ -1,0 +1,2 @@
+auxFun.o: auxFun.cpp
+mlcp_simplex.o: mlcp_simplex.cpp mlcp_simplex.h auxFun.h
