@@ -66,6 +66,12 @@ public:
   void computeZnstiFromX_Zs();
   void ExtractAndCompute2Sources();
   void extractSources();
+
+  void extractDynamicSystemSource();
+  void extractInteractionSource();
+  void computeDynamicSystemSource();
+  void computeInteractionSource();
+  
   long  mLogFrequency;
   long  mLogPrint;
   long mPourMille;
@@ -189,7 +195,8 @@ public:
   void printStep(ostream& os = cout);
   void printDiscretisation(ostream& os = cout);
 
-  
+  void allocForInitialValue();
+
 
 protected:
 private:
@@ -209,7 +216,7 @@ private:
   void freeD1Matrix();
   void allocDiscretisation();
   void freeDiscretisation();
-
+  void freeForInitialValue();
   
 };
 #endif //LINEARSYSTEM_H

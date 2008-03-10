@@ -33,6 +33,7 @@ int main(int argc, char **argv){
   ACE_INIT();
   algo *a=new algo(argv[1]);
   a->perform();
+  a-> simulate();
   ACE_times[ACE_TIMER_MAIN].stop();
   ACE_PRINT_TIME();
   return 0;

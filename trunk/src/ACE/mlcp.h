@@ -6,8 +6,8 @@
 0<z*v>0
 **************************************************************************/
 
-#ifndef MLCP_H
-#define MLCP_H
+#ifndef MLCP_ACE_H
+#define MLCP_ACE_H
 #include "ace.h"
 #include "aceMatrix.h"
 #include "aceVector.h"
@@ -100,4 +100,4 @@ private:
 
 
 };
-#endif //MLCP_H
+#endif //MLCP_ACE_H

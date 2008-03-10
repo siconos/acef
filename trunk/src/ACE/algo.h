@@ -20,7 +20,7 @@ public:
   void printComponents();
   void stamp();
   void stampAfterInvertion();
-  void preparStep();
+  void preparStep(double time);
   void simulate();
 
   components mInds;

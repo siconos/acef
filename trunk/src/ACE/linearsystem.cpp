@@ -318,16 +318,20 @@ void linearSystem::freeD1Matrix(){
   if (mA2sti)
     delete mA2sti;
 }
-
-
-void linearSystem::allocDiscretisation(){
+void linearSystem::allocForInitialValue(){
   if(mDimx){
     mxti = new aceVector(mDimx,ACE_MAT_TYPE);
+  }
+  mzsti = new aceVector(mDimzs-1,ACE_MAT_TYPE);
+}
+
+void linearSystem::allocDiscretisation(){
+  allocForInitialValue();
+  if(mDimx){
     mxfree = new aceVector(mDimx,ACE_MAT_TYPE);
     mW = new aceMatrix(mDimx,mDimx,ACE_MAT_TYPE);
   }
   
-  mzsti = new aceVector(mDimzs-1,ACE_MAT_TYPE);
   if(mDimzns)
     mznsti = new aceVector(mDimzns,ACE_MAT_TYPE);
   if (mB2zs)
@@ -347,13 +351,16 @@ void linearSystem::allocDiscretisation(){
 
   }
 }
-void linearSystem::freeDiscretisation(){
+void linearSystem::freeForInitialValue(){
   if (mxti)
     delete mxti;
-  if (mxfree)
-    delete mxfree;
   if (mzsti)
     delete mzsti;
+}
+void linearSystem::freeDiscretisation(){
+  freeForInitialValue();
+  if (mxfree)
+    delete mxfree;
   if (mznsti)
     delete mznsti;
   if(mW)
@@ -562,7 +569,6 @@ void linearSystem::initSimu(){
   
 }
 void linearSystem::preparStep(){
-  ExtractAndCompute2Sources();
   if (mDimx && mDimLambda){//both
     //(*mxfree) = (*mxti) + mH*((1-mTheta)*(prod(*mA2x,*mxti)+prod(*mA2zs,*mzsti) + (*mA2sti))+mThetap*(*mA2s));
     //mxfree->display();
@@ -1045,28 +1051,49 @@ void linearSystem::extractDynBockInVect(aceVector * V){
 ///////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////SOURCES must be call each step
-void linearSystem::extractSources(){
-  //BUILD s
-  extractNonDynBockInVect(mB1s);
-//   cout<<"extractSources input\n"<<"mB1s";
-//   cout<<*mB1s;
-//   cout<<"mA\n"<<*mA;
-//   cout<<"ms\n"<<*ms;
+void linearSystem::extractDynamicSystemSource(){
   if (mDimx){
     extractDynBockInVect(ms);
     //(*mA1s)=prod(*mA,*ms);
     ACEprod(*mA,*ms,*mA1s,true);
   }
-//   cout<<"extractSources output\n"<<"mA1s";
-//   cout<<*mA1s;
-  /*  cout<<"vecteur source s:";
-  if (ms)
-    cout<<(*ms);
-  cout<<"\nvecteur source Bs1:";
-  if (mB1s)
-    cout<<(*mB1s);
-  */
+
 }
+void linearSystem::extractInteractionSource(){
+    extractNonDynBockInVect(mB1s);
+}
+
+void linearSystem::extractSources(){
+  extractInteractionSource();
+  extractDynamicSystemSource();
+}
+void linearSystem::computeDynamicSystemSource(){
+  if (mDimx && mDimLambda){
+    //(*mA2s)=(*mA1s)+prod(*mA1zns,*mC1s);
+    ACEprod(*mA1zns,*mC1s,*mA2s,false);
+    //prod(*mA1zns,*mC1s,*mA2s);
+    //(*mA2s)+=(*mA1s);
+    
+  }
+}
+void linearSystem::computeInteractionSource(){
+  if (mDimx && mDimLambda){
+    
+    ACEprod(*mB1zns,*mC1s,*mB2s,false);
+    //prod(*mB1zns,*mC1s,*mB2s);
+    //(*mB2s)+=(*mB1s);
+
+    ACEprod(*mD1zns,*mC1s,*mD2s,false);
+    //prod(*mD1zns,*mC1s,*mD2s);
+    //(*mD2s)+=(*mD1s);
+  }else if (mDimLambda){
+    //(*mB2s)=(*mB1s)+prod(*mB1zns,*mC1s);
+    ACEprod(*mB1zns,*mC1s,*mB2s,false);
+    //(*mD2s)=(*mD1s)+prod(*mD1zns,*mC1s);
+    ACEprod(*mD1zns,*mC1s,*mD2s,false);
+  }
+}
+
 void linearSystem::ExtractAndCompute2Sources(){
   if (mDimx)
     *mA2sti=*mA2s;
@@ -1078,29 +1105,31 @@ void linearSystem::ExtractAndCompute2Sources(){
 //   cout<<*mA2s;
 //   cout<<"mC1s\n";
 //   cout<<*mC1s;
+  computeDynamicSystemSource();
+  computeInteractionSource();
 
-  if (mDimx && mDimLambda){
-    //(*mA2s)=(*mA1s)+prod(*mA1zns,*mC1s);
-    ACEprod(*mA1zns,*mC1s,*mA2s,false);
-    //prod(*mA1zns,*mC1s,*mA2s);
-    //(*mA2s)+=(*mA1s);
+//   if (mDimx && mDimLambda){
+//     //(*mA2s)=(*mA1s)+prod(*mA1zns,*mC1s);
+//     ACEprod(*mA1zns,*mC1s,*mA2s,false);
+//     //prod(*mA1zns,*mC1s,*mA2s);
+//     //(*mA2s)+=(*mA1s);
     
-    ACEprod(*mB1zns,*mC1s,*mB2s,false);
-    //prod(*mB1zns,*mC1s,*mB2s);
-    //(*mB2s)+=(*mB1s);
+//     ACEprod(*mB1zns,*mC1s,*mB2s,false);
+//     //prod(*mB1zns,*mC1s,*mB2s);
+//     //(*mB2s)+=(*mB1s);
 
-    ACEprod(*mD1zns,*mC1s,*mD2s,false);
-    //prod(*mD1zns,*mC1s,*mD2s);
-    //(*mD2s)+=(*mD1s);
-  }else if (mDimx){
-    (*mA2s)=(*mA1s);
-    (*mB2s)=(*mB1s);    
-  }else if (mDimLambda){
-    //(*mB2s)=(*mB1s)+prod(*mB1zns,*mC1s);
-    ACEprod(*mB1zns,*mC1s,*mB2s,false);
-    //(*mD2s)=(*mD1s)+prod(*mD1zns,*mC1s);
-    ACEprod(*mD1zns,*mC1s,*mD2s,false);
-  }
+//     ACEprod(*mD1zns,*mC1s,*mD2s,false);
+//     //prod(*mD1zns,*mC1s,*mD2s);
+//     //(*mD2s)+=(*mD1s);
+//   }else if (mDimx){
+//     (*mA2s)=(*mA1s);
+//     (*mB2s)=(*mB1s);    
+//   }else if (mDimLambda){
+//     //(*mB2s)=(*mB1s)+prod(*mB1zns,*mC1s);
+//     ACEprod(*mB1zns,*mC1s,*mB2s,false);
+//     //(*mD2s)=(*mD1s)+prod(*mD1zns,*mC1s);
+//     ACEprod(*mD1zns,*mC1s,*mD2s,false);
+//   }
 //   cout<<"ExtractAndCompute2Sources output:\n";
 //   cout<<"mA2s\n";
 //   cout<<*mA2s;
@@ -1259,7 +1288,7 @@ void linearSystem::printSystem2(ostream& os){
 }
 void linearSystem::printStep(ostream& os){
   int i;
-  bool printALL = false;
+  bool printALL = true;
   if (printALL){
     os << "xt("<<mStepCmp*mH<<")\t";
     if (mxti)

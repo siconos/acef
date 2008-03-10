@@ -249,15 +249,8 @@ void algo::perform(){
  sls.buildLinearSystem();
  ACE_times[ACE_TIMER_TEST_2].stop();
  sls.set2matrix();
-
- 
- sls.printSystemInTabFile(&mFile[0]);
- //sls.printB1();
- //sls.printC1();
- //sls.printD1();
- //sls.printSystem2();
+ sls.printSystem2();
  ACE_times[ACE_TIMER_EQUATION].stop();
- simulate();
 }
 ////////////////////////////////////////////////////////////////////// STAMP
 //with x'=A1x * mx + A1zs * mZs + A1zns * mZns, compute curent in all capacitor branche, and fill KCL law
@@ -305,31 +298,32 @@ void algo::stamp(){
 
 }
 ////////////////////////////////////////////////////////////////////// SIMULATION
-void algo::preparStep(){
+void algo::preparStep(double time){
   int n;
   int i;
-  ACE_DOUBLE time = sls.mStepCmp*sls.mH;
+  //ACE_DOUBLE time = sls.mStepCmp*sls.mH;
   computeSourcesValues(time);
-
   n = mVsrcs.size();
   for(i=0;i<n;i++)
     mVsrcs[i]->stampTimer();
   n = mIsrcs.size();
   for(i=0;i<n;i++)
     mIsrcs[i]->stampTimer();
-  
-  sls.preparStep();
 }
 void algo::simulate(){
   sls.initSimu();
   mSimuStream = new ofstream(mSimuFile);
   ACE_times[ACE_TIMER_SIMULATION].start();
-  preparStep();
+  preparStep(sls.mStepCmp*sls.mH);
+  sls.ExtractAndCompute2Sources();
+  sls.preparStep();
   while(sls.step()){
     if (ACE_MUET_LEVEL != ACE_MUET)
       sls.printStep();
     sls.printStep(*mSimuStream);
-    preparStep();
+    preparStep(sls.mStepCmp*sls.mH);
+    sls.ExtractAndCompute2Sources();
+    sls.preparStep();
   }
   ACE_times[ACE_TIMER_SIMULATION].stop();
   sls.stopSimu();

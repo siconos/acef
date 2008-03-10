@@ -8,8 +8,8 @@ Coupler le solver path au solver direct
 
 
 
-description:
-
-1)commencer par les 'guess'
-2)continuer avec la methode indiquee.
-3)ajouter le nouveau 'guess' dans la liste.
+->Lecture des param de simu ds la netlist
+->lecture des variables de sorties ds la netlist
+->ajouter le solver direct ds siconos
+->comparer les perfs siconos/ace
+->Mettre un peu d'ordre dans les tests automatiques
