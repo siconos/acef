@@ -165,8 +165,8 @@ include $(MAKEDEP_FILE)
 
 # Generation of the final binary (see $(EXE))
 $(LIB) : $(OBJ) $(ALL_SRC)
-	ar r mlcpSimplex.a Obj/auxFun.o Obj/mlcp_simplex.o
-	ranlib mlcpSimplex.a
+	ar r libMlcpSimplex.a Obj/auxFun.o Obj/mlcp_simplex.o
+	ranlib libMlcpSimplex.a
 
 # Help rule - print help message
 help :

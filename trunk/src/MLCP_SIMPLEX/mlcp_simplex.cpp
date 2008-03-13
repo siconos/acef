@@ -23,9 +23,10 @@
   \f$
    \left\lbrace
     \begin{array}{l}
-    A u + Cv +a =0\\
-    D u + Bv +b = w
-    0 \le v \perp  w \ge 0\\
+    A u + Cv +a = w1\\
+    D u + Bv +b = w2
+    0 \le v \perp  w2 \ge 0\\
+    w1 = 0\\
     \end{array}
    \right.
   \f$
@@ -103,12 +104,12 @@ static     char *lower;							/* lower or upper ? (for changing bounds) */
 static  double *newUppBnd;				/* new upper bounds */
 static   int *vwIndices;/* indices of variables v,w */
 
-static  const double tolVar = 1e-12;			/* tolerance to consider that a var is null */
-static  const double tolComp = 1e-12; 		/* tolerance to consider that complementarity holds */
-static  const double tolNegVar = 1e-9; 		
-static  const int nIterMax = 1000000;		/* max number of nodes to consider in tree search */
+static   double tolVar = 1e-12;			/* tolerance to consider that a var is null */
+static   double tolComp = 1e-12; 		/* tolerance to consider that complementarity holds */
+static   double tolNegVar = 1e-9; 		
+static   int nIterMax = 1000000;		/* max number of nodes to consider in tree search */
 static  const int logFrequency = 10000;	/* print log every ... iterations */
-static int VERBOSE=0;
+static int VERBOSE=1;
 
 
 #define USE_GUESS false
@@ -129,10 +130,10 @@ struct node {
 	  }
 	};
 };
-unsigned long getConfigLCP(){
+unsigned long extern_getConfigLCP(){
   return configLCP;
 }
-void setVerbose(int v){
+void extern_setVerbose(int v){
   VERBOSE=v;
 }
 void computeConfig(const node* _node,double x[]){
@@ -383,11 +384,11 @@ int solvesubproblem(mySet::iterator& currentNode, int branchingIndex, char v_or_
 void fillSolution(double u[],double v[],double w[],double x[]){
   int i;
   printSolution(x);
-  for( i = 0 ; i < m ; ++i ) {v[i] = x[i+n]; w[i]=x[n+m+i];}
-  for( i = 0 ; i < n ; ++i ) {u[i] = x[i]; }
+  for( i = 0 ; i < m ; ++i ) {v[i] = x[i+n]; w[i+n]=x[n+m+i];}
+  for( i = 0 ; i < n ; ++i ) {u[i] = x[i]; w[i]=0;}
 }
 
-void mlcp_simplex_init_with_M(int *nn , int* mm, double *M ){
+void extern_mlcp_simplex_init_with_M(int *nn , int* mm, double *M ){
     /* Variables declaration */
 
   int i,j,linNumber,colNumber,curbeg;
@@ -483,7 +484,7 @@ void mlcp_simplex_init_with_M(int *nn , int* mm, double *M ){
   }
 
 
-  //print_sparse_matrix( matbeg,matcnt,matind,matval,objective,rhs,sense,lb,ub);
+  print_sparse_matrix( matbeg,matcnt,matind,matval,objective,rhs,sense,lb,ub);
 
   /*READY TO SOLVE*/
 	
@@ -497,7 +498,7 @@ void mlcp_simplex_init_with_M(int *nn , int* mm, double *M ){
   lpopt(env, lp);
 }
 
-void mlcp_simplex_init(int *nn , int* mm, double *A , double *B , double *C , double *D){
+void extern_mlcp_simplex_init(int *nn , int* mm, double *A , double *B , double *C , double *D){
 
   /* Variables declaration */
 
@@ -645,7 +646,7 @@ void mlcp_simplex_init(int *nn , int* mm, double *A , double *B , double *C , do
   }
 
 
-  //print_sparse_matrix( matbeg,matcnt,matind,matval,objective,rhs,sense,lb,ub);
+  print_sparse_matrix( matbeg,matcnt,matind,matval,objective,rhs,sense,lb,ub);
 
   /*READY TO SOLVE*/
 	
@@ -666,7 +667,7 @@ void resetList(){
   }
   sList.clear();
 }
-void mlcp_simplex_stop(){
+void extern_mlcp_simplex_stop(){
   resetList();
   
   if (upper) free(upper);
@@ -689,7 +690,7 @@ void mlcp_simplex_stop(){
 
 
 
-int mlcp_simplex( double *a, double *b, double *u, double *v, double *w , int *info ,	 int *iparamMLCP , double *dparamMLCP  )
+int extern_mlcp_simplex( double *a, double *b, double *u, double *v, double *w , int *info ,	 int *iparamMLCP , double *dparamMLCP  )
 { 
   /* Parameters */
 
@@ -697,6 +698,11 @@ int mlcp_simplex( double *a, double *b, double *u, double *v, double *w , int *i
 
   /* Variables declaration */
   int curbeg;
+  tolVar = dparamMLCP[0];			/* tolerance to consider that a var is null */
+  tolComp = dparamMLCP[1]; 		/* tolerance to consider that complementarity holds */
+  tolNegVar = dparamMLCP[2];     /*tolerance to consider a value is negative*/ 		
+  nIterMax = iparamMLCP[0];		/* max number of nodes to consider in tree search */
+  VERBOSE = iparamMLCP[1];
 
 
   int i;
@@ -710,9 +716,9 @@ int mlcp_simplex( double *a, double *b, double *u, double *v, double *w , int *i
   double objval;
   /*fill rhs*/
   for (i=0;i<n;i++)
-    rhs[i]=a[i];
+    rhs[i]=-a[i];
   for (i=0;i<m;i++)
-    rhs[n+i]=b[i];
+    rhs[n+i]=-b[i];
   chgrhs ( env,  lp, n+m, ind1toN, rhs);
 
   for (i=0; i<n; i++) objective[i]=0;
@@ -720,8 +726,8 @@ int mlcp_simplex( double *a, double *b, double *u, double *v, double *w , int *i
   chgobj (env, lp, ncols, ind1toN, objective);
 
     /* optimize with objective to find feasible point */
-  print_double_array("a",a,n);
-  print_double_array("b",b,m);
+  print_double_array("a",rhs,n);
+  print_double_array("b",rhs+n,m);
   //print_sparse_matrix(matbeg,matcnt,matind,matval,objective,rhs,sense,lb,ub);
 
   //  ACE_times[ACE_TIMER_SIMPLEX_FIRST].start();
