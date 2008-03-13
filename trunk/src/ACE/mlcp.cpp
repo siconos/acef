@@ -49,7 +49,7 @@ mlcp::mlcp(unsigned int Dlcp,unsigned int Dlin,int solverType){
     mb=(double *)calloc(mDlcp,sizeof(double));
     mu=(double *)calloc(mDlin,sizeof(double));
     mv=(double *)calloc(mDlcp,sizeof(double));
-    mw=(double *)calloc(mDlcp,sizeof(double));
+    mw=(double *)calloc(mDlcp+mDlin,sizeof(double));
   }
    
   mW1Z1=0;
@@ -204,7 +204,7 @@ bool mlcp::solveWithPath(){
 }
 void mlcp::stopSolver(){
   if (ACE_SOLVER_TYPE == ACE_SOLVER_SIMPLEX){
-    mlcp_simplex_stop();
+    extern_mlcp_simplex_stop();
   }
 }
 bool mlcp::initSolver(){
@@ -213,19 +213,23 @@ bool mlcp::initSolver(){
     int n = (int)mDlin;
     int m = (int)mDlcp;
     
-//     mM22->MatrixToFortran(mA);  
-//     mM11->MatrixToFortran(mB);  
-//     mM21->MatrixToFortran(mC);  
-//     mM12->MatrixToFortran(mD);
+    mM22->MatrixToFortran(mA);  
+    mM11->MatrixToFortran(mB);  
+    mM21->MatrixToFortran(mC);  
+    mM12->MatrixToFortran(mD);
     
-    mM->setBlock(0,0,*mM11);
-    mM->setBlock(0,mDlcp,*mM12);
-    mM->setBlock(mDlcp,0,*mM21);
-    mM->setBlock(mDlcp,mDlcp,*mM22);
+     mM->setBlock(0,0,*mM22);
+     mM->setBlock(0,mDlin,*mM21);
+     mM->setBlock(mDlin,0,*mM12);
+     mM->setBlock(mDlin,mDlin,*mM11);
+    printInPutABCDab();
+    cout<<*mM;
     
-    mM->MatrixToFortran(mMd);
-    mlcp_simplex_init_with_M(&n,&m,mMd);
-    //        mlcp_simplex_init(&n,&m,mA,mB,mC,mD);
+        mM->MatrixToFortran(mMd);
+    extern_mlcp_simplex_init_with_M(&n,&m,mMd);
+    printf("init with A B C D\n");
+    extern_mlcp_simplex_stop();
+    extern_mlcp_simplex_init(&n,&m,mA,mB,mC,mD);
   }
   return true;
 }
@@ -238,10 +242,21 @@ bool mlcp::solveWithSimplex(){
   mQ1->VectorToFortran(mb);
   //  cout<<"**mQ1\n"<<*mQ1;
   //  cout<<"**mQ2\n"<<*mQ2;
-
+  int info;
+  int iparamMLCP[2];
+  double dparamMLCP[3];
+  iparamMLCP[0]= 1000000;
+  iparamMLCP[1]=1;
+  dparamMLCP[0]=1e-12;
+  dparamMLCP[1]=1e-12;
+  dparamMLCP[2]=1e-9;
   ACE_times[ACE_TIMER_SOLVE_SIMPLEX].start();
-  res= mlcp_simplex(ma, mb, mu, mv, mw , 0 , 0 , 0  );
-  mCase = getConfigLCP();
+  for (int i=0; i<n;i++)
+    ma[i]=-ma[i];
+  for (int i=0; i <m;i++)
+    mb[i]=-mb[i];
+  res= extern_mlcp_simplex(ma, mb, mu, mv, mw , &info , iparamMLCP , dparamMLCP  );
+  mCase = extern_getConfigLCP();
   addGuess(mCase);
   ACE_times[ACE_TIMER_SOLVE_SIMPLEX].stop();
 
@@ -543,8 +558,8 @@ void mlcp::printGuess(ostream& os){
 
 void mlcp::printInPutABCDab(ostream& os)
 {
-  if (ACE_MUET_LEVEL == ACE_MUET)
-    return;
+//   if (ACE_MUET_LEVEL == ACE_MUET)
+//     return;
   os<<"mlcp print input"<<endl;
   os<<"dim lcp:\t"<<mDlcp<<"\tlin\t"<<mDlin;
   os<<"A\n";

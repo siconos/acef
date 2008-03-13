@@ -42,7 +42,7 @@ int main(int argc, char **argv){
     printf("usage : toto file.cir ENUM|SIMPLEX|PATH 10 DENSE|SPARSE\n");
     return 0;
   }
-  if (!strcmp(argv[2],"ENUM")){
+  if (!strcmp(argv[2],"SIMPLEX")){
     ACE_SOLVER_TYPE = ACE_SOLVER_ENUM;
   }else if(!strcmp(argv[2],"SIMPLEX")){
     ACE_SOLVER_TYPE = ACE_SOLVER_SIMPLEX;
