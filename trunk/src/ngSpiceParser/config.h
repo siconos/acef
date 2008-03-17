@@ -278,13 +278,13 @@
 /* #undef NEWTRUNC */
 
 /* Define the directory for executables */
-#define NGSPICEBINDIR "/home/bipop/bonnefon/installParser/bin"
+#define NGSPICEBINDIR "/usr/local/bin"
 
 /* Define the build date */
-#define NGSPICEBUILDDATE "Fri Nov 16 16:49:38 CET 2007"
+#define NGSPICEBUILDDATE "Mon Mar 17 12:03:00 CET 2008"
 
 /* Define the directory for architecture independent data files */
-#define NGSPICEDATADIR "/home/bipop/bonnefon/installParser/share/ng-spice-rework"
+#define NGSPICEDATADIR "/usr/local/share/ng-spice-rework"
 
 /* Define if we want NOBYPASS */
 /* #undef NOBYPASS */

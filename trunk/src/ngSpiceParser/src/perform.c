@@ -25,6 +25,8 @@
 static int sType =0;
 static char sTypeName[16];
 static GENinstance *psInstance =0;
+static GENmodel *psModel =0;
+static double slastTime =0;
 
 int computeSourcesValues(double time){
   SPICEdev **myDEVices = devices();
@@ -35,6 +37,8 @@ int computeSourcesValues(double time){
   dev[0]=46;
   dev[1]=27;
   circuit =(CKTcircuit *) ft_curckt->ci_ckt;
+  circuit->CKTstep = time - slastTime;
+  slastTime = time;
 
   if (!circuit)
     return 0;
@@ -47,7 +51,19 @@ int computeSourcesValues(double time){
   }
   return 1;
 }
+int initSimulation(int type,double val){
+  CKTcircuit *circuit =0;
+  circuit =(CKTcircuit *) ft_curckt->ci_ckt;
+  if (!circuit)
+    return 0;
 
+  if (type == PARSER_TSTEP)
+      circuit->CKTstep = val;
+  if (type == PARSER_TSTOP)
+      circuit->CKTfinalTime = val;
+
+  return 1;
+}
 
 int getSourceValue(char *type,void* id,double* value){
   VSRCinstance *hereVSRC;
@@ -64,6 +80,7 @@ int getSourceValue(char *type,void* id,double* value){
   }else{
     return 0;
   }
+  /*printf("getSourceValue, val %f\n",*value);*/
   return 1;
 }
 
@@ -303,7 +320,6 @@ void MEprint(){
   printf("******FIN DE LA LECTURE DE LA TABLE******\n");
 }
 int initComponentList(char *type){
-  GENmodel *pModel =0;
   CKTcircuit *circuit =0;
   circuit =(CKTcircuit *) ft_curckt->ci_ckt;
 
@@ -311,10 +327,10 @@ int initComponentList(char *type){
     return -1;
   strcpy(sTypeName,type);
   sType = INPtypelook(type);
-  pModel =  circuit->CKThead[sType];
-  if (!pModel)
+  psModel =  circuit->CKThead[sType];
+  if (!psModel)
     return 0;
-  psInstance = pModel->GENinstances;
+  psInstance = psModel->GENinstances;
   if (!psInstance)
     return 0;
   return 1;
@@ -355,11 +371,16 @@ int nextComponent(void * data){
     break;
   default :
     printf("ERROR parser/src/perform.c : unknown type\n");
-
-    
     return 0;
   }
   psInstance = psInstance->GENnextInstance;
+  if (!psInstance){
+    if (psModel){
+      psModel=psModel->GENnextModel;
+      if (psModel)
+	psInstance = psModel->GENinstances;
+    } 
+  }
   return 1;
 }
 int getNbElementsOfType(char* type){
