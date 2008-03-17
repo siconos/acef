@@ -1,7 +1,5 @@
 
 
-#define PARSER_TSTEP 1
-#define PARSER_TSTOP 2
 
 
 void initParserLibrary();
@@ -15,8 +13,9 @@ int getNbElementsOfType(char* type);
 //if succes, return 1 else return 0 
 int getSourceValue(char *type,void* id,double* value);
 int computeSourcesValues(double time);
-int initSimulation(int type,double val);
-
+int getTransValues(double * step, double * stop, double * start);
+int getICvalue(int * numNode,int * icGiven, double * icValue);
+int initICvalue();
 
 
 typedef struct {

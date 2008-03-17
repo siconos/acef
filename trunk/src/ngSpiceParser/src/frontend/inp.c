@@ -380,7 +380,6 @@ inp_spsource(FILE *fp, bool comfile, char *filename)
             for (t = s; *t && !isspace(*t); t++)
                 ;
             *t = '\0';
-
             if (ciprefix(".control", dd->li_line)) {
                 ld->li_next = dd->li_next;
 		line_free(dd,FALSE); /* SJB - free this line's memory */

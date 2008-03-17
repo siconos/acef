@@ -192,10 +192,10 @@ if_inpdeck(struct line *deck, INPtables **tab)
    * cards. These are left till INPpas3 so that we can check for
    * nodeset/ic of non-existant nodes.  */
 
-  /*OLIVIER  INPpas3((void *) ckt, (card *) deck->li_next,
+  INPpas3((void *) ckt, (card *) deck->li_next,
 	  (INPtables *) *tab,ft_curckt->ci_defTask, ft_sim->nodeParms,
 	  ft_sim->numNodeParms);
-  */
+  
 
 
   return (ckt);

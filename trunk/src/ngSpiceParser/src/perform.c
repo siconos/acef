@@ -17,6 +17,8 @@
 #include "./spicelib/devices/vccs/vccsdefs.h"
 #include "./spicelib/devices/asrc/asrcdefs.h"
 #include "./spicelib/devices/mos1/mos1defs.h"
+#include "tskdefs.h"
+#include "trandefs.h"
 //#include "./spicelib/devices/dev.h"
 #include "devdefs.h"
 
@@ -27,6 +29,59 @@ static char sTypeName[16];
 static GENinstance *psInstance =0;
 static GENmodel *psModel =0;
 static double slastTime =0;
+static CKTnode * scurNode =0;
+static CKTnode * slasNode =0;
+
+int initICvalue(){
+  CKTcircuit *circuit =0;
+  circuit =(CKTcircuit *) ft_curckt->ci_ckt;
+
+  scurNode = circuit->CKTnodes;
+  slasNode = circuit->CKTlastNode;
+  return 1;
+}
+
+int getICvalue(int * numNode,int * icGiven, double * icValue){
+  if (scurNode==0)
+    return 0;
+  *numNode = scurNode->number;
+  *icGiven = scurNode->icGiven;
+  if (scurNode->icGiven)
+    *icValue = scurNode->ic;
+  else
+    *icValue = 0;
+
+  do{
+    if (scurNode == slasNode){
+      scurNode = 0;
+      break;
+    }
+    else
+      scurNode=scurNode+1;
+  } while ( scurNode->type != NODE_VOLTAGE);
+    
+  return 1;
+}
+
+int getTransValues(double * step, double * stop, double * start){
+  TSKtask *task =0;
+  task =(TSKtask *) ft_curckt->ci_defTask;
+  if (!task)
+    return 0;
+  (*stop) = ((TRANan *)task->jobs)->TRANfinalTime;
+  (*start) = ((TRANan *)task->jobs)->TRANinitTime;
+  (*step) = ((TRANan *)task->jobs)->TRANstep;
+  
+  CKTcircuit *circuit =0;
+  circuit =(CKTcircuit *) ft_curckt->ci_ckt;
+  if (!circuit)
+    return 0;
+
+  circuit->CKTstep = *step;
+  circuit->CKTfinalTime = *stop;
+
+  return 1;
+}
 
 int computeSourcesValues(double time){
   SPICEdev **myDEVices = devices();
@@ -49,19 +104,6 @@ int computeSourcesValues(double time){
       error = (*((*myDEVices[dev[i]]).DEVload))(circuit->CKThead[dev[i]],circuit);
     }
   }
-  return 1;
-}
-int initSimulation(int type,double val){
-  CKTcircuit *circuit =0;
-  circuit =(CKTcircuit *) ft_curckt->ci_ckt;
-  if (!circuit)
-    return 0;
-
-  if (type == PARSER_TSTEP)
-      circuit->CKTstep = val;
-  if (type == PARSER_TSTOP)
-      circuit->CKTfinalTime = val;
-
   return 1;
 }
 
