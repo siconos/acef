@@ -435,6 +435,7 @@ void linearSystem::readInitialValue(){
   int i;
   double aux;
   int nbGuess;
+  int useIc;
   unsigned long guess;
 
   cout << "read init value\n";
@@ -449,11 +450,20 @@ void linearSystem::readInitialValue(){
       pin >> guess;
       mMLCP->addGuess(guess);
     }
-      
-    initSimulation(PARSER_TSTEP,mH);
-    initSimulation(PARSER_TSTOP,mH*mStepNumber);
+    double stop,start;
+    getTransValues(&mH,&stop,&start);
+    mStepNumber = (long)(stop/mH);
     cout << "mStepNumber\t"<<mStepNumber<<"\tmH\t"<<mH<<endl;
     cout << "x\n";
+    for (i=0;i<mDimzs-1;i++){
+      mzsti->setValueIfNotNull(i,0);
+    }
+    initICvalue();
+    while(getICvalue(&i,&useIc,&aux)){
+      mzsti->setValueIfNotNull(i,aux);
+      cout<<"set value from netlist :v_"<<i<<"="<<aux;
+    }
+      
     for (i=0;i<mDimx;i++){
       pin >> aux;
       mxti->setValueIfNotNull(i,aux);

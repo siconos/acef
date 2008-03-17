@@ -42,14 +42,26 @@ int main(int argc, char **argv){
     printf("usage : toto file.cir ENUM|SIMPLEX|PATH 10 DENSE|SPARSE\n");
     return 0;
   }
-  if (!strcmp(argv[2],"SIMPLEX")){
+  string solverEnum = "ENUM" ;
+  string solverSimplex = "SIMPLEX" ;
+  string solverPath = "PATH" ;
+  string * solverName =0;
+  // One Step non smooth problem
+  IntParameters iparam(5);
+  DoubleParameters dparam(5);
+  
+  double* floatWorkingMem = 0;
+  int * intWorkingMem= 0;
+
+  if (!strcmp(argv[2],"ENUM")){
     ACE_SOLVER_TYPE = ACE_SOLVER_ENUM;
   }else if(!strcmp(argv[2],"SIMPLEX")){
     ACE_SOLVER_TYPE = ACE_SOLVER_SIMPLEX;
   }else if(!strcmp(argv[2],"PATH")){
     ACE_SOLVER_TYPE = ACE_SOLVER_PATH;
+    
   }else{
-    printf("usage : toto file.cir ENUM|SIMPLEX|PATH 10\n");
+    printf("usage : toto file.cir ENUM|SIMPLEX|PATH 10 DENSE|SPARSE\n");
     return 0;
   }
   if (!strcmp(argv[3],"0"))
@@ -112,17 +124,28 @@ int main(int argc, char **argv){
   TimeDiscretisation * aTD = new TimeDiscretisation(h,aM);
   TimeStepping *aS = new TimeStepping(aTD);
   Moreau * aMoreau = new Moreau(aDS,0.5,aS);
-
-  // One Step non smooth problem
-    IntParameters iparam(5);
+  
+  if (ACE_SOLVER_TYPE == ACE_SOLVER_ENUM){
     iparam[0] = 0; // verbose
-    DoubleParameters dparam(5);
     dparam[0] = 0.0000001; // Tolerance
-    string solverName = "ENUM" ;
-    double* floatWorkingMem = (double*)malloc(((s+m)*(s+m) + 3*(s+m))* sizeof(double));
-    int * intWorkingMem= (int*)malloc(2*(s+m)*sizeof(int));
+    solverName = &solverEnum;
+    floatWorkingMem = (double*)malloc(((s+m)*(s+m) + 3*(s+m))* sizeof(double));
+    intWorkingMem= (int*)malloc(2*(s+m)*sizeof(int));
+  }else if(ACE_SOLVER_TYPE == ACE_SOLVER_SIMPLEX){
+    iparam[0]= 1000000;
+    iparam[1]=1;
+    dparam[0]=1e-12;
+    dparam[1]=1e-12;
+    dparam[2]=1e-9;
+    solverName = &solverSimplex;
+  }else if(ACE_SOLVER_TYPE == ACE_SOLVER_PATH){
+    iparam[0]=101;
+    dparam[0]=1e-9;
+    solverName = &solverPath;
+  }
+
     
-    NonSmoothSolver * mySolver = new NonSmoothSolver(solverName,iparam,dparam,floatWorkingMem,intWorkingMem);
+  NonSmoothSolver * mySolver = new NonSmoothSolver((*solverName),iparam,dparam,floatWorkingMem,intWorkingMem);
 
   
   MLCP * aMLCP = new MLCP(aS,mySolver,"MLCP");
@@ -162,8 +185,10 @@ int main(int argc, char **argv){
   
   ACE_times[ACE_TIMER_MAIN].stop();
   ACE_PRINT_TIME();
-  free(floatWorkingMem);
-  free(intWorkingMem);
+  if (floatWorkingMem)
+    free(floatWorkingMem);
+  if (intWorkingMem)
+    free(intWorkingMem);
   return 0;
  
 }
