@@ -3,13 +3,16 @@
 #include <stdio.h>
 
 typedef void (*fct_print)();
+typedef int (*fct_init)();
 typedef int (*fct_nextComponent)(void*);
 typedef int (*fct_readFile)(char *);
 typedef int (*fct_initComponentList)(char *);
 typedef int (*fct_getNbElementsOfType)(char *);
 typedef int (*fct_getSourceValue)(char *,void *,double *);
 typedef int (*fct_computeSourcesValues)(double);
-typedef int (*fct_initSimulation)(int,double);
+typedef int (*fct_getTransValues)(double *,double *,double *);
+typedef int (*fct_getICvalue)(int *,int *,double *);
+
 
 static fct_print ptr_print=0;
 static fct_readFile ptr_readFile=0;
@@ -18,7 +21,10 @@ static fct_initComponentList ptr_initComponentList=0;
 static fct_getNbElementsOfType ptr_getNbElementsOfType=0;
 static fct_getSourceValue ptr_getSourceValue=0;
 static fct_computeSourcesValues ptr_computeSourcesValues=0;
-static fct_initSimulation ptr_initSimulation=0;
+static fct_getTransValues ptr_getTransValues=0;
+static fct_init ptr_initICvalue=0;
+static fct_getICvalue ptr_getICvalue=0;
+
 
 static void* module=0;
 
@@ -74,11 +80,25 @@ int initParserLibrary(){
    fprintf(stderr, "Couldn't find computeSourcesValues: %s\n", error);
    return (0);
   }
-  ptr_initSimulation = dlsym(module, "initSimulation");
+  
+  ptr_getTransValues = dlsym(module, "getTransValues");
   if ((error = dlerror())) {
-   fprintf(stderr, "Couldn't find initSimulation: %s\n", error);
+   fprintf(stderr, "Couldn't find getTransValues: %s\n", error);
    return (0);
   }
+
+  ptr_initICvalue = dlsym(module, "initICvalue");
+  if ((error = dlerror())) {
+   fprintf(stderr, "Couldn't find initICvalue: %s\n", error);
+   return (0);
+  }
+
+  ptr_getICvalue = dlsym(module, "getICvalue");
+  if ((error = dlerror())) {
+   fprintf(stderr, "Couldn't find getICvalue: %s\n", error);
+   return (0);
+  }
+
     
   return 1;
 }
@@ -106,6 +126,13 @@ int getSourceValue(char *type,void* id,double* value){
 int computeSourcesValues(double time){
   return (*ptr_computeSourcesValues)(time);
 }
-int initSimulation(int type,double val){
-  return (*ptr_initSimulation)(type,val);
+int getTransValues(double * step, double * stop, double * start){
+  return (*ptr_getTransValues)(step,stop,start);
+}
+int initICvalue(){
+  return (*ptr_initICvalue)();
+
+}
+int getICvalue(int * numNode,int * icGiven, double * icValue) {
+  return (*ptr_getICvalue)(numNode,icGiven,icValue);
 }

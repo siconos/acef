@@ -1,8 +1,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-#define PARSER_TSTEP 1
-#define PARSER_TSTOP 2
 
 int readFile(char *file);
 int initParserLibrary();
@@ -16,8 +14,12 @@ void printCircuit();
 //if succes, return 1 else return 0 
 int getSourceValue(char *type,void* id,double* value);
 int computeSourcesValues(double time);
-int initSimulation(int type,double val);
 
+  /*Get .trans values*/
+  int getTransValues(double * step, double * stop, double * start);
+  /*Get initial values .IC*/
+  int initICvalue();  
+  int getICvalue(int * numNode,int * icGiven, double * icValue);  
 typedef struct {
   char *name;
   int nodePos;
