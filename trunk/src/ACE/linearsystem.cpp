@@ -438,45 +438,29 @@ void linearSystem::readInitialValue(){
   int useIc;
   unsigned long guess;
 
-  cout << "read init value\n";
+  cout << "get init value from Netlist\n";
   try{
-    ifstream pin(mFile);
-    ACE_CHECK_IERROR(pin,"linearSystem::readInitialValue need init file");
 
-    pin >> mStepNumber ;
-    pin >> mH;
-    pin >> nbGuess;
-    for (i=0;i<nbGuess;i++){
-      pin >> guess;
-      mMLCP->addGuess(guess);
-    }
+    nbGuess=0;
     double stop,start;
     getTransValues(&mH,&stop,&start);
     mStepNumber = (long)(stop/mH);
     cout << "mStepNumber\t"<<mStepNumber<<"\tmH\t"<<mH<<endl;
-    cout << "x\n";
     for (i=0;i<mDimzs-1;i++){
       mzsti->setValueIfNotNull(i,0);
     }
     initICvalue();
     while(getICvalue(&i,&useIc,&aux)){
-      mzsti->setValueIfNotNull(i,aux);
-      cout<<"set value from netlist :v_"<<i<<"="<<aux;
+      if (i>0){
+	mzsti->setValueIfNotNull(i-1,aux);
+	cout<<"set value from netlist :v_"<<i<<"="<<aux<<endl;
+      }
     }
       
     for (i=0;i<mDimx;i++){
-      pin >> aux;
-      mxti->setValueIfNotNull(i,aux);
-      cout << aux<<"\t";
+      mxti->setValueIfNotNull(i,0);
     }
     
-    cout << "\nzs\n";
-    for (i=0;i<mDimzs-1;i++){
-      pin >> aux ;
-      mzsti->setValueIfNotNull(i,aux);
-      cout << aux<<"\t";
-    }
-    cout <<"\n";
   }
   catch(...)
     {

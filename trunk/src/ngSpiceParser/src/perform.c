@@ -56,9 +56,10 @@ int getICvalue(int * numNode,int * icGiven, double * icValue){
       scurNode = 0;
       break;
     }
-    else
-      scurNode=scurNode+1;
-  } while ( scurNode->type != NODE_VOLTAGE);
+    else{
+      scurNode=scurNode->next;
+    }
+  } while (scurNode->type != NODE_VOLTAGE);
     
   return 1;
 }
