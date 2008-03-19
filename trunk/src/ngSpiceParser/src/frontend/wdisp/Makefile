@@ -78,7 +78,7 @@ AUTOMAKE = automake-1.9
 AWK = gawk
 CC = gcc
 CCDEPMODE = depmode=gcc3
-CFLAGS = -g -O2 -Wall 
+CFLAGS = -g   -Wall 
 CIDERDIR = 
 CIDERMATH = 
 CIDERMATHDIR = 
@@ -89,7 +89,7 @@ CPPFLAGS =
 CXX = g++
 CXXCPP = g++ -E
 CXXDEPMODE = depmode=gcc3
-CXXFLAGS = -g -O2
+CXXFLAGS = -g  
 CYGPATH_W = echo
 DEFS = -DHAVE_CONFIG_H
 DEPDIR = .deps
@@ -102,7 +102,7 @@ EKVDIR =
 EKVLIB = 
 EXEEXT = 
 F77 = f95
-FFLAGS = -g -O2
+FFLAGS = -g  
 INSTALL_DATA = ${INSTALL} -m 644
 INSTALL_PROGRAM = ${INSTALL}
 INSTALL_SCRIPT = ${INSTALL}

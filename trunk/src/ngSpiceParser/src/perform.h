@@ -1,6 +1,14 @@
+#ifndef __SICONOS_PERFORM_H
+#define __SICONOS_PERFORM_H
 
 
 
+typedef struct {
+  int node1;
+  int node2;
+  void * next;
+  char * name;
+} dataPrint;
 
 void initParserLibrary();
 void MEperform();
@@ -16,6 +24,12 @@ int computeSourcesValues(double time);
 int getTransValues(double * step, double * stop, double * start);
 int getICvalue(int * numNode,int * icGiven, double * icValue);
 int initICvalue();
+
+void setPrintStr(char * str);
+int myCKTNodeId(char * name);
+void freePrintElem();
+int initPrintElem();
+int getPrintElem(void ** p);
 
 
 typedef struct {
@@ -110,3 +124,7 @@ typedef struct {
   double *coef;
   void* id;
 } dataISRC;
+
+
+
+#endif

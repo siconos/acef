@@ -32,10 +32,105 @@ static double slastTime =0;
 static CKTnode * scurNode =0;
 static CKTnode * slasNode =0;
 
+static dataPrint * sPrint =0;
+static dataPrint * sCurPrint =0;
+static dataPrint * sLast =0;
+static char * sPrintString =0;
+
+void setPrintStr(char * str){
+  sPrintString=copy(str);
+}
+void addPrintElem(dataPrint * p){
+  if (!p || p->node1 == -1)
+    return;
+  if (sPrint == 0){
+    sPrint = (void * ) malloc(sizeof(dataPrint));
+    sPrint->node1=p->node1;
+    sPrint->node2=p->node2;
+    sPrint->name=p->name;
+    sPrint->next=0;
+    sCurPrint = sPrint;
+  }else{
+    sCurPrint->next = (void*) malloc(sizeof(dataPrint));
+    sCurPrint = sCurPrint->next;
+    sCurPrint->node1=p->node1;
+    sCurPrint->node2=p->node2;
+    sCurPrint->name=p->name;
+    sCurPrint->next=0;
+  }
+}
+void preparPrint(){
+  char *pTemp = 0;
+  char *myTok= 0;
+  char *v_name = 0;
+  dataPrint myBuf;
+  if (!sPrintString)
+    return;
+  pTemp = sPrintString;
+  (void *)gettok(&pTemp);/*.print*/
+  (void *)gettok(&pTemp);/*tran*/
+  myTok= gettok(&pTemp);
+  while (myTok){
+    myBuf.name = copy(myTok);
+    myBuf.node1=-1;
+    myBuf.node2=-1;
+    /* must be v(x) . v(x)-v(y) . v(x,y)*/
+    /*start with v(x)*/
+    if (ciprefix("v",myTok)){
+      v_name = gettok_node(&myTok);/*delete v*/
+      v_name = gettok_node(&myTok);/* get x */
+      myBuf.node1=myCKTNodeId(v_name);
+      if (ciprefix("-v",myTok) ){/*case v(x)-v(y)*/
+	v_name = gettok_node(&myTok);/*delete -v*/
+	v_name = gettok_node(&myTok);/*get y*/
+	myBuf.node2=myCKTNodeId(v_name);	  
+      }else{
+	/*case v(x,y)*/
+	v_name = gettok_node(&myTok);
+	myBuf.node2=myCKTNodeId(v_name);
+      }
+    }
+    addPrintElem(&myBuf);	      
+    myTok= gettok(&pTemp);
+  }
+		    
+  if (sPrintString){
+    free(sPrintString);
+    sPrintString=0;
+  }
+}
+int initPrintElem(){
+  if (sPrintString){
+    preparPrint();
+  }
+  sCurPrint=sPrint;
+  return 1;
+  
+}
+int getPrintElem(void ** p){
+  if (sCurPrint == 0)
+    return 0;
+  (*p) = (void*)sCurPrint;
+  sCurPrint=(dataPrint * )sCurPrint->next;
+  return 1;
+}
+
+
+void freePrintElem(){
+  dataPrint * aux;
+  while(sPrint != sLast){
+    aux = sPrint;
+    free(aux->name);
+    free(aux);
+    sPrint++;
+  }
+  sPrint=0;
+  sLast=0;
+}
+
 int initICvalue(){
   CKTcircuit *circuit =0;
   circuit =(CKTcircuit *) ft_curckt->ci_ckt;
-
   scurNode = circuit->CKTnodes;
   slasNode = circuit->CKTlastNode;
   return 1;
@@ -281,7 +376,21 @@ void MEperform(){
     circuit =(CKTcircuit *) ft_curckt->ci_ckt;
     
 }
+int myCKTNodeId(char * name){
+  CKTcircuit *circuit =0;
+  circuit =(CKTcircuit *) ft_curckt->ci_ckt;
+  CKTnode * node;
+  if(!name)
+    return -1;
+  node = circuit->CKTnodes;
+  while (node){
+    if (!strcmp(name , node->name))
+      return node->number;
+    node = node->next;
+  }
+  return -1;
 
+}
 void MEprint(){
   CKTcircuit *circuit =0;
   int type =0;

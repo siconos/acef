@@ -2,6 +2,13 @@
 extern "C" {
 #endif
 
+  typedef struct {
+  int node1;
+  int node2;
+  void * next;
+  char * name;
+} dataPrint;
+  
 int readFile(char *file);
 int initParserLibrary();
 void stopParserLibrary();
@@ -19,7 +26,13 @@ int computeSourcesValues(double time);
   int getTransValues(double * step, double * stop, double * start);
   /*Get initial values .IC*/
   int initICvalue();  
-  int getICvalue(int * numNode,int * icGiven, double * icValue);  
+  int getICvalue(int * numNode,int * icGiven, double * icValue);
+
+  /*.print tran management*/
+  int initPrintElem();
+  /* p must be casted in dataPrint ** */
+  int getPrintElem(void ** p);
+  
 typedef struct {
   char *name;
   int nodePos;

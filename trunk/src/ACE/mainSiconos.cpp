@@ -89,6 +89,9 @@ int main(int argc, char **argv){
   
   sAlgo->sls.allocForInitialValue();
   sAlgo->sls.readInitialValue();
+  double h=0.00001;
+  h=sAlgo->sls.mH;
+  double finalTime = h*sAlgo->sls.mStepNumber ;
   FirstOrderLinearTIDS * aDS = new FirstOrderLinearTIDS(1,*(sAlgo->sls.mxti),*(sAlgo->sls.mA2x),*(sAlgo->sls.mA2s));
   aDS->setComputeBFunction(&bLDS);
   cout<<"FirstOrderLinearTIDS with :"<<endl;
@@ -118,9 +121,8 @@ int main(int argc, char **argv){
   MixedComplementarityConditionNSL * aNSL = new MixedComplementarityConditionNSL(m,s);
   Interaction * aI = new Interaction("MLCP",Inter_DS,1,m+s,aNSL,aR);
   NonSmoothDynamicalSystem * aNSDS = new NonSmoothDynamicalSystem(aDS,aI);
-  Model * aM = new Model(0,0.005);
+  Model * aM = new Model(0,finalTime);
   aM->setNonSmoothDynamicalSystemPtr(aNSDS);
-  double h=0.00001;
   TimeDiscretisation * aTD = new TimeDiscretisation(h,aM);
   TimeStepping *aS = new TimeStepping(aTD);
   Moreau * aMoreau = new Moreau(aDS,0.5,aS);
@@ -162,18 +164,31 @@ int main(int argc, char **argv){
   cout << " ==== Start of  simulation ====" << endl;
   ofstream pout("acefSimu.dat");
 
-  int N = 500;
+  int N = sAlgo->sls.mStepNumber;
+  dataPrint * pPrint;
+  initPrintElem();
+  pout<<"Index\ttime";
+  while(getPrintElem((void**)&pPrint)){
+    pout<<"\t\t";
+    pout<<pPrint->name;
+  }
+  pout<<endl<<endl;
   for(int k = 0 ; k < N ; k++){
     // solve ... 
     aS->computeOneStep();
     
-    for (int ix=0;ix<dimX;ix++){
-      pout<<(*x)(ix)<<"\t";
-    }
-    for (int iz=0;iz<s;iz++){
-      pout<<(*lambda)(iz)<<"\t";
+
+    initPrintElem();
+    pout <<k<<"\t"<<k*h;
+    while(getPrintElem((void**)&pPrint)){
+      pout<<"\t\t";
+      double aux = (*lambda)(pPrint->node1-1);
+      if (pPrint->node2 >0)
+	aux -= (*lambda)(pPrint->node2-1);
+      pout << aux;
     }
     pout<<endl;
+    
     aS->nextStep();
 	
   }

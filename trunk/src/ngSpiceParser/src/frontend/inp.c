@@ -22,6 +22,7 @@ $Id: inp.c,v 1.14 2005/06/09 01:38:47 sjborley Exp $
 #include "dvec.h"
 #include "fteinp.h"
 #include "inp.h"
+#include "../perform.h"
 
 #include "circuits.h"
 #include "completion.h"
@@ -445,6 +446,10 @@ inp_spsource(FILE *fp, bool comfile, char *filename)
 		    || eq(s, ".op")
 		    || eq(s, ".tf"))
 		{
+		  /*BEGIN OLIVIER */
+		  if (strstr(dd->li_line,"tran"))
+		    setPrintStr(dd->li_line);
+		  /*END OLIVIER */
                     if (end) {
                         end->wl_next = alloc(struct wordlist);
                         end->wl_next->wl_prev = end;

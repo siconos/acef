@@ -12,6 +12,7 @@ typedef int (*fct_getSourceValue)(char *,void *,double *);
 typedef int (*fct_computeSourcesValues)(double);
 typedef int (*fct_getTransValues)(double *,double *,double *);
 typedef int (*fct_getICvalue)(int *,int *,double *);
+typedef int (*fct_getPrintElem)(void **);
 
 
 static fct_print ptr_print=0;
@@ -24,6 +25,8 @@ static fct_computeSourcesValues ptr_computeSourcesValues=0;
 static fct_getTransValues ptr_getTransValues=0;
 static fct_init ptr_initICvalue=0;
 static fct_getICvalue ptr_getICvalue=0;
+static fct_init ptr_initPrintElem=0;
+static fct_getPrintElem ptr_getPrintElem=0;
 
 
 static void* module=0;
@@ -99,7 +102,18 @@ int initParserLibrary(){
    return (0);
   }
 
-    
+  ptr_initPrintElem = dlsym(module, "initPrintElem");
+  if ((error = dlerror())) {
+   fprintf(stderr, "Couldn't find initPrintElem: %s\n", error);
+   return (0);
+  }
+  
+  ptr_getPrintElem = dlsym(module, "getPrintElem");
+  if ((error = dlerror())) {
+   fprintf(stderr, "Couldn't find getPrintElem: %s\n", error);
+   return (0);
+  }
+
   return 1;
 }
 
@@ -135,4 +149,11 @@ int initICvalue(){
 }
 int getICvalue(int * numNode,int * icGiven, double * icValue) {
   return (*ptr_getICvalue)(numNode,icGiven,icValue);
+}
+int initPrintElem(){
+  return (*ptr_initPrintElem)();
+
+}
+int getPrintElem(void ** p){
+  return (*ptr_getPrintElem)(p);
 }
