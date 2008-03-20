@@ -13,7 +13,7 @@ typedef int (*fct_computeSourcesValues)(double);
 typedef int (*fct_getTransValues)(double *,double *,double *);
 typedef int (*fct_getICvalue)(int *,int *,double *);
 typedef int (*fct_getPrintElem)(void **);
-
+typedef int (*fct_initSimulation)(int,double);
 
 static fct_print ptr_print=0;
 static fct_readFile ptr_readFile=0;
@@ -27,7 +27,7 @@ static fct_init ptr_initICvalue=0;
 static fct_getICvalue ptr_getICvalue=0;
 static fct_init ptr_initPrintElem=0;
 static fct_getPrintElem ptr_getPrintElem=0;
-
+static fct_initSimulation ptr_initSimulation=0;
 
 static void* module=0;
 
@@ -113,6 +113,11 @@ int initParserLibrary(){
    fprintf(stderr, "Couldn't find getPrintElem: %s\n", error);
    return (0);
   }
+  ptr_initSimulation = dlsym(module, "initSimulation");
+  if ((error = dlerror())) {
+   fprintf(stderr, "Couldn't find initSimulation: %s\n", error);
+   return (0);
+  }
 
   return 1;
 }
@@ -156,4 +161,7 @@ int initPrintElem(){
 }
 int getPrintElem(void ** p){
   return (*ptr_getPrintElem)(p);
+}
+int initSimulation(int type,double val){
+  return (*ptr_initSimulation)(type,val);
 }

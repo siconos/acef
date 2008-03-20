@@ -1,6 +1,9 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+#define PARSER_TSTEP 1
+#define PARSER_TSTOP 2
+
 
   typedef struct {
   int node1;
@@ -33,6 +36,8 @@ int computeSourcesValues(double time);
   /* p must be casted in dataPrint ** */
   int getPrintElem(void ** p);
   
+  int initSimulation(int type,double val);
+
 typedef struct {
   char *name;
   int nodePos;
