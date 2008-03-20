@@ -188,7 +188,7 @@ int main(int argc, char **argv){
       pout << aux;
     }
     pout<<endl;
-    
+
     aS->nextStep();
 	
   }

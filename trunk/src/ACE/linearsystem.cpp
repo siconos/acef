@@ -435,20 +435,26 @@ void linearSystem::readInitialValue(){
   int i;
   double aux;
   int nbGuess;
-  int useIc;
   unsigned long guess;
+  int useIc;
 
-  cout << "get init value from Netlist\n";
+  cout << "read init value\n";
   try{
 
-    nbGuess=0;
     double stop,start;
     getTransValues(&mH,&stop,&start);
     mStepNumber = (long)(stop/mH);
-    cout << "mStepNumber\t"<<mStepNumber<<"\tmH\t"<<mH<<endl;
+
+    
+      
     for (i=0;i<mDimzs-1;i++){
       mzsti->setValueIfNotNull(i,0);
     }
+    
+    for (i=0;i<mDimx;i++){
+      mxti->setValueIfNotNull(i,0);
+    }
+
     initICvalue();
     while(getICvalue(&i,&useIc,&aux)){
       if (i>0){
@@ -457,10 +463,15 @@ void linearSystem::readInitialValue(){
       }
     }
       
-    for (i=0;i<mDimx;i++){
-      mxti->setValueIfNotNull(i,0);
+    /*for each x of type TENSION, compute the initial value with V init*/
+    for(i=0; i <(int) mx.size(); i++){
+      unknown* u = mx[i];
+      if (u->mType == ACE_TYPE_U ){
+	aux = mzsti->getValue(u->mComponent->mNodePos) - mzsti->getValue(u->mComponent->mNodeNeg);
+	mxti->setValueIfNotNull(i,aux);
+      }
     }
-    
+
   }
   catch(...)
     {
