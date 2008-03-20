@@ -1,0 +1,107 @@
+
+\newpage
+
+
+
+\section{ACEF to Siconos}
+\subsection{The MLCS formulation}
+\subsubsection{The MLCS from the automatic formulation}
+ \begin{eqnarray}
+A_{x'}x'=A_{x}x +A_{z}Z_{s} +A_{\lambda} \lambda +a(t)&\label{eq2}\\
+0=B_{x}x+B_{z}Z_{s} + B_{\lambda}\lambda + b(t)&\label{eq3}\\
+Y=C_{x}x+C_{z}Z_{s}+C_{\lambda}\lambda + c(t) &\label{eq4}\\
+0 \leq Y \, \perp \, \lambda \geq 0&\label{eqperp}
+\end{eqnarray}
+ With $A_{x'}$ regular.\\
+ Let
+ \begin{itemize}
+  \item[--] Let n the x dimension.
+  \item[--] Let m the Y dimension.
+  \item[--] Let s the $Z_{s}$ dimension.
+\end{itemize}
+\subsubsection{The MLCS formulation for siconos}
+It consists in concataining $Z_{s}$ and $ \lambda $ , it rises to the following system:
+ \begin{eqnarray}
+A_{x'}x'=A_{x}x +A_{\lambda} \lambda +a(t)&\label{eq2}\\
+0=B_{x}x+ B_{\lambda}\lambda + b(t)&\label{eq3}\\
+Y=C_{x}x+C_{\lambda}\lambda + c(t) &\label{eq4}\\
+(\lambda_{1},..,\lambda_{s}) free\\
+0 \leq Y \, \perp \, (\lambda_{s+1},..,\lambda_{s+m})^{t} \geq 0&\label{eqperp}
+\end{eqnarray}
+
+
+ \subsubsection{With the siconos convention}
+ 
+The Dynamic system:
+\[Mx'=Ax +b(t)+r\]
+The First Order Linear Relation:
+\[Y=CX +D \lambda\]
+\[R=B \lambda\]
+The complementary relation and interaction:
+\[(Y_{1},..,Y_{s})^{t}=0\]
+\[(\lambda_{1},..,\lambda_{s}) \qquad free\]
+\[0 \leq (Y_{s+1},..,Y_{s+m})^{t} \, \perp \, (\lambda_{s+1},..,\lambda_{s+m})^{t} \geq 0\]
+
+\subsubsection{Building a NonSmooth Dynamical System}
+ 
+ aDS = new FirstOrderLinearDS$(int,A_{x'},A_{x},a(t))$;\\
+ aTIR = new FirstOrderLinearTIR$(\left(\begin{array}{c}B_{x}\\C_{x}
+ \end{array}\right),0,\left(\begin{array}{c}B_{\lambda}\\C_{\lambda}
+ \end{array}\right),\left(\begin{array}{c}b(t)\\c(t) \end{array}\right),A_{\lambda})$\\
+
+ aNSL= new complementarityConditionNSL(m);\\
+ aI = new interaction(``MLCP'',allDS,1,m+s, aNSL, aTIR);\\
+ aNSDS= new NonSmoothDynamicalSystem(aDS, aI);\\
+ aM=new Model($t_{0}$,T);\\
+ aM setNSDS(aNSDS);\\
+\\
+\subsubsection{Simulation}
+aTD = new TimeDiscretisation(h,aM);\\
+aS = new TimeStepping(aTD);\\
+aMoreau = new Moreau(aDS,0.5,aS);\\
+aMLCP = new MLCP(aM,mySolver,''MLCP'');\\
+aS init();\\
+aS run();\\
+
+\section{Initial conditions}
+\subsection{Initial conditions in NGSPICE}
+In spice, the initial conditions are about the Voltage node. It is not possible to specify a
+current. The DC analysis consists in computing the operating point of the circuit with inductors
+shorted and capacitor opened. There are three ways to define the initial conditions(description from NGSPICE User Manual):
+
+\subsubsection{.NODESET: Specify initial node voltage guesses}
+It consists in doing a DC analysis. The initial node voltage are used to initialize the DC analysis,
+but the iteration continues to the true solution.
+\subsubsection{.IC: set initial condition }
+It consists in doing a DC analysis. But the specify node voltage values are forced during the DC
+iterations. It is the preferred method since it allows NGSPICE to compute a consistent DC solution.
+\subsubsection{.IC and UIC: set initial condition }
+In this case there are no DC analysis. The specified values are directly used for the trans
+analysis.
+
+\subsection{Initial conditions in ACEF}
+In current version r84.\\
+\subsubsection{.IC interpretation}
+In ACEF there are no DC analysis. The initial node voltage values are used to initialize the
+dynamical unknowns of type TENSION.
+\subsubsection{It could be better to do}
+First point, note that inductors shorted and capacitor opened means $\frac{dx}{dt}=0$. Because:\\
+The capacitor constitutive law is : $C\frac{dU}{dt}=I$. If the capacitor branch is opened, it means
+$I=0$. So $C\frac{dU}{dt}=0$.\\
+The inductor constitutive law is : $L\frac{dI}{dt}=U$. If the inductor branch is shorted, it means
+$U=0$. So $C\frac{dI}{dt}=0$.\\
+Second point, all the node potential are unknowns included in the $Z_{s}$ vector with ACEF, or in
+$\lambda$ vector with current version of SICONOS.\\
+
+It leads to the following system:
+
+ \begin{eqnarray}
+0=A_{x}x_{0} +A_{\lambda} \lambda +a(t)&\label{eq2}\\
+0=B_{x}x_{0}+ B_{\lambda}\lambda + b(t)&\label{eq3}\\
+Y_{0}=C_{x}x_{0}+C_{\lambda}\lambda + c(t) &\label{eq4}\\
+\lambda_{i} = \lambda_{i0} \qquad for \qquad i \in \{ user initial value \}\\
+\lambda_{i} \qquad free \qquad i \notin \{ user initial value \}\\
+0 \leq Y_0 \, \perp \, (\lambda_{s+1},..,\lambda_{s+m})^{t} \geq 0&\label{eqperp}
+\end{eqnarray}
+The solution $x_{0}$ and $\lambda_{1}...\lambda_{s}$ are the initial values for the trans analysis.
+
