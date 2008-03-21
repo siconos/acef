@@ -62,6 +62,7 @@ aMoreau = new Moreau(aDS,0.5,aS);\\
 aMLCP = new MLCP(aM,mySolver,''MLCP'');\\
 aS init();\\
 aS run();\\
+\newpage
 
 \section{Initial conditions}
 \subsection{Initial conditions in NGSPICE}
@@ -96,12 +97,54 @@ $\lambda$ vector with current version of SICONOS.\\
 It leads to the following system:
 
  \begin{eqnarray}
-0=A_{x}x_{0} +A_{\lambda} \lambda +a(t)&\label{eq2}\\
-0=B_{x}x_{0}+ B_{\lambda}\lambda + b(t)&\label{eq3}\\
-Y_{0}=C_{x}x_{0}+C_{\lambda}\lambda + c(t) &\label{eq4}\\
+0=A_{x}x_{0} +A_{\lambda} \lambda +a(t)\\
+0=B_{x}x_{0}+ B_{\lambda}\lambda + b(t)\\
+Y_{0}=C_{x}x_{0}+C_{\lambda}\lambda + c(t) \\
 \lambda_{i} = \lambda_{i0} \qquad for \qquad i \in \{ user initial value \}\\
 \lambda_{i} \qquad free \qquad i \notin \{ user initial value \}\\
-0 \leq Y_0 \, \perp \, (\lambda_{s+1},..,\lambda_{s+m})^{t} \geq 0&\label{eqperp}
+0 \leq Y_0 \, \perp \, (\lambda_{s+1},..,\lambda_{s+m})^{t} \geq 0
 \end{eqnarray}
 The solution $x_{0}$ and $\lambda_{1}...\lambda_{s}$ are the initial values for the trans analysis.
+\newpage
+
+\section{MLCP solver direct}
+The standard MLCP description:
+\[n=dim(z_{1}) \qquad m=dim(z_{2})\]
+\[M \left(\begin{array}{c} z_{1}\\z_{2} \end{array}\right)+\left(\begin{array}{c} a\\b \end{array}\right)=\left(\begin{array}{c} 0\\w_{2}\\ \end{array}\right)\]
+\[0 \leq z_{2} \, \perp \, w_{2} \geq 0\]
+\[M=\left(\begin{array}{cc} A&C\\B&D \end{array}\right)\]
+The direct solver consists in solving a MLCP when complementarity condition is known. It leads to a
+linear system.
+\[I_{z} \cup I_{w} = \{ 1,..,m\}\]
+\[z_{2_{i}}=0 \qquad and \qquad w_{2_{i}} \geq 0 \qquad i \in I_{w} \]
+\[w_{2_{i}}=0 \qquad and \qquad z_{2_{i}} \geq 0 \qquad i \in I_{z} \]
+
+\subsection{First linear system formulation}
+The MLCP becomes:\\
+\[\label{system1} M_{1} \left(\begin{array}{c} z_{1}\\zw \end{array}\right)+\left(\begin{array}{c} a\\b
+\end{array}\right)=0 \]
+\[zw_{i}=w_{i} \qquad if \qquad i \in I_{w}\]
+\[zw_{i}=z_{i} \qquad if \qquad i \in I_{z}\]
+With $M_{1}$:
+\[M_{1}=\left(\begin{array}{cc} A&E\\D&F \end{array}\right)\]
+for $i \in I_w$:
+\[E_{i}=C_{i} \qquad F_{i}=B_{i} \]
+for $i \in I_z$:
+\[E_{i}=0 \]
+\[F_{i}=-e_{mi}\]
+with $e_{mi}$ the $i^{th}$ vector base of $\RR^m$\\
+The linear system \ref{system1} is solved, and the sign of the solution must be check.
+\subsection{First linear system formulation}
+The MLCP becomes:\\
+\[\label{system2} M_{2} \left(\begin{array}{c} z_{1}\\ \widetilde{z_{2}}
+\end{array}\right)+\left(\begin{array}{c} a\\ \widetilde{b}\end{array}\right)=0 \]
+where $\widetilde{z_{2}}$ are the non null $z_{2}$ coordinates.\\
+With $M_{2}$:
+\[M_{2}=\left(\begin{array}{cc} A&\widetilde{C}\\D&\widetilde{B} \end{array}\right)\]
+
+\[\label{system3} M_{3} \left(\begin{array}{c} z_{1}\\ \widetilde{z_{2}}
+\end{array}\right)+\left(\begin{array}{c} a\\ \widetilde{\widetilde{b}}\end{array}\right)=\widetilde{\widetilde{W_{2}}} \]
+where $\widetilde{\widetilde{w_{2}}}$ are the non null $w_{2}$ coordinates.
+\[M_{3}=\left(\begin{array}{cc} D&G \end{array}\right)\qquad G_{ij}=B_{ij} \qquad i \in I_{w} \qquad
+j \in I_{z}\]
 
