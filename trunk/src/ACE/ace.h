@@ -42,6 +42,8 @@ class component;
 #define ACE_SOLVER_ENUM 0
 #define ACE_SOLVER_SIMPLEX 1
 #define ACE_SOLVER_PATH 2
+#define ACE_SOLVER_NUMERICS_DIRECT_ENUM 3
+#define ACE_SOLVER_NUMERICS_DIRECT_SIMPLEX 4
 #include "acetime.h"
 
 

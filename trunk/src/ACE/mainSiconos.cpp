@@ -10,9 +10,9 @@ void (bLDS) (double t, unsigned int N, double* b, unsigned int z, double*zz){
   sAlgo->preparStep(t);
   sAlgo->sls.extractDynamicSystemSource();
   sAlgo->sls.computeDynamicSystemSource();
-  printf("bLDS %lf :\n",t);
-  printf("mA2s");
-  cout<<(*(sAlgo->sls.mA2s));
+//   printf("bLDS %lf :\n",t);
+//   printf("mA2s");
+//   cout<<(*(sAlgo->sls.mA2s));
   for (int i=0;i<N;i++){
     b[i]= sAlgo->sls.mA2s->getValue(i);
   }
@@ -23,11 +23,11 @@ void (eLDS) (double t, unsigned int N, double* e, unsigned int z, double*zz){
   sAlgo->sls.computeInteractionSource();
   int s = sAlgo->sls.mB2s->dimRow;
   int m = sAlgo->sls.mD2s->dimRow;
-  printf("eLDS %lf :\n",t);
-  printf("mB2s");
-  cout<<(*(sAlgo->sls.mB2s));
-  printf("mD2s");
-  cout<<(*(sAlgo->sls.mD2s));
+//   printf("eLDS %lf :\n",t);
+//   printf("mB2s");
+//   cout<<(*(sAlgo->sls.mB2s));
+//   printf("mD2s");
+//   cout<<(*(sAlgo->sls.mD2s));
   for (int i=0;i<s ;i++){
     e[i]= sAlgo->sls.mB2s->getValue(i);
   }
@@ -39,16 +39,17 @@ void (eLDS) (double t, unsigned int N, double* e, unsigned int z, double*zz){
 
 int main(int argc, char **argv){
   if (argc<5){
-    printf("usage : toto file.cir ENUM|SIMPLEX|PATH 10 DENSE|SPARSE\n");
+    printf("usage : toto file.cir ENUM|SIMPLEX|PATH|DIR_ENUM 10 DENSE|SPARSE\n");
     return 0;
   }
+  string solverDirEnum = "DIRECT_ENUM" ;
   string solverEnum = "ENUM" ;
   string solverSimplex = "SIMPLEX" ;
   string solverPath = "PATH" ;
   string * solverName =0;
   // One Step non smooth problem
-  IntParameters iparam(5);
-  DoubleParameters dparam(5);
+  IntParameters iparam(10);
+  DoubleParameters dparam(10);
   
   double* floatWorkingMem = 0;
   int * intWorkingMem= 0;
@@ -59,9 +60,10 @@ int main(int argc, char **argv){
     ACE_SOLVER_TYPE = ACE_SOLVER_SIMPLEX;
   }else if(!strcmp(argv[2],"PATH")){
     ACE_SOLVER_TYPE = ACE_SOLVER_PATH;
-    
+  }else if(!strcmp(argv[2],"DIR_ENUM")){
+    ACE_SOLVER_TYPE=ACE_SOLVER_NUMERICS_DIRECT_ENUM;
   }else{
-    printf("usage : toto file.cir ENUM|SIMPLEX|PATH 10 DENSE|SPARSE\n");
+    printf("param2 must be : ENUM|SIMPLEX|PATH|DIR_ENUM \n");
     return 0;
   }
   if (!strcmp(argv[3],"0"))
@@ -131,8 +133,6 @@ int main(int argc, char **argv){
     iparam[0] = 0; // verbose
     dparam[0] = 0.0000001; // Tolerance
     solverName = &solverEnum;
-    floatWorkingMem = (double*)malloc(((s+m)*(s+m) + 3*(s+m))* sizeof(double));
-    intWorkingMem= (int*)malloc(2*(s+m)*sizeof(int));
   }else if(ACE_SOLVER_TYPE == ACE_SOLVER_SIMPLEX){
     iparam[0]= 1000000;
     iparam[1]=1;
@@ -144,14 +144,31 @@ int main(int argc, char **argv){
     iparam[0]=101;
     dparam[0]=1e-9;
     solverName = &solverPath;
+  }else if (ACE_SOLVER_TYPE==ACE_SOLVER_NUMERICS_DIRECT_ENUM){
+    iparam[0] = 0; // enum verbose
+    iparam[5] = 2; // nb config
+    iparam[6] = 0; // direct verbose
+    dparam[0] = 0.0000001; // Tolerance
+    dparam[5] = 0.0000001; // Tolerance
+    solverName = &solverDirEnum;
   }
 
     
   NonSmoothSolver * mySolver = new NonSmoothSolver((*solverName),iparam,dparam,floatWorkingMem,intWorkingMem);
-
   
   MLCP * aMLCP = new MLCP(aS,mySolver,"MLCP");
   aS->initialize();
+  //  Alloc working mem
+  if (ACE_SOLVER_TYPE==ACE_SOLVER_NUMERICS_DIRECT_ENUM || ACE_SOLVER_TYPE==ACE_SOLVER_ENUM  ){
+    int aux =mlcp_driver_get_iwork(aMLCP->getNumericsMLCP(),mySolver->getNumericsSolverOptionsPtr());
+    intWorkingMem = (int*)malloc(aux*sizeof(int));
+    mySolver->getNumericsSolverOptionsPtr()->iWork = intWorkingMem;
+    aux =mlcp_driver_get_dwork(aMLCP->getNumericsMLCP(),mySolver->getNumericsSolverOptionsPtr());
+    floatWorkingMem = (double*)malloc(aux*sizeof(double));
+    mySolver->getNumericsSolverOptionsPtr()->dWork = floatWorkingMem;
+  }
+    
+  mlcp_driver_init(aMLCP->getNumericsMLCP(),mySolver->getNumericsSolverOptionsPtr());
 
   
   SiconosVector * x = aDS->getXPtr();
@@ -173,13 +190,25 @@ int main(int argc, char **argv){
     pout<<pPrint->name;
   }
   pout<<endl<<endl;
+  /*print t0*/
+  initPrintElem();
+  pout <<0<<"\t"<<0;
+  while(getPrintElem((void**)&pPrint)){
+    pout<<"\t\t";
+    double aux = sAlgo->sls.mzsti->getValue(pPrint->node1-1);
+    if (pPrint->node2 >0)
+      aux -=  sAlgo->sls.mzsti->getValue(pPrint->node2-1);
+    pout << aux;
+  }
+  pout<<endl;
+  
   for(int k = 0 ; k < N ; k++){
     // solve ... 
     aS->computeOneStep();
     
 
     initPrintElem();
-    pout <<k<<"\t"<<k*h;
+    pout <<k+1<<"\t"<<(k+1)*h;
     while(getPrintElem((void**)&pPrint)){
       pout<<"\t\t";
       double aux = (*lambda)(pPrint->node1-1);
@@ -192,6 +221,7 @@ int main(int argc, char **argv){
     aS->nextStep();
 	
   }
+  aMLCP->reset();
   pout.close();
   cout << "===== End of simulation. ==== " << endl; 
 
