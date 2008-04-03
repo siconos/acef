@@ -148,3 +148,68 @@ where $\widetilde{\widetilde{w_{2}}}$ are the non null $w_{2}$ coordinates.
 \[M_{3}=\left(\begin{array}{cc} D&G \end{array}\right)\qquad G_{ij}=B_{ij} \qquad i \in I_{w} \qquad
 j \in I_{z}\]
 
+\section{ACE/SICONOS simulation}
+
+\subsection{Diode bridge simulation with acef}
+\input{DiodeBridgeAcef.tex}
+\\
+This graphic validates the ACEF formulation, indeed the simulation follow the theoretical damping coefficient.
+\subsection{Diode bridge simulation with siconos}
+\input{DiodeBridgeSiconos.tex}
+\\
+This graphic shows that the simulation from siconos is not correct. The theoretical damping
+coefficient is not following.
+\subsection{Buck simulation with acef}
+\input{Buck.tex}
+\\
+\subsection{Buck simulation with siconos}
+\input{BuckSiconos.tex}
+\\
+It is the same simulation. The relative difference between the simulation is $10^{-4}$, may be because
+the time stepping is very small.
+\newpage
+\subsection{a sample example}
+Consider the following circuit:\\
+\begin{figure}[h]
+\centerline{
+ \scalebox{1.0}{
+    \input{RC_.pstex_t}
+ }
+}\end{figure}
+\\
+With:
+\begin{itemize}
+  \item[--] C=1mF
+  \item[--] R=100 Ohms
+  \item[--] $V_{0}$=10 V
+\end{itemize}
+
+The circuit equation is :
+\[C\frac{dV}{dt}=-\frac{V}{R}\]
+The analytic solution is:
+\[V(t)=V(0)\exp(-\frac{t}{RC})\]
+Application Numeric: $V(0.01)=9.048...$\\
+Start the discretisation with :\\
+\[\int_{0}^{h}{RC\frac{dV(t)}{dt}+V(t)}dt=0\]
+The implicit discretisation leads to :\\
+With an implicit method:
+\[RC(V_{h}-V_{0})+hV_{1}h=0 \qquad V_{h}=\frac{RCV_{0}}{RC+h}\]
+Application Numeric: $V_{h}=9.091...$\\
+The $\theta=0.5$ method leads to :
+\[RC(V_{h}-V_{0})+0.5*h(V_{h}+V_{0})=0 \qquad V_{h} = \frac{RC-0.5h}{RC+0.5h}V_{0}\]
+Application Numeric: $V_{h}=9.048...$\\
+\subsubsection{A short justification}
+\[\int_{0}^{h}{f(x)}dx = F(h)-F(0)\]
+With a first order Taylor serie:
+\[F(h+r)=F(h)+F'(h)r+o(r) \qquad F(0)=F(h)-f(h)h+o(h)\]
+The implicit method order is 1.\\
+With a DL2 Taylor:
+\[F(h+r)=F(h)+F'(h)r+\frac{F''(h)r^2}{2}+o(r^2)\]
+\[F(0)=F(h)-hf(h)+\frac{f'(h)h^2}{2}+o(h^2) \]
+\[F(0)=F(h)-hf(h)+ (\frac{f(h)-f(0)}{h}+o(1)) \frac{h^2}{2}+o(h^2)\]
+\[F(h)-F(0)=0.5(hf(h)+hf(0))+o(h^2)\]
+The order is 2. 
+
+\subsection{conclusion}
+In current siconos version,the node voltage are integrated with an implicit method, and a $\theta$
+is more accuracy.
