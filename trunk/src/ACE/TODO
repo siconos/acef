@@ -3,13 +3,17 @@ Calcul de l'etat initial a partir de ngspice.
 Line search
 monte decsentes
 
-Brancher le solver path.
-Coupler le solver path au solver direct
+sub cuircuit
+
+autre formulation MLCP
+
+Wxi+1=free+hBli+1
+yi+1=Cxi+1 + Dli+1
+0<yi+1 per li+1>0
 
 
+  |-W hB|
+M=|     |
+  | C D |
 
-->Lecture des param de simu ds la netlist
-->lecture des variables de sorties ds la netlist
-->ajouter le solver direct ds siconos
-->comparer les perfs siconos/ace
-->Mettre un peu d'ordre dans les tests automatiques
+
