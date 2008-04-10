@@ -443,7 +443,9 @@ void linearSystem::readInitialValue(){
 
     double stop,start;
     getTransValues(&mH,&stop,&start);
-    mStepNumber = (long)(stop/mH);
+    long long b1 = llrint(stop/mH);;
+    long b2 = lrint(stop/mH);;
+    mStepNumber = b2;
 
     
       
@@ -486,7 +488,7 @@ void linearSystem::initSimu(){
   readInitialValue();
   mStepCmp=0;
   mLogFrequency =  mStepNumber/1000;
-  mLogPrint = mStepNumber/100000;
+  mLogPrint = mStepNumber/10000;
   if (mLogPrint==0) mLogPrint=1;
   if (mLogFrequency==0) mLogFrequency = 1;
   mPourMille=0;
@@ -1295,23 +1297,24 @@ void linearSystem::printStep(ostream& os){
   int i;
   bool printALL = true;
   if (printALL){
-    os << "xt("<<mStepCmp*mH<<")\t";
-    if (mxti)
-      for (i=0;i<mDimx;i++)
-	os << mxti->getValue(i)<<"\t";
-    os << "zs("<<mStepCmp*mH<<")\t";
+//     os << "xt("<<mStepCmp*mH<<")\t";
+//     if (mxti)
+//       for (i=0;i<mDimx;i++)
+// 	os << mxti->getValue(i)<<"\t";
+//     os << "zs("<<mStepCmp*mH<<")\t";
     if (mzsti)
-      for (i=0;i<mDimzs-1;i++)
-	os << mzsti->getValue(i)<<"\t";
+      os <<mStepCmp*mH<<"\t"<< mzsti->getValue(1)-mzsti->getValue(2)<<"\n";
+//       for (i=0;i<mDimzs-1;i++)
+// 	os << mzsti->getValue(i)<<"\t";
   
-    os << "zns("<<mStepCmp*mH<<")\t";
-    if (mznsti)
-      for (i=0;i<mDimzns;i++)
-	os << mznsti->getValue(i)<<"\t";
-    os<<"\n";
+    //   os << "zns("<<mStepCmp*mH<<")\t";
+//     if (mznsti)
+//       for (i=0;i<mDimzns;i++)
+// 	os << mznsti->getValue(i)<<"\t";
+//     os<<"\n";
   }else{
     if (mStepCmp%mLogPrint==0){
-      os <<mStepCmp*mH<<"\t"<<mxti->getValue(4)<<"\n";
+      os <<mStepCmp*mH<<"\t"<<mxti->getValue(4)<<"\n";//<<mzsti->getValue(5)<<"\n";
     }
   }
 }

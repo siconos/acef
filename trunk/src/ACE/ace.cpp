@@ -141,6 +141,8 @@ void ACE_TYPE_TO_CHAR(int type,char* name){
       break;
     case ACE_TYPE_VCCS:
       strcpy(name,"VCCS");
+    case ACE_TYPE_BJT:
+      strcpy(name,"BJT");
       break;
   default:
     strcpy(name,"????");

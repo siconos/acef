@@ -29,6 +29,7 @@ class component;
 #define ACE_TYPE_VCVS 9
 #define ACE_TYPE_ARB 10
 #define ACE_TYPE_VCCS 11
+#define ACE_TYPE_BJT 12
 
 
 
@@ -44,6 +45,7 @@ class component;
 #define ACE_SOLVER_PATH 2
 #define ACE_SOLVER_NUMERICS_DIRECT_ENUM 3
 #define ACE_SOLVER_NUMERICS_DIRECT_SIMPLEX 4
+#define ACE_SOLVER_NUMERICS_DIRECT_PATH 5
 #include "acetime.h"
 
 

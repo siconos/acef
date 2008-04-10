@@ -14,6 +14,7 @@
 #include "componentcomp.h"
 #include "componentisrc.h"
 #include "componentmos.h"
+#include "componentbjt.h"
 #include "graph.h"
 #include <fstream>
 
@@ -169,6 +170,14 @@ void algo::perform(){
    c->addUnknowns();
    c->addEquations();
  }
+//  initComponentList("BJT");
+//  dataBJT bjt;
+//  while(nextComponent(&bjt)){
+//    componentBJT *c=new componentBJT(&bjt);
+//    mBjt.push_back(c);
+//    c->addUnknowns();
+//    c->addEquations();
+//  }
 
  
 //get RESISTOR from parser

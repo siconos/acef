@@ -39,10 +39,12 @@ void (eLDS) (double t, unsigned int N, double* e, unsigned int z, double*zz){
 
 int main(int argc, char **argv){
   if (argc<5){
-    printf("usage : toto file.cir ENUM|SIMPLEX|PATH|DIR_ENUM 10 DENSE|SPARSE\n");
+    printf("usage : toto file.cir ENUM|SIMPLEX|PATH|DIRECT_ENUM|DIRECT_SIMPLEX 10 DENSE|SPARSE\n");
     return 0;
   }
   string solverDirEnum = "DIRECT_ENUM" ;
+  string solverDirPath = "DIRECT_PATH" ;
+  string solverDirSimplex = "DIRECT_SIMPLEX" ;
   string solverEnum = "ENUM" ;
   string solverSimplex = "SIMPLEX" ;
   string solverPath = "PATH" ;
@@ -54,16 +56,27 @@ int main(int argc, char **argv){
   double* floatWorkingMem = 0;
   int * intWorkingMem= 0;
 
+  int freq = 1000;
+  int Nfreq=0;
+  int cmp=0;
+
+  int NbDataMax = 10000;
+  int NData=0;
+
   if (!strcmp(argv[2],"ENUM")){
     ACE_SOLVER_TYPE = ACE_SOLVER_ENUM;
   }else if(!strcmp(argv[2],"SIMPLEX")){
     ACE_SOLVER_TYPE = ACE_SOLVER_SIMPLEX;
   }else if(!strcmp(argv[2],"PATH")){
     ACE_SOLVER_TYPE = ACE_SOLVER_PATH;
-  }else if(!strcmp(argv[2],"DIR_ENUM")){
+  }else if(!strcmp(argv[2],"DIRECT_ENUM")){
     ACE_SOLVER_TYPE=ACE_SOLVER_NUMERICS_DIRECT_ENUM;
+  }else if(!strcmp(argv[2],"DIRECT_SIMPLEX")){
+    ACE_SOLVER_TYPE=ACE_SOLVER_NUMERICS_DIRECT_SIMPLEX;
+  }else if(!strcmp(argv[2],"DIRECT_PATH")){
+    ACE_SOLVER_TYPE=ACE_SOLVER_NUMERICS_DIRECT_PATH;
   }else{
-    printf("param2 must be : ENUM|SIMPLEX|PATH|DIR_ENUM \n");
+    printf("param2 must be : ENUM|SIMPLEX|PATH|DIRECT_ENUM|DIRECT_SIMPLEX \n");
     return 0;
   }
   if (!strcmp(argv[3],"0"))
@@ -141,7 +154,7 @@ int main(int argc, char **argv){
     dparam[2]=1e-9;
     solverName = &solverSimplex;
   }else if(ACE_SOLVER_TYPE == ACE_SOLVER_PATH){
-    iparam[0]=101;
+    iparam[0]=0;//verbose
     dparam[0]=1e-9;
     solverName = &solverPath;
   }else if (ACE_SOLVER_TYPE==ACE_SOLVER_NUMERICS_DIRECT_ENUM){
@@ -149,17 +162,43 @@ int main(int argc, char **argv){
     iparam[5] = 2; // nb config
     iparam[6] = 0; // direct verbose
     dparam[0] = 0.0000001; // Tolerance
-    dparam[5] = 0.0000001; // Tolerance
+    dparam[5] = 0.0000001; // Tolerance neg
+    dparam[5] = 1e-20; // Tolerance pos
     solverName = &solverDirEnum;
+  }else if (ACE_SOLVER_TYPE==ACE_SOLVER_NUMERICS_DIRECT_SIMPLEX){
+    //simplex option
+    iparam[0]= 1000000;
+    iparam[1]=0;//verbose
+    dparam[0]=1e-12;
+    dparam[1]=1e-12;
+    dparam[2]=1e-9;
+    //direct options
+    iparam[5] = 2; // nb config
+    iparam[6] = 0; // direct verbose
+    dparam[5] = 0.0000001; // Tolerance
+    dparam[5] = 1e-20; // Tolerance pos
+    solverName = &solverDirSimplex;
+   }else if (ACE_SOLVER_TYPE==ACE_SOLVER_NUMERICS_DIRECT_PATH){
+    //path option
+    iparam[0]=0;//verbose
+    dparam[0]=1e-9;
+    //direct options
+    iparam[5] = 2; // nb config
+    iparam[6] = 0; // direct verbose
+    dparam[5] = 0.0000001; // Tolerance
+    dparam[5] = 1e-20; // Tolerance pos
+    solverName = &solverDirPath;
   }
-
     
   NonSmoothSolver * mySolver = new NonSmoothSolver((*solverName),iparam,dparam,floatWorkingMem,intWorkingMem);
   
   MLCP * aMLCP = new MLCP(aS,mySolver,"MLCP");
   aS->initialize();
   //  Alloc working mem
-  if (ACE_SOLVER_TYPE==ACE_SOLVER_NUMERICS_DIRECT_ENUM || ACE_SOLVER_TYPE==ACE_SOLVER_ENUM  ){
+  if (ACE_SOLVER_TYPE==ACE_SOLVER_NUMERICS_DIRECT_ENUM ||
+      ACE_SOLVER_TYPE==ACE_SOLVER_ENUM  ||
+      ACE_SOLVER_TYPE==ACE_SOLVER_NUMERICS_DIRECT_SIMPLEX ||
+      ACE_SOLVER_TYPE==ACE_SOLVER_NUMERICS_DIRECT_PATH){
     int aux =mlcp_driver_get_iwork(aMLCP->getNumericsMLCP(),mySolver->getNumericsSolverOptionsPtr());
     intWorkingMem = (int*)malloc(aux*sizeof(int));
     mySolver->getNumericsSolverOptionsPtr()->iWork = intWorkingMem;
@@ -178,10 +217,15 @@ int main(int argc, char **argv){
 
   unsigned int count = 0; // events counter. 
   // do simulation while events remains in the "future events" list of events manager. 
-  cout << " ==== Start of  simulation ====" << endl;
+  int N = sAlgo->sls.mStepNumber;
+  cout << " ==== Start of  simulation : "<<N<<" steps====" << endl;
+  Nfreq = N/freq;
+  if (N > NbDataMax){
+    NData = N/NbDataMax;
+  }
+  
   ofstream pout("acefSimu.dat");
 
-  int N = sAlgo->sls.mStepNumber;
   dataPrint * pPrint;
   initPrintElem();
   pout<<"Index\ttime";
@@ -203,20 +247,27 @@ int main(int argc, char **argv){
   pout<<endl;
   
   for(int k = 0 ; k < N ; k++){
+    if ((!Nfreq) || k % Nfreq == 0){
+      cout<<"..."<<cmp<<endl;
+      cmp++;
+    }
     // solve ... 
     aS->computeOneStep();
-    
 
-    initPrintElem();
-    pout <<k+1<<"\t"<<(k+1)*h;
-    while(getPrintElem((void**)&pPrint)){
-      pout<<"\t\t";
-      double aux = (*lambda)(pPrint->node1-1);
-      if (pPrint->node2 >0)
-	aux -= (*lambda)(pPrint->node2-1);
-      pout << aux;
+    if ((!NData) || k % NData == 0){
+      initPrintElem();
+      //pout <<k+1<<"\t"<<(k+1)*h;
+      pout <<(k+1)*h;
+      while(getPrintElem((void**)&pPrint)){
+	pout<<"\t\t";
+	double aux = (*lambda)(pPrint->node1-1);
+	if (pPrint->node2 >0)
+	  aux -= (*lambda)(pPrint->node2-1);
+	pout << aux;
+      }
+      //      pout<<"\t"<<(*x)(4)<<"\t";
+      pout<<endl;
     }
-    pout<<endl;
 
     aS->nextStep();
 	

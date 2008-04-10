@@ -33,6 +33,7 @@ public:
   components mArbs;
   components mDios;
   components mMos;
+  components mBjt;
   char mFile[ACE_CHAR_LENGTH];
   ofstream* mSimuStream;
   char mSimuFile[ACE_CHAR_LENGTH];

@@ -85,7 +85,7 @@ H_EXT        = h
 #SRC          = $(wildcard *.$(C_EXT) *.$(CPP_EXT))
 SRC          = ace.cpp aceMatrix.cpp acetime.cpp aceVector.cpp algo.cpp componentarb.cpp componentcap.cpp componentcomp.cpp \
  component.cpp componentdio.cpp componentdyn.cpp componentind.cpp componentisrc.cpp componentlinear.cpp componentmos.cpp componentnlinear.cpp \
- componentres.cpp componentvccs.cpp componentvcvs.cpp componentvsrc.cpp equationcap.cpp equation.cpp equationind.cpp equationkcl.cpp \
+ componentres.cpp componentvccs.cpp componentvcvs.cpp componentvsrc.cpp componentbjt.cpp equationcap.cpp equation.cpp equationind.cpp equationkcl.cpp \
  equationten.cpp equationvd.cpp graph.cpp linearsystem.cpp mlcp.cpp unknown.cpp
 
 SRC_H        = $(wildcard *.$(H_EXT) $(INCLUDE_DIR)/*.$(H_EXT))
@@ -120,7 +120,7 @@ else
 	CXX    = g++
 	SPECIAL_CPP_OPTION = -Wno-deprecated
 endif
-CXXFLAGS     =  -g -Wall $(SPECIAL_CPP_OPTION) -I$(INCLUDE_DIR) -I$(INCLUDE_SICONOS_DIR) -I$(CPLEXINCDIR) -I$(CONCERTINCDIR) \
+CXXFLAGS     =  -Wall $(SPECIAL_CPP_OPTION) -I$(INCLUDE_DIR) -I$(INCLUDE_SICONOS_DIR) -I$(CPLEXINCDIR) -I$(CONCERTINCDIR) \
 			-I$(INCLUDE_SICONOS_KERNEL_DIR) -I/usr/include/libxml2 -I/usr/local/include/Siconos/Numerics \
 			-I/usr/local/include/Siconos/Kernel/AtlasLocal/atlas/ -c
 ADD_OPT      = #-lntl -lgmp -lm  # Optionnal option for the linker
@@ -177,9 +177,9 @@ mainSiconos.o : mainSiconos.cpp
 
 # Generation of the final binary (see $(EXE))
 $(EXE_ACE) : $(OBJ) $(ALL_SRC) main.o
-	$(CXX)  -g -o $@ $(ABSOBJ) $(ADD_OPT) $(OBJ_DIR)/main.o
+	$(CXX)   -o $@ $(ABSOBJ) $(ADD_OPT) $(OBJ_DIR)/main.o
 $(EXE_SICONOS) : $(OBJ) $(ALL_SRC) mainSiconos.o
-	$(CXX)  -g -o $@ $(ABSOBJ) $(ADD_OPT) $(OBJ_DIR)/mainSiconos.o
+	$(CXX)   -o $@ $(ABSOBJ) $(ADD_OPT) $(OBJ_DIR)/mainSiconos.o
 	@$(MAKE) help
 
 # Help rule - print help message

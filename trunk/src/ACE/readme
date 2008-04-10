@@ -2,3 +2,4 @@ version 52 : les sparse matrices
 version 53 : SPARSE matrices without axpy_prod
 version 71 : before index reduction
 version 81 : Use siconos solver, tested with diodeBridgeSimple.cir:`
+version 92 : Add direct solver. tested with DiodeBridge 12 .cir

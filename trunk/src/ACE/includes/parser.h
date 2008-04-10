@@ -80,6 +80,14 @@ typedef struct {
   double k;
   double vt;
 } dataMOS1;
+
+  typedef struct {
+  char *name;
+  int mode;
+  int collector;
+  int base;
+  int emitor;
+} dataBJT;
 /* structures to describe Voltage Controlled Current Sources */
 typedef struct {
   char *name;
