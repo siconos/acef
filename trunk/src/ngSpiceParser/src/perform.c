@@ -17,12 +17,15 @@
 #include "./spicelib/devices/vccs/vccsdefs.h"
 #include "./spicelib/devices/asrc/asrcdefs.h"
 #include "./spicelib/devices/mos1/mos1defs.h"
+#include "./spicelib/devices/bjt/bjtdefs.h"
 #include "tskdefs.h"
 #include "trandefs.h"
 //#include "./spicelib/devices/dev.h"
 #include "devdefs.h"
 
 #include "./spicelib/devices/dev.h"
+#define PARSER_TSTEP 1
+#define PARSER_TSTOP 2
 
 static int sType =0;
 static char sTypeName[16];
@@ -36,7 +39,19 @@ static dataPrint * sPrint =0;
 static dataPrint * sCurPrint =0;
 static dataPrint * sLast =0;
 static char * sPrintString =0;
+int initSimulation(int type,double val){
+  CKTcircuit *circuit =0;
+  circuit =(CKTcircuit *) ft_curckt->ci_ckt;
+  if (!circuit)
+    return 0;
 
+  if (type == PARSER_TSTEP)
+      circuit->CKTstep = val;
+  if (type == PARSER_TSTOP)
+      circuit->CKTfinalTime = val;
+
+  return 1;
+}
 void setPrintStr(char * str){
   sPrintString=copy(str);
 }
@@ -358,7 +373,6 @@ void bidon(MOS1instance *here){
     return;
   p = (dataMOS1 *)data;
   here = (MOS1instance *)psInstance;
-  bidon(here);
   p->mode = here->sMOS1modPtr->MOS1type;
   p->name = here->MOS1name;
   p->drain = here->MOS1dNode;
@@ -369,6 +383,19 @@ void bidon(MOS1instance *here){
   p->vt = here->sMOS1modPtr->MOS1vt0;
 
   
+ }
+ void fillBjtInfos(void *data, GENinstance *pInstance){
+   BJTinstance *here;
+   dataBJT *p;
+  if (!data || !psInstance)
+    return;
+  p = (dataBJT *)data;
+  here = (BJTinstance *)psInstance;
+  p->name = here->BJTname;
+  p->mode = 1;
+  p->collector = here->BJTcolNode;
+  p->base = here->BJTbaseNode;
+  p->emitor = here->BJTemitNode;
  }
 
 void MEperform(){
@@ -491,6 +518,9 @@ int nextComponent(void * data){
   if (!psInstance)
     return 0;
   switch(sType){
+  case 2:
+    fillBjtInfos(data,psInstance);
+    break;
   case 38:
     fillResistorInfos(data,psInstance);
     break;
