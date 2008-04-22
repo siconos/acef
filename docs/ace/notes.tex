@@ -1,8 +1,6 @@
 
 \newpage
 
-
-
 \section{ACEF to Siconos}
 \subsection{The MLCS formulation}
 \subsubsection{The MLCS from the automatic formulation}
@@ -29,7 +27,7 @@ Y=C_{x}x+C_{\lambda}\lambda + c(t) &\label{eq4}\\
 0 \leq Y \, \perp \, (\lambda_{s+1},..,\lambda_{s+m})^{t} \geq 0&\label{eqperp}
 \end{eqnarray}
 
-
+\newpage
  \subsubsection{With the siconos convention}
  
 The Dynamic system:
@@ -42,6 +40,24 @@ The complementary relation and interaction:
 \[(\lambda_{1},..,\lambda_{s}) \qquad free\]
 \[0 \leq (Y_{s+1},..,Y_{s+m})^{t} \, \perp \, (\lambda_{s+1},..,\lambda_{s+m})^{t} \geq 0\]
 
+\subsubsection{A MLCP formulation in Siconos}
+The Dynamic system:
+\[Mx'=Ax +B \lambda +b(t)\]
+\[y=Cx +D \lambda +e(t)\]
+Discretisation:
+\[M(x(t_{i+1})-x(t_{i}))=h(\theta A x(t_{i+1}) + (1-\theta) x(t_{i}) +B \lambda (t_{i+1}) +\theta
+b(t_{i+1}) + (1-\theta) b(t_{i}))\]
+\[Wx(t_{i+1})=hB \lambda (t_{i+1}) + f_{free}\]
+with:
+\[f_{free}=h(1-\theta) x(t_{i}) + Mx(t_{i})+h \theta b(t_{i+1}) + h(1-\theta) b(t_{i}) \qquad W=(M-h\theta A)\]
+\[y(t_{t+1})=Cx(t_{i+1}) +D \lambda(t_{i+1}) +e(t_{i+1})\]
+MLCP instance:
+\[w=Mz+q\]
+\[w=\left(\begin{array}{c}0\\y(t_{i+1})\end{array}\right) \qquad
+z=\left(\begin{array}{c}x(t_{i+1})\\ \lambda (t_{i+1})\end{array}\right)\]
+\[q=\left(\begin{array}{c}f_{free}\\ e(t_{i+1})\end{array}\right)\]
+\[M=\left(\begin{array}{cc}-W&hB\\ C&D\end{array}\right)\]
+\newpage
 \subsubsection{Building a NonSmooth Dynamical System}
  
  aDS = new FirstOrderLinearDS$(int,A_{x'},A_{x},a(t))$;\\

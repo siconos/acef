@@ -83,6 +83,47 @@ B_{3\lambda}&B_{3zs}
 \[q=\left(\begin{array}{c}
 p_{free}\\
 q_{free}\end{array}\right)\]
+\newpage
+
+\subsection{Sketch of an Implicit Moreau time--stepping scheme}
+\begin{eqnarray}
+R=A_{1ns}C_{1\lambda}\label{eq1}\\
+Mx'=A_{2x}x +A_{2zs}Z_{s} +R \lambda +A_{2s}&\label{eq2}\\
+0=B_{2x}x+B_{2zs}Z_{s} + B_{2\lambda}\lambda + B_{2s}&\label{eq3}\\
+Y=D_{2x}x+D_{2zs}Z_{s}+D_{2\lambda}\lambda + D_{2s} &\label{eq4}\\
+0 \leq Y \, \perp \, \lambda \geq 0&\label{eqperp}\\
+\end{eqnarray}
+
+
+ The time--discretization of the equation~(\ref{eq2}) yields:
+\[Mx(t_{i+1}) - Mx(t_{i})=h\theta A_{2x}x(t_{i+1})+h(1-\theta)A_{2x}x(t_{i}) +h\theta
+A_{2zs}Z_{s}(t_{i+1}) +\]
+\[h(1-\theta)A_{2zs}Z_s(t_{i}) +hR\lambda (t_{i+1}) + h\theta 'A_{2s}(t_{i+1}) +
+h(1-\theta ')A_{2s}(t_{i})\]
+Let $W=(M-h\theta A_{2x}) .$
+\begin{eqnarray}
+Wx(t_{i+1})=x_{free}+h\theta A_{2zs}Z_{s}(t_{i+1})+hR\lambda (t_{i+1}) &\label{eq5}
+\end{eqnarray}
+With:
+\[x_{free}=(M+h(1-\theta)A_{2x})x(t_{i}) + h(1-\theta )A_{2zs}Zs(t_{i}) + h\theta 'A_{2s}(t_{i+1}) +
+h(1-\theta ')A_{2s}(t_{i})\]
+equation~(\ref{eq3}) discretization:
+\[0 = B_{2x}x(t_{i+1})+B_{2zs}Z_{s}(t_{i+1}) + B_{2\lambda}\lambda(t_{i+1})+B_{2s}(t_{i+1})\]
+equation~(\ref{eq4}) discretization:
+\[Y(t_{i+1})=D_{2x}x(t_{i+1})+D_{2zs}Z_{s}(t_{i+1}) +D_{2\lambda}\lambda(t_{i+1})+D_{2s}(t_{i+1})\]
+
+\paragraph{MLCP instance}
+We identify a MLCP:\\
+
+\[w=\left(\begin{array}{c}0\\0\\Y(t_{i+1})\end{array}\right) \qquad
+z=\left(\begin{array}{c}x(t_{i+1})\\Z_{s}(t_{i+1})\\ \lambda (t_{i+1})\end{array}\right) \qquad
+q=\left(\begin{array}{c}x_{free}\\B_{2s}(t_{i+1})\\ D_{2s} (t_{i+1})\end{array}\right)\]
+\[M=\left(\begin{array}{ccc}-W&h \theta A_{2zs}& hR \\B_{2x}&B_{2zs}&B_{2 \lambda} \\D_{2x} &
+  D_{2zs} & D_{2 \lambda} \end{array}\right)\]
+\[W=MZ+q\]
+\[0 \leq W_{1} \, \perp \, Z_{1} \geq 0\]
+
+\newpage
 
 \section {Cost of the automatic circuit equation formulation}
 To evaluate the cost of the automatic circuit equation, we define the following notation:\\
