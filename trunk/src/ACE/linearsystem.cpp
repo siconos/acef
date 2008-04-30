@@ -1295,26 +1295,27 @@ void linearSystem::printSystem2(ostream& os){
 }
 void linearSystem::printStep(ostream& os){
   int i;
-  bool printALL = true;
+  bool printALL = false;
   if (printALL){
-//     os << "xt("<<mStepCmp*mH<<")\t";
-//     if (mxti)
-//       for (i=0;i<mDimx;i++)
-// 	os << mxti->getValue(i)<<"\t";
-//     os << "zs("<<mStepCmp*mH<<")\t";
-    if (mzsti)
-      os <<mStepCmp*mH<<"\t"<< mzsti->getValue(1)-mzsti->getValue(2)<<"\n";
-//       for (i=0;i<mDimzs-1;i++)
-// 	os << mzsti->getValue(i)<<"\t";
+    os << "xt("<<mStepCmp*mH<<")\t";
+    if (mxti)
+      for (i=0;i<mDimx;i++)
+ 	os << mxti->getValue(i)<<"\t";
+    os << "zs("<<mStepCmp*mH<<")\t";
+    for (i=0;i<mDimzs-1;i++)
+      os << mzsti->getValue(i)<<"\t";
   
-    //   os << "zns("<<mStepCmp*mH<<")\t";
-//     if (mznsti)
-//       for (i=0;i<mDimzns;i++)
-// 	os << mznsti->getValue(i)<<"\t";
-//     os<<"\n";
+    os << "zns("<<mStepCmp*mH<<")\t";
+    if (mznsti)
+      for (i=0;i<mDimzns;i++)
+ 	os << mznsti->getValue(i)<<"\t";
+    os<<"\n";
   }else{
     if (mStepCmp%mLogPrint==0){
-      os <<mStepCmp*mH<<"\t"<<mxti->getValue(4)<<"\n";//<<mzsti->getValue(5)<<"\n";
+      //      os <<mStepCmp*mH<<"\t"<<mxti->getValue(4)<<"\n";
+      os << (mzsti->getValue(1)-mzsti->getValue(0))/1000.0<<"\t";
+      os << (mzsti->getValue(2)-mzsti->getValue(3))/8.0<<"\t"<<"\n";
+      
     }
   }
 }

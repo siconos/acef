@@ -16,4 +16,6 @@ yi+1=Cxi+1 + Dli+1
 M=|     |
   | C D |
 
+GESTION des egalitees dans le KERNEL
 
+inversion complete pour le solver direct

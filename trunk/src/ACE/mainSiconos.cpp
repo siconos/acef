@@ -140,7 +140,7 @@ int main(int argc, char **argv){
   aM->setNonSmoothDynamicalSystemPtr(aNSDS);
   TimeDiscretisation * aTD = new TimeDiscretisation(h,aM);
   TimeStepping *aS = new TimeStepping(aTD);
-  Moreau * aMoreau = new Moreau(aDS,0.5,aS);
+  Moreau2 * aMoreau = new Moreau2(aDS,0.5,aS);
   
   if (ACE_SOLVER_TYPE == ACE_SOLVER_ENUM){
     iparam[0] = 0; // verbose
@@ -192,7 +192,7 @@ int main(int argc, char **argv){
     
   NonSmoothSolver * mySolver = new NonSmoothSolver((*solverName),iparam,dparam,floatWorkingMem,intWorkingMem);
   
-  MLCP * aMLCP = new MLCP(aS,mySolver,"MLCP");
+  MLCP * aMLCP = new MLCP2(aS,mySolver,"MLCP2");
   aS->initialize();
   //  Alloc working mem
   if (ACE_SOLVER_TYPE==ACE_SOLVER_NUMERICS_DIRECT_ENUM ||

@@ -25,8 +25,10 @@ public:
   //mIndexInVector index in x or Zs or Zns.
   int mIndexInVector;
   component * mComponent;
+  char mName[64];
 protected:
 private:
+  void buildName();
 };
 #endif //UNKNOWN_H
 

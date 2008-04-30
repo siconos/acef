@@ -54,6 +54,7 @@ Convention:
 
 #include "componentbjt.h"
 #include "algo.h"
+#include "unknown.h"
 
 
 
@@ -84,20 +85,21 @@ componentBJT::componentBJT(dataBJT *d)
 
 void componentBJT::addUnknowns(){
   mIb=algo::sls.addinZns(ACE_TYPE_I,this);
+  sprintf(mIb->mName,"Ib_%d_%s",mNodeB,mName);
   mIc=algo::sls.addinZns(ACE_TYPE_I,this);
+  sprintf(mIc->mName,"Ic_%d_%s",mNodeC,mName);
   mIndiceStartZns= mIb->mIndexInVector;
   mIndiceStartLambda= algo::sls.mDimLambda ;
   algo::sls.mDimLambda = algo::sls.mDimLambda + mDimlambda;
 }
 void componentBJT::stamp(){
-  int ind=0;
   int ib=mIb->mIndex;
   int ic=mIc->mIndex;
   //stamp equations.
-  algo::sls.KCL(mNodeB)->mCoefs[ib]+=1;
-  algo::sls.KCL(mNodeC)->mCoefs[ic]+=1;
-  algo::sls.KCL(mNodeE)->mCoefs[ib]-=1;
-  algo::sls.KCL(mNodeE)->mCoefs[ic]-=1;
+  algo::sls.KCL(mNodeB)->mCoefs[ib]-=1;
+  algo::sls.KCL(mNodeC)->mCoefs[ic]-=1;
+  algo::sls.KCL(mNodeE)->mCoefs[ib]+=1;
+  algo::sls.KCL(mNodeE)->mCoefs[ic]+=1;
 
   //      |1 -1 0  |          |0|  | 0 0 0  |
   //Zns = |0 0  1  |*lambda + |0| +| 0 0 0  |(Vc,Vb,Ve)
@@ -153,7 +155,7 @@ void componentBJT::print(){
   printf("component type : %s \n",name);
   if (mName)
     printf("\t Name : %s\n",mName);
-  printf("\tBase, Collector, Emitor , mode: %d %d %d \n",mNodeB,mNodeC,mNodeE,mMode);
+  printf("\tBase, Collector, Emitor , mode: %d %d %d %d \n",mNodeB,mNodeC,mNodeE,mMode);
   printf("\tbetha, vbiais : %f %f\n",mBetha,mVBiais);
   
 }

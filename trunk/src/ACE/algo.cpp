@@ -170,14 +170,14 @@ void algo::perform(){
    c->addUnknowns();
    c->addEquations();
  }
-//  initComponentList("BJT");
-//  dataBJT bjt;
-//  while(nextComponent(&bjt)){
-//    componentBJT *c=new componentBJT(&bjt);
-//    mBjt.push_back(c);
-//    c->addUnknowns();
-//    c->addEquations();
-//  }
+  initComponentList("BJT");
+  dataBJT bjt;
+  while(nextComponent(&bjt)){
+    componentBJT *c=new componentBJT(&bjt);
+    mBjt.push_back(c);
+    c->addUnknowns();
+    c->addEquations();
+  }
 
  
 //get RESISTOR from parser
@@ -250,13 +250,16 @@ void algo::perform(){
  ACE_times[ACE_TIMER_TEST_1].start();
  sls.computedxdt();
  ACE_times[ACE_TIMER_TEST_1].stop();
- // sls.printA1();
  stampAfterInvertion();
  ACE_MESSAGE("final equation ;\n");
  sls.printEquations();
  ACE_times[ACE_TIMER_TEST_2].start();
  sls.buildLinearSystem();
  ACE_times[ACE_TIMER_TEST_2].stop();
+ sls.printA1();
+ sls.printB1();
+ sls.printC1();
+ sls.printD1();
  sls.set2matrix();
  sls.printSystem2();
  ACE_times[ACE_TIMER_EQUATION].stop();
@@ -304,6 +307,9 @@ void algo::stamp(){
   n = mVccs.size();
   for(i=0;i<n;i++)
     mVccs[i]->stamp();
+  n = mBjt.size();
+  for(i=0;i<n;i++)
+    mBjt[i]->stamp();
 
 }
 ////////////////////////////////////////////////////////////////////// SIMULATION
@@ -396,6 +402,11 @@ void algo::printComponents(){
   printf("-->%d MOS:\n",n);
   for(i=0;i<n;i++)
     mMos[i]->print();
+
+  n=mBjt.size();
+  printf("-->%d BJT:\n",n);
+  for(i=0;i<n;i++)
+    mBjt[i]->print();
   
 
   

@@ -120,7 +120,7 @@ else
 	CXX    = g++
 	SPECIAL_CPP_OPTION = -Wno-deprecated
 endif
-CXXFLAGS     =  -Wall $(SPECIAL_CPP_OPTION) -I$(INCLUDE_DIR) -I$(INCLUDE_SICONOS_DIR) -I$(CPLEXINCDIR) -I$(CONCERTINCDIR) \
+CXXFLAGS     =  -g -Wall $(SPECIAL_CPP_OPTION) -I$(INCLUDE_DIR) -I$(INCLUDE_SICONOS_DIR) -I$(CPLEXINCDIR) -I$(CONCERTINCDIR) \
 			-I$(INCLUDE_SICONOS_KERNEL_DIR) -I/usr/include/libxml2 -I/usr/local/include/Siconos/Numerics \
 			-I/usr/local/include/Siconos/Kernel/AtlasLocal/atlas/ -c
 ADD_OPT      = #-lntl -lgmp -lm  # Optionnal option for the linker
@@ -177,9 +177,9 @@ mainSiconos.o : mainSiconos.cpp
 
 # Generation of the final binary (see $(EXE))
 $(EXE_ACE) : $(OBJ) $(ALL_SRC) main.o
-	$(CXX)   -o $@ $(ABSOBJ) $(ADD_OPT) $(OBJ_DIR)/main.o
+	$(CXX)   -g -o $@ $(ABSOBJ) $(ADD_OPT) $(OBJ_DIR)/main.o
 $(EXE_SICONOS) : $(OBJ) $(ALL_SRC) mainSiconos.o
-	$(CXX)   -o $@ $(ABSOBJ) $(ADD_OPT) $(OBJ_DIR)/mainSiconos.o
+	$(CXX)   -g -o $@ $(ABSOBJ) $(ADD_OPT) $(OBJ_DIR)/mainSiconos.o
 	@$(MAKE) help
 
 # Help rule - print help message
