@@ -17,39 +17,75 @@ Y=C_{x}x+C_{z}Z_{s}+C_{\lambda}\lambda + c(t) &\label{eq4}\\
   \item[--] Let m the Y dimension.
   \item[--] Let s the $Z_{s}$ dimension.
 \end{itemize}
-\subsubsection{The MLCS formulation for siconos}
-It consists in concataining $Z_{s}$ and $ \lambda $ , it rises to the following system:
+
+\subsubsection{Rappel, siconos model}
+Siconos allow to define some dynamical systems with some relations:
+\[Mx'=Ax +b(t)+R\]
+\[Y=CX +D \lambda\]
+\[r=B \lambda\]
+\subsubsection{concataining $Z_{s}$ and $\lambda$ }
+To fit the acef formulation in the siconos model, a first way could be to concataining the vectors $Z_{s}$ and $\lambda$, it rises to the following system:
  \begin{eqnarray}
-A_{x'}x'=A_{x}x +A_{\lambda} \lambda +a(t)&\label{eq2}\\
-0=B_{x}x+ B_{\lambda}\lambda + b(t)&\label{eq3}\\
-Y=C_{x}x+C_{\lambda}\lambda + c(t) &\label{eq4}\\
+Mx'=Ax +B_{1} \lambda +a(t)&\label{eq_merge_1}\\
+0=B_{x}x+ B_{2}\lambda + b(t)&\label{eq_merge_2}\\
+Y=Cx+D\lambda + c(t) &\label{eq_merge_3}\\
 (\lambda_{1},..,\lambda_{s}) free\\
-0 \leq Y \, \perp \, (\lambda_{s+1},..,\lambda_{s+m})^{t} \geq 0&\label{eqperp}
+0 \leq Y \, \perp \, (\lambda_{s+1},..,\lambda_{s+m})^{t} \geq 0&\label{eq_merge_eqperp}
 \end{eqnarray}
 
-\newpage
- \subsubsection{With the siconos convention}
- 
-The Dynamic system:
-\[Mx'=Ax +b(t)+r\]
-The First Order Linear Relation:
-\[Y=CX +D \lambda\]
-\[R=B \lambda\]
-The complementary relation and interaction:
-\[(Y_{1},..,Y_{s})^{t}=0\]
-\[(\lambda_{1},..,\lambda_{s}) \qquad free\]
-\[0 \leq (Y_{s+1},..,Y_{s+m})^{t} \, \perp \, (\lambda_{s+1},..,\lambda_{s+m})^{t} \geq 0\]
+There are tow disadvantages with this formulation:
+\begin{itemize}
+ \item[--] The time discretisation of the Zs variables like the complementarity variables is not
+enough accuracy.
+ \item[--] Because of the equality, it is not compatible with the block siconos structure.
+\end{itemize}
+\subsubsection{concataining x and $Z_{s}$ }
+An other solution could be to concataining the vector x and $Z_{s}$, it leads to the following
+system:
+ \begin{eqnarray}
+Mx'=Ax +B \lambda +a(t)&\label{eq_merge2_1}\\
+Y=Cx+D\lambda + c(t) &\label{eq_merge2_3}\\
+0 \leq Y \, \perp \, \lambda \geq 0&\label{eq_merge2_eqperp}
+\end{eqnarray}
+In this case, M is not regular, it is a DAE. The main objection is that the semi-explicit form of
+the DAE is hidden. But the physical variables are all discretised with the same model, moreover it
+is compatible with the block structure of siconos.
+
+\subsection{Example, one DS and n UR}
+
+This section describe the case of a system with one DS, and n UR from the same interaction. The n UR
+comes from n NS components defined by the same geometry :
+
+\begin{equation}\left(\begin{array}{c}
+\beta = Z_{nsi} = A_{i}x+B\lambda_{i} + a_{i}\\
+y_{i}=D_{i}x+F\lambda_{i}+e_{i}\\
+0 \leq y_{i} \, \perp \, \lambda_{i} \geq 0
+\end{array}\right)
+\end{equation}
+where $Z_{nsi}$ is some physical variables. In siconos, it is contained in the Non Smooth Law of the
+interaction.
+
+\begin{equation}\left(\begin{array}{c}
+Mx = Ax + B \lambda\\
+Y=(y_{1},...,y{n})^{t}=Cx + \left(\begin{array}{ccc} F & .. & 0\\ ..& F & ..\\0 & .. &
+F\end{array}\right) \lambda\\
+ie \qquad Y=Cx+D\lambda\\
+0 \leq Y \, \perp \, \lambda \geq 0
+\end{array}\right)
+\end{equation}
+
+
 
 \subsubsection{A MLCP formulation in Siconos}
 The Dynamic system:
 \[Mx'=Ax +B \lambda +b(t)\]
 \[y=Cx +D \lambda +e(t)\]
 Discretisation:
-\[M(x(t_{i+1})-x(t_{i}))=h(\theta A x(t_{i+1}) + (1-\theta) x(t_{i}) +B \lambda (t_{i+1}) +\theta
+\[M(x(t_{i+1})-x(t_{i}))=h(\theta A x(t_{i+1}) + (1-\theta) A x(t_{i}) +B \lambda (t_{i+1}) +\theta
 b(t_{i+1}) + (1-\theta) b(t_{i}))\]
 \[Wx(t_{i+1})=hB \lambda (t_{i+1}) + f_{free}\]
 with:
-\[f_{free}=h(1-\theta) x(t_{i}) + Mx(t_{i})+h \theta b(t_{i+1}) + h(1-\theta) b(t_{i}) \qquad W=(M-h\theta A)\]
+\[f_{free}=h(1-\theta) A x(t_{i}) + Mx(t_{i})+h \theta b(t_{i+1}) + h(1-\theta) b(t_{i}) \qquad W=(M-h\theta A)\]
 \[y(t_{t+1})=Cx(t_{i+1}) +D \lambda(t_{i+1}) +e(t_{i+1})\]
 MLCP instance:
 \[w=Mz+q\]
@@ -229,3 +265,21 @@ The order is 2.
 \subsection{conclusion}
 In current siconos version,the node voltage are integrated with an implicit method, and a $\theta$
 is more accuracy.
+
+
+\section{ DAE or ODE ?}
+
+\subsection{Circuit without non smooth component}
+In this section section, the circuit is composed only with linear components, capacitor, inductor,
+resistor, voltage source, etc. The equation formulation leads to the following system:
+\[ \]
+\[0 = Cx + Dz \]
+ \begin{eqnarray}
+Mx'=Ax + Bz&\label{eq_cir_wout_NS_1}\\
+0=Cx+ Dz &\label{eq_cir_wout_NS_2}\\
+\end{eqnarray}
+The equation \ref{eq_cir_wout_NS_2} comes from the Kirchhoff current laws.\\
+
+The index of this DAE is 0, 1 or 2.
+\subsection{Circuit with non smooth component}
+
