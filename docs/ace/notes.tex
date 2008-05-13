@@ -94,6 +94,13 @@ z=\left(\begin{array}{c}x(t_{i+1})\\ \lambda (t_{i+1})\end{array}\right)\]
 \[q=\left(\begin{array}{c}f_{free}\\ e(t_{i+1})\end{array}\right)\]
 \[M=\left(\begin{array}{cc}-W&hB\\ C&D\end{array}\right)\]
 \newpage
+\subsection{Simulation DAE/ODE comparaison}
+The following graphic compares the diodes bridges simulations from the DAE and the ODE model. Because of the time
+discretisation, the DAE simulation is less damping.
+\begin{figure}[h]
+\input{DAE_ODE.tex}
+\end{figure}
+\newpage
 \subsubsection{Building a NonSmooth Dynamical System}
  
  aDS = new FirstOrderLinearDS$(int,A_{x'},A_{x},a(t))$;\\
