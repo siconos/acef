@@ -47,6 +47,7 @@ typedef struct sINPtables{
     void *defPmod;
     void *defQmod;
     void *defRmod;
+    void *defCOMPmod;
     void *defSmod;
     void *defTmod;
     void *defUmod;
@@ -132,6 +133,7 @@ void INP2O(void*,INPtables*,card*);
 void INP2P(void*,INPtables*,card*);
 void INP2Q(void*,INPtables*,card*,void*);
 void INP2R(void*,INPtables*,card*);
+void INP2COMP(void*,INPtables*,card*);
 void INP2S(void*,INPtables*,card*);
 void INP2T(void*,INPtables*,card*);
 void INP2U(void*,INPtables*,card*);

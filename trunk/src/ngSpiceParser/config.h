@@ -281,7 +281,7 @@
 #define NGSPICEBINDIR "/usr/local/bin"
 
 /* Define the build date */
-#define NGSPICEBUILDDATE "Mon Mar 17 16:00:44 CET 2008"
+#define NGSPICEBUILDDATE "Wed May 14 17:02:04 CEST 2008"
 
 /* Define the directory for architecture independent data files */
 #define NGSPICEDATADIR "/usr/local/share/ng-spice-rework"

@@ -31,6 +31,7 @@ void freePrintElem();
 int initPrintElem();
 int getPrintElem(void ** p);
 
+int initSimulation(int type,double val);
 
 typedef struct {
   char *name;
@@ -75,6 +76,14 @@ typedef struct {
   double k;
   double vt;
 } dataMOS1;
+
+typedef struct {
+  char *name;
+  int mode;
+  int collector;
+  int base;
+  int emitor;
+} dataBJT;
 
 /* structures to describe Voltage Controlled Current Sources */
 typedef struct {
@@ -124,6 +133,17 @@ typedef struct {
   double *coef;
   void* id;
 } dataISRC;
+
+/* information needed per comparator */
+typedef struct {
+  char *name;
+  int nodePos;
+  int nodeNeg;
+  int nodeOut;
+  double vmin;
+  double vmax;
+  double vepsilon;
+} dataCOMP;
 
 
 

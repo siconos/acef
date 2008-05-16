@@ -718,7 +718,72 @@ translate(struct line *deck, char *formal, char *actual, char *scname, char *sub
         case '\0':
         case '*':
         case '.':
-            /* Just a pointer to the line into s and then break */
+	  if(!strncmp(".comp",c->li_line,4)){/*cas comparator*/
+	    s = c->li_line;
+	    nametofree = name = gettok_node(&s);  /* changed to gettok_node to handle netlists with ( , ) */
+	    if (!name)
+	      continue;
+	    if (!*name) {
+	      tfree(name);
+	      continue;
+	    }
+
+	    /* Here's where we translate the refdes to e.g. .comp:subcircuitname:57
+	     * and stick the translated name into buffer.
+	     */
+	    ch = *name;
+	    
+	    name++;
+	    if (*name == ':')
+	      name++;
+	    
+	    if (*name) {
+	      buffer = (char *)tmalloc((strlen(scname)+strlen(name)+5+4)*sizeof(char));
+	      sprintf(buffer, "%s:%s:%s ", ".comp", scname, name);
+	    } else {
+	      buffer = (char *)tmalloc((strlen(scname)+4+4)*sizeof(char));
+	      sprintf(buffer, "%s:%s ", ".comp", scname);
+	    }
+	    tfree(nametofree);
+
+	    nnodes = 3;
+	    while (nnodes-- > 0) {
+	      name = gettok_node(&s);
+	      if (name == NULL ) {
+		fprintf(cp_err, "Error: too few nodes: %s\n",
+			c->li_line);
+		goto quit;
+	      }
+	      
+	      /* call gettrans and see if netname was used in the invocation */
+	      t = gettrans(name);
+	      
+	      if (t) {   /* the netname was used during the invocation; print it into the buffer */
+		blen = strlen(buffer);
+		buffer = (char *)trealloc(buffer, (blen+strlen(t)+2)*sizeof(char));
+		sprintf(buffer + blen, "%s ", t);
+	      }
+	      else {    /* net netname was not used during the invocation; place a 
+			 * translated name into the buffer.
+			 */
+		blen = strlen(buffer);
+		buffer = (char *)trealloc(buffer, (blen+strlen(scname)+strlen(name)+3)*sizeof(char));
+		sprintf(buffer + blen, "%s:%s ", scname, name);
+	      }
+	      tfree(name);
+	      
+	    }  /* while (nnodes-- . . . . */
+
+	    blen = strlen(buffer);
+	    buffer = (char *)trealloc(buffer, (blen+strlen(s)+strlen(scname)+1000)*sizeof(char));
+	    finishLine(buffer + blen, s, scname);
+	    s = "";
+
+	    
+	    break;
+	  }/*cas comparator*/
+	  
+	  /* Just a pointer to the line into s and then break */
 	  buffer = tmalloc(2000+strlen(c->li_line));    /* DW,VA */
 	  s = c->li_line;
 	  break;

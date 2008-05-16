@@ -70,7 +70,7 @@ int add_udn(int,Evt_Udn_Info_t **);
 
 #define DEVICES_USED "asrc bjt bjt2 bsim1 bsim2 bsim3 bsim3v2 bsim3v1 bsim4 bsim3soipd bsim3soifd   \
                       bsim3soidd cap cccs ccvs csw dio hfet hfet2 ind isrc jfet ltra mes mesa mos1  \
-                      mos2 mos3 mos6 mos9 res soi3 sw tra urc vbic vccs vcvs vsrc (ekv)" 
+                      mos2 mos3 mos6 mos9 res soi3 sw tra urc vbic vccs vcvs vsrc comp (ekv)" 
                       
 
 /*
@@ -126,6 +126,7 @@ int add_udn(int,Evt_Udn_Info_t **);
 #include "mos9/mos9itf.h"
 #include "cpl/cplitf.h"
 #include "res/resitf.h"
+#include "comp/compitf.h"
 #include "soi3/soi3itf.h"
 #include "sw/switf.h"
 #include "tra/traitf.h"
@@ -153,17 +154,17 @@ int add_udn(int,Evt_Udn_Info_t **);
  #include "ekv/ekvitf.h"
 
   #ifdef XSPICE
-   static int DEVNUM = 53;
+   static int DEVNUM = 54;
   #else
-   #define DEVNUM 53
+   #define DEVNUM 54
   #endif
 
  #else	
 
   #ifdef XSPICE
-   static int DEVNUM = 52;
+   static int DEVNUM = 53;
   #else
-   #define DEVNUM 52
+   #define DEVNUM 53
   #endif
 
  #endif
@@ -173,15 +174,15 @@ int add_udn(int,Evt_Udn_Info_t **);
  #ifdef HAVE_EKV
   #include "ekv/ekvitf.h"
   #ifdef XSPICE
-   static int DEVNUM = 48;
+   static int DEVNUM = 49;
   #else
-   #define DEVNUM 48
+   #define DEVNUM 49
   #endif
  #else
   #ifdef XSPICE
-   static int DEVNUM = 47;
+   static int DEVNUM = 48;
   #else
-   #define DEVNUM 47
+   #define DEVNUM 48
   #endif
  #endif
 
@@ -268,6 +269,7 @@ spice_init_devices(void)
     DEVices[44] = get_vccs_info();
     DEVices[45] = get_vcvs_info();
     DEVices[46] = get_vsrc_info();
+    DEVices[47] = get_comp_info();
     
 
 #ifdef CIDER
@@ -287,7 +289,7 @@ spice_init_devices(void)
     DEVices[47] = get_ekv_info();
     assert(48 == DEVNUM);
 #else
-    assert(47 == DEVNUM);
+    assert(48 == DEVNUM);
 #endif
 #endif                          /* CIDER */
 return;
@@ -319,11 +321,11 @@ devices(void)
 #ifdef HAVE_EKV
 #define DEVICES_USED {"asrc", "bjt", "bjt2", "vbic", "bsim1", "bsim2", "bsim3", "bsim3v2", "bsim3v1", "bsim4", "bsim3soipd", "bsim3soifd",   \
                       "bsim3soidd", "cap", "cccs", "ccvs", "csw", "dio", "hfet", "hfet2", "ind", "isrc", "jfet", "ltra", "mes", "mesa" ,"mos1",  \
-                      "mos2", "mos3", "mos6", "mos9", "res", "soi3", "sw", "tra", "urc", "vccs", "vcvs", "vsrc", "ekv" }
+      "mos2", "mos3", "mos6", "mos9", "res", "soi3", "sw", "tra", "urc", "vccs", "vcvs", "vsrc", "comp", "ekv" }
 #else
 #define DEVICES_USED {"asrc", "bjt", "bjt2", "vbic", "bsim1", "bsim2", "bsim3", "bsim3v2", "bsim3v1", "bsim4", "bsim3soipd", "bsim3soifd",   \
                       "bsim3soidd", "cap", "cccs", "ccvs", "csw", "dio", "hfet", "hfet2", "ind", "isrc", "jfet", "ltra", "mes", "mesa" ,"mos1",  \
-                      "mos2", "mos3", "mos6", "mos9", "res", "soi3", "sw", "tra", "urc", "vccs", "vcvs", "vsrc"}
+      "mos2", "mos3", "mos6", "mos9", "res", "soi3", "sw", "tra", "urc", "vccs", "vcvs", "comp", "vsrc"}
 #endif
 int load_dev(char *name) {
   char *msg;

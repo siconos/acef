@@ -22,6 +22,7 @@ libinp_a_SOURCES = \
 		inp2p.c		\
 		inp2q.c		\
 		inp2r.c		\
+		inp2comp.c		\
 		inp2s.c		\
 		inp2t.c		\
 		inp2u.c		\

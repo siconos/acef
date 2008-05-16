@@ -61,6 +61,7 @@ DYNAMIC_DEVICELIBS = 					\
 	spicelib/devices/mos6/libmos6.a			\
 	spicelib/devices/mos9/libmos9.a			\
 	spicelib/devices/res/libres.a			\
+	spicelib/devices/comp/libcomp.a			\
 	spicelib/devices/soi3/libsoi3.a			\
 	spicelib/devices/sw/libsw.a			\
 	spicelib/devices/txl/libtxl.a			\

@@ -298,7 +298,7 @@ inp_spsource(FILE *fp, bool comfile, char *filename)
       *  *filename = 
       */
 {
-    struct line *deck, *dd, *ld;
+  struct line *deck, *dd, *ld,*aux;
     struct line *realdeck, *options = NULL;
     char *tt = NULL, name[BSIZE_SP], *s, *t;
     bool nosubckts, commands = FALSE;
@@ -522,7 +522,12 @@ inp_spsource(FILE *fp, bool comfile, char *filename)
             wl_free(end); 
 	    }*/
     }
-
+    aux =deck;
+    while (aux){
+      printf("ligne %s\n",aux->li_line);
+      aux = aux->li_next;
+    }
+      
     /* Hitoshi Tanaka */
     if(dbs) tfree(dbs); /* Added */
 

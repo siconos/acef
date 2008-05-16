@@ -727,7 +727,12 @@ INP2dot(void *ckt, INPtables *tab, card *current, void *task, void *gnode)
 	rtn = 0;
 	LITERR(" Warning: .global not yet implemented - ignored \n");
 	goto quit;
+    }else if (strncmp(token, ".comp",4) == 0) {
+	rtn = 0;
+	INP2COMP(ckt, tab, current);
+	goto quit;
     }
+
     LITERR(" unimplemented control card - error \n");
 quit:
     tfree(token);

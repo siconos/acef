@@ -5,6 +5,7 @@
 
 #include "./spicelib/devices/isrc/isrcdefs.h"
 #include "./spicelib/devices/res/resdefs.h"
+#include "./spicelib/devices/comp/compdefs.h"
 #include "./spicelib/devices/dio/diodefs.h"
 #include "./spicelib/devices/dio/dioext.h"
 #include "./spicelib/devices/cap/capext.h"
@@ -397,7 +398,21 @@ void bidon(MOS1instance *here){
   p->base = here->BJTbaseNode;
   p->emitor = here->BJTemitNode;
  }
-
+void fillCompInfos(void *data, GENinstance *pInstance){
+   COMPinstance *here;
+   dataCOMP *p;
+  if (!data || !psInstance)
+    return;
+  p = (dataCOMP *)data;
+  here = (COMPinstance *)psInstance;
+  p->name = here->COMPname;
+  p->nodePos = here->COMPposNode;
+  p->nodeNeg = here->COMPnegNode;
+  p->nodeOut = here->COMPoutNode;
+  p->vmin = here->COMPVmoins;
+  p->vmax = here->COMPVplus;
+  p->vepsilon = here->COMPEpsilon;
+ }
 void MEperform(){
     CKTcircuit *circuit =0;
     circuit =(CKTcircuit *) ft_curckt->ci_ckt;
@@ -465,11 +480,6 @@ void MEprint(){
   pModel =  circuit->CKThead[type];
   CAPsPrint(pModel,circuit);
 
-  printf("les diodes: \n");
-  printf("-----------");
-  type = INPtypelook("Diode");
-  pModel =  circuit->CKThead[type];
-  DIOsPrint(pModel, circuit);
 
   printf("les resistances:\n");
   printf("----------------");
@@ -495,7 +505,18 @@ void MEprint(){
   printf("--------------\n");
   type = INPtypelook("Inductor");
   INDsPrint(circuit->CKThead[type],circuit);
-   
+
+  printf("les diodes: \n");
+  printf("-----------");
+  type = INPtypelook("Diode");
+  pModel =  circuit->CKThead[type];
+  DIOsPrint(pModel, circuit);
+  
+  printf("Les comparators:\n");
+  printf("--------------\n");
+  type = INPtypelook("Comparator");
+  COMPsPrint(circuit->CKThead[type],circuit);
+
   printf("******FIN DE LA LECTURE DE LA TABLE******\n");
 }
 int initComponentList(char *type){
@@ -550,6 +571,9 @@ int nextComponent(void * data){
     break;
   case 44:
     fillVCCsourceInfos(data,psInstance);
+    break;
+  case 47:
+    fillCompInfos(data,psInstance);
     break;
   default :
     printf("ERROR parser/src/perform.c : unknown type\n");

@@ -125,6 +125,7 @@ am__DEPENDENCIES_1 = spicelib/devices/asrc/libasrc.a \
 	spicelib/devices/mos3/libmos3.a \
 	spicelib/devices/mos6/libmos6.a \
 	spicelib/devices/mos9/libmos9.a spicelib/devices/res/libres.a \
+	spicelib/devices/mos9/libmos9.a spicelib/devices/comp/libcomp.a \
 	spicelib/devices/soi3/libsoi3.a spicelib/devices/sw/libsw.a \
 	spicelib/devices/txl/libtxl.a spicelib/devices/tra/libtra.a \
 	spicelib/devices/urc/liburc.a spicelib/devices/vbic/libvbic.a \
@@ -186,7 +187,7 @@ AUTOMAKE = automake-1.9
 AWK = gawk
 CC = gcc
 CCDEPMODE = depmode=gcc3
-CFLAGS = -g   -Wall 
+CFLAGS = -g  -Wall 
 CIDERDIR = 
 CIDERMATH = 
 CIDERMATHDIR = 
@@ -197,7 +198,7 @@ CPPFLAGS =
 CXX = g++
 CXXCPP = g++ -E
 CXXDEPMODE = depmode=gcc3
-CXXFLAGS = -g  
+CXXFLAGS = -g 
 CYGPATH_W = echo
 DEFS = -DHAVE_CONFIG_H
 DEPDIR = .deps
@@ -210,7 +211,7 @@ EKVDIR =
 EKVLIB = 
 EXEEXT = 
 F77 = f95
-FFLAGS = -g  
+FFLAGS = -g 
 INSTALL_DATA = ${INSTALL} -m 644
 INSTALL_PROGRAM = ${INSTALL}
 INSTALL_SCRIPT = ${INSTALL}
@@ -354,6 +355,7 @@ DYNAMIC_DEVICELIBS = \
 	spicelib/devices/mos6/libmos6.a			\
 	spicelib/devices/mos9/libmos9.a			\
 	spicelib/devices/res/libres.a			\
+	spicelib/devices/comp/libcomp.a			\
 	spicelib/devices/soi3/libsoi3.a			\
 	spicelib/devices/sw/libsw.a			\
 	spicelib/devices/txl/libtxl.a			\

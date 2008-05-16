@@ -39,6 +39,7 @@ SUBDIRS = \
 	mos6	\
 	mos9 	\
 	res	\
+	comp	\
 	soi3	\
 	sw	\
 	tra	\
@@ -89,6 +90,7 @@ DIST_SUBDIRS = \
 	mos6	\
 	mos9 	\
 	res	\
+	comp	\
 	soi3	\
 	sw	\
 	tra	\

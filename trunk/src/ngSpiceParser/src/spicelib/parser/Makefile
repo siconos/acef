@@ -55,7 +55,7 @@ am_libinp_a_OBJECTS = ifeval.$(OBJEXT) ifnewuid.$(OBJEXT) \
 	inp2g.$(OBJEXT) inp2h.$(OBJEXT) inp2i.$(OBJEXT) \
 	inp2j.$(OBJEXT) inp2k.$(OBJEXT) inp2l.$(OBJEXT) \
 	inp2m.$(OBJEXT) inp2o.$(OBJEXT) inp2p.$(OBJEXT) \
-	inp2q.$(OBJEXT) inp2r.$(OBJEXT) inp2s.$(OBJEXT) \
+	inp2q.$(OBJEXT) inp2r.$(OBJEXT) inp2comp.$(OBJEXT) inp2s.$(OBJEXT) \
 	inp2t.$(OBJEXT) inp2u.$(OBJEXT) inp2v.$(OBJEXT) \
 	inp2w.$(OBJEXT) inp2y.$(OBJEXT) inp2z.$(OBJEXT) \
 	inpaname.$(OBJEXT) inpapnam.$(OBJEXT) inpcfix.$(OBJEXT) \
@@ -96,7 +96,7 @@ AUTOMAKE = automake-1.9
 AWK = gawk
 CC = gcc
 CCDEPMODE = depmode=gcc3
-CFLAGS = -g   -Wall 
+CFLAGS = -g  -Wall 
 CIDERDIR = 
 CIDERMATH = 
 CIDERMATHDIR = 
@@ -107,7 +107,7 @@ CPPFLAGS =
 CXX = g++
 CXXCPP = g++ -E
 CXXDEPMODE = depmode=gcc3
-CXXFLAGS = -g  
+CXXFLAGS = -g 
 CYGPATH_W = echo
 DEFS = -DHAVE_CONFIG_H
 DEPDIR = .deps
@@ -120,7 +120,7 @@ EKVDIR =
 EKVLIB = 
 EXEEXT = 
 F77 = f95
-FFLAGS = -g  
+FFLAGS = -g 
 INSTALL_DATA = ${INSTALL} -m 644
 INSTALL_PROGRAM = ${INSTALL}
 INSTALL_SCRIPT = ${INSTALL}
@@ -236,6 +236,7 @@ libinp_a_SOURCES = \
 		inp2p.c		\
 		inp2q.c		\
 		inp2r.c		\
+		inp2comp.c		\
 		inp2s.c		\
 		inp2t.c		\
 		inp2u.c		\
@@ -345,6 +346,7 @@ include ./$(DEPDIR)/inp2o.Po
 include ./$(DEPDIR)/inp2p.Po
 include ./$(DEPDIR)/inp2q.Po
 include ./$(DEPDIR)/inp2r.Po
+include ./$(DEPDIR)/inp2comp.Po
 include ./$(DEPDIR)/inp2s.Po
 include ./$(DEPDIR)/inp2t.Po
 include ./$(DEPDIR)/inp2u.Po
