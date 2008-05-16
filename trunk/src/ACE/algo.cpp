@@ -76,6 +76,9 @@ algo::~algo(){
   n = mVccs.size();
   for(i=0;i<n;i++)
     delete mVccs[i];
+  n= mComps.size();
+  for(i=0;i<n;i++)
+    delete mComps[i];
   
  }
 
@@ -207,23 +210,32 @@ void algo::perform(){
    mVcvs.push_back(c);   
  }
  
- initComponentList("ASRC");
- dataARB dArb;
- dataCOMP dCOMP;
- while(nextComponent(&dArb)){
-   ACE_MESSAGE("replace arb by comp\n");
-   dCOMP.nodePos=7;
-   dCOMP.nodeNeg=12;
-   dCOMP.nodeS=3;
-   dCOMP.vplus = 3;
-   dCOMP.vmoins = 0;
-   dCOMP.epsilon=0.1;
-   dCOMP.name=ACE_name;
+//  initComponentList("ASRC");
+//  dataARB dArb;
+//  dataCOMP dCOMP;
+//  while(nextComponent(&dArb)){
+//    ACE_MESSAGE("replace arb by comp\n");
+//    dCOMP.nodePos=7;
+//    dCOMP.nodeNeg=12;
+//    dCOMP.nodeOut=3;
+//    dCOMP.vmax = 3;
+//    dCOMP.vmin = 0;
+//    dCOMP.vepsilon=0.1;
+//    dCOMP.name=ACE_name;
+//    componentCOMP *c=new componentCOMP(&dCOMP);
+//    c->addUnknowns();
+//    c->addEquations();
+//    mArbs.push_back(c);   
+//  }
+
+ initComponentList("Comparator");
+ while(nextComponent(&dCOMP)){
    componentCOMP *c=new componentCOMP(&dCOMP);
    c->addUnknowns();
    c->addEquations();
-   mArbs.push_back(c);   
+   mComps.push_back(c);   
  }
+ 
  
  initComponentList("VCCS");
  dataVCCS dVCCS;
@@ -304,6 +316,9 @@ void algo::stamp(){
   n = mArbs.size();
   for(i=0;i<n;i++)
     mArbs[i]->stamp();
+  n = mComps.size();
+  for(i=0;i<n;i++)
+    mComps[i]->stamp();
   n = mVccs.size();
   for(i=0;i<n;i++)
     mVccs[i]->stamp();
@@ -407,6 +422,11 @@ void algo::printComponents(){
   printf("-->%d BJT:\n",n);
   for(i=0;i<n;i++)
     mBjt[i]->print();
+
+  n=mComps.size();
+  printf("-->%d COMPARATOR:\n",n);
+  for(i=0;i<n;i++)
+    mComps[i]->print();
   
 
   

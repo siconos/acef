@@ -1295,7 +1295,7 @@ void linearSystem::printSystem2(ostream& os){
 }
 void linearSystem::printStep(ostream& os){
   int i;
-  bool printALL = false;
+  bool printALL = true;
   if (printALL){
     os << "xt("<<mStepCmp*mH<<")\t";
     if (mxti)

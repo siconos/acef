@@ -11,11 +11,11 @@ componentCOMP::componentCOMP(dataCOMP *d)
   mData =(*d);
   mNodePos=mData.nodePos;
   mNodeNeg=mData.nodeNeg;
-  mNodeS=mData.nodeS;
+  mNodeS=mData.nodeOut;
   mName = mData.name;
-  mEpsilon = mData.epsilon;
-  mVplus = mData.vplus;
-  mVmoins = mData.vmoins;
+  mEpsilon = mData.vepsilon;
+  mVplus = mData.vmax;
+  mVmoins = mData.vmin;
   ACE_CHECK_ERROR(mEpsilon >0,"componentCOMP::componentCOMP, epsilon==0");
   mD12= (mVmoins-mVplus)/(2.0*mEpsilon);
   mD11= -mD12;
