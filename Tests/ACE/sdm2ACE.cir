@@ -1,0 +1,226 @@
+DeltaSigma2
+
+**************************************
+
+
+* ..model amPli  opa
+* + level=1 cin=0 rs=0.1 gain=10000
+
+.subckt opamp inp inn outp outn
+*Bopamppos outp1 0 V=2500*(((V(inp,inn)+0.001)*tanh(5000*(V(inp,inn)+0.001))) + ((V(inp,inn)-0.001)*tanh(5000*(-V(inp,inn)+0.001))))
+.comp inp inn outp1 Vmin=-5 Vmax=5 Vepsilon=0.0001
+*Bopampneg outn1 0 V=-2500*(((V(inp,inn)+0.001)*tanh(5000*(V(inp,inn)+0.001))) + ((V(inp,inn)-0.001)*tanh(5000*(-V(inp,inn)+0.001))))
+Eopampneg outn1 0 outp1 0 -1
+Routp outp1 outp 0.1
+Routn outn1 outn 0.1
+.ends
+
+.subckt inverseur e s vdd vss
+
+Mosp s e vdd vdd mosP_Sah
+Mosn s e vss vss mosN_Sah
+cinv e 0 0.01p
+
+.ends
+
+.subckt compmacro he hbasc hbascb inp inm   q qb
+
+	Vplog vddlog 0 DC 2.5
+	Vnlog vsslog 0 DC -2.5
+
+	M1 he inp compinp compinp switch_Sah
+	M2 he inm compinm compinm switch_Sah
+	
+*	Bcomp compout 0 V=2.5*tanh(100.0*V(compinp,compinm))
+	.comp compinp compinm compout Vmin=-2.5 Vmax=2.5 Vepsilon=0.01
+
+	ccPp  compinp 0 0.01p
+	ccPm  compinm 0 0.01p
+	ccout compout 0 0.01p
+	
+	M3 hbasc  compout ebasc ebasc switch_Sah
+	
+	xinv1 ebasc qb	vddlog vsslog inverseur
+	xinv2 qb  q1	vddlog vsslog inverseur
+	xinv3 qb  q	vddlog vsslog inverseur
+
+	M4 hbascb  q1 ebasc ebasc switch_Sah
+
+	cloadq	q  0 0.01p
+	cloadqb	qb 0 0.01p
+	cloadq1	q1 0 1f
+
+.ends
+
+
+* premier integrateur 
+
+* vinp1
+M101 h1 a10  spg1 spg1	switch_Sah
+M102 h2 a10  0 0 	switch_Sah
+M103 h1 b10  0 0	 	switch_Sah
+M104 h2 b10  en1 en1 	switch_Sah
+
+c10 	a10 	b10 	2.0p
+
+*eqp1
+M105 h1 c10 d10 d10	switch_Sah
+M106 h2 c10 0	0	switch_Sah
+
+c11 c10 b10 		2.0p
+
+M107 q1  mvref d10 d10	switch_Sah 
+M108 q1b pvref d10 d10	switch_Sah 
+
+M109 q1  pvref d11 d11	switch_Sah 
+M110 q1b mvref d11 d11	switch_Sah 
+
+
+M121 h1 a11  sng1 sng1 	switch_Sah
+M122 h2 a11  0 0   	switch_Sah
+M123 h1 b11  0 0 	switch_Sah
+M124 h2 b11  ep1 ep1 	switch_Sah
+
+c13 a11  b11 		2.0p
+
+*eqn1
+M125 h1 c11  d11 d11 	switch_Sah
+M126 h2 c11 0 0		switch_Sah
+
+c14 c11 b11 		2.0p
+
+xopa1        ep1 en1 sp1  sn1 	opamp
+cint10          en1    sp1 		4.0p
+cint11          ep1    sn1 		4.0p
+*.ends int1
+* additional capacitances to match Siconos dynamical system
+ca10 	a10 0 0.1p
+cb10 	b10 0 0.1p
+cc10 	c10 0 0.1p
+cd10 	d10 0 0.1p
+copa1p 	sp1 0 0.1p
+ca11 	a11 0 0.1p
+cb11 	b11 0 0.1p
+cc11 	c11 0 0.1p
+cd11 	d11 0 0.1p
+copa1n 	sn1 0 0.1p
+*cen1	en1 0 0.1p
+*cep1	ep1 0 0.1p
+
+* deuxieme integrateur
+
+* ep2
+M201 h2 a20  sp1 sp1	switch_Sah
+M202 h1 a20  0 0 	switch_Sah
+M203 h2 b20  0 0	 	switch_Sah
+M204 h1 b20  en2 en2  	switch_Sah
+
+c20 a20  b20 		0.5p
+
+*eqp2
+M205 h2 c20 d20 d20	switch_Sah
+M206 h1 c20 0 0		switch_Sah
+
+c21 c20 b20 		0.5p
+
+M207 q1  mvref d20 d20 	switch_Sah 
+M208 q1b pvref d20 d20	switch_Sah 
+
+M209 q1  pvref d21 d21 	switch_Sah 
+M210 q1b mvref d21 d21	switch_Sah 
+
+* en2
+M211 h2 a21  sn1 sn1	switch_Sah
+M212 h1 a21  0 0  	switch_Sah
+M213 h2 b21  0 0  	switch_Sah
+M214 h1 b21  ep2 ep2 	switch_Sah
+
+c23 a21  b21 	 	0.5p
+
+*eqn2
+M215 h2 c21 d21 d21 	switch_Sah
+M216 h1 c21 0 0		switch_Sah
+
+c24 c21 b21 		0.5p
+
+xopa2        ep2 en2 sp2  sn2 	opamp
+cint20          en2    sp2 	1p
+cint21          ep2    sn2 	1p
+*.ends int2
+* additional capacitances to match Siconos dynamical system
+ca20 	a20 0 0.025p
+cb20 	b20 0 0.025p
+cc20 	c20 0 0.025p
+cd20 	d20 0 0.025p
+copa2p 	sp2 0 0.1p
+ca21 	a21 0 0.025p
+cb21 	b21 0 0.025p
+cc21 	c21 0 0.025p
+cd21 	d21 0 0.025p
+copa2n 	sn2 0 0.1p
+*cen2 	en2 0 0.025p
+*cep2 	ep2 0 0.025p
+
+xcomp1	h1 h2 h2b sp2  sn2 q1 q1b compmacro
+
+
+***********************************************
+
+*	simulation
+*
+vinp spg1 0 sin(0  0.5  1024 0 0)
+vinn sng1 0 sin(0 -0.5  1024 0 0)
+
+vrefm mvref 0 DC -1
+vrefp pvref 0 DC 1
+
+Vh1  h1  0  pulse (-5  5  259n  1n  1n  238n  500n)
+Vh2  h2  0  pulse (-5  5  9n  1n  1n  238n  500n)
+Vh2b h2b 0  pulse (-5  5  250n 1n  1n  238n  500n)
+
+.ic v(a10)=0
+.ic v(b10)=0
+.ic v(c10)=0
+*.ic v(d10)=0
+.ic v(en1)=0
+.ic v(sn1)=0
+.ic v(a11)=0
+.ic v(b11)=0
+.ic v(c11)=0
+*.ic v(d11)=0
+.ic v(ep1)=0
+.ic v(sp1)=0
+.ic v(a20)=0
+.ic v(b20)=0
+.ic v(c20)=0
+*.ic v(d20)=0
+.ic v(en2)=0
+.ic v(sn2)=0
+.ic v(a21)=0
+.ic v(b21)=0
+.ic v(c21)=0
+*.ic v(d21)=0
+.ic v(ep2)=0
+.ic v(sp2)=0
+.ic v(comp1:compinp)=0
+.ic v(comp1:compinm)=0
+.ic v(comp1:compout)=0
+.ic v(comp1:ebasc)=-2.5
+.ic v(q1b)=2.5
+.ic v(q1)=-2.5
+.ic v(comp1:q1)=-2.5
+
+.model switch_Sah NMOS LEVEL=1 KP=2.5e-5 VT0=1
+.model mosP_Sah PMOS LEVEL=1 KP=3.24e-5 VT0=0.6
+.model mosN_Sah NMOS LEVEL=1 KP=3.24e-5 VT0=0.6
+
+.options method=trap ITL4=100 ABSTOL=1p VNTOL=1u RELTOL=0.001
+
+.save V(spg1,sng1) V(q1)
+.tran 1n 250u 0 1n
+
+.print tran V(spg1,sng1) V(q1)
+*.plot tran   V(Q1)
+*.plot tran v(spg1, sng1)
+
+.end
