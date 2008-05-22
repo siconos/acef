@@ -695,7 +695,7 @@ bool linearSystem::step(){
   return res;
 }
 void linearSystem::stopSimu(){
-  mMLCP->printGuess();
+  //  mMLCP->printGuess();
   mMLCP->stopSolver();
   if (mMLCP)
     delete mMLCP;

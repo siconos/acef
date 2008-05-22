@@ -12,6 +12,7 @@
 #include "aceMatrix.h"
 #include "aceVector.h"
 #include <list>
+#include "NonSmoothDrivers.h"
 
 
 typedef std::list<unsigned long> ulongs;
@@ -28,10 +29,10 @@ public:
   bool solve();
   void stopSolver();
   bool initSolver();
-  void addGuess(aceVector *mZ);
+  //  void addGuess(aceVector *mZ);
 
-  void addGuess(unsigned long l);
-  void setCurrentConfig(unsigned long l);
+  //  void addGuess(unsigned long l);
+  //  void setCurrentConfig(unsigned long l);
   aceVector *mW1;
   aceVector *mZ1;
   aceVector *mZ2;
@@ -62,23 +63,31 @@ public:
   aceMatrix *mM;
   bool mTryM;
   
-  void printGuess(ostream& os = cout);
+  //  void printGuess(ostream& os = cout);
   void printInPut(ostream& os = cout);
   void printInPutABCDab(ostream& os = cout);
 
   void printOutPut(ostream& os = cout);
+
+
+  //Numerics interface
+  MixedLinearComplementarity_Problem mProblem;
+  Solver_Options mOptions;
+  Numerics_Options mNumericsOptions;
+
 protected:
 private:
-  void   fillSolution();
+  //  void   fillSolution();
 
-  void initEnum();
-  bool nextEnum();
-  bool tryGuess();
-  void initGuess();
-  void affectW1Z1(unsigned long ll);
-  bool solveGuessAndIt();
-  bool solveWithSimplex();
-  bool solveWithPath();
+//   void initEnum();
+//   bool nextEnum();
+//   bool tryGuess();
+//   void initGuess();
+//   void affectW1Z1(unsigned long ll);
+//   bool solveGuessAndIt();
+//   bool solveWithSimplex();
+//   bool solveWithPath();
+   bool solveWithNumerics();
   //INTERNAL--OPTION
   bool mTringGuess;
   bool mTryOnlyGuess;

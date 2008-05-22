@@ -168,7 +168,7 @@ void algo::perform(){
  initComponentList("Mos1");
  dataMOS1 mos;
  while(nextComponent(&mos)){
-   componentMOS *c=new componentMOS(&mos,2);
+   componentMOS *c=new componentMOS(&mos,1);
    mMos.push_back(c);
    c->addUnknowns();
    c->addEquations();
@@ -229,6 +229,7 @@ void algo::perform(){
 //  }
 
  initComponentList("Comparator");
+ dataCOMP dCOMP;
  while(nextComponent(&dCOMP)){
    componentCOMP *c=new componentCOMP(&dCOMP);
    c->addUnknowns();
