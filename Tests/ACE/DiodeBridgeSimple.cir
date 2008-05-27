@@ -1,8 +1,13 @@
 diode bridge
 
+.subckt resis n1 n2
+RresisName n1 n2 1000
+.ends
+
 C1 1 0 1uF
 L1 1 0 10mH
-R1 2 3 1000
+
+xR1 2 3 resis
 
 .MODEL DIODEDEF D N=0.25
 DF1 1 2 DIODEDEF 
@@ -11,14 +16,17 @@ DR1 0 2 DIODEDEF
 DF2 3 0 DIODEDEF 
 
 .ic V(1)=10
-.options method=trapezoidal
+
+.options method=trap RELTOL=0.04
+
+.save  v(1)
+
+.tran 0.00001 0.005
+.print tran 	v(2,3)
 
 .control
-set width = 140
+set width = 230
 set nobreak
-
-tran 100u 10.0m uic
-print col v(1) v(3) v(2,3) v(2) 
+rusage everything
 .endc
-
-.END
+.end

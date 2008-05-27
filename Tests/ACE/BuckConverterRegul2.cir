@@ -47,14 +47,15 @@ Ramp 14 5 1
 Camp 5 0 5.305E-9
 
 * comparator
-Bcomp 7 0 V=1.5*(tanh(10.0*V(6,5)) + 1.0)
+*Bcomp 7 0 V=1.5*(tanh(10.0*V(6,5)) + 1.0)
+.comp 6 5 7 Vmin=0 Vmax=3 Vepsilon=0.1
 
 .options method=trap RELTOL=0.04
 
-.save  v(6) v(2) @L1[i] v(3) v(7) v(5) @Dpswitch[id] @Dnswitch[id] i(ValimI) i(Vmespswitch) i(Vmesnswitch)
+.save  v(3) v(2) 
 
-.tran 1n 200u 0 0.1n
-.print tran v(6) v(2) @L1[i] v(3) v(7) v(5) @Dpswitch[id] @Dnswitch[id] i(ValimI) i(Vmespswitch) i(Vmesnswitch)
+.tran 0.00000000005 0.000002
+.print tran  v(3) v(3,2) 
 
 .control
 set width = 230

@@ -1,0 +1,45 @@
+inverterchain10
+
+.model nmos nmos level=1 tox=20e-09 vto=0.6 kp=0.0001294924849
+.model pmos pmos level=1 tox=20e-09 vto=-0.6 kp=4.31643e-05
+
+.subckt invertercmos a anot vdd vss
+
+    m1 anot a vdd vdd  pmos w=3u l=1u
+    m2 anot a vss vss  nmos w=1u l=1u
+
+    cload anot vss 50f
+
+.ends
+
+ xinv1 inv0 inv1 vdd 0 invertercmos
+ xinv2 inv1 inv2 vdd 0 invertercmos
+ xinv3 inv2 inv3 vdd 0 invertercmos
+ xinv4 inv3 inv4 vdd 0 invertercmos
+ xinv5 inv4 inv5 vdd 0 invertercmos
+ xinv6 inv5 inv6 vdd 0 invertercmos
+ xinv7 inv6 inv7 vdd 0 invertercmos
+ xinv8 inv7 inv8 vdd 0 invertercmos
+ xinv9 inv8 inv9 vdd 0 invertercmos
+ xinv10 inv9 inv10 vdd 0 invertercmos
+
+valim vdd 0 1.8
+
+Vin_inv inv0 0 PULSE (0 1.8 1n 0.5n 0.5n 20n 40n)
+
+ .ic v(inv1) = 1.8
+ .ic v(inv2) = 0.0
+ .ic v(inv3) = 1.8
+ .ic v(inv4) = 0.0
+ .ic v(inv5) = 1.8
+ .ic v(inv6) = 0.0
+ .ic v(inv7) = 1.8
+ .ic v(inv8) = 0.0
+ .ic v(inv9) = 1.8
+ .ic v(inv10) = 0.0
+
+
+.tran 0.1n 100n
+
+
+.end

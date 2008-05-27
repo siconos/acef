@@ -178,10 +178,10 @@ xcomp1	h1 h2 h2b sp2  sn2 q1 q1b compmacro
 
 *	simulation
 *
-*vinp spg1 0 sin(0  0.5  1024 0 0)
-*vinn sng1 0 sin(0 -0.5  1024 0 0)
-vinp spg1 0 DC 0.25
-vinn sng1 0 DC -0.25
+vinp spg1 0 sin(0  0.5  1024 0 0)
+vinn sng1 0 sin(0 -0.5  1024 0 0)
+*vinp spg1 0 DC 0.25
+*vinn sng1 0 DC -0.25
 
 vrefm mvref 0 DC -1
 vrefp pvref 0 DC 1
