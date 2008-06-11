@@ -43,7 +43,7 @@ void componentVSRC::stamp(){
 
 void componentVSRC::stampTimer(){
   ACE_DOUBLE newValue;
-  getSourceValue("Vsource",mData.id,&newValue);
+  ParserGetSourceValue("Vsource",mData.id,&newValue);
   mEquation->mCoefs[algo::sls.mRS]-=newValue - mCurrentValue;
 
   mCurrentValue = newValue;

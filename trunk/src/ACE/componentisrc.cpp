@@ -31,7 +31,7 @@ void componentISRC::stamp(){
 
 void componentISRC::stampTimer(){
   ACE_DOUBLE newValue;
-  ACE_CHECK_IERROR(getSourceValue("Isource",mData.id,&newValue),"componentISRC::stampTimer");
+  ACE_CHECK_IERROR(ParserGetSourceValue("Isource",mData.id,&newValue),"componentISRC::stampTimer");
   //KCL
   algo::sls.KCL(mData.nodeNeg)->mCoefs[algo::sls.mRS]-=newValue - mCurrentValue;
   algo::sls.KCL(mData.nodePos)->mCoefs[algo::sls.mRS]+=newValue - mCurrentValue;

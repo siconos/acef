@@ -442,7 +442,7 @@ void linearSystem::readInitialValue(){
   try{
 
     double stop,start;
-    getTransValues(&mH,&stop,&start);
+    ParserGetTransValues(&mH,&stop,&start);
     long long b1 = llrint(stop/mH);;
     long b2 = lrint(stop/mH);;
     mStepNumber = b2;
@@ -457,8 +457,8 @@ void linearSystem::readInitialValue(){
       mxti->setValueIfNotNull(i,0);
     }
 
-    initICvalue();
-    while(getICvalue(&i,&useIc,&aux)){
+    ParserInitICvalue();
+    while(ParserGetICvalue(&i,&useIc,&aux)){
       if (i>0){
 	mzsti->setValueIfNotNull(i-1,aux);
 	cout<<"set value from netlist :v_"<<i<<"="<<aux<<endl;
@@ -1297,24 +1297,23 @@ void linearSystem::printStep(ostream& os){
   int i;
   bool printALL = true;
   if (printALL){
-    os << "xt("<<mStepCmp*mH<<")\t";
-    if (mxti)
-      for (i=0;i<mDimx;i++)
- 	os << mxti->getValue(i)<<"\t";
+//     os << "xt("<<mStepCmp*mH<<")\t";
+//     if (mxti)
+//       for (i=0;i<mDimx;i++)
+//  	os << mxti->getValue(i)<<"\t";
     os << "zs("<<mStepCmp*mH<<")\t";
     for (i=0;i<mDimzs-1;i++)
       os << mzsti->getValue(i)<<"\t";
   
-    os << "zns("<<mStepCmp*mH<<")\t";
-    if (mznsti)
-      for (i=0;i<mDimzns;i++)
- 	os << mznsti->getValue(i)<<"\t";
+//     os << "zns("<<mStepCmp*mH<<")\t";
+//     if (mznsti)
+//       for (i=0;i<mDimzns;i++)
+//  	os << mznsti->getValue(i)<<"\t";
     os<<"\n";
   }else{
     if (mStepCmp%mLogPrint==0){
       //      os <<mStepCmp*mH<<"\t"<<mxti->getValue(4)<<"\n";
-      os << (mzsti->getValue(1)-mzsti->getValue(0))/1000.0<<"\t";
-      os << (mzsti->getValue(2)-mzsti->getValue(3))/8.0<<"\t"<<"\n";
+      os << mzsti->getValue(1)<<"\t"<<mzsti->getValue(0)<<"\t"<<mzsti->getValue(6)<<"\t"<<mzsti->getValue(8)<<"\t"<<mzsti->getValue(10)<<"\n";
       
     }
   }

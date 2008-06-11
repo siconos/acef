@@ -2,7 +2,7 @@
 #define EXTERNAL_H
 
 
-#include "includes/parser.h"
+#include "Siconos/Spiceparser/Spiceparser.h"
 
 
 

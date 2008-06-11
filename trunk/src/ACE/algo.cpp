@@ -31,17 +31,17 @@ algo::algo(char * file){
   strcat(mSimuFile,"sim");
   
 
-  if (!initParserLibrary()){
+  if (!ParserInitLibrary()){
     ACE_INTERNAL_ERROR("initParserLibrary");
   }
-  readFile(file);
-  printCircuit();
+  ParserReadFile(file);
+  ParserPrintCircuit();
 
 
   
 }
 algo::~algo(){
-  stopParserLibrary();
+  ParserStopLibrary();
 
   //destroy components
   int n=0;
@@ -85,15 +85,15 @@ algo::~algo(){
 ////////////////////////////////////////////////////////////////////// ALGO
 void algo::perform(){
   ACE_times[ACE_TIMER_EQUATION].start();
- sls.mNbNodes = getNbElementsOfType("Node");
+ sls.mNbNodes = ParserGetNbElementsOfType("Node");
  sls.initKCL();
  sls.addVUnknowns();
  //BUILD x VECTOR
  //get CAPACITOR from parser
- initGraph(sls.mNbNodes,getNbElementsOfType("Capacitor"));
- initComponentList("Capacitor");
+ initGraph(sls.mNbNodes,ParserGetNbElementsOfType("Capacitor"));
+ ParserInitComponentList("Capacitor");
  dataCAP dCap;
- while(nextComponent(&dCap)){
+ while(ParserNextComponent(&dCap)){
    componentCAP *c=new componentCAP(&dCap);
    mCaps.push_back(c);
    
@@ -146,9 +146,9 @@ void algo::perform(){
  stopGraph();
 
  //get INDUCTOR from parser
- initComponentList("Inductor");
+ ParserInitComponentList("Inductor");
  dataIND dInd;
- while(nextComponent(&dInd)){
+ while(ParserNextComponent(&dInd)){
    componentIND* c = new componentIND(&dInd);
    mInds.push_back(c);
    c->addUnknowns();
@@ -156,26 +156,26 @@ void algo::perform(){
  }
 //BUILD Zns component
 //get INDUCTOR from parser
- initComponentList("Diode");
+ ParserInitComponentList("Diode");
  dataDIO dIo;
- while(nextComponent(&dIo)){
+ while(ParserNextComponent(&dIo)){
    componentDIO *c=new componentDIO(&dIo);
    mDios.push_back(c);
    c->addUnknowns();
    c->addEquations();
    
  }
- initComponentList("Mos1");
+ ParserInitComponentList("Mos1");
  dataMOS1 mos;
- while(nextComponent(&mos)){
+ while(ParserNextComponent(&mos)){
    componentMOS *c=new componentMOS(&mos,1);
    mMos.push_back(c);
    c->addUnknowns();
    c->addEquations();
  }
-  initComponentList("BJT");
+  ParserInitComponentList("BJT");
   dataBJT bjt;
-  while(nextComponent(&bjt)){
+  while(ParserNextComponent(&bjt)){
     componentBJT *c=new componentBJT(&bjt);
     mBjt.push_back(c);
     c->addUnknowns();
@@ -184,26 +184,26 @@ void algo::perform(){
 
  
 //get RESISTOR from parser
- initComponentList("Resistor");
+ ParserInitComponentList("Resistor");
  dataRES dRes;
- while(nextComponent(&dRes)){
+ while(ParserNextComponent(&dRes)){
    componentRES *c=new componentRES(&dRes);
    mRess.push_back(c);   
  }
- computeSourcesValues(0.0);
+ ParserComputeSourcesValues(0.0);
 //get Vsource from parser
- initComponentList("Vsource");
+ ParserInitComponentList("Vsource");
  dataVSRC dVsrc;
- while(nextComponent(&dVsrc)){
+ while(ParserNextComponent(&dVsrc)){
    componentVSRC *c=new componentVSRC(&dVsrc);
    c->addUnknowns();
    c->addEquations();
    mVsrcs.push_back(c);   
  }
 
- initComponentList("VCVS");
+ ParserInitComponentList("VCVS");
  dataVCVS dVcvs;
- while(nextComponent(&dVcvs)){
+ while(ParserNextComponent(&dVcvs)){
    componentVCVS *c=new componentVCVS(&dVcvs);
    c->addUnknowns();
    c->addEquations();
@@ -228,9 +228,9 @@ void algo::perform(){
 //    mArbs.push_back(c);   
 //  }
 
- initComponentList("Comparator");
+ ParserInitComponentList("Comparator");
  dataCOMP dCOMP;
- while(nextComponent(&dCOMP)){
+ while(ParserNextComponent(&dCOMP)){
    componentCOMP *c=new componentCOMP(&dCOMP);
    c->addUnknowns();
    c->addEquations();
@@ -238,9 +238,9 @@ void algo::perform(){
  }
  
  
- initComponentList("VCCS");
+ ParserInitComponentList("VCCS");
  dataVCCS dVCCS;
- while(nextComponent(&dVCCS)){
+ while(ParserNextComponent(&dVCCS)){
    componentVCCS *c=new componentVCCS(&dVCCS);
    c->addUnknowns();
    c->addEquations();
@@ -248,9 +248,9 @@ void algo::perform(){
  }
  
 //get Isource from parser
- initComponentList("Isource");
+ ParserInitComponentList("Isource");
  dataISRC dIsrc;
- while(nextComponent(&dIsrc)){
+ while(ParserNextComponent(&dIsrc)){
    componentISRC *c=new componentISRC(&dIsrc);
    mIsrcs.push_back(c);   
  }
@@ -333,7 +333,7 @@ void algo::preparStep(double time){
   int n;
   int i;
   //ACE_DOUBLE time = sls.mStepCmp*sls.mH;
-  computeSourcesValues(time);
+  ParserComputeSourcesValues(time);
   n = mVsrcs.size();
   for(i=0;i<n;i++)
     mVsrcs[i]->stampTimer();

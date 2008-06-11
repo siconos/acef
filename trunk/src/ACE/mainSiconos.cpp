@@ -347,17 +347,17 @@ int main(int argc, char **argv){
   ofstream pout("acefSimu.dat");
 
   dataPrint * pPrint;
-  initPrintElem();
+  ParserInitPrintElem();
   pout<<"Index\ttime";
-  while(getPrintElem((void**)&pPrint)){
+  while(ParserGetPrintElem((void**)&pPrint)){
     pout<<"\t\t";
     pout<<pPrint->name;
   }
   pout<<endl<<endl;
   /*print t0*/
-  initPrintElem();
+  ParserInitPrintElem();
   pout <<0<<"\t"<<0;
-  while(getPrintElem((void**)&pPrint)){
+  while(ParserGetPrintElem((void**)&pPrint)){
     pout<<"\t\t";
     double aux = sAlgo->sls.mzsti->getValue(pPrint->node1-1);
     if (pPrint->node2 >0)
@@ -375,10 +375,10 @@ int main(int argc, char **argv){
     aS->computeOneStep();
 
     if ((!NData) || k % NData == 0){
-      initPrintElem();
+      ParserInitPrintElem();
       //pout <<k+1<<"\t"<<(k+1)*h;
       pout <<(k+1)*h;
-      while(getPrintElem((void**)&pPrint)){
+      while(ParserGetPrintElem((void**)&pPrint)){
 	pout<<"\t\t";
 	if (FORMULATION == SEMI_EXPLICIT){
 	  double aux = (*lambda)(pPrint->node1-1);
