@@ -484,7 +484,7 @@ void extern_mlcp_simplex_init_with_M(int *nn , int* mm, double *M ){
   }
 
 
-  print_sparse_matrix( matbeg,matcnt,matind,matval,objective,rhs,sense,lb,ub);
+  //print_sparse_matrix( matbeg,matcnt,matind,matval,objective,rhs,sense,lb,ub);
 
   /*READY TO SOLVE*/
 	
@@ -646,7 +646,7 @@ void extern_mlcp_simplex_init(int *nn , int* mm, double *A , double *B , double 
   }
 
 
-  print_sparse_matrix( matbeg,matcnt,matind,matval,objective,rhs,sense,lb,ub);
+  //print_sparse_matrix( matbeg,matcnt,matind,matval,objective,rhs,sense,lb,ub);
 
   /*READY TO SOLVE*/
 	
@@ -703,6 +703,7 @@ int extern_mlcp_simplex( double *a, double *b, double *u, double *v, double *w ,
   tolNegVar = dparamMLCP[2];     /*tolerance to consider a value is negative*/ 		
   nIterMax = iparamMLCP[0];		/* max number of nodes to consider in tree search */
   VERBOSE = iparamMLCP[1];
+  *info=1;
 
 
   int i;
@@ -726,9 +727,9 @@ int extern_mlcp_simplex( double *a, double *b, double *u, double *v, double *w ,
   chgobj (env, lp, ncols, ind1toN, objective);
 
     /* optimize with objective to find feasible point */
-  print_double_array("a",rhs,n);
-  print_double_array("b",rhs+n,m);
-  //print_sparse_matrix(matbeg,matcnt,matind,matval,objective,rhs,sense,lb,ub);
+  //print_double_array("a",rhs,n);
+  //print_double_array("b",rhs+n,m);
+  print_sparse_matrix(matbeg,matcnt,matind,matval,objective,rhs,sense,lb,ub);
 
   //  ACE_times[ACE_TIMER_SIMPLEX_FIRST].start();
   lpopt(env, lp);
@@ -738,6 +739,7 @@ int extern_mlcp_simplex( double *a, double *b, double *u, double *v, double *w ,
     computeConfig(0,x);
     //printf("No iterations\n");
     fillSolution(u,v,w,x);
+    *info=0;
     return 1;
   }
 
@@ -772,12 +774,14 @@ int extern_mlcp_simplex( double *a, double *b, double *u, double *v, double *w ,
       tryNode(&(*curIt),objval,'v');
       if (checkSolution(x)){
 	fillSolution(u,v,w,x);
+	*info=0;
 	//	ACE_times[ACE_TIMER_SIMPLEX_GUESS].stop();
 	return 1;
       }
       tryNode(&(*curIt),objval,'w');
       if (checkSolution(x)){
 	fillSolution(u,v,w,x);
+	*info=0;
 	//	ACE_times[ACE_TIMER_SIMPLEX_GUESS].stop();
 	return 1;
       }
@@ -831,6 +835,7 @@ int extern_mlcp_simplex( double *a, double *b, double *u, double *v, double *w ,
     if (solvesubproblem(currentNode, branchingIndex, 'v', tree, x)){
       computeConfig((node*)&(*currentNode),x);
       fillSolution(u,v,w,x);
+      *info=0;
       if (USE_GUESS){
 	sList.push_front(*currentNode);
 	tree.erase(currentNode);
@@ -847,6 +852,7 @@ int extern_mlcp_simplex( double *a, double *b, double *u, double *v, double *w ,
     if (solvesubproblem( currentNode, branchingIndex, 'w', tree, x)){
       computeConfig(&(*currentNode),x);
       fillSolution(u,v,w,x);
+      *info=0;
       if (USE_GUESS){
 	sList.push_front(*currentNode);
 	tree.erase(currentNode);

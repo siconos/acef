@@ -111,7 +111,7 @@ else
 	CXX    = g++
 	SPECIAL_CPP_OPTION = -Wno-deprecated
 endif
-CXXFLAGS     =  -g -Wall $(SPECIAL_CPP_OPTION) -I$(INCLUDE_DIR) -I$(INCLUDE_SICONOS_DIR) -I$(CPLEXINCDIR) -I$(CONCERTINCDIR) \
+CXXFLAGS     =   -Wall $(SPECIAL_CPP_OPTION) -I$(INCLUDE_DIR) -I$(INCLUDE_SICONOS_DIR) -I$(CPLEXINCDIR) -I$(CONCERTINCDIR) \
 			-I$(INCLUDE_SICONOS_KERNEL_DIR) -I/usr/include/libxml2 -I/usr/local/include/Siconos/Numerics \
 			-I/usr/local/include/Siconos/Kernel/AtlasLocal/atlas/ -c
 ADD_OPT      = #-lntl -lgmp -lm  # Optionnal option for the linker
