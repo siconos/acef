@@ -1,0 +1,4 @@
+1) compil perform.so and copy it in the LD_LIBRARY_PATH.
+2) compil parser.a and copy in ACE/lib/
+3) make
+4) ./toto file.cir

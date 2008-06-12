@@ -1,5 +1,4 @@
-#include"ace.h"
-#include "algo.h"
+#include "ACEF.h"
 
 #include "/usr/local/include/Siconos/Kernel/MLCP.h"
 #include "SiconosKernel.h"

@@ -15,7 +15,7 @@ $Id: spec.c,v 1.5 2005/05/30 20:28:30 sjborley Exp $
 
 #include "spec.h"
 #include "variable.h"
-
+#include "parse.h"
 void
 com_spec(wordlist *wl)
 {

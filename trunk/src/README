@@ -1,0 +1,4 @@
+This directory contains the code source of the automatic circuit equation formulation (ACEF). It is based on SiconosKernel and SiconosNumerics.
+./Spiceparser : It builds the library libSiconosSpiceparser. It contains the netlist parser.
+./ACE : It builds the library libSiconosACEF. It is linked with libSiconosSpiceparser. It contains the automatic circuit equation formulation.
+./EXE : It builds executables to run the simulation.

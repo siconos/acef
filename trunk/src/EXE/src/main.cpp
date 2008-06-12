@@ -1,5 +1,5 @@
-#include"ace.h"
-#include "algo.h"
+#include "ACEF.h"
+
 int main(int argc, char **argv){
   if (argc<5){
     printf("usage : toto file.cir ENUM|SIMPLEX|PATH 10 DENSE|SPARSE\n");

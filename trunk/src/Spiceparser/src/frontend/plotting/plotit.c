@@ -15,6 +15,7 @@
 #include "agraf.h"
 #include "xgraph.h"
 #include "graf.h"
+#include "parse.h"
 
 static wordlist *wl_root;
 static bool sameflag;
