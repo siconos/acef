@@ -4,3 +4,4 @@ version 71 : before index reduction
 version 81 : Use siconos solver, tested with diodeBridgeSimple.cir:`
 version 92 : Add direct solver. tested with DiodeBridge 12 .cir
 version 111 : last version before the spice parser with Cmake
+version 115 : all acef with cmake, tested.

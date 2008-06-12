@@ -1,4 +1,4 @@
-This directory must contained a symbolic link called cmake on the target Numerics/cmake
+To compile, you have to create a symbolic link called cmake on the target Numerics/cmake
 
 compil with cmake:
-LDFLAGS=-lm cmake -DCMAKE_BUILD_TYPE=Debug ...src/EXE
+cmake -DCMAKE_BUILD_TYPE=Debug ...trunk/src/EXE
