@@ -17,6 +17,13 @@ public:
   virtual void preparStep();
   virtual bool step();
   virtual void buildMLCP();
+  virtual void computeBestStep();
+  void preparMLCP();
+
+
+protected:
+  virtual void setStep(ACE_DOUBLE newH);
+
   
 };
 #endif //LINEARSYSTEMDAE_H

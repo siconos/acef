@@ -59,12 +59,14 @@ public:
 
   //DISCRETISATION simulation
   void readInitialValue();
+  virtual double getCurrentTime();
   virtual void initSimu();
   virtual void preparStep();
   virtual bool step();
   void stopSimu();
   virtual void computeZnstiFromX_Zs();
   virtual void buildMLCP();
+  virtual void computeBestStep();
 
   void ExtractAndCompute2Sources();
   void extractSources();
@@ -170,6 +172,9 @@ public:
   aceVector *mznsti;
   aceVector *mxfree;
 
+ 
+
+  
   aceMatrix *mW;
   aceMatrix *mD3l;
   aceMatrix *mD3zs;
@@ -183,6 +188,26 @@ public:
   ACE_DOUBLE mTheta;
   ACE_DOUBLE mThetap;
   ACE_DOUBLE mH;
+  ACE_DOUBLE mHori;
+  ACE_DOUBLE mMaxHori;
+  //for adaptive time stepping
+  bool mUseAdaptiveTimeStepping;
+  ACE_DOUBLE mAlpha;
+  ACE_DOUBLE mAlphaMax;
+  ACE_DOUBLE mAlphaMin;
+  ACE_DOUBLE mNormX0;
+  ACE_DOUBLE mNormZ0;
+  ACE_DOUBLE mLocalErrorTol;
+  int mAdaptCmp;
+
+  ACE_DOUBLE mTstart;
+  ACE_DOUBLE mTstop;
+  ACE_DOUBLE mTcurrent;
+  aceVector *mxtiprev;
+  aceVector *mzstiprev;
+  aceVector *mxticurrent;
+  aceVector *mzsticurrent;
+  
 
   mlcp* mMLCP;
   long mStepCmp;
@@ -204,6 +229,7 @@ public:
 
 
 protected:
+  virtual void setStep(ACE_DOUBLE newH);
 private:
   void buildABCDs();
   void extractDynBockInMat(aceMatrix * m, int IndexBegin, int IndexEnd);
@@ -222,6 +248,7 @@ private:
   void allocDiscretisation();
   void freeDiscretisation();
   void freeForInitialValue();
+  
   
 };
 #endif //LINEARSYSTEM_H

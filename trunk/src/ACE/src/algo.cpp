@@ -351,14 +351,14 @@ void algo::simulate(){
   spls->initSimu();
   mSimuStream = new ofstream(mSimuFile);
   ACE_times[ACE_TIMER_SIMULATION].start();
-  preparStep(spls->mStepCmp*spls->mH);
+  preparStep(spls->getCurrentTime());
   spls->ExtractAndCompute2Sources();
   spls->preparStep();
   while(spls->step()){
     if (ACE_MUET_LEVEL != ACE_MUET)
       spls->printStep();
     spls->printStep(*mSimuStream);
-    preparStep(spls->mStepCmp*spls->mH);
+    preparStep(spls->getCurrentTime());
     spls->ExtractAndCompute2Sources();
     spls->preparStep();
   }

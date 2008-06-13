@@ -1,8 +1,8 @@
 #include "ACEF.h"
 
 int main(int argc, char **argv){
-  if (argc<5){
-    printf("usage : toto file.cir ENUM|SIMPLEX|PATH 10 DENSE|SPARSE INV/NOINV\n");
+  if (argc<6){
+    printf("usage : toto file.cir ENUM|SIMPLEX|PATH 10 DENSE|SPARSE INV/NOINV [FIX/ADAPT]\n");
     return 0;
   }
   if (!strcmp(argv[2],"ENUM")){
@@ -29,8 +29,12 @@ int main(int argc, char **argv){
   else
     ACE_MAT_TYPE=DENSE;
   
-  if (argc > 5 && !strcmp(argv[5],"NOINV"))
+  if (!strcmp(argv[5],"NOINV"))
     ACE_FORMULATION_WITH_INVERSION=0;
+  if (argc > 6 && !strcmp(argv[6],"ADAPT")){
+    ACE_MAX_LOCAL_ERROR=1e-4;
+    ACE_WITH_ADAPTATIVE_TIME_STEPPING=1;
+  }
     
   ACE_times[ACE_TIMER_MAIN].start();
   ACE_INIT();

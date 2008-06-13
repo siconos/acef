@@ -87,6 +87,23 @@ linearSystem::linearSystem(){
   mTheta = 0.5;
   mThetap = 0.5;
   mH = 1;
+  mHori=1;
+  mTstart=0;
+  mTstop=0;
+  mTcurrent=0;
+  //adaptive time stepping
+  mUseAdaptiveTimeStepping=false;
+  mAlphaMax=5;
+  mAlphaMin=0.5;
+  mAlpha=0.95;
+  mAdaptCmp=-1;
+  mxtiprev=0;
+  mzstiprev=0;
+  mxticurrent=0;
+  mzsticurrent=0;
+  mLocalErrorTol = ACE_MAX_LOCAL_ERROR;
+
+
   mLogFrequency=0;
   mLogPrint=0;
   mPourMille=0;
@@ -327,10 +344,15 @@ void linearSystem::freeD1Matrix(){
     delete mA2sti;
 }
 void linearSystem::allocForInitialValue(){
+
   if(mDimx){
     mxti = new aceVector(mDimx,ACE_MAT_TYPE);
+    mxtiprev=new aceVector(mDimx,ACE_MAT_TYPE);
+    mxticurrent=new aceVector(mDimx,ACE_MAT_TYPE);
   }
   mzsti = new aceVector(mDimzs-1,ACE_MAT_TYPE);
+  mzsticurrent=new aceVector(mDimzs-1,ACE_MAT_TYPE);
+  mzstiprev=new aceVector(mDimzs-1,ACE_MAT_TYPE);
 }
 
 void linearSystem::allocDiscretisation(){
@@ -362,6 +384,10 @@ void linearSystem::allocDiscretisation(){
 void linearSystem::freeForInitialValue(){
   if (mxti)
     delete mxti;
+  if (mxtiprev)
+    delete mxtiprev;
+  if (mxticurrent)
+    delete mxticurrent;
   if (mzsti)
     delete mzsti;
 }
@@ -449,10 +475,11 @@ void linearSystem::readInitialValue(){
   cout << "read init value\n";
   try{
 
-    double stop,start;
-    ParserGetTransValues(&mH,&stop,&start);
-    long long b1 = llrint(stop/mH);;
-    long b2 = lrint(stop/mH);;
+    ParserGetTransValues(&mH,&mTstop,&mTstart);
+    mHori = mH;
+    mMaxHori = 100 * mHori;
+    long long b1 = llrint(mTstop/mH);;
+    long b2 = lrint(mTstop/mH);;
     mStepNumber = b2;
 
     
@@ -490,6 +517,13 @@ void linearSystem::readInitialValue(){
     }
 
 }
+void linearSystem::computeBestStep(){
+  ;
+}
+void linearSystem::setStep(ACE_DOUBLE newH){
+  ACE_ERROR("linearSystem::setStep not implemeted");
+}
+
 void linearSystem::buildMLCP(){
   mMLCP = new mlcp(mDimLambda,mNbNonDynEquations,ACE_SOLVER_TYPE);
 
@@ -577,6 +611,7 @@ void linearSystem::initSimu(){
   allocDiscretisation();
   readInitialValue();
   mStepCmp=0;
+  mTcurrent=0;
   mLogFrequency =  mStepNumber/1000;
   mLogPrint = mStepNumber/10000;
   if (mLogPrint==0) mLogPrint=1;
@@ -589,6 +624,10 @@ void linearSystem::initSimu(){
 
   
 }
+double linearSystem::getCurrentTime(){
+  return mTcurrent;
+}
+
 void linearSystem::preparStep(){
   if (mDimx && mDimLambda){//both
     //(*mxfree) = (*mxti) + mH*((1-mTheta)*(prod(*mA2x,*mxti)+prod(*mA2zs,*mzsti) + (*mA2sti))+mThetap*(*mA2s));
@@ -666,10 +705,11 @@ void linearSystem::computeZnstiFromX_Zs(){
 bool linearSystem::step(){
   ACE_times[ACE_TIMER_LS_STEP].start();
   mStepCmp++;
-  if (mStepCmp >= mStepNumber){
+  if (mTcurrent >= mTstop){
     ACE_times[ACE_TIMER_LS_STEP].stop();
     return false;
   }
+  mTcurrent += mH;
   if (mStepCmp%mLogFrequency==0){
     printf("-->%d\n",mPourMille);
     mPourMille ++;

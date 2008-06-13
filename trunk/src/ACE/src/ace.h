@@ -9,8 +9,8 @@ class equation;
 class component;
 #include "SiconosAlgebra.h"
 
-#define ACE_INF 0.00000000000000001
-#define ACE_NULL_COEF_MAT 0.00000000000000001
+#define ACE_INF 1e-17   
+#define ACE_NULL_COEF_MAT 1e-17 
 #define ACE_NULL 0.000001
 #define ACE_DOUBLE double
 #define ACE_BIG_FLOAT 1e9
@@ -41,6 +41,9 @@ class component;
 
 //DAE or SEMI-EXPLICT
 extern int ACE_FORMULATION_WITH_INVERSION;//0 or 1
+//Adaptatve time stepping or SEMI-EXPLICT
+extern int ACE_WITH_ADAPTATIVE_TIME_STEPPING;//0 or 1
+extern ACE_DOUBLE ACE_MAX_LOCAL_ERROR;
 
 //SOLVER TYPE
 #define ACE_SOLVER_ENUM 0
