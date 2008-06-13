@@ -45,6 +45,7 @@ equationvd.h
 extern.h
 graph.h
 linearsystem.h
+linearsystemDAE.h
 mlcp.h
 unknown.h)
 

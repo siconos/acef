@@ -84,31 +84,31 @@ componentBJT::componentBJT(dataBJT *d)
 }
 
 void componentBJT::addUnknowns(){
-  mIb=algo::sls.addinZns(ACE_TYPE_I,this);
+  mIb=algo::spls->addinZns(ACE_TYPE_I,this);
   sprintf(mIb->mName,"Ib_%d_%s",mNodeB,mName);
-  mIc=algo::sls.addinZns(ACE_TYPE_I,this);
+  mIc=algo::spls->addinZns(ACE_TYPE_I,this);
   sprintf(mIc->mName,"Ic_%d_%s",mNodeC,mName);
   mIndiceStartZns= mIb->mIndexInVector;
-  mIndiceStartLambda= algo::sls.mDimLambda ;
-  algo::sls.mDimLambda = algo::sls.mDimLambda + mDimlambda;
+  mIndiceStartLambda= algo::spls->mDimLambda ;
+  algo::spls->mDimLambda = algo::spls->mDimLambda + mDimlambda;
 }
 void componentBJT::stamp(){
   int ib=mIb->mIndex;
   int ic=mIc->mIndex;
   //stamp equations.
-  algo::sls.KCL(mNodeB)->mCoefs[ib]-=1;
-  algo::sls.KCL(mNodeC)->mCoefs[ic]-=1;
-  algo::sls.KCL(mNodeE)->mCoefs[ib]+=1;
-  algo::sls.KCL(mNodeE)->mCoefs[ic]+=1;
+  algo::spls->KCL(mNodeB)->mCoefs[ib]-=1;
+  algo::spls->KCL(mNodeC)->mCoefs[ic]-=1;
+  algo::spls->KCL(mNodeE)->mCoefs[ib]+=1;
+  algo::spls->KCL(mNodeE)->mCoefs[ic]+=1;
 
   //      |1 -1 0  |          |0|  | 0 0 0  |
   //Zns = |0 0  1  |*lambda + |0| +| 0 0 0  |(Vc,Vb,Ve)
-    algo::sls.mC1l->setValue(mIndiceStartZns,mIndiceStartLambda,1);
-    algo::sls.mC1l->setValue(mIndiceStartZns,mIndiceStartLambda+1,-1);
-    algo::sls.mC1l->setValue(mIndiceStartZns,mIndiceStartLambda+2,0);
-    algo::sls.mC1l->setValue(mIndiceStartZns+1,mIndiceStartLambda,0);
-    algo::sls.mC1l->setValue(mIndiceStartZns+1,mIndiceStartLambda+1,0);
-    algo::sls.mC1l->setValue(mIndiceStartZns+1,mIndiceStartLambda+2,1);
+    algo::spls->mC1l->setValue(mIndiceStartZns,mIndiceStartLambda,1);
+    algo::spls->mC1l->setValue(mIndiceStartZns,mIndiceStartLambda+1,-1);
+    algo::spls->mC1l->setValue(mIndiceStartZns,mIndiceStartLambda+2,0);
+    algo::spls->mC1l->setValue(mIndiceStartZns+1,mIndiceStartLambda,0);
+    algo::spls->mC1l->setValue(mIndiceStartZns+1,mIndiceStartLambda+1,0);
+    algo::spls->mC1l->setValue(mIndiceStartZns+1,mIndiceStartLambda+2,1);
   
     //   |1 0 0 |         |-alpha  0   alpha|           |0  0      |
     //Y= |0 1 0 |*lambda+ |-alpha  0   alpha|(Vc,Vb,Ve)+|0  betha  | Zns +CST
@@ -118,30 +118,30 @@ void componentBJT::stamp(){
     // |-alpha  0   alpha|(Vc,Vb,Ve)
     // |0       -1  1    |           
   if (mNodeC){
-    algo::sls.mD1zs->setValue(mIndiceStartLambda,mNodeC-1,-mAlpha);
-    algo::sls.mD1zs->setValue(mIndiceStartLambda+1,mNodeC-1,-mAlpha);
+    algo::spls->mD1zs->setValue(mIndiceStartLambda,mNodeC-1,-mAlpha);
+    algo::spls->mD1zs->setValue(mIndiceStartLambda+1,mNodeC-1,-mAlpha);
   }
   if (mNodeE){
-    algo::sls.mD1zs->setValue(mIndiceStartLambda,mNodeE-1,mAlpha);
-    algo::sls.mD1zs->setValue(mIndiceStartLambda+1,mNodeE-1,mAlpha);
-    algo::sls.mD1zs->setValue(mIndiceStartLambda+2,mNodeE-1,1);
+    algo::spls->mD1zs->setValue(mIndiceStartLambda,mNodeE-1,mAlpha);
+    algo::spls->mD1zs->setValue(mIndiceStartLambda+1,mNodeE-1,mAlpha);
+    algo::spls->mD1zs->setValue(mIndiceStartLambda+2,mNodeE-1,1);
   }
   if (mNodeB){
-    algo::sls.mD1zs->setValue(mIndiceStartLambda+2,mNodeB-1,-1);
+    algo::spls->mD1zs->setValue(mIndiceStartLambda+2,mNodeB-1,-1);
   }
   //   |1 0 0 |        
   //Y= |0 1 0 |*lambda
   //   |0 0 0 |       
-  algo::sls.mD1l->setValue(mIndiceStartLambda,mIndiceStartLambda,1);
-  algo::sls.mD1l->setValue(mIndiceStartLambda+1,mIndiceStartLambda+1,1);
+  algo::spls->mD1l->setValue(mIndiceStartLambda,mIndiceStartLambda,1);
+  algo::spls->mD1l->setValue(mIndiceStartLambda+1,mIndiceStartLambda+1,1);
 
   //|0  0      |
   //|0  betha  | Zns
   //|0  0      |
-  algo::sls.mD1zns->setValue(mIndiceStartLambda+1,mIndiceStartZns+1,mBetha);
+  algo::spls->mD1zns->setValue(mIndiceStartLambda+1,mIndiceStartZns+1,mBetha);
 
   //+CST = (0,0,Vbiais)
-  algo::sls.mD1s->setValue(mIndiceStartLambda+2,mVBiais);
+  algo::spls->mD1s->setValue(mIndiceStartLambda+2,mVBiais);
 
   
 }

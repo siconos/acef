@@ -33,6 +33,7 @@ UNP = RI
 // Class component
 // 
 // 
+#include "linearsystem.h"
 class component {
 public:
   component();

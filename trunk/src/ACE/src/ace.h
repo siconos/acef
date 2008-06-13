@@ -39,6 +39,9 @@ class component;
 
 #define ACE_CHAR_LENGTH 124
 
+//DAE or SEMI-EXPLICT
+extern int ACE_FORMULATION_WITH_INVERSION;//0 or 1
+
 //SOLVER TYPE
 #define ACE_SOLVER_ENUM 0
 #define ACE_SOLVER_SIMPLEX 1

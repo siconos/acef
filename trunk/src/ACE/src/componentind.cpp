@@ -20,22 +20,22 @@ componentIND::componentIND(dataIND * d){
 }
 
 void componentIND::addUnknowns(){
-  mI=algo::sls.addinx(ACE_TYPE_I,this);
+  mI=algo::spls->addinx(ACE_TYPE_I,this);
 }
 void componentIND::addEquations(){
-  mDynEquation=algo::sls.addIndEquation();
+  mDynEquation=algo::spls->addIndEquation();
 }
 void componentIND::stamp(){
   //Li'=U
   int i;
   mDynEquation->mCoefs[mI->mDynIndex]+=mData.value;
-  i=algo::sls.getIndexUnknown(ACE_TYPE_V,mData.nodePos);
+  i=algo::spls->getIndexUnknown(ACE_TYPE_V,mData.nodePos);
   mDynEquation->mCoefs[i]+=-1;
-  i=algo::sls.getIndexUnknown(ACE_TYPE_V,mData.nodeNeg);
+  i=algo::spls->getIndexUnknown(ACE_TYPE_V,mData.nodeNeg);
   mDynEquation->mCoefs[i]+=1;
   //KCL
-  algo::sls.KCL(mData.nodeNeg)->mCoefs[mI->mIndex]+=-1;
-  algo::sls.KCL(mData.nodePos)->mCoefs[mI->mIndex]+=1;
+  algo::spls->KCL(mData.nodeNeg)->mCoefs[mI->mIndex]+=-1;
+  algo::spls->KCL(mData.nodePos)->mCoefs[mI->mIndex]+=1;
 }
 componentIND::~componentIND(){
   

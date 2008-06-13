@@ -28,51 +28,51 @@ componentCOMP::componentCOMP(dataCOMP *d)
 }
 componentCOMP::~componentCOMP(){;}
 void componentCOMP::addUnknowns(){
-  mI=algo::sls.addinZs(ACE_TYPE_I,this);
-  mVs=algo::sls.addinZns(ACE_TYPE_U,this);
+  mI=algo::spls->addinZs(ACE_TYPE_I,this);
+  mVs=algo::spls->addinZns(ACE_TYPE_U,this);
   mIndiceStartZns= mVs->mIndexInVector;
-  mIndiceStartLambda= algo::sls.mDimLambda ;
-  algo::sls.mDimLambda = algo::sls.mDimLambda + mDimlambda;
+  mIndiceStartLambda= algo::spls->mDimLambda ;
+  algo::spls->mDimLambda = algo::spls->mDimLambda + mDimlambda;
 }
 
 void componentCOMP::addEquations(){
-  mEquation=algo::sls.addVdEquation(mName);
+  mEquation=algo::spls->addVdEquation(mName);
 }
 void componentCOMP::stamp(){
   int i=mI->mIndex;
   //stamp equations.
-  algo::sls.KCL(mNodeS)->mCoefs[i]=1;
+  algo::spls->KCL(mNodeS)->mCoefs[i]=1;
   //because ie = ie'=0
 
   //Zns = Vj-Vk mB1..
   //VD laws
-  i= algo::sls.getIndexUnknown(ACE_TYPE_V,mNodeS);
+  i= algo::spls->getIndexUnknown(ACE_TYPE_V,mNodeS);
   mEquation->mCoefs[i]+=+1;
-  i= algo::sls.getIndexUnknown(ACE_TYPE_V,0);
+  i= algo::spls->getIndexUnknown(ACE_TYPE_V,0);
   mEquation->mCoefs[i]-=1;
   mEquation->mCoefs[mVs->mIndex]-=1;
 
   //Y=Vp-Vn + I*lambda +- epsilon
   //Vp-Vn
   if (mNodePos >0){
-    algo::sls.mD1zs->setValue(mIndiceStartLambda,mNodePos-1,1);
-    algo::sls.mD1zs->setValue(mIndiceStartLambda+1,mNodePos-1,1);
+    algo::spls->mD1zs->setValue(mIndiceStartLambda,mNodePos-1,1);
+    algo::spls->mD1zs->setValue(mIndiceStartLambda+1,mNodePos-1,1);
   }
   if (mNodeNeg >0){
-    algo::sls.mD1zs->setValue(mIndiceStartLambda,mNodeNeg-1,-1);
-    algo::sls.mD1zs->setValue(mIndiceStartLambda+1,mNodeNeg-1,-1);
+    algo::spls->mD1zs->setValue(mIndiceStartLambda,mNodeNeg-1,-1);
+    algo::spls->mD1zs->setValue(mIndiceStartLambda+1,mNodeNeg-1,-1);
   }
   //I*lambda
-  algo::sls.mD1l->setValue(mIndiceStartLambda,mIndiceStartLambda,1);
-  algo::sls.mD1l->setValue(mIndiceStartLambda+1,mIndiceStartLambda+1,1);
+  algo::spls->mD1l->setValue(mIndiceStartLambda,mIndiceStartLambda,1);
+  algo::spls->mD1l->setValue(mIndiceStartLambda+1,mIndiceStartLambda+1,1);
   //+-epsilon
-  algo::sls.mD1s->setValue(mIndiceStartLambda,mEpsilon);
-  algo::sls.mD1s->setValue(mIndiceStartLambda+1,-mEpsilon);
+  algo::spls->mD1s->setValue(mIndiceStartLambda,mEpsilon);
+  algo::spls->mD1s->setValue(mIndiceStartLambda+1,-mEpsilon);
 
   //Zns = Vplus +(d11 d12)lambda
-  algo::sls.mC1l->setValue(mIndiceStartZns,mIndiceStartLambda,mD11);
-  algo::sls.mC1l->setValue(mIndiceStartZns,mIndiceStartLambda+1,mD12);
-  algo::sls.mC1s->setValue(mIndiceStartZns,mVplus);
+  algo::spls->mC1l->setValue(mIndiceStartZns,mIndiceStartLambda,mD11);
+  algo::spls->mC1l->setValue(mIndiceStartZns,mIndiceStartLambda+1,mD12);
+  algo::spls->mC1s->setValue(mIndiceStartZns,mVplus);
 }
 void componentCOMP::print(){
   componentNLINEAR::print();

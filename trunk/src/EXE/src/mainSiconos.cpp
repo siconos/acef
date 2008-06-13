@@ -1,86 +1,83 @@
 #include "ACEF.h"
+#include "linearsystem.h"
 
 #include "/usr/local/include/Siconos/Kernel/MLCP.h"
 #include "SiconosKernel.h"
 
 static  algo *sAlgo=0;
-static int FORMULATION =1;
-#define DAE  0
-#define SEMI_EXPLICIT 1
 
 void (bLDS) (double t, unsigned int N, double* b, unsigned int z, double*zz){
   sAlgo->preparStep(t);
-  sAlgo->sls.extractDynamicSystemSource();
-  sAlgo->sls.computeDynamicSystemSource();
+  sAlgo->spls->extractDynamicSystemSource();
+  sAlgo->spls->computeDynamicSystemSource();
 //   printf("bLDS %lf :\n",t);
 //   printf("mA2s");
-//   cout<<(*(sAlgo->sls.mA2s));
+//   cout<<(*(sAlgo->spls->mA2s));
   for (unsigned int i=0;i<N;i++){
-    b[i]= sAlgo->sls.mA2s->getValue(i);
+    b[i]= sAlgo->spls->mA2s->getValue(i);
   }
 }
 
 void (DAEbLDS) (double t, unsigned int N, double* b, unsigned int z, double*zz){
   sAlgo->preparStep(t);
-  sAlgo->sls.extractDynamicSystemSource();
-  sAlgo->sls.computeDynamicSystemSource();
-  sAlgo->sls.extractInteractionSource();
-  sAlgo->sls.computeInteractionSource();
-  unsigned int s = sAlgo->sls.mB2s->dimRow;
+  sAlgo->spls->extractDynamicSystemSource();
+  sAlgo->spls->computeDynamicSystemSource();
+  sAlgo->spls->extractInteractionSource();
+  sAlgo->spls->computeInteractionSource();
+  unsigned int s = sAlgo->spls->mB2s->dimRow;
 ///   printf("bLDS %lf :\n",t);
 //   printf("mA2s");
-//   cout<<(*(sAlgo->sls.mA2s));
+//   cout<<(*(sAlgo->spls->mA2s));
   for (unsigned int i=0;i<N-s;i++){
-    b[i]= sAlgo->sls.mA2s->getValue(i);
+    b[i]= sAlgo->spls->mA2s->getValue(i);
   }
   for (unsigned int i=N-s;i<N;i++){
-    b[i]= sAlgo->sls.mB2s->getValue(i-(N-s));
+    b[i]= sAlgo->spls->mB2s->getValue(i-(N-s));
   }
 }
 
 void (eLDS) (double t, unsigned int N, double* e, unsigned int z, double*zz){
   sAlgo->preparStep(t);
-  sAlgo->sls.extractInteractionSource();
-  sAlgo->sls.computeInteractionSource();
-  int s = sAlgo->sls.mB2s->dimRow;
-  int m = sAlgo->sls.mD2s->dimRow;
+  sAlgo->spls->extractInteractionSource();
+  sAlgo->spls->computeInteractionSource();
+  int s = sAlgo->spls->mB2s->dimRow;
+  int m = sAlgo->spls->mD2s->dimRow;
 //   printf("eLDS %lf :\n",t);
 //   printf("mB2s");
-//   cout<<(*(sAlgo->sls.mB2s));
+//   cout<<(*(sAlgo->spls->mB2s));
 //   printf("mD2s");
-//   cout<<(*(sAlgo->sls.mD2s));
+//   cout<<(*(sAlgo->spls->mD2s));
   for (int i=0;i<s ;i++){
-    e[i]= sAlgo->sls.mB2s->getValue(i);
+    e[i]= sAlgo->spls->mB2s->getValue(i);
   }
   for (int i=0;i<m ;i++){
-    e[i+s]= sAlgo->sls.mD2s->getValue(i);
+    e[i+s]= sAlgo->spls->mD2s->getValue(i);
   }
 }
 void (DAEeLDS) (double t, unsigned int N, double* e, unsigned int z, double*zz){
   sAlgo->preparStep(t);
-  sAlgo->sls.extractInteractionSource();
-  sAlgo->sls.computeInteractionSource();
-  int m = sAlgo->sls.mD2s->dimRow;
+  sAlgo->spls->extractInteractionSource();
+  sAlgo->spls->computeInteractionSource();
+  int m = sAlgo->spls->mD2s->dimRow;
 //   printf("eLDS %lf :\n",t);
 //   printf("mB2s");
-//   cout<<(*(sAlgo->sls.mB2s));
+//   cout<<(*(sAlgo->spls->mB2s));
 //   printf("mD2s");
-//   cout<<(*(sAlgo->sls.mD2s));
+//   cout<<(*(sAlgo->spls->mD2s));
   for (int i=0;i<m ;i++){
-    e[i]= sAlgo->sls.mD2s->getValue(i);
+    e[i]= sAlgo->spls->mD2s->getValue(i);
   }
 }
 
 
 int main(int argc, char **argv){
   if (argc<5){
-    printf("usage : toto file.cir ENUM|SIMPLEX|PATH|DIRECT_ENUM|DIRECT_SIMPLEX 10 DENSE|SPARSE DAE/SEMI-EXPLICIT\n");
+    printf("usage : toto file.cir ENUM|SIMPLEX|PATH|DIRECT_ENUM|DIRECT_SIMPLEX 10 DENSE|SPARSE INV/NOINV\n");
     return 0;
   }
-  FORMULATION = SEMI_EXPLICIT;
   if (argc>5){
-    if (!strcmp(argv[5],"DAE"))
-      FORMULATION=DAE;
+    if (!strcmp(argv[5],"NOINV"))
+      ACE_FORMULATION_WITH_INVERSION=0;
   }
 
 
@@ -188,16 +185,16 @@ int main(int argc, char **argv){
   ACE_INIT();
   sAlgo=new algo(argv[1]);
   sAlgo->perform();
-  int ACEFdimX = sAlgo->sls.mDimx;
+  int ACEFdimX = sAlgo->spls->mDimx;
   int dimX=ACEFdimX;
-  int s=sAlgo->sls.mB2zs->getDimRow();
-  int m=sAlgo->sls.mD2l->getDimRow();
+  int s=sAlgo->spls->mB2zs->getDimRow();
+  int m=sAlgo->spls->mD2l->getDimRow();
   aceMatrix * DAE_M =0;
   aceMatrix * DAE_A =0;
   aceVector* DAE_X0 =0;
   aceVector* DAE_As =0;
   
-  if (FORMULATION == DAE){
+  if (!ACE_FORMULATION_WITH_INVERSION){
     dimX += s;
     DAE_M = new aceMatrix(dimX,dimX);
     DAE_A = new aceMatrix(dimX,dimX);
@@ -205,26 +202,26 @@ int main(int argc, char **argv){
     DAE_As = new aceVector(dimX);
   }
   
-  sAlgo->sls.allocForInitialValue();
-  sAlgo->sls.readInitialValue();
+  sAlgo->spls->allocForInitialValue();
+  sAlgo->spls->readInitialValue();
   double h=0.00001;
-  h=sAlgo->sls.mH;
-  double finalTime = h*sAlgo->sls.mStepNumber ;
+  h=sAlgo->spls->mH;
+  double finalTime = h*sAlgo->spls->mStepNumber ;
 
   //*****BUILD THE DYNAMIC SYSTEM
   FirstOrderLinearTIDS * aDS = 0;
-  if (FORMULATION == SEMI_EXPLICIT){
-    aDS = new FirstOrderLinearTIDS(1,*(sAlgo->sls.mxti),*(sAlgo->sls.mA2x),*(sAlgo->sls.mA2s));
+  if (ACE_FORMULATION_WITH_INVERSION){
+    aDS = new FirstOrderLinearTIDS(1,*(sAlgo->spls->mxti),*(sAlgo->spls->mA2x),*(sAlgo->spls->mA2s));
     aDS->setComputeBFunction(&bLDS);
   }else{
-    DAE_As->setBlock(0,*(sAlgo->sls.mA2s));
-    DAE_As->setBlock(ACEFdimX,*(sAlgo->sls.mB2s));
-    DAE_X0->setBlock(0,*(sAlgo->sls.mxti));
-    DAE_X0->setBlock(ACEFdimX,*(sAlgo->sls.mzsti));
-    DAE_A->setBlock(0,0,*(sAlgo->sls.mA2x));
-    DAE_A->setBlock(ACEFdimX,0,*(sAlgo->sls.mB2x));
-    DAE_A->setBlock(0,ACEFdimX,*(sAlgo->sls.mA2zs));
-    DAE_A->setBlock(ACEFdimX,ACEFdimX,*(sAlgo->sls.mB2zs));
+    DAE_As->setBlock(0,*(sAlgo->spls->mA2s));
+    DAE_As->setBlock(ACEFdimX,*(sAlgo->spls->mB2s));
+    DAE_X0->setBlock(0,*(sAlgo->spls->mxti));
+    DAE_X0->setBlock(ACEFdimX,*(sAlgo->spls->mzsti));
+    DAE_A->setBlock(0,0,*(sAlgo->spls->mA2x));
+    DAE_A->setBlock(ACEFdimX,0,*(sAlgo->spls->mB2x));
+    DAE_A->setBlock(0,ACEFdimX,*(sAlgo->spls->mA2zs));
+    DAE_A->setBlock(ACEFdimX,ACEFdimX,*(sAlgo->spls->mB2zs));
     for (int ii =0; ii < ACEFdimX; ii++)
       DAE_M->setValue(ii,ii,1);
     aDS = new FirstOrderLinearTIDS(1,*DAE_X0,*DAE_A,*DAE_As);
@@ -240,33 +237,33 @@ int main(int argc, char **argv){
   aceMatrix* C= 0;
   aceMatrix* D= 0;
   aceMatrix* B= 0;
-  if (FORMULATION == SEMI_EXPLICIT){
+  if (ACE_FORMULATION_WITH_INVERSION){
     C= new aceMatrix(s+m,dimX);
     D= new aceMatrix(s+m,s+m);
     B= new aceMatrix(dimX,s+m);
-    C->setBlock(0,0,*(sAlgo->sls.mB2x));
-    C->setBlock(s,0,*(sAlgo->sls.mD2x));
-    D->setBlock(0,0,*(sAlgo->sls.mB2zs));
-    D->setBlock(0,s,*(sAlgo->sls.mB2l));
-    D->setBlock(s,0,*(sAlgo->sls.mD2zs));
-    D->setBlock(s,s,*(sAlgo->sls.mD2l));
-    B->setBlock(0,0,*(sAlgo->sls.mA2zs));
-    B->setBlock(0,s,*(sAlgo->sls.mR));
+    C->setBlock(0,0,*(sAlgo->spls->mB2x));
+    C->setBlock(s,0,*(sAlgo->spls->mD2x));
+    D->setBlock(0,0,*(sAlgo->spls->mB2zs));
+    D->setBlock(0,s,*(sAlgo->spls->mB2l));
+    D->setBlock(s,0,*(sAlgo->spls->mD2zs));
+    D->setBlock(s,s,*(sAlgo->spls->mD2l));
+    B->setBlock(0,0,*(sAlgo->spls->mA2zs));
+    B->setBlock(0,s,*(sAlgo->spls->mR));
   }else{//FORMULATION DAE
     C= new aceMatrix(m,dimX);
     D= new aceMatrix(m,m);
     B= new aceMatrix(dimX,m);
-    C->setBlock(0,0,*(sAlgo->sls.mD2x));
-    C->setBlock(0,ACEFdimX,*(sAlgo->sls.mD2zs));
+    C->setBlock(0,0,*(sAlgo->spls->mD2x));
+    C->setBlock(0,ACEFdimX,*(sAlgo->spls->mD2zs));
 
-    D->setBlock(0,0,*(sAlgo->sls.mD2l));
+    D->setBlock(0,0,*(sAlgo->spls->mD2l));
 
-    B->setBlock(0,0,*(sAlgo->sls.mR));
-    B->setBlock(ACEFdimX,0,*(sAlgo->sls.mB2l));
+    B->setBlock(0,0,*(sAlgo->spls->mR));
+    B->setBlock(ACEFdimX,0,*(sAlgo->spls->mB2l));
   }
   FirstOrderLinearR * aR = new FirstOrderLinearR(C,B);
   aR->setD(*D);
-  if (FORMULATION == SEMI_EXPLICIT){
+  if (ACE_FORMULATION_WITH_INVERSION){
     aR->setComputeEFunction(&eLDS);
   }else{
     aR->setComputeEFunction(&DAEeLDS);
@@ -277,7 +274,7 @@ int main(int argc, char **argv){
   //*****BUILD THE NSLAW
   NonSmoothLaw * aNSL=0;
   int NSLawSize=0;
-  if (FORMULATION == SEMI_EXPLICIT){
+  if (ACE_FORMULATION_WITH_INVERSION){
     NSLawSize=m+s;
     aNSL = new MixedComplementarityConditionNSL(m,s);
   }else{
@@ -297,7 +294,7 @@ int main(int argc, char **argv){
   
   //*****BUILD THE STEP INTEGRATOR
   OneStepIntegrator * aMoreau =0;
-  if (FORMULATION == SEMI_EXPLICIT){
+  if (ACE_FORMULATION_WITH_INVERSION){
     aMoreau = new Moreau(aDS,0.5,aS);
   }else{
     aMoreau = new Moreau2(aDS,0.5,aS);
@@ -307,7 +304,7 @@ int main(int argc, char **argv){
 
   //**** BUILD THE STEP NS PROBLEM
   MLCP * aMLCP =0;
-  if (FORMULATION == SEMI_EXPLICIT){
+  if (ACE_FORMULATION_WITH_INVERSION){
     aMLCP = new MLCP(aS,mySolver,"MLCP");
   }else{
     aMLCP = new MLCP2(aS,mySolver,"MLCP2");
@@ -336,7 +333,7 @@ int main(int argc, char **argv){
 
   unsigned int count = 0; // events counter. 
   // do simulation while events remains in the "future events" list of events manager. 
-  int N = sAlgo->sls.mStepNumber;
+  int N = sAlgo->spls->mStepNumber;
   cout << " ==== Start of  simulation : "<<N<<" steps====" << endl;
   Nfreq = N/freq;
   if (N > NbDataMax){
@@ -358,9 +355,9 @@ int main(int argc, char **argv){
   pout <<0<<"\t"<<0;
   while(ParserGetPrintElem((void**)&pPrint)){
     pout<<"\t\t";
-    double aux = sAlgo->sls.mzsti->getValue(pPrint->node1-1);
+    double aux = sAlgo->spls->mzsti->getValue(pPrint->node1-1);
     if (pPrint->node2 >0)
-      aux -=  sAlgo->sls.mzsti->getValue(pPrint->node2-1);
+      aux -=  sAlgo->spls->mzsti->getValue(pPrint->node2-1);
     pout << aux;
   }
   pout<<endl;
@@ -379,7 +376,7 @@ int main(int argc, char **argv){
       pout <<(k+1)*h;
       while(ParserGetPrintElem((void**)&pPrint)){
 	pout<<"\t\t";
-	if (FORMULATION == SEMI_EXPLICIT){
+	if (ACE_FORMULATION_WITH_INVERSION){
 	  double aux = (*lambda)(pPrint->node1-1);
 	  if (pPrint->node2 >0)
 	    aux -= (*lambda)(pPrint->node2-1);

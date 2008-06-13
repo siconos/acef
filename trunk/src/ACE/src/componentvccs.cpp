@@ -24,14 +24,14 @@ void componentVCCS::addEquations(){
 }
 void componentVCCS::stamp(){
 
-  int drivNeg= algo::sls.getIndexUnknown(ACE_TYPE_V,mData.nodeDriverNeg);
-  int drivPos= algo::sls.getIndexUnknown(ACE_TYPE_V,mData.nodeDriverPos);
+  int drivNeg= algo::spls->getIndexUnknown(ACE_TYPE_V,mData.nodeDriverNeg);
+  int drivPos= algo::spls->getIndexUnknown(ACE_TYPE_V,mData.nodeDriverPos);
 
-  algo::sls.KCL(mData.nodeNeg)->mCoefs[drivNeg]-=mData.coef;
-  algo::sls.KCL(mData.nodeNeg)->mCoefs[drivPos]+=mData.coef;
+  algo::spls->KCL(mData.nodeNeg)->mCoefs[drivNeg]-=mData.coef;
+  algo::spls->KCL(mData.nodeNeg)->mCoefs[drivPos]+=mData.coef;
 
-  algo::sls.KCL(mData.nodePos)->mCoefs[drivNeg]+=mData.coef;
-  algo::sls.KCL(mData.nodePos)->mCoefs[drivPos]-=mData.coef;
+  algo::spls->KCL(mData.nodePos)->mCoefs[drivNeg]+=mData.coef;
+  algo::spls->KCL(mData.nodePos)->mCoefs[drivPos]-=mData.coef;
 }
 void componentVCCS::print(){
   componentLINEAR::print();

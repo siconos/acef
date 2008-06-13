@@ -20,10 +20,10 @@ componentVSRC::componentVSRC(dataVSRC *d)
     ACE_WARNING("VSRC null");
 }
 void componentVSRC::addUnknowns(){
-  mI=algo::sls.addinZs(ACE_TYPE_I,this);
+  mI=algo::spls->addinZs(ACE_TYPE_I,this);
 }
 void componentVSRC::addEquations(){
-  mEquation=algo::sls.addVdEquation();
+  mEquation=algo::spls->addVdEquation();
 }
 void componentVSRC::stamp(){
   ACE_DOUBLE newValue;
@@ -31,20 +31,20 @@ void componentVSRC::stamp(){
   //KCL
   int i;
   ACE_CHECK_IERROR(mI && mEquation,"componentVSRC::stamp no mI or no mEquation!!");
-  algo::sls.KCL(mData.nodeNeg)->mCoefs[mI->mIndex]-=1;
-  algo::sls.KCL(mData.nodePos)->mCoefs[mI->mIndex]+=1;
+  algo::spls->KCL(mData.nodeNeg)->mCoefs[mI->mIndex]-=1;
+  algo::spls->KCL(mData.nodePos)->mCoefs[mI->mIndex]+=1;
   
   //VD laws
-  i= algo::sls.getIndexUnknown(ACE_TYPE_V,mData.nodeNeg);
+  i= algo::spls->getIndexUnknown(ACE_TYPE_V,mData.nodeNeg);
   mEquation->mCoefs[i]+=-1;
-  i= algo::sls.getIndexUnknown(ACE_TYPE_V,mData.nodePos);
+  i= algo::spls->getIndexUnknown(ACE_TYPE_V,mData.nodePos);
   mEquation->mCoefs[i]+=1;
 }
 
 void componentVSRC::stampTimer(){
   ACE_DOUBLE newValue;
   ParserGetSourceValue("Vsource",mData.id,&newValue);
-  mEquation->mCoefs[algo::sls.mRS]-=newValue - mCurrentValue;
+  mEquation->mCoefs[algo::spls->mRS]-=newValue - mCurrentValue;
 
   mCurrentValue = newValue;
 }

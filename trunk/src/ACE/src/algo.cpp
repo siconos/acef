@@ -3,6 +3,7 @@
 
 **************************************************************************/
 #include "algo.h"
+#include "linearsystemDAE.h"
 #include "componentcap.h"
 #include "componentind.h"
 #include "componentres.h"
@@ -18,15 +19,19 @@
 #include "graph.h"
 #include <fstream>
 
-linearSystem algo::sls;
+linearSystem * algo::spls;
 
 algo::algo(char * file){
   ACE_CHECK_IERROR(strlen(file) < ACE_CHAR_LENGTH && strlen(file) >3,"algo::algo: file name length!");
+  if (ACE_FORMULATION_WITH_INVERSION)
+    spls = new linearSystem();
+  else
+    spls = new linearSystemDAE();
   strncpy(mFile,file,strlen(file)-3);
   strcat(mFile,"txt");
   
-  strncpy(sls.mFile,file,strlen(file)-3);
-  strcat(sls.mFile,"ini");
+  strncpy(spls->mFile,file,strlen(file)-3);
+  strcat(spls->mFile,"ini");
   strncpy(mSimuFile,file,strlen(file)-3);
   strcat(mSimuFile,"sim");
   
@@ -79,18 +84,19 @@ algo::~algo(){
   n= mComps.size();
   for(i=0;i<n;i++)
     delete mComps[i];
+  delete spls;
   
  }
 
 ////////////////////////////////////////////////////////////////////// ALGO
 void algo::perform(){
   ACE_times[ACE_TIMER_EQUATION].start();
- sls.mNbNodes = ParserGetNbElementsOfType("Node");
- sls.initKCL();
- sls.addVUnknowns();
+ spls->mNbNodes = ParserGetNbElementsOfType("Node");
+ spls->initKCL();
+ spls->addVUnknowns();
  //BUILD x VECTOR
  //get CAPACITOR from parser
- initGraph(sls.mNbNodes,ParserGetNbElementsOfType("Capacitor"));
+ initGraph(spls->mNbNodes,ParserGetNbElementsOfType("Capacitor"));
  ParserInitComponentList("Capacitor");
  dataCAP dCap;
  while(ParserNextComponent(&dCap)){
@@ -100,17 +106,17 @@ void algo::perform(){
    int np = dCap.nodePos;
    int nn = dCap.nodeNeg;
    unknown *uout;
-   if (!sls.isUnknown(ACE_TYPE_U,c,&uout)){
+   if (!spls->isUnknown(ACE_TYPE_U,c,&uout)){
      c->addTensionUnknown();
      c->addTensionEquation();
      if (np == 0){
-       equationKCL *eq=sls.KCL(nn);
+       equationKCL *eq=spls->KCL(nn);
        ACE_CHECK_IERROR(eq->mAvailable,"algo::perform : KCL not available");
-       sls.addKCLinDyn(nn);
+       spls->addKCLinDyn(nn);
      }else if(nn ==0){
-       equationKCL *eq=sls.KCL(np);
+       equationKCL *eq=spls->KCL(np);
        ACE_CHECK_IERROR(eq->mAvailable,"algo::perform : KCL not available");
-       sls.addKCLinDyn(np);
+       spls->addKCLinDyn(np);
      }else{
        //add only edge not connected on node 0.
        graphAddEdge(np,nn,c);
@@ -126,11 +132,11 @@ void algo::perform(){
  componentCAP *c=0;
  while (nextEdgeInMST(n1,n2,&c)){
       
-      if (sls.KCL(n1)->mAvailable) {
-	sls.addKCLinDyn(n1);
+      if (spls->KCL(n1)->mAvailable) {
+	spls->addKCLinDyn(n1);
       }
-      else if (sls.KCL(n2)->mAvailable){
-	sls.addKCLinDyn(n2);
+      else if (spls->KCL(n2)->mAvailable){
+	spls->addKCLinDyn(n2);
       }else{
 	ACE_MESSAGE("algo::perform : Add unknown current in capacitor branche!!\n");
 	c->addCurrentUnknown();
@@ -255,26 +261,26 @@ void algo::perform(){
    mIsrcs.push_back(c);   
  }
  printComponents();
- sls.preparForStamp();
+ spls->preparForStamp();
  stamp();
- //  sls.printEquations();
+ //  spls->printEquations();
  
  //compute matrix: x'=A1x * mx + A1zs * mZs + A1zns * mZns;
  ACE_times[ACE_TIMER_TEST_1].start();
- sls.computedxdt();
+ spls->computedxdt();
  ACE_times[ACE_TIMER_TEST_1].stop();
  stampAfterInvertion();
  ACE_MESSAGE("final equation ;\n");
- sls.printEquations();
+ spls->printEquations();
  ACE_times[ACE_TIMER_TEST_2].start();
- sls.buildLinearSystem();
+ spls->buildLinearSystem();
  ACE_times[ACE_TIMER_TEST_2].stop();
- sls.printA1();
- sls.printB1();
- sls.printC1();
- sls.printD1();
- sls.set2matrix();
- sls.printSystem2();
+ spls->printA1();
+ spls->printB1();
+ spls->printC1();
+ spls->printD1();
+ spls->set2matrix();
+ spls->printSystem2();
  ACE_times[ACE_TIMER_EQUATION].stop();
 }
 ////////////////////////////////////////////////////////////////////// STAMP
@@ -332,7 +338,7 @@ void algo::stamp(){
 void algo::preparStep(double time){
   int n;
   int i;
-  //ACE_DOUBLE time = sls.mStepCmp*sls.mH;
+  //ACE_DOUBLE time = spls->mStepCmp*spls->mH;
   ParserComputeSourcesValues(time);
   n = mVsrcs.size();
   for(i=0;i<n;i++)
@@ -342,22 +348,22 @@ void algo::preparStep(double time){
     mIsrcs[i]->stampTimer();
 }
 void algo::simulate(){
-  sls.initSimu();
+  spls->initSimu();
   mSimuStream = new ofstream(mSimuFile);
   ACE_times[ACE_TIMER_SIMULATION].start();
-  preparStep(sls.mStepCmp*sls.mH);
-  sls.ExtractAndCompute2Sources();
-  sls.preparStep();
-  while(sls.step()){
+  preparStep(spls->mStepCmp*spls->mH);
+  spls->ExtractAndCompute2Sources();
+  spls->preparStep();
+  while(spls->step()){
     if (ACE_MUET_LEVEL != ACE_MUET)
-      sls.printStep();
-    sls.printStep(*mSimuStream);
-    preparStep(sls.mStepCmp*sls.mH);
-    sls.ExtractAndCompute2Sources();
-    sls.preparStep();
+      spls->printStep();
+    spls->printStep(*mSimuStream);
+    preparStep(spls->mStepCmp*spls->mH);
+    spls->ExtractAndCompute2Sources();
+    spls->preparStep();
   }
   ACE_times[ACE_TIMER_SIMULATION].stop();
-  sls.stopSimu();
+  spls->stopSimu();
   mSimuStream->close();
   delete mSimuStream;
   mSimuStream=0;

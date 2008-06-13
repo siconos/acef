@@ -19,24 +19,24 @@ componentVCVS::componentVCVS(dataVCVS *d)
     ACE_WARNING("VCVS null");
 }
 void componentVCVS::addUnknowns(){
-  mI=algo::sls.addinZs(ACE_TYPE_I,this);
+  mI=algo::spls->addinZs(ACE_TYPE_I,this);
 }
 void componentVCVS::addEquations(){
-  mEquation=algo::sls.addVdEquation();
+  mEquation=algo::spls->addVdEquation();
 }
 void componentVCVS::stamp(){
   ACE_CHECK_IERROR(mI && mEquation,"componentVCVS::stamp no mI or no mEquation!!");
-  algo::sls.KCL(mData.nodeNeg)->mCoefs[mI->mIndex]-=1;
-  algo::sls.KCL(mData.nodePos)->mCoefs[mI->mIndex]+=1;
+  algo::spls->KCL(mData.nodeNeg)->mCoefs[mI->mIndex]-=1;
+  algo::spls->KCL(mData.nodePos)->mCoefs[mI->mIndex]+=1;
 
-  int i= algo::sls.getIndexUnknown(ACE_TYPE_V,mData.nodeNeg);
+  int i= algo::spls->getIndexUnknown(ACE_TYPE_V,mData.nodeNeg);
   mEquation->mCoefs[i]+=-1;
-  i= algo::sls.getIndexUnknown(ACE_TYPE_V,mData.nodePos);
+  i= algo::spls->getIndexUnknown(ACE_TYPE_V,mData.nodePos);
   mEquation->mCoefs[i]+=1;
 
-  i= algo::sls.getIndexUnknown(ACE_TYPE_V,mData.nodeDriverNeg);
+  i= algo::spls->getIndexUnknown(ACE_TYPE_V,mData.nodeDriverNeg);
   mEquation->mCoefs[i]+=mData.coef;
-  i= algo::sls.getIndexUnknown(ACE_TYPE_V,mData.nodeDriverPos);
+  i= algo::spls->getIndexUnknown(ACE_TYPE_V,mData.nodeDriverPos);
   mEquation->mCoefs[i]-=mData.coef;
 
 }

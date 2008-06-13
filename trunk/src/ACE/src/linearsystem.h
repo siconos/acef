@@ -59,11 +59,13 @@ public:
 
   //DISCRETISATION simulation
   void readInitialValue();
-  void initSimu();
-  void preparStep();
-  bool step();
+  virtual void initSimu();
+  virtual void preparStep();
+  virtual bool step();
   void stopSimu();
-  void computeZnstiFromX_Zs();
+  virtual void computeZnstiFromX_Zs();
+  virtual void buildMLCP();
+
   void ExtractAndCompute2Sources();
   void extractSources();
 
@@ -137,8 +139,11 @@ public:
   aceVector *mD1s;
 
   aceMatrix *mR;
+  aceMatrix *mhR;
   aceMatrix *mA2x;
   aceMatrix *mA2zs;
+  aceMatrix *mHThetaA2zs;
+  
   aceVector *mA2s;
   aceVector *mA2sti;
 

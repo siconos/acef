@@ -6,14 +6,14 @@
 #ifndef ALGO_H
 #define ALGO_H
 #include "ace.h"
-#include "linearsystem.h"
 
 // Class algo
 // 
-// 
+//
+class linearSystem;
 class algo {
 public:
-  static linearSystem sls;
+  static linearSystem *spls;
   algo(char * file);
   virtual ~algo();
   void perform();

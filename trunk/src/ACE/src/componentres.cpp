@@ -36,13 +36,13 @@ void componentRES::stamp(){
   //KCLs
   int vp,vn;
   //equationKCL *pk;
-  vp=algo::sls.getIndexUnknown(ACE_TYPE_V,mData.nodePos);
-  vn=algo::sls.getIndexUnknown(ACE_TYPE_V,mData.nodeNeg);
+  vp=algo::spls->getIndexUnknown(ACE_TYPE_V,mData.nodePos);
+  vn=algo::spls->getIndexUnknown(ACE_TYPE_V,mData.nodeNeg);
   //pk=;
-  algo::sls.KCL(mData.nodePos)->mCoefs[vp]+=-1/mData.value;
-  algo::sls.KCL(mData.nodePos)->mCoefs[vn]+=1/mData.value;
-  algo::sls.KCL(mData.nodeNeg)->mCoefs[vp]+=1/mData.value;
-  algo::sls.KCL(mData.nodeNeg)->mCoefs[vn]+=-1/mData.value;
+  algo::spls->KCL(mData.nodePos)->mCoefs[vp]+=-1/mData.value;
+  algo::spls->KCL(mData.nodePos)->mCoefs[vn]+=1/mData.value;
+  algo::spls->KCL(mData.nodeNeg)->mCoefs[vp]+=1/mData.value;
+  algo::spls->KCL(mData.nodeNeg)->mCoefs[vn]+=-1/mData.value;
 
 }
 void componentRES::print(){

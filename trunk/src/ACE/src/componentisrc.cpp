@@ -24,8 +24,8 @@ componentISRC::componentISRC(dataISRC *d)
 void componentISRC::stamp(){
   //nothing, time dependant.
   //KCL
-  //  algo::sls.KCL(mData.nodeNeg)->mCoefs[algo::sls.mRS]-=mData.value;
-  //algo::sls.KCL(mData.nodePos)->mCoefs[algo::sls.mRS]+=mData.value;
+  //  algo::spls->KCL(mData.nodeNeg)->mCoefs[algo::spls->mRS]-=mData.value;
+  //algo::spls->KCL(mData.nodePos)->mCoefs[algo::spls->mRS]+=mData.value;
 }
 
 
@@ -33,8 +33,8 @@ void componentISRC::stampTimer(){
   ACE_DOUBLE newValue;
   ACE_CHECK_IERROR(ParserGetSourceValue("Isource",mData.id,&newValue),"componentISRC::stampTimer");
   //KCL
-  algo::sls.KCL(mData.nodeNeg)->mCoefs[algo::sls.mRS]-=newValue - mCurrentValue;
-  algo::sls.KCL(mData.nodePos)->mCoefs[algo::sls.mRS]+=newValue - mCurrentValue;
+  algo::spls->KCL(mData.nodeNeg)->mCoefs[algo::spls->mRS]-=newValue - mCurrentValue;
+  algo::spls->KCL(mData.nodePos)->mCoefs[algo::spls->mRS]+=newValue - mCurrentValue;
 
   mCurrentValue = newValue;
 }

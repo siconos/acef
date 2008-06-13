@@ -32,23 +32,23 @@ componentDIO::componentDIO(dataDIO *d)
 }
 
 void componentDIO::addUnknowns(){
-  mI=algo::sls.addinZns(ACE_TYPE_I,this);
+  mI=algo::spls->addinZns(ACE_TYPE_I,this);
   mIndiceStartZns= mI->mIndexInVector;
-  mIndiceStartLambda= algo::sls.mDimLambda ;
-  algo::sls.mDimLambda = algo::sls.mDimLambda + mDimlambda;
+  mIndiceStartLambda= algo::spls->mDimLambda ;
+  algo::spls->mDimLambda = algo::spls->mDimLambda + mDimlambda;
 }
 void componentDIO::stamp(){
   int i=mI->mIndex;
   //stamp equations.
-  algo::sls.KCL(mData.nodeNeg)->mCoefs[i]-=1;
-  algo::sls.KCL(mData.nodePos)->mCoefs[i]+=1;
+  algo::spls->KCL(mData.nodeNeg)->mCoefs[i]-=1;
+  algo::spls->KCL(mData.nodePos)->mCoefs[i]+=1;
 
   //stamp C1 and D1 system:
-  algo::sls.mC1l->setValue(mIndiceStartZns,mIndiceStartLambda,-1);
+  algo::spls->mC1l->setValue(mIndiceStartZns,mIndiceStartLambda,-1);
   if (mNodeNeg)
-    algo::sls.mD1zs->setValue(mIndiceStartZns,mNodeNeg-1,1);
+    algo::spls->mD1zs->setValue(mIndiceStartZns,mNodeNeg-1,1);
   if (mNodePos)
-    algo::sls.mD1zs->setValue(mIndiceStartZns,mNodePos-1,-1);
+    algo::spls->mD1zs->setValue(mIndiceStartZns,mNodePos-1,-1);
   
 }
 

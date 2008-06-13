@@ -2,7 +2,7 @@
 
 int main(int argc, char **argv){
   if (argc<5){
-    printf("usage : toto file.cir ENUM|SIMPLEX|PATH 10 DENSE|SPARSE\n");
+    printf("usage : toto file.cir ENUM|SIMPLEX|PATH 10 DENSE|SPARSE INV/NOINV\n");
     return 0;
   }
   if (!strcmp(argv[2],"ENUM")){
@@ -28,6 +28,9 @@ int main(int argc, char **argv){
     ACE_MAT_TYPE=SPARSE;
   else
     ACE_MAT_TYPE=DENSE;
+  
+  if (argc > 5 && !strcmp(argv[5],"NOINV"))
+    ACE_FORMULATION_WITH_INVERSION=0;
     
   ACE_times[ACE_TIMER_MAIN].start();
   ACE_INIT();

@@ -48,6 +48,7 @@ linearSystem::linearSystem(){
   mD1s=0;
 
   mR=0;
+  mhR=0;
   mA2x=0;
   mA2zs=0;
   mA2s=0;
@@ -94,6 +95,7 @@ linearSystem::linearSystem(){
   mD2xW=0;
   mB2xW=0;
   mHThetaWA2zs=0;
+  mHThetaA2zs=0;
   mHWR=0;
 }
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -182,6 +184,8 @@ void linearSystem::freeA1Matrix(){
     delete mD;
   if (ms)
     delete ms;
+  if(mHThetaA2zs)
+    delete mHThetaA2zs;
 }
 
 //0 = B1x*x + B1zs*Zs + B1zns*Zns + B1s
@@ -245,6 +249,7 @@ void linearSystem::allocD1Matrix(){
   mD1s = new aceVector(mDimLambda,ACE_MAT_TYPE);
   if (mDimx){
     mR = new aceMatrix(mDimx,mDimLambda,ACE_MAT_TYPE);
+    mhR = new aceMatrix(mDimx,mDimLambda,ACE_MAT_TYPE);
     mMatBuf2 = new aceMatrix(mDimx,mDimLambda,ACE_MAT_TYPE);
   }
 
@@ -253,6 +258,7 @@ void linearSystem::set2matrix(){
 
   mA2x=mA1x;
   mA2zs=mA1zs;
+  mHThetaA2zs = new aceMatrix(mDimx,mDimzs-1,ACE_MAT_TYPE);
   
   mB2x=mB1x;
   mB2zs=mB1zs;
@@ -311,6 +317,8 @@ void linearSystem::freeD1Matrix(){
     delete mD1s;
   if (mR)
     delete mR;
+  if (mhR)
+    delete mhR;
   if (mMatBuf2)
     delete mMatBuf2;
   if (mB2l)
@@ -482,9 +490,91 @@ void linearSystem::readInitialValue(){
     }
 
 }
+void linearSystem::buildMLCP(){
+  mMLCP = new mlcp(mDimLambda,mNbNonDynEquations,ACE_SOLVER_TYPE);
+
+    try{
+      //ACE_CHECK_IERROR(mDimx >0 && mDimLambda >0,"linearSystem::initSimu case no x or no lambda not yet implemented");
+      if (mDimx){
+	mW->zero();
+	for(int i = 0; i < mDimx;i++)	mW->setValue(i,i,1.0);
+	*mW -=  mH*mTheta*(*mA2x);
+	if (ACE_MAT_TYPE == SPARSE){
+	  mPxAux->set(*mW);
+	  mPxAux->PLUInverseInPlace();
+	  mW->set(*mPxAux);
+	}else{
+	  mW->PLUInverseInPlace();
+	}
+      
+	//*mB3zs = *mB2zs + mH*mTheta*prod(*mB2x,prod(*mW,*mA2zs)) ;
+	ACEprod(*mW,*mA2zs,*mMatBuf1,true);
+	ACEprod(*mB2x,*mMatBuf1,*mB3zs,true);
+	scal(mH*mTheta,*mB3zs,*mB3zs);
+	scal(mH*mTheta,*mA2zs,*mHThetaA2zs);
+	*mB3zs+=*mB2zs;
+      
+	if (mDimLambda){
+	  //*mD3zs = *mD2zs+mH*mTheta*prod(*mD2x,prod(*mW,*mA2zs));
+	  ACEprod(*mD2x,*mMatBuf1,*mD3zs,true);
+	  scal(mH*mTheta,*mD3zs,*mD3zs);
+	  *mD3zs+=*mD2zs;
+
+      
+	  //*mB3l = mH*prod(*mB2x,prod(*mW,*mR))+*mB2l;
+	  ACEprod(*mW,*mR,*mMatBuf2,true);
+	  ACEprod(*mB2x,*mMatBuf2,*mB3l,true);
+	  scal(mH,*mB3l,*mB3l);
+	  *mB3l+=*mB2l;
+	     
+	  //*mD3l = mH*prod(*mD2x,prod(*mW,*mR))+*mD2l;
+	  ACEprod(*mD2x,*mMatBuf2,*mD3l,true);
+	  scal(mH,*mD3l,*mD3l);
+	  *mD3l+=*mD2l;
+	}
+      }else{
+	*mD3zs = *mD2zs;
+	*mB3zs = *mB2zs;
+	if (mDimLambda){
+	  *mB3l = *mB2l;
+	  *mD3l = *mD2l;
+	}
+      }
+      *(mMLCP->mM11) = *mD3l;
+      *(mMLCP->mM12) = *mD3zs;
+      *(mMLCP->mM21) = *mB3l;
+      *(mMLCP->mM22) = *mB3zs;
+    }
+    catch(SiconosException e)
+      {
+	std::cout << e.report() << endl;
+	ACE_INTERNAL_ERROR("linearSystem::initSimu");
+      }
+    catch(...)
+      {
+	std::cout << "Exception caught." << endl;
+	ACE_INTERNAL_ERROR("linearSystem::initSimu");
+      }
+    if (mDimLambda && mDimx){
+      //  *mD2xW=prod(*mD2x,*mW);
+      ACEprod(*mD2x,*mW,*mD2xW,true);
+    }
+    if (mDimx){
+      //*mB2xW=prod(*mB2x,*mW);
+      ACEprod(*mB2x,*mW,*mB2xW,true);
+      //*mHThetaWA2zs=mH*mTheta*prod(*mW,*mA2zs);
+      ACEprod(*mW,*mA2zs,*mHThetaWA2zs,true);
+      scal(mH*mTheta,*mHThetaWA2zs,*mHThetaWA2zs);
+    }
+    //*mHWR=mH*prod(*mW,*mR);
+    if (mDimLambda && mDimx){
+      ACEprod(*mW,*mR,*mHWR,true);
+      scal(mH,*mHWR,*mHWR);
+    }
+
+}
 void linearSystem::initSimu(){
   allocDiscretisation();
-  mMLCP = new mlcp(mDimLambda,mNbNonDynEquations,ACE_SOLVER_TYPE);
   readInitialValue();
   mStepCmp=0;
   mLogFrequency =  mStepNumber/1000;
@@ -493,83 +583,7 @@ void linearSystem::initSimu(){
   if (mLogFrequency==0) mLogFrequency = 1;
   mPourMille=0;
 
-  try{
-    //ACE_CHECK_IERROR(mDimx >0 && mDimLambda >0,"linearSystem::initSimu case no x or no lambda not yet implemented");
-    if (mDimx){
-      mW->zero();
-      for(int i = 0; i < mDimx;i++)	mW->setValue(i,i,1.0);
-      *mW -=  mH*mTheta*(*mA2x);
-      if (ACE_MAT_TYPE == SPARSE){
-	mPxAux->set(*mW);
-	mPxAux->PLUInverseInPlace();
-	mW->set(*mPxAux);
-      }else{
-	mW->PLUInverseInPlace();
-      }
-      
-      //*mB3zs = *mB2zs + mH*mTheta*prod(*mB2x,prod(*mW,*mA2zs)) ;
-      ACEprod(*mW,*mA2zs,*mMatBuf1,true);
-      ACEprod(*mB2x,*mMatBuf1,*mB3zs,true);
-      scal(mH*mTheta,*mB3zs,*mB3zs);
-      *mB3zs+=*mB2zs;
-      
-      if (mDimLambda){
-	//*mD3zs = *mD2zs+mH*mTheta*prod(*mD2x,prod(*mW,*mA2zs));
-	ACEprod(*mD2x,*mMatBuf1,*mD3zs,true);
-	scal(mH*mTheta,*mD3zs,*mD3zs);
-	*mD3zs+=*mD2zs;
-
-      
-	//*mB3l = mH*prod(*mB2x,prod(*mW,*mR))+*mB2l;
-	ACEprod(*mW,*mR,*mMatBuf2,true);
-	ACEprod(*mB2x,*mMatBuf2,*mB3l,true);
-	scal(mH,*mB3l,*mB3l);
-	*mB3l+=*mB2l;
-	     
-	//*mD3l = mH*prod(*mD2x,prod(*mW,*mR))+*mD2l;
-	ACEprod(*mD2x,*mMatBuf2,*mD3l,true);
-	scal(mH,*mD3l,*mD3l);
-	*mD3l+=*mD2l;
-      }
-    }else{
-      *mD3zs = *mD2zs;
-      *mB3zs = *mB2zs;
-      if (mDimLambda){
-	*mB3l = *mB2l;
-	*mD3l = *mD2l;
-      }
-    }
-    *(mMLCP->mM11) = *mD3l;
-    *(mMLCP->mM12) = *mD3zs;
-    *(mMLCP->mM21) = *mB3l;
-    *(mMLCP->mM22) = *mB3zs;
-  }
-  catch(SiconosException e)
-    {
-      std::cout << e.report() << endl;
-      ACE_INTERNAL_ERROR("linearSystem::initSimu");
-    }
-  catch(...)
-    {
-      std::cout << "Exception caught." << endl;
-      ACE_INTERNAL_ERROR("linearSystem::initSimu");
-    }
-  if (mDimLambda && mDimx){
-    //  *mD2xW=prod(*mD2x,*mW);
-    ACEprod(*mD2x,*mW,*mD2xW,true);
-  }
-  if (mDimx){
-    //*mB2xW=prod(*mB2x,*mW);
-    ACEprod(*mB2x,*mW,*mB2xW,true);
-    //*mHThetaWA2zs=mH*mTheta*prod(*mW,*mA2zs);
-    ACEprod(*mW,*mA2zs,*mHThetaWA2zs,true);
-    scal(mH*mTheta,*mHThetaWA2zs,*mHThetaWA2zs);
-  }
-  //*mHWR=mH*prod(*mW,*mR);
-  if (mDimLambda && mDimx){
-    ACEprod(*mW,*mR,*mHWR,true);
-    scal(mH,*mHWR,*mHWR);
-  }
+  buildMLCP();
 
   mMLCP->initSolver();
 

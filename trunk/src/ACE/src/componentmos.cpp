@@ -90,23 +90,23 @@ componentMOS::componentMOS(dataMOS1 *d,int NbHyp)
 }
 
 void componentMOS::addUnknowns(){
-  mI=algo::sls.addinZns(ACE_TYPE_I,this);
-  //mIs=algo::sls.addinZns(ACE_TYPE_I,this);
+  mI=algo::spls->addinZns(ACE_TYPE_I,this);
+  //mIs=algo::spls->addinZns(ACE_TYPE_I,this);
   mIndiceStartZns= mI->mIndexInVector;
-  mIndiceStartLambda= algo::sls.mDimLambda ;
-  algo::sls.mDimLambda = algo::sls.mDimLambda + mDimlambda;
+  mIndiceStartLambda= algo::spls->mDimLambda ;
+  algo::spls->mDimLambda = algo::spls->mDimLambda + mDimlambda;
 }
 void componentMOS::stamp(){
   int ind=0;
   int i=mI->mIndex;
   //stamp equations.
-  algo::sls.KCL(mNodeNeg)->mCoefs[i]-=mMode*1;
-  algo::sls.KCL(mNodePos)->mCoefs[i]+=mMode*1;
+  algo::spls->KCL(mNodeNeg)->mCoefs[i]-=mMode*1;
+  algo::spls->KCL(mNodePos)->mCoefs[i]+=mMode*1;
 
   //Zns = B*lamdba
   for (ind=0;ind < mNbHyp;ind++){
-    algo::sls.mC1l->setValue(mIndiceStartZns,mIndiceStartLambda+ind,mCoefs[ind]);
-    algo::sls.mC1l->setValue(mIndiceStartZns,mIndiceStartLambda+mNbHyp+ind,-mCoefs[ind]);
+    algo::spls->mC1l->setValue(mIndiceStartZns,mIndiceStartLambda+ind,mCoefs[ind]);
+    algo::spls->mC1l->setValue(mIndiceStartZns,mIndiceStartLambda+mNbHyp+ind,-mCoefs[ind]);
   }
   
   //Y=C*zs+I*lambda+hyp
@@ -114,25 +114,25 @@ void componentMOS::stamp(){
   //C*zs
   if (mNodeD){
     for(ind=0;ind < mNbHyp;ind++)
-      algo::sls.mD1zs->setValue(mIndiceStartLambda+mNbHyp+ind,mNodeD-1,mMode);
+      algo::spls->mD1zs->setValue(mIndiceStartLambda+mNbHyp+ind,mNodeD-1,mMode);
   }
   if (mNodeG){
     for(ind=0;ind < mDimlambda;ind++)
-      algo::sls.mD1zs->setValue(mIndiceStartLambda+ind,mNodeG-1,-mMode);
+      algo::spls->mD1zs->setValue(mIndiceStartLambda+ind,mNodeG-1,-mMode);
   }
   if (mNodeS){
     for(ind=0;ind < mNbHyp;ind++)
-      algo::sls.mD1zs->setValue(mIndiceStartLambda+ind,mNodeS-1,mMode);
+      algo::spls->mD1zs->setValue(mIndiceStartLambda+ind,mNodeS-1,mMode);
   }
 
   //I*lambda
   for(ind=0;ind < mDimlambda;ind++)
-    algo::sls.mD1l->setValue(mIndiceStartLambda+ind,mIndiceStartLambda+ind,1);
+    algo::spls->mD1l->setValue(mIndiceStartLambda+ind,mIndiceStartLambda+ind,1);
   
   //hyp
   for(ind=0;ind < mNbHyp;ind++){
-      algo::sls.mD1s->setValue(mIndiceStartLambda+ind,mHyp[ind]);
-      algo::sls.mD1s->setValue(mIndiceStartLambda+mNbHyp+ind,mHyp[ind]);
+      algo::spls->mD1s->setValue(mIndiceStartLambda+ind,mHyp[ind]);
+      algo::spls->mD1s->setValue(mIndiceStartLambda+mNbHyp+ind,mHyp[ind]);
     }
 
   
