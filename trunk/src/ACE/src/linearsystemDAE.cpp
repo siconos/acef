@@ -10,6 +10,7 @@ using namespace std;
 //|--------x'---------|----------x--------|-------Zs------|------Zns------|
 
 linearSystemDAE::linearSystemDAE(){
+  mAdaptiveStepEvaluation = false;
 }
 
 linearSystemDAE::~linearSystemDAE(){
@@ -19,25 +20,38 @@ linearSystemDAE::~linearSystemDAE(){
 ////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////DISCRETISATION
 void linearSystemDAE::buildMLCP(){
+
+  if (!mMLCP)
     mMLCP = new mlcp(mDimLambda,mNbNonDynEquations+mDimx,ACE_SOLVER_TYPE);
-    scal(mH,*mR,*mhR);
+  
+  for (int i=0;i<ACE_NB_ADAPT_STEP+1;i++){
+
+#ifdef PRE_COMPUTE_ADAPTIVE
+    if (ACE_WITH_ADAPTATIVE_TIME_STEPPING)
+	mH=mHori*(1<<i);
+#endif    
+    scal(mH,*mR,*mhR[i]);
     //W=I-h*theta A2x
-    mW->zero();
-    for(int i = 0; i < mDimx;i++)	mW->setValue(i,i,-1.0);
-    *mW += mH*mTheta*(*mA2x);
+    mW[i]->zero();
+    for(int j = 0; j < mDimx;j++)
+      mW[i]->setValue(j,j,-1.0);
     
-    *(mMLCP->mM11) = *mD2l;
-    mMLCP->mM12->setBlock(0,0,*mD2x);
-    mMLCP->mM12->setBlock(0,mDimx,*mD2zs);
+    *mW[i] += mH*mTheta*(*mA2x);
     
-    mMLCP->mM21->setBlock(0,0,*mhR);
-    mMLCP->mM21->setBlock(mDimx,0,*mB2l);
-
-    mMLCP->mM22->setBlock(0,0,*mW);
-    mMLCP->mM22->setBlock(0,mDimx,*mHThetaA2zs);
-    mMLCP->mM22->setBlock(mDimx,0,*mB2x);
-    mMLCP->mM22->setBlock(mDimx,mDimx,*mB2zs );
-
+  }
+  *(mMLCP->mM11) = *mD2l;
+  mMLCP->mM12->setBlock(0,0,*mD2x);
+  mMLCP->mM12->setBlock(0,mDimx,*mD2zs);
+  
+  mMLCP->mM21->setBlock(mDimx,0,*mB2l);
+  
+  mMLCP->mM22->setBlock(mDimx,0,*mB2x);
+  mMLCP->mM22->setBlock(mDimx,mDimx,*mB2zs );
+}
+void linearSystemDAE::fillMLCP(){
+      mMLCP->mM21->setBlock(0,0,*mhR[ACE_CUR_STEP]);
+      mMLCP->mM22->setBlock(0,0,*mW[ACE_CUR_STEP]);
+      mMLCP->mM22->setBlock(0,mDimx,*mHThetaA2zs[ACE_CUR_STEP]);
 }
 void linearSystemDAE::preparMLCP(){
     if (mDimx && mDimLambda){//both
@@ -76,26 +90,23 @@ void linearSystemDAE::preparMLCP(){
   }
 
 }
-void linearSystemDAE::preparStep(){
-  computeBestStep();
-  preparMLCP();
-}
 
 bool linearSystemDAE::step(){
-  cout<<"*******************begin step "<<mTcurrent<<" to ";
+  //  cout<<"*******************begin step "<<mTcurrent<<" to ";
   ACE_times[ACE_TIMER_LS_STEP].start();
   mStepCmp++;
+  mAllStepCmp++;
   if (mTcurrent > mTstop){
     ACE_times[ACE_TIMER_LS_STEP].stop();
     return false;
   }
-  mTcurrent += mH;
-  cout<<mTcurrent<<endl;
-  cout<<"before mzsti"<<*mzsti;
-  if (mStepCmp%mLogFrequency==0){
-    printf("-->%d : %lf\n",mPourMille, mTcurrent);
+  //  cout<<mTcurrent<<endl;
+  //  cout<<"before mzsti"<<*mzsti;
+  if (mStepCmp%mLogFrequency==0 ){
+    printf("-->%d : %e to %e\n",mPourMille, mTcurrent,mTcurrent + mH);
     mPourMille ++;
   }
+  mTcurrent += mH;
   bool res = mMLCP->solve();
   ACE_times[ACE_TIMER_COMPUTE_VAR].start();
   if (res){
@@ -117,103 +128,8 @@ bool linearSystemDAE::step(){
   }
   ACE_times[ACE_TIMER_COMPUTE_VAR].stop();
   ACE_times[ACE_TIMER_LS_STEP].stop();
-  cout<<"after mzsti "<<*mzsti;
-  cout<<"*******************end step : "<<res<<"\n";
+  //  cout<<"after mzsti "<<*mzsti;
+  //  cout<<"*******************end step : "<<res<<"\n";
   return res;
 }
 
-void linearSystemDAE::setStep(ACE_DOUBLE newH){
-  
-  //update mhR mHThetaA2zs and mW
-  scal(newH,*mR,*mhR);
-  scal(newH*mTheta,*mA2zs,*mHThetaA2zs);
-
-  //W=I-h*theta A2x
-  mW->zero();
-  for(int i = 0; i < mDimx;i++)	mW->setValue(i,i,-1.0);
-  *mW += mH*mTheta*(*mA2x);
-
-  
-  //update the matrix M of the MLCP
-  
-  mMLCP->mM21->setBlock(0,0,*mhR);
-  mMLCP->mM22->setBlock(0,0,*mW);
-  mMLCP->mM22->setBlock(0,mDimx,*mHThetaA2zs);
-
-  mH=newH;
-}
-/*
- *mStepCmp%2==0 : nothing.
- *mStepCmp=1 : initialisation.
- *mStepCmp%2==1 : backtrack, and compute new step, remenber current state.
- *
- */
-
-void  linearSystemDAE::computeBestStep(){
-  if (!ACE_WITH_ADAPTATIVE_TIME_STEPPING)
-    return;
-  
-  if (mStepCmp%2==1 ){
-    //initialisation.
-    if (mStepCmp == 1){
-      mNormX0=fmax(1,mxti->norm2());
-      mNormZ0=fmax(1,mzsti->norm2());
-    }else{
-      //backtrack excepted for the first step
-      int cmpSav = mStepCmp;
-      ACE_DOUBLE timeSav = mTcurrent;
-      ACE_DOUBLE H = mH;
-      ACE_DOUBLE newH = mH;
-      ACE_DOUBLE error=0;
-      ACE_DOUBLE coef;
-      ACE_DOUBLE buf1,buf2;
-      //save current state for error evaluation.
-      *mxticurrent = *mxti;
-      *mzsticurrent = *mzsti;
-      //come back in the past.
-      *mxti = *mxtiprev;
-      *mzsti = *mzstiprev;
-      //      cout<<"mzstiprev \n"<<*mzstiprev;
-      mTcurrent-=2*H;
-      //set step for evaluation
-      setStep(2*H);
-      //run
-      preparMLCP();
-      step();
-      //compute error
-      //      cout<<"mzsti \n"<<*mzsti;
-      //      cout<<"mzsticurrent \n"<<*mzsticurrent;
-      *mxti=*mxti-*mxticurrent;
-      *mzsti=*mzsti-*mzsticurrent;
-      buf2=mzsti->normInf();
-      error=fmax(ACE_INF,mzsti->normInf());
-      //compute new step
-      coef = fmin(mAlphaMax,fmax(mAlphaMin,mAlpha*mNormZ0*mLocalErrorTol/error));
-      newH = coef * H;
-      if (newH < mHori){
-	newH = mHori;
-	ACE_WARNING("linearSystemDAE::computeBestStep : try to set a to small time stepping");
-      }
-      if (newH > mMaxHori){
-	newH = mMaxHori;
-	ACE_WARNING("linearSystemDAE::computeBestStep : try to set a to large time stepping");
-      }
-      if (timeSav + newH > mTstop)
-	setStep(mTstop - timeSav);
-      else
-	setStep(newH);
-      printf("new H : %lf\n",newH);
-
-      //restore current values.
-      *mxti=*mxticurrent;
-      *mzsti=*mzsticurrent;
-      mStepCmp=cmpSav;
-      mTcurrent=timeSav;
-    }
-
-    //sav current state to be able to come back in tow steps
-    *mxtiprev=  *mxti ;
-    *mzstiprev=*mzsti ;
- 
-  }
-}

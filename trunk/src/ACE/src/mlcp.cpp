@@ -173,6 +173,7 @@ bool mlcp::initSolver(){
     strcpy(mOptions.solverName,"DIRECT_SIMPLEX");
     mOptions.iparam[0]=1000000;
     mOptions.iparam[1]=0;/*VERBOSE*/
+    mOptions.iparam[6]=0;/*VERBOSE*/
     mOptions.dparam[0]=1e-12;
     mOptions.dparam[1]=1e-12;
     mOptions.dparam[2]=1e-9;
@@ -187,6 +188,7 @@ bool mlcp::initSolver(){
   }else{
     strcpy(mOptions.solverName,"DIRECT_ENUM");
     mOptions.iparam[0]=0;/*VERBOSE*/
+    mOptions.iparam[6]=0;/*VERBOSE*/
     mOptions.dSize=6;
     mOptions.dparam[0]=1e-12;
     mOptions.dparam[5]=1e-12;

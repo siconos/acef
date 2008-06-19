@@ -11,10 +11,23 @@ UBLAS_TYPE ACE_MAT_TYPE=DENSE;
 int ACE_FORMULATION_WITH_INVERSION=1;
 int ACE_WITH_ADAPTATIVE_TIME_STEPPING=0;
 ACE_DOUBLE ACE_MAX_LOCAL_ERROR=1e-3;
+static ofstream* ACE_LOG_FILE=0;
+int ACE_CUR_STEP=0;
+int ACE_CMP_ADAT[ACE_NB_ADAPT_STEP+1];
 
+using namespace std;
+
+
+ofstream& ACE_GET_LOG_STREAM(){
+  return *ACE_LOG_FILE;
+}
 
 void ACE_INIT(){
   ACE_INIT_TIME();
+  ACE_LOG_FILE = new ofstream("ACE.log");
+}
+void ACE_STOP(){
+  delete ACE_LOG_FILE;
 }
 void ACE_INIT_TIME(){
   ACE_times[ACE_TIMER_MAIN].setName("main ");
@@ -69,33 +82,31 @@ bool ACE_IS_NULL(ACE_DOUBLE d){
 void ACE_MESSAGE( char * mess,int level){
   if (ACE_MUET_LEVEL>level)
     return;
-  printf("ACE MESSAGE :");
-  printf(mess);
+  (*ACE_LOG_FILE)<<"ACE MESSAGE :"<<mess<<endl;
+  ACE_LOG_FILE->flush();
 }
 
 void ACE_ERROR(char * mess){
-  printf("ACE ERROR: ");
-  printf(mess);
-  printf("\n");
+  (*ACE_LOG_FILE)<<"ACE ERROR: "<<mess<<endl;
+  ACE_LOG_FILE->flush();
+  ACE_STOP();
   exit(1);
 
 }
 void ACE_WARNING(char * mess){
-  printf("ACE WARNING: ");
-  printf(mess);
-  printf("\n");
+  (*ACE_LOG_FILE)<<"ACE WARNING: "<<mess<<endl;
+  ACE_LOG_FILE->flush();
 }
 void ACE_INTERNAL_ERROR(char *mess){
-  printf("ACE INTERNAL ERROR: ");
-  printf(mess);
-  printf("\n");
+  (*ACE_LOG_FILE)<<"ACE INTERNAL ERROR: "<<mess<<endl;
+  ACE_LOG_FILE->flush();
+  ACE_STOP();
   exit(1);
 
 }
 void ACE_INTERNAL_WARNING(char *mess){
-  printf("ACE INTERNAL WARNING: ");
-  printf(mess);
-  printf("\n");
+  (*ACE_LOG_FILE)<<"ACE INTERNAL WARNING: "<<mess<<endl;
+  ACE_LOG_FILE->flush();
 
 }
 void ACE_TYPE_TO_CHAR(int type,char* name){

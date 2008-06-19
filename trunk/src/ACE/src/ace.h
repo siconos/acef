@@ -1,8 +1,12 @@
 #ifndef ACE_H
 #define ACE_H
 
+#define PRE_COMPUTE_ADAPTIVE
+
 #include "extern.h"
 #include <vector>
+#include <fstream>
+
 
 class unknown;
 class equation;
@@ -44,6 +48,20 @@ extern int ACE_FORMULATION_WITH_INVERSION;//0 or 1
 //Adaptatve time stepping or SEMI-EXPLICT
 extern int ACE_WITH_ADAPTATIVE_TIME_STEPPING;//0 or 1
 extern ACE_DOUBLE ACE_MAX_LOCAL_ERROR;
+
+#ifdef PRE_COMPUTE_ADAPTIVE
+#define ACE_NB_ADAPT_STEP 7
+#else
+#define ACE_NB_ADAPT_STEP 0
+#endif
+
+extern int ACE_CMP_ADAT[ACE_NB_ADAPT_STEP+1];
+
+
+/*
+ *ACE_CUR_STEP means  ==> mH* 2 pow ACE_CUR_STEP
+ */
+extern int ACE_CUR_STEP;
 
 //SOLVER TYPE
 #define ACE_SOLVER_ENUM 0
@@ -104,6 +122,7 @@ extern int ACE_MUET_LEVEL; //0 verbose .... 10 muet
 
 
 void ACE_INIT();
+void ACE_STOP();
 bool ACE_IS_NULL(ACE_DOUBLE d);
 void ACE_MESSAGE(char * mess,int level=0);
 void ACE_ERROR(char * mess);
@@ -111,6 +130,7 @@ void ACE_WARNING(char * mess);
 void ACE_INTERNAL_ERROR(char *mess);
 void ACE_INTERNAL_WARNING(char *mess);
 void ACE_TYPE_TO_CHAR(int type,char* name);
+ofstream & ACE_GET_LOG_STREAM();
 
 //Raise an error if not b
 //check b is true

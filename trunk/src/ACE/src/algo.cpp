@@ -174,7 +174,7 @@ void algo::perform(){
  ParserInitComponentList("Mos1");
  dataMOS1 mos;
  while(ParserNextComponent(&mos)){
-   componentMOS *c=new componentMOS(&mos,1);
+   componentMOS *c=new componentMOS(&mos,3);
    mMos.push_back(c);
    c->addUnknowns();
    c->addEquations();

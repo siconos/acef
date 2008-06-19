@@ -62,10 +62,30 @@ public:
   virtual double getCurrentTime();
   virtual void initSimu();
   virtual void preparStep();
+  /*compute the right side of the mlcp*/
+  virtual void preparMLCP();
   virtual bool step();
   void stopSimu();
   virtual void computeZnstiFromX_Zs();
+  /*build the mlcp:
+  *
+  *IF ADAPTIVE TIME STEPPING
+  * If PRE_COMPUTE_MLCP
+  *  call only one time, and precompute system for each possible step (see ace.h)
+  * ELSE
+  *  call at each step when the step change.
+  * END
+  *ELSE
+  * call only on time
+  *END
+  */
   virtual void buildMLCP();
+  /*
+   *Fill the MLCP matrix with current step
+   *
+   */
+  virtual void fillMLCP();
+  /*compute the largest time stepping that respect the ACE_MAX_LOCAL_ERROR*/
   virtual void computeBestStep();
 
   void ExtractAndCompute2Sources();
@@ -141,10 +161,10 @@ public:
   aceVector *mD1s;
 
   aceMatrix *mR;
-  aceMatrix *mhR;
+  aceMatrix *mhR[ACE_NB_ADAPT_STEP+1];
   aceMatrix *mA2x;
   aceMatrix *mA2zs;
-  aceMatrix *mHThetaA2zs;
+  aceMatrix *mHThetaA2zs[ACE_NB_ADAPT_STEP+1];
   
   aceVector *mA2s;
   aceVector *mA2sti;
@@ -159,10 +179,10 @@ public:
   aceMatrix *mD2l;
   aceVector *mD2s;
 
-  aceMatrix *mD2xW;
-  aceMatrix *mB2xW;
-  aceMatrix *mHThetaWA2zs;
-  aceMatrix *mHWR;
+  aceMatrix *mD2xW[ACE_NB_ADAPT_STEP+1];
+  aceMatrix *mB2xW[ACE_NB_ADAPT_STEP+1];
+  aceMatrix *mHThetaWA2zs[ACE_NB_ADAPT_STEP+1];
+  aceMatrix *mHWR[ACE_NB_ADAPT_STEP+1];
 
 
   
@@ -175,15 +195,16 @@ public:
  
 
   
-  aceMatrix *mW;
-  aceMatrix *mD3l;
-  aceMatrix *mD3zs;
-  aceMatrix *mB3l;
-  aceMatrix *mB3zs;
+  aceMatrix *mW[ACE_NB_ADAPT_STEP+1];
+  aceMatrix *mD3l[ACE_NB_ADAPT_STEP+1];
+  aceMatrix *mD3zs[ACE_NB_ADAPT_STEP+1];
+  aceMatrix *mB3l[ACE_NB_ADAPT_STEP+1];
+  aceMatrix *mB3zs[ACE_NB_ADAPT_STEP+1];
   aceVector *mPfree;
   aceVector *mQfree;
   aceVector *mPAux;
   aceMatrix *mPxAux;
+ 
 
   ACE_DOUBLE mTheta;
   ACE_DOUBLE mThetap;
@@ -197,8 +218,8 @@ public:
   ACE_DOUBLE mAlphaMin;
   ACE_DOUBLE mNormX0;
   ACE_DOUBLE mNormZ0;
-  ACE_DOUBLE mLocalErrorTol;
   int mAdaptCmp;
+  int mAllStepCmp;
 
   ACE_DOUBLE mTstart;
   ACE_DOUBLE mTstop;
@@ -230,6 +251,13 @@ public:
 
 protected:
   virtual void setStep(ACE_DOUBLE newH);
+  bool mAdaptiveStepEvaluation;
+
+  ACE_DOUBLE mSerror;
+  int mNbToSmall;
+  int mNbToBig;
+  int mNbBacktrack;
+
 private:
   void buildABCDs();
   void extractDynBockInMat(aceMatrix * m, int IndexBegin, int IndexEnd);
