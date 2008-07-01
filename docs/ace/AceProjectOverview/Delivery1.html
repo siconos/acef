@@ -1,0 +1,174 @@
+<!DOCTYPE html PUBLIC "-//Tigris//DTD XHTML 1.0 Transitional//EN" "http://style.tigris.org/tigris_transitional.dtd">
+<html>
+<head>
+  <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/>
+  <title>Software delivery 1, July 2008</title>
+  <style type="text/css">
+/* <![CDATA[ */ 
+@import "css/readyset.css"; 
+@import "css/inst.css";
+/*  ]]>
+
+ */
+ </style>
+  <link rel="stylesheet" type="text/css" href="css/print.css" media="print"/>
+</head>
+<body>
+<div class="app">
+<div class="readyset">
+<h1>Software delivery 1, July 2008</h1>
+<div id="releaseinfo">
+<h2>Project Information</h2>
+<table class="axial" border="1" cellpadding="3" cellspacing="2">
+  <tbody>
+    <tr>
+      <th>Project:</th>
+      <td><a href="index.html">NS-ACEF</a><br />
+      </td>
+    </tr>
+    <tr>
+      <th>Internal Release Number:</th>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>Last update:</th>
+      <td>January 16, 2008</td>
+    </tr>
+
+    <tr>
+      <th>Related Documents:</th>
+      <td>
+      <div>  <a href="feature-set.html">Functionalities</a></div>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<!-- /releaseinfo -->
+<!-- /processimpact -->
+<!-- /introduction -->
+<div id="usecases">
+<h2>Software installation</h2>
+<center>
+<img src=softArchi.jpg align=top>
+</center>
+
+<h3>Require</h3>
+<p>ACEF requires siconos platform. Path (<a href="http://pages.cs.wisc.edu/~ferris/path.html"> http://pages.cs.wisc.edu/~ferris/path.html </a>) is an
+external library optionaly used by siconos.</p>
+<h3>Installation of acef and parser libraries</h3>
+These libraries are installed with the commande: <br>
+-><b>dpkg -i parserAcef.deb</b><br>
+-><b>dpkg -i acef.deb</b>
+<h3>Main program compilation</h3>
+Because of cmake, the first step is to copy the code source in the following directory:<br>
+<b>->EXE :</b> It contains the main code.<br>
+The next step consists in creating an other directory to compile the executable. 
+<h4>Compilation with cmake</h4>
+In the build directory of the executable, use the <i>cmake</i> command:<br>
+<b>>cmake /..../src/EXE<br>
+>make<br></b>
+The name of the generated executable is <i>noselect</i>. The executable is located in the directory
+<i>build_directory/src/noselect</i> 
+</div>
+<h2>Functionalities </h2>
+<p>This delivery contains all <a href="feature-set.html">Functionalities</a> of the release 1.</p>
+<h3>Software input: a Netlist</h3>
+The input of the main program is like a spice Netlist. The NGSPICE User Manual contains all the informations about the netlist format
+(<a href= "http://ngspice.sourceforge.net/docs.html">
+http://ngspice.sourceforge.net/docs.html</a>).<br>
+The following figure presentes the circuit elements managed in ACEF. 
+<TABLE BORDER="1">
+  <CAPTION> circuit elements </CAPTION>
+  <TR>
+	<TH> Name </TH>
+	<TH> code </TH>
+	<TH> example </TH>
+	<TH> note </TH>
+  </TR>
+  <TR>
+	<TH> Resistors </TH>
+	<TD> R </TD>
+	<TD> R1 0 1 10K </TD>
+	<TD> It is a constant value. </TD>
+  </TR>
+  <TR>
+	<TH> Capacitors </TH>
+	<TD> C </TD>
+	<TD> C1 0 1 10pf </TD>
+	<TD> It is a constant value. Model are ignored.</TD>
+  </TR>
+  <TR>
+	<TH> Inductors </TH>
+	<TD> L </TD>
+	<TD> L1 n0 n1 15mh </TD>
+	<TD> It is a constant value. Model are ignored.</TD>
+  </TR>
+  <TR>
+	<TH> Independent voltage and current </TH>
+	<TD> PULSE, SIN, EXP </TD>
+	<TD> PULSE(0 1.8 0 0.1e-3) </TD>
+	<TD> See Spice documentation for more information. </TD>
+  </TR>
+  <TR>
+	<TH> Dependent voltage and current </TH>
+	<TD> G, E, F, H, B </TD>
+	<TD> G1 2 0 5 0 0.1MMHO </TD>
+	<TD> See Spice documentation for more information. </TD>
+  </TR>
+  <TR>
+	<TH> Diode model </TH>
+	<TD> D </TD>
+	<TD> D1 0 3 DIOMODEL </TD>
+	<TD> ACEF uses an ideal model. Model are ignored. </TD>
+  </TR>
+  <TR>
+	<TH> Transistor PMOS/NMOS </TH>
+	<TD> M </TD>
+	<TD> M106 c1 h2 0 0 mosP_Sah </TD>
+	<TD> ACEF uses a piecewise linear model. </TD>
+  </TR>
+  <TR>
+	<TH> Comparator </TH>
+	<TD> .comp </TD>
+	<TD> .comp1 6 5 7 Vmin=0 Vmax=3 Vepsilon=0.1 </TD>
+	<TD> ACEF uses a piecewise linear model. </TD>
+  </TR>
+</TABLE>
+<h4>About the transistor model</h4>
+Example : <b>.model mosP_Sah PMOS LEVEL=1 KP=3.24e-5 VT0=0.6</b><br>
+A model transistor is a necessary information. It specifies witch kind of transistor is used.<br>
+LEVEL=1 is a necessary option for the parser, but is not used in ACEF.<br>
+VT0 is the zero-bias voltage.<br>
+KP is the transconductance parameter.<br>
+The others parameters of the model are ignored.<br>
+ACEF use a piecewise linear model for the transistor. The number of hyperplan is a parameter
+available in the main program.
+<h4> The comparator component</h4>
+The <b>.comp </b> is a specific component of ACEF. It describes a comparator. The syntax is :<br>
+<b>.comp N+ N- Noutput Vmin=0 Vmax=3 Vepsilon=0.1</b><br>
+if V(N+) - V(N-) > Vepsilon/2 then V(Noutput) must be Vmax.<br>
+if V(N+) - V(N-) < -Vepsilon/2 then V(Noutput) must be Vmin.<br>
+else V(Noutput) is an interpoled value.<br>
+<center>
+<img src=comparator.jpg align=top>
+</center>
+
+
+<h3>Transient Analysis</h3>
+The <b>.tran</b> line contains the time interval of the simulation, example :<br>
+<b>.tran 1ns 100ns </b> specified a simulation from 0 to 100ns with a fixed time stepping of 1ns.
+<h3>Output</h3>
+The <b>.input</b> line defines the output of the simulation, example:<br>
+<b>.print tran V(4) V(23,27)</b>. The output could be any voltage or any tension. This software version doesn't display any current.<br>
+The result is writted in a file <i>circuit.sim</i>.
+<h3>Initial conditions</h3>
+The <b>.ic </b> line defines the initial conditions, example:<br>
+<b>.ic V(10)=1</b><br>
+This line forces the initial node voltages.
+<br>
+<br>
+
+
+</body>
+</html>
