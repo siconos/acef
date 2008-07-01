@@ -87,7 +87,9 @@ private:
 //   bool solveGuessAndIt();
 //   bool solveWithSimplex();
 //   bool solveWithPath();
-   bool solveWithNumerics();
+  bool solveWithNumerics();
+  bool solveLinearSystem();
+
   //INTERNAL--OPTION
   bool mTringGuess;
   bool mTryOnlyGuess;

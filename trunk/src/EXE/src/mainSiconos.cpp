@@ -3,16 +3,19 @@
 
 #include "/usr/local/include/Siconos/Kernel/MLCP.h"
 #include "SiconosKernel.h"
+#include <stdio.h>
+#include <stdlib.h>
 
 static  algo *sAlgo=0;
-
+/************************************************************/
+/************************************************************/
+/************************************************************/
+/*call back for the source*/
+/*call back for the formulation with inversion*/
 void (bLDS) (double t, unsigned int N, double* b, unsigned int z, double*zz){
   sAlgo->preparStep(t);
   sAlgo->spls->extractDynamicSystemSource();
   sAlgo->spls->computeDynamicSystemSource();
-//   printf("bLDS %lf :\n",t);
-//   printf("mA2s");
-//   cout<<(*(sAlgo->spls->mA2s));
   for (unsigned int i=0;i<N;i++){
     b[i]= sAlgo->spls->mA2s->getValue(i);
   }
@@ -25,9 +28,6 @@ void (DAEbLDS) (double t, unsigned int N, double* b, unsigned int z, double*zz){
   sAlgo->spls->extractInteractionSource();
   sAlgo->spls->computeInteractionSource();
   unsigned int s = sAlgo->spls->mB2s->dimRow;
-///   printf("bLDS %lf :\n",t);
-//   printf("mA2s");
-//   cout<<(*(sAlgo->spls->mA2s));
   for (unsigned int i=0;i<N-s;i++){
     b[i]= sAlgo->spls->mA2s->getValue(i);
   }
@@ -35,18 +35,13 @@ void (DAEbLDS) (double t, unsigned int N, double* b, unsigned int z, double*zz){
     b[i]= sAlgo->spls->mB2s->getValue(i-(N-s));
   }
 }
-
+/*call back for the formulation without inversion*/
 void (eLDS) (double t, unsigned int N, double* e, unsigned int z, double*zz){
   sAlgo->preparStep(t);
   sAlgo->spls->extractInteractionSource();
   sAlgo->spls->computeInteractionSource();
   int s = sAlgo->spls->mB2s->dimRow;
   int m = sAlgo->spls->mD2s->dimRow;
-//   printf("eLDS %lf :\n",t);
-//   printf("mB2s");
-//   cout<<(*(sAlgo->spls->mB2s));
-//   printf("mD2s");
-//   cout<<(*(sAlgo->spls->mD2s));
   for (int i=0;i<s ;i++){
     e[i]= sAlgo->spls->mB2s->getValue(i);
   }
@@ -59,24 +54,26 @@ void (DAEeLDS) (double t, unsigned int N, double* e, unsigned int z, double*zz){
   sAlgo->spls->extractInteractionSource();
   sAlgo->spls->computeInteractionSource();
   int m = sAlgo->spls->mD2s->dimRow;
-//   printf("eLDS %lf :\n",t);
-//   printf("mB2s");
-//   cout<<(*(sAlgo->spls->mB2s));
-//   printf("mD2s");
-//   cout<<(*(sAlgo->spls->mD2s));
   for (int i=0;i<m ;i++){
     e[i]= sAlgo->spls->mD2s->getValue(i);
   }
 }
-
-
+/************************************************************/
+/************************************************************/
+/************************************************************/
+/************************************************************/
+/*main program*/
 int main(int argc, char **argv){
-  if (argc<5){
-    printf("usage : toto file.cir ENUM|SIMPLEX|PATH|DIRECT_ENUM|DIRECT_SIMPLEX 10 DENSE|SPARSE INV/NOINV\n");
+  if (argc<3){
+    printf("usage : noselect file.cir ENUM|SIMPLEX|PATH|DIRECT_ENUM|DIRECT_SIMPLEX|DIRECT_PATH [INV/NOINV]\n");
     return 0;
   }
-  if (argc>5){
-    if (!strcmp(argv[5],"NOINV"))
+  /*MOS Parameters*/
+  ACE_MOS_NB_HYP=3;
+  ACE_MOS_POWER_SUPPLY=3.0;
+  /*formulation with inversion ?*/
+  if (argc>3){
+    if (!strcmp(argv[3],"NOINV"))
       ACE_FORMULATION_WITH_INVERSION=0;
   }
 
@@ -101,7 +98,13 @@ int main(int argc, char **argv){
 
   int NbDataMax = 10000;
   int NData=0;
-
+  int len = strlen(argv[1]);
+  char *simTraj;
+  simTraj =(char*)malloc(sizeof(char)*len);
+  strncpy(simTraj,argv[1],len-3);
+  strcat(simTraj,"sim");
+  cout<<"simTraj : "<<simTraj<<endl;
+  /*Get the solver type*/
   if (!strcmp(argv[2],"ENUM")){
     ACE_SOLVER_TYPE = ACE_SOLVER_ENUM;
   }else if(!strcmp(argv[2],"SIMPLEX")){
@@ -115,23 +118,27 @@ int main(int argc, char **argv){
   }else if(!strcmp(argv[2],"DIRECT_PATH")){
     ACE_SOLVER_TYPE=ACE_SOLVER_NUMERICS_DIRECT_PATH;
   }else{
-    printf("param2 must be : ENUM|SIMPLEX|PATH|DIRECT_ENUM|DIRECT_SIMPLEX \n");
+    printf("param2 must be : ENUM|SIMPLEX|PATH|DIRECT_ENUM|DIRECT_SIMPLEX|DIRECT_PATH \n");
     return 0;
   }
-  if (!strcmp(argv[3],"0"))
-    ACE_MUET_LEVEL=0;
-  else if (!strcmp(argv[3],"1"))
-    ACE_MUET_LEVEL=1;
-  else if (!strcmp(argv[3],"2"))
-    ACE_MUET_LEVEL=2;
-  else
-    ACE_MUET_LEVEL=10;
+//   if (!strcmp(argv[3],"0"))
+//     ACE_MUET_LEVEL=0;
+//   else if (!strcmp(argv[3],"1"))
+//     ACE_MUET_LEVEL=1;
+//   else if (!strcmp(argv[3],"2"))
+//     ACE_MUET_LEVEL=2;
+//   else
+  ACE_MUET_LEVEL=10;
   
-  if (!strcmp(argv[4],"SPARSE"))
-    ACE_MAT_TYPE=SPARSE;
-  else
+//   if (!strcmp(argv[4],"SPARSE"))
+//     ACE_MAT_TYPE=SPARSE;
+//   else
     ACE_MAT_TYPE=DENSE;
 
+    /************************************************************/
+    /************************************************************/
+    /*Solver options*/
+    iparam[5] = 5; // nb config
     if (ACE_SOLVER_TYPE == ACE_SOLVER_ENUM){
     iparam[0] = 0; // verbose
     dparam[0] = 0.0000001; // Tolerance
@@ -145,7 +152,7 @@ int main(int argc, char **argv){
     solverName = &solverSimplex;
   }else if(ACE_SOLVER_TYPE == ACE_SOLVER_PATH){
     iparam[0]=0;//verbose
-    dparam[0]=1e-9;
+    dparam[0]=1e-12;
     solverName = &solverPath;
   }else if (ACE_SOLVER_TYPE==ACE_SOLVER_NUMERICS_DIRECT_ENUM){
     iparam[0] = 0; // enum verbose
@@ -163,7 +170,6 @@ int main(int argc, char **argv){
     dparam[1]=1e-12;
     dparam[2]=1e-9;
     //direct options
-    iparam[5] = 2; // nb config
     iparam[6] = 0; // direct verbose
     dparam[5] = 0.0000001; // Tolerance
     dparam[5] = 1e-20; // Tolerance pos
@@ -171,20 +177,26 @@ int main(int argc, char **argv){
    }else if (ACE_SOLVER_TYPE==ACE_SOLVER_NUMERICS_DIRECT_PATH){
     //path option
     iparam[0]=0;//verbose
-    dparam[0]=1e-9;
     //direct options
-    iparam[5] = 2; // nb config
     iparam[6] = 0; // direct verbose
-    dparam[5] = 0.0000001; // Tolerance
-    dparam[5] = 1e-20; // Tolerance pos
     solverName = &solverDirPath;
+    dparam[0]=1e-12;
+    dparam[5]=1e-12;
+    dparam[6]=1e-12;
   }
 
-  
   ACE_times[ACE_TIMER_MAIN].start();
   ACE_INIT();
+  /*build object from ACEF*/
   sAlgo=new algo(argv[1]);
   sAlgo->perform();
+  if (!sAlgo->spls->mDimLambda){
+    sAlgo->simulate();
+    ACE_times[ACE_TIMER_MAIN].stop();
+    ACE_PRINT_TIME();
+    ACE_STOP();
+    return 0;
+  }
   int ACEFdimX = sAlgo->spls->mDimx;
   int dimX=ACEFdimX;
   int s=sAlgo->spls->mB2zs->getDimRow();
@@ -310,7 +322,7 @@ int main(int argc, char **argv){
     aMLCP = new MLCP2(aS,mySolver,"MLCP2");
   }
   aS->initialize();
-  //  Alloc working mem
+  //  Alloc working mem for the solver
   if (ACE_SOLVER_TYPE==ACE_SOLVER_NUMERICS_DIRECT_ENUM ||
       ACE_SOLVER_TYPE==ACE_SOLVER_ENUM  ||
       ACE_SOLVER_TYPE==ACE_SOLVER_NUMERICS_DIRECT_SIMPLEX ||
@@ -322,7 +334,7 @@ int main(int argc, char **argv){
     floatWorkingMem = (double*)malloc(aux*sizeof(double));
     mySolver->getNumericsSolverOptionsPtr()->dWork = floatWorkingMem;
   }
-    
+  /*init solver*/
   mlcp_driver_init(aMLCP->getNumericsMLCP(),mySolver->getNumericsSolverOptionsPtr());
 
   
@@ -340,7 +352,7 @@ int main(int argc, char **argv){
     NData = N/NbDataMax;
   }
   
-  ofstream pout("acefSimu.dat");
+  ofstream pout(simTraj);
 
   dataPrint * pPrint;
   ParserInitPrintElem();
@@ -408,6 +420,8 @@ int main(int argc, char **argv){
     free(floatWorkingMem);
   if (intWorkingMem)
     free(intWorkingMem);
+  ACE_STOP();
+
   return 0;
  
 }

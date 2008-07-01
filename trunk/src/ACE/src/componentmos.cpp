@@ -38,7 +38,7 @@ componentMOS::componentMOS(dataMOS1 *d,int NbHyp)
   ACE_CHECK_ERROR(mNodeD>=0 && mNodeG>=0 && mNodeS >=0,"componentMOS::componentMOS");
 
   //process parameters
-  double VI = 3.0;	// Power supply
+  double VI = ACE_MOS_POWER_SUPPLY;	// Power supply
   double Vt0 = mData.vt;
   double Kval = mData.k;
   double HalfK = Kval/2.0;

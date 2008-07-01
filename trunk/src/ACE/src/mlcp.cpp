@@ -45,13 +45,15 @@ mlcp::mlcp(unsigned int Dlcp,unsigned int Dlin,int solverType){
 
     mA=(double *)calloc(mDlin*mDlin,sizeof(double));
     mC=(double *)calloc(mDlin*mDlcp,sizeof(double));
-    mD=(double *)calloc(mDlcp*mDlin,sizeof(double));
-    mB=(double *)calloc(mDlcp*mDlcp,sizeof(double));
     ma=(double *)calloc(mDlin,sizeof(double));
-    mb=(double *)calloc(mDlcp,sizeof(double));
     mu=(double *)calloc(mDlin+mDlcp,sizeof(double));
-    mv=mu+mDlin;
     mw=(double *)calloc(mDlcp+mDlin,sizeof(double));
+    if (mDlcp){
+      mb=(double *)calloc(mDlcp,sizeof(double));
+      mD=(double *)calloc(mDlcp*mDlin,sizeof(double));
+      mB=(double *)calloc(mDlcp*mDlcp,sizeof(double));
+    }
+    mv=mu+mDlin;
     //  }
    
   mW1Z1=0;
@@ -100,13 +102,31 @@ mlcp::mlcp(unsigned int Dlcp,unsigned int Dlin,int solverType){
 
 
 }
-
+bool mlcp::solveLinearSystem(){
+  try{
+    mM22->PLUForwardBackwardInPlace(*mQ2);
+    for (int lin=0;lin<mDlin;lin++)
+      mZ2->setValue(lin,mQ2->getValue(lin));
+    return true;
+  }
+  catch(SiconosException e)
+    {
+      std::cout << e.report() << endl;
+      ACE_ERROR("mlcp::solveLinearSystem linear system no solution\n");
+    }
+  catch(...)
+    {
+      std::cout << "Exception caught." << endl;
+      ACE_ERROR("mlcp::solveLinearSystem linear system no solution\n");
+    }
+  return false;
+}
 bool mlcp::solveWithNumerics(){
   int n = mDlin;
   int m = mDlcp;
   bool res=false;
   int info;
-  mQ2->VectorToFortran(mProblem.q);  
+  mQ2->VectorToFortran(mProblem.q);
   mQ1->VectorToFortran(mProblem.q+mDlin);
   for (int i=0;i<mDlin+mDlcp;i++)
     mProblem.q[i]=-mProblem.q[i];
@@ -127,9 +147,11 @@ void mlcp::stopSolver(){
   free(mProblem.q);
   free(mOptions.iparam);
   free(mOptions.dparam);
-  free(mOptions.iWork);
-  free(mOptions.dWork);
-  mlcp_driver_reset(&mProblem,&mOptions);
+  if (mDlcp){
+    mlcp_driver_reset(&mProblem,&mOptions);
+    free(mOptions.iWork);
+    free(mOptions.dWork);
+  }
 }
 bool mlcp::initSolver(){
   int n = (int)mDlin;
@@ -137,14 +159,18 @@ bool mlcp::initSolver(){
 
 
   mM22->MatrixToFortran(mA);  
-  mM11->MatrixToFortran(mB);  
-  mM21->MatrixToFortran(mC);  
-  mM12->MatrixToFortran(mD);
+  if (mDlcp){
+    mM21->MatrixToFortran(mC);
+    mM12->MatrixToFortran(mD);
+    mM11->MatrixToFortran(mB);
+  }
   
   mM->setBlock(0,0,*mM22);
-  mM->setBlock(0,mDlin,*mM21);
-  mM->setBlock(mDlin,0,*mM12);
-  mM->setBlock(mDlin,mDlin,*mM11);
+  if (mDlcp){
+    mM->setBlock(0,mDlin,*mM21);
+    mM->setBlock(mDlin,0,*mM12);
+    mM->setBlock(mDlin,mDlin,*mM11);
+  }
   //  printInPutABCDab();
   //  cout<<*mM;
   mM->MatrixToFortran(mMd);
@@ -196,19 +222,24 @@ bool mlcp::initSolver(){
 
   }
 
-  int nbInts = mlcp_driver_get_iwork(&mProblem,&mOptions);
-  int nbDoubles = mlcp_driver_get_dwork(&mProblem,&mOptions);
-  mOptions.iWork = (int*)malloc( nbInts*sizeof(int));
-  mOptions.dWork = (double*)malloc( nbDoubles*sizeof(double));
-  mlcp_driver_init(&mProblem,&mOptions);
+  if (mDlcp){
+    int nbInts = mlcp_driver_get_iwork(&mProblem,&mOptions);
+    int nbDoubles = mlcp_driver_get_dwork(&mProblem,&mOptions);
+    mOptions.iWork = (int*)malloc( nbInts*sizeof(int));
+    mOptions.dWork = (double*)malloc( nbDoubles*sizeof(double));
+    mlcp_driver_init(&mProblem,&mOptions);
+  }
 
   return true;
 }
 bool mlcp::solve(){
   bool res =false;
   ACE_times[ACE_TIMER_SOLVER].start();
-
-  res = solveWithNumerics();
+  if (!mDlcp){
+    res = solveLinearSystem();
+  }else{
+    res = solveWithNumerics();
+  }
   ACE_STOP_SOLVER_TIME();
   return res;
 }
@@ -275,17 +306,23 @@ void mlcp::printInPutABCDab(ostream& os)
   os<<"mlcp print input"<<endl;
   os<<"dim lcp:\t"<<mDlcp<<"\tlin\t"<<mDlin;
   os<<"A\n";
-  os<<(*mM22);
+  if (mM22)
+    os<<(*mM22);
   os<<"B\n";
-  os<<(*mM11);
+  if (mM11)
+    os<<(*mM11);
   os<<"C\n";
-  os<<(*mM21);
+  if (mM21)
+    os<<(*mM21);
   os<<"D\n";
-  os<<(*mM12);
+  if (mM12)
+    os<<(*mM12);
   os<<"a\n";
-  os<<(*mQ2);
+  if (mQ2)
+    os<<(*mQ2);
   os<<"b\n";
-  os<<(*mQ1);
+  if (mQ1)
+    os<<(*mQ1);
   
 }
 void mlcp::printInPut(ostream& os)
@@ -304,9 +341,12 @@ void mlcp::printOutPut(ostream& os){
 //     return;
   os<<"mlcp print output"<<endl;
   os<<"Z1:\n";
-  os<<(*mZ1);
+  if (mZ1)
+    os<<(*mZ1);
   os<<"Z2:\n";
-  os<<(*mZ2);
+  if (mZ2)
+    os<<(*mZ2);
   os<<"W1:\n";
-  os<<(*mW1);
+  if (mW1)
+    os<<(*mW1);
 }

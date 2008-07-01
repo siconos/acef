@@ -174,7 +174,7 @@ void algo::perform(){
  ParserInitComponentList("Mos1");
  dataMOS1 mos;
  while(ParserNextComponent(&mos)){
-   componentMOS *c=new componentMOS(&mos,3);
+   componentMOS *c=new componentMOS(&mos,ACE_MOS_NB_HYP);
    mMos.push_back(c);
    c->addUnknowns();
    c->addEquations();
@@ -348,8 +348,20 @@ void algo::preparStep(double time){
     mIsrcs[i]->stampTimer();
 }
 void algo::simulate(){
+  int cmp =0;
   spls->initSimu();
   mSimuStream = new ofstream(mSimuFile);
+  dataPrint * pPrint;
+  ParserInitPrintElem();
+  //write first line.
+  (*mSimuStream)<<"Index\ttime";
+  while(ParserGetPrintElem((void**)&pPrint)){
+    (*mSimuStream)<<"\t\t";
+    (*mSimuStream)<<pPrint->name;
+  }
+  (*mSimuStream)<<endl<<endl;
+
+
   ACE_times[ACE_TIMER_SIMULATION].start();
   preparStep(spls->getCurrentTime());
   spls->ExtractAndCompute2Sources();
@@ -357,6 +369,8 @@ void algo::simulate(){
   while(spls->step()){
     if (ACE_MUET_LEVEL != ACE_MUET)
       spls->printStep();
+    (*mSimuStream)<<cmp<<"\t";
+    cmp++;
     spls->printStep(*mSimuStream);
     preparStep(spls->getCurrentTime());
     spls->ExtractAndCompute2Sources();

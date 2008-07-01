@@ -32,7 +32,7 @@ int main(int argc, char **argv){
   if (!strcmp(argv[5],"NOINV"))
     ACE_FORMULATION_WITH_INVERSION=0;
   if (argc > 6 && !strcmp(argv[6],"ADAPT")){
-    ACE_MAX_LOCAL_ERROR=1e-4;
+    ACE_MAX_LOCAL_ERROR=1e-3;
     ACE_WITH_ADAPTATIVE_TIME_STEPPING=1;
   }
     
@@ -40,9 +40,10 @@ int main(int argc, char **argv){
   ACE_INIT();
   algo *a=new algo(argv[1]);
   a->perform();
-  a-> simulate();
+  a->simulate();
   ACE_times[ACE_TIMER_MAIN].stop();
   ACE_PRINT_TIME();
+  ACE_STOP();
   return 0;
  
 }

@@ -1,7 +1,7 @@
 #ifndef ACE_H
 #define ACE_H
 
-#define PRE_COMPUTE_ADAPTIVE
+//#define PRE_COMPUTE_ADAPTIVE
 
 #include "extern.h"
 #include <vector>
@@ -48,6 +48,11 @@ extern int ACE_FORMULATION_WITH_INVERSION;//0 or 1
 //Adaptatve time stepping or SEMI-EXPLICT
 extern int ACE_WITH_ADAPTATIVE_TIME_STEPPING;//0 or 1
 extern ACE_DOUBLE ACE_MAX_LOCAL_ERROR;
+
+/*option for the MOS component*/
+extern int  ACE_MOS_NB_HYP;
+extern ACE_DOUBLE ACE_MOS_POWER_SUPPLY;
+
 
 #ifdef PRE_COMPUTE_ADAPTIVE
 #define ACE_NB_ADAPT_STEP 7
