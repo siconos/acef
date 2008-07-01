@@ -1428,31 +1428,43 @@ void linearSystem::printSystem2(ostream& os){
     os<<(*mD2s);
 }
 void linearSystem::printStep(ostream& os){
-  int i;
-  bool printALL = false;
-  ACE_DOUBLE curDate = getCurrentTime();
-  if (printALL){
-//     os << "xt("<<curDate<<")\t";
-//     if (mxti)
-//       for (i=0;i<mDimx;i++)
-//  	os << mxti->getValue(i)<<"\t";
-//    os << "zs("<<curDate<<")\t";
-    os << curDate<<"\t";
-    for (i=0;i<mDimzs-1;i++)
-      os << mzsti->getValue(i)<<"\t";
+//   int i;
+//   bool printALL = false;
+//   ACE_DOUBLE curDate = getCurrentTime();
+//   if (printALL){
+// //     os << "xt("<<curDate<<")\t";
+// //     if (mxti)
+// //       for (i=0;i<mDimx;i++)
+// //  	os << mxti->getValue(i)<<"\t";
+// //    os << "zs("<<curDate<<")\t";
+//     os << curDate<<"\t";
+//     for (i=0;i<mDimzs-1;i++)
+//       os << mzsti->getValue(i)<<"\t";
   
-//     os << "zns("<<curDate<<")\t";
-//     if (mznsti)
-//       for (i=0;i<mDimzns;i++)
-//  	os << mznsti->getValue(i)<<"\t";
-    os<<"\n";
-  }else{
-    if (mStepCmp%mLogPrint==0){
-            os <<curDate<<"\t"<<mxti->getValue(4)<<"\n";
-	    //      os << curDate <<"\t"<<mzsti->getValue(0) - mzsti->getValue(2)<<"\n";
+// //     os << "zns("<<curDate<<")\t";
+// //     if (mznsti)
+// //       for (i=0;i<mDimzns;i++)
+// //  	os << mznsti->getValue(i)<<"\t";
+//     os<<"\n";
+//   }else{
+//     if (mStepCmp%mLogPrint==0){
+//             os <<curDate<<"\t"<<mxti->getValue(4)<<"\n";
+// 	    //      os << curDate <<"\t"<<mzsti->getValue(0) - mzsti->getValue(2)<<"\n";
       
-    }
+//     }
+//   }
+
+  dataPrint * pPrint;
+  ParserInitPrintElem();
+  os<<getCurrentTime();
+  while(ParserGetPrintElem((void**)&pPrint)){
+    os<<"\t\t";
+    double aux = mzsti->getValue(pPrint->node1-1);
+    if (pPrint->node2 >0)
+      aux -=  mzsti->getValue(pPrint->node2-1);
+    os << aux;
   }
+  os<<endl;
 }
 
 void linearSystem::printEquations(ostream& os ){
