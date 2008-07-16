@@ -32,7 +32,8 @@ int main(int argc, char **argv){
   if (!strcmp(argv[5],"NOINV"))
     ACE_FORMULATION_WITH_INVERSION=0;
   if (argc > 6 && !strcmp(argv[6],"ADAPT")){
-    ACE_MAX_LOCAL_ERROR=1e-3;
+    ACE_RTOL_LOCAL=1e-4;
+    ACE_ATOL_LOCAL=1e-4;
     ACE_WITH_ADAPTATIVE_TIME_STEPPING=1;
   }
     

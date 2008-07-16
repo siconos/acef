@@ -1,7 +1,6 @@
 #include "ACEF.h"
 #include "linearsystem.h"
 
-#include "/usr/local/include/Siconos/Kernel/MLCP.h"
 #include "SiconosKernel.h"
 #include <stdio.h>
 #include <stdlib.h>
