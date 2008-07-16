@@ -102,18 +102,24 @@ linearSystem::linearSystem(){
   mTcurrent=0;
   //adaptive time stepping
   mUseAdaptiveTimeStepping=false;
-  mAlphaMax=5;
+  mAlphaMax=2;
   mAlphaMin=0.0001;
-  mAlpha=0.95;
+  mAlpha=0.9;
   mAdaptCmp=-1;
   mxtiprev=0;
   mzstiprev=0;
   mxticurrent=0;
   mzsticurrent=0;
-  
+  mzst_inter=0;
+  mxt1=0;
+  mzst1=0;
+  mxbuf=0;
+  mzsbuf=0;
+
   mNbToSmall=0;
   mNbToBig=0;
-  mSerror=0;
+  mSerrorX=0;
+  mSerrorZs=0;
   mNbBacktrack=0;
 
 
@@ -121,6 +127,8 @@ linearSystem::linearSystem(){
   mLogFrequency=0;
   mLogPrint=0;
   mPourMille=0;
+  mSommeError=0;
+  mCoef=1;
 
   //
 }
@@ -366,13 +374,22 @@ void linearSystem::allocForInitialValue(){
     mxti = new aceVector(mDimx,ACE_MAT_TYPE);
     mxtiprev=new aceVector(mDimx,ACE_MAT_TYPE);
     mxticurrent=new aceVector(mDimx,ACE_MAT_TYPE);
+    mxt1=new aceVector(mDimx,ACE_MAT_TYPE);
+    mxbuf=new aceVector(mDimx,ACE_MAT_TYPE);
+    
+
   }
   mzsti = new aceVector(mDimzs-1,ACE_MAT_TYPE);
   mzsticurrent=new aceVector(mDimzs-1,ACE_MAT_TYPE);
   mzstiprev=new aceVector(mDimzs-1,ACE_MAT_TYPE);
+  mzst_inter=new aceVector(mDimzs-1,ACE_MAT_TYPE);
+  mzst1=new aceVector(mDimzs-1,ACE_MAT_TYPE);
+  mzsbuf=new aceVector(mDimzs-1,ACE_MAT_TYPE);
 }
 
 void linearSystem::allocDiscretisation(){
+  if (mxfree)
+    return;
   allocForInitialValue();
   if(mDimx){
     mxfree = new aceVector(mDimx,ACE_MAT_TYPE);
@@ -415,6 +432,16 @@ void linearSystem::freeForInitialValue(){
     delete mxticurrent;
   if (mzsti)
     delete mzsti;
+  if (mzst_inter)
+    delete mzst_inter;
+  if (mzst1)
+    delete mzst1;
+  if (mzsbuf)
+    delete mzsbuf;
+  if (mxt1)
+    delete mxt1;
+  if (mxbuf)
+    delete mxbuf;
 }
 void linearSystem::freeDiscretisation(){
   freeForInitialValue();
@@ -508,11 +535,12 @@ void linearSystem::readInitialValue(){
   try{
 
     ParserGetTransValues(&mH,&mTstop,&mTstart);
-    mHori = mH;
+    mH = mH/mCoef;
+    mHori=mH;
 #ifdef PRE_COMPUTE_ADAPTIVE
     mMaxHori = mHori*(1<<(ACE_NB_ADAPT_STEP-1));
 #else
-    mMaxHori = mHori*100;
+    mMaxHori = mHori*1000;
 #endif
     long long b1 = llrint(mTstop/mH);;
     long b2 = lrint(mTstop/mH);;
@@ -527,6 +555,7 @@ void linearSystem::readInitialValue(){
     for (i=0;i<mDimx;i++){
       mxti->setValueIfNotNull(i,0);
     }
+     mxti->setValueIfNotNull(1,10.0/2000);
 
     ParserInitICvalue();
     while(ParserGetICvalue(&i,&useIc,&aux)){
@@ -535,12 +564,14 @@ void linearSystem::readInitialValue(){
 	cout<<"set value from netlist :v_"<<i<<"="<<aux<<endl;
       }
     }
-      
+    printStep(*mSimuStream,mzsti);
+
     /*for each x of type TENSION, compute the initial value with V init*/
     for(i=0; i <(int) mx.size(); i++){
       unknown* u = mx[i];
       if (u->mType == ACE_TYPE_U ){
-	aux = mzsti->getValue(u->mComponent->mNodePos) - mzsti->getValue(u->mComponent->mNodeNeg);
+	aux =  (u->mComponent->mNodeNeg>0)? mzsti->getValue(u->mComponent->mNodeNeg-1):0;
+	aux -= (u->mComponent->mNodePos>0)? mzsti->getValue(u->mComponent->mNodePos-1):0;
 	mxti->setValueIfNotNull(i,aux);
       }
     }
@@ -647,15 +678,20 @@ void linearSystem::fillMLCP(){
   *(mMLCP->mM12) = *mD3zs[ACE_CUR_STEP];
   *(mMLCP->mM21) = *mB3l[ACE_CUR_STEP];
   *(mMLCP->mM22) = *mB3zs[ACE_CUR_STEP];
+  mMLCP->update();
 
 }
-void linearSystem::initSimu(){
+void linearSystem::initSimu(ofstream * pstream){
+  mSimuStream = pstream;
+  mSommeError=0;
+  mTcurrent=0;
   allocDiscretisation();
   readInitialValue();
   //compteur for the adaptive time stepping.
   mNbToSmall=0;
   mNbToBig=0;
-  mSerror=0;
+  mSerrorX=0;
+  mSerrorZs=0;
   mNbBacktrack=0;
   mAllStepCmp=0;
 
@@ -684,7 +720,7 @@ double linearSystem::getCurrentTime(){
   return mTcurrent;
 }
 void linearSystem::preparStep(){
-  computeBestStep();
+  computeAndAcceptStep();
   preparMLCP();
 }
 
@@ -709,9 +745,6 @@ void linearSystem::preparMLCP(){
     //(*mQfree) = prod(*mB2xW,*mxfree) + (*mB2s);
     ACEprod(*mB2xW[ACE_CUR_STEP],*mxfree,*mQfree,true);
     *mQfree+=*mB2s;
-
-
-
     
   } else if(mDimx){//only x
     (*mxfree) = (*mxti) + mH*(1-mTheta)*prod(*mA2x,*mxti)+mH*(1-mTheta)*prod(*mA2zs,*mzsti)+mH*(*mA2s);
@@ -782,8 +815,9 @@ bool linearSystem::step(){
   }
   mTcurrent += mH;
   ACE_CMP_ADAT[ACE_CUR_STEP]++;
-
+  //  mMLCP->printInPutABCDab();
   bool res = mMLCP->solve();
+  //  mMLCP->printOutPut();
   ACE_times[ACE_TIMER_COMPUTE_VAR].start();
   if (res){
     //*mzsti=*(mMLCP->mZ2);
@@ -819,19 +853,30 @@ bool linearSystem::step(){
   ACE_times[ACE_TIMER_LS_STEP].stop();
   return res;
 }
-void linearSystem::stopSimu(){
-  //  mMLCP->printGuess();
-  mMLCP->stopSolver();
-  if (mMLCP)
-    delete mMLCP;
-  mMLCP=0;
+void linearSystem::printLog(){
   ACE_GET_LOG_STREAM()<<"linearSystem::stopSimu, number of ALL steps: "<<mAllStepCmp<<endl;
   ACE_GET_LOG_STREAM()<<"linearSystem::stopSimu, adaptive nb backtrack: "<<mNbBacktrack<<endl;
   ACE_GET_LOG_STREAM()<<"linearSystem::stopSimu, adaptive to small step: "<<mNbToSmall<<endl;
   ACE_GET_LOG_STREAM()<<"linearSystem::stopSimu, adaptive to big step: "<<mNbToBig<<endl;
-  ACE_GET_LOG_STREAM()<<"linearSystem::stopSimu, total error step: "<<mSerror<<endl;
+  ACE_GET_LOG_STREAM()<<"linearSystem::stopSimu, total error voltage step: "<<mSerrorZs<<endl;
+  ACE_GET_LOG_STREAM()<<"linearSystem::stopSimu, total error X step: "<<mSerrorX<<endl;
+  ACE_GET_LOG_STREAM()<<"linearSystem::stopSimu,  h, error somme, number of step, average: "<<mH<<" "<<mSommeError<<" "<<mStepCmp<<" "<<mSommeError/mStepCmp<<endl;
+  ACE_GET_LOG_STREAM()<<"linearSystem::stopSimu,  log10(average), log10(h)"<<log10(mSommeError/mStepCmp)<<" "<<log10(mH)<<endl;
+  if (ACE_WITH_ADAPTATIVE_TIME_STEPPING){
+    ACE_GET_LOG1_STREAM()<<log10(mSommeError/mStepCmp)<<"\t"<<log10(ACE_RTOL_LOCAL)<<endl;
+  }else{
+    ACE_GET_LOG1_STREAM()<<log10(mSommeError/mStepCmp)<<"\t"<<log10(mH)<<endl;
+  }
   for (int i=0;i < ACE_NB_ADAPT_STEP+1;i++)
     ACE_GET_LOG_STREAM()<<"linearSystem::stopSimu, step number : "<< i << " : "<< ACE_CMP_ADAT[i]<<endl;
+ }
+void linearSystem::stopSimu(){
+  //  mMLCP->printGuess();
+  printLog();
+  mMLCP->stopSolver();
+  if (mMLCP)
+    delete mMLCP;
+  mMLCP=0;
   
   
 }
@@ -1427,7 +1472,18 @@ void linearSystem::printSystem2(ostream& os){
   if (mD2s)
     os<<(*mD2s);
 }
-void linearSystem::printStep(ostream& os){
+ACE_DOUBLE linearSystem::computeAnalyticSolution(ACE_DOUBLE t){
+  ACE_DOUBLE R=1000;
+  ACE_DOUBLE L=1e-2;
+  ACE_DOUBLE C=1e-6;
+
+  ACE_DOUBLE a = -t/(2.0*R*C);
+  ACE_DOUBLE w = t*sqrt((1.0/(L*C)-(1.0/(4.0*R*R*C*C))));
+  return fabs(10.0*exp(a)*cos(w));
+
+  
+}
+void linearSystem::printStep(ostream& os,aceVector *pVzs){
 //   int i;
 //   bool printALL = false;
 //   ACE_DOUBLE curDate = getCurrentTime();
@@ -1453,15 +1509,19 @@ void linearSystem::printStep(ostream& os){
       
 //     }
 //   }
+  ACE_DOUBLE v = computeAnalyticSolution(getCurrentTime());
 
   dataPrint * pPrint;
+  double aux;
   ParserInitPrintElem();
   os<<getCurrentTime();
   while(ParserGetPrintElem((void**)&pPrint)){
     os<<"\t\t";
-    double aux = mzsti->getValue(pPrint->node1-1);
+    aux = pVzs->getValue(pPrint->node1-1);
     if (pPrint->node2 >0)
-      aux -=  mzsti->getValue(pPrint->node2-1);
+      aux -=  pVzs->getValue(pPrint->node2-1);
+    mSommeError += fabs(v-aux);
+    
     os << aux;
   }
   os<<endl;
@@ -1651,15 +1711,27 @@ void linearSystem::printSystemInTabFile(char * file){
  *mStepCmp%2==1 : backtrack, and compute new step, remenber current state.
  *
  */
-void  linearSystem::computeBestStep(){
-  if (!ACE_WITH_ADAPTATIVE_TIME_STEPPING)
+void  linearSystem::computeAndAcceptStep(){
+  if (!ACE_WITH_ADAPTATIVE_TIME_STEPPING){
+    printStep(*mSimuStream,mzsti);
     return;
+  }
   mAdaptiveStepEvaluation=true;
-  if (mStepCmp%2==1 ){
+  ACE_DOUBLE timeSav = mTcurrent;
+  if (mStepCmp%2==0 ){
+    *mzst_inter=*mzsti;
+  }else{
     //initialisation.
     if (mStepCmp == 1){
       mNormX0=fmax(1,mxti->norm2());
       mNormZ0=fmax(1,mzsti->norm2());
+      //sav current state to be able to come back in tow steps
+      *mxtiprev=  *mxti ;
+      *mzstiprev=*mzsti ;
+      *mzst1 = *mzsti;
+      *mxt1 = *mxti;
+      printStep(*mSimuStream,mzsti);
+
     }else{
       mNbBacktrack++;
       //backtrack excepted for the first step
@@ -1667,7 +1739,7 @@ void  linearSystem::computeBestStep(){
       ACE_DOUBLE timeSav = mTcurrent;
       ACE_DOUBLE H = mH;
       ACE_DOUBLE newH = mH;
-      ACE_DOUBLE error=0;
+      ACE_DOUBLE errorX, errorZs=0;
       ACE_DOUBLE coef;
       ACE_DOUBLE buf1,buf2;
       //save current state for error evaluation.
@@ -1682,20 +1754,34 @@ void  linearSystem::computeBestStep(){
       setStep(2*H);
       //run
       preparMLCP();
+      bool l_accept = false;
       if (step()){
 	//compute error
 	//      cout<<"mzsti \n"<<*mzsti;
 	//      cout<<"mzsticurrent \n"<<*mzsticurrent;
-	*mxti=*mxti-*mxticurrent;
-	*mzsti=*mzsti-*mzsticurrent;
-	buf2=mzsti->normInf();
-	error=fmax(ACE_INF,buf2);
-	mSerror+=error;
+	*mxbuf=*mxti-*mxticurrent;
+	*mzsbuf=*mzsti-*mzsticurrent;
+	buf2=mzsbuf->normInf();
+	errorZs=fmax(ACE_INF,buf2);
+	buf2=mxbuf->normInf();
+	errorX=fmax(ACE_INF,buf2);
+	mSerrorX+=errorX;
+	mSerrorZs+=errorZs;
 	//compute new step
       
-	coef = fmin(mAlphaMax,fmax(mAlphaMin,mAlpha*mNormZ0*ACE_MAX_LOCAL_ERROR/error));
+	coef = fmin(
+		    mNormZ0*ACE_RTOL_LOCAL/errorZs,
+		    mNormX0*ACE_RTOL_LOCAL/errorX
+		    );
+	if (coef >=1){
+	  coef = fmin(
+		      fmin(mAlphaMax,fmax(mAlphaMin,mAlpha*mNormZ0*ACE_RTOL_LOCAL/errorZs)),
+		      fmin(mAlphaMax,fmax(mAlphaMin,mAlpha*mNormX0*ACE_RTOL_LOCAL/errorX))
+		      );
+	  l_accept =true;
+	}
 #ifdef PRE_COMPUTE_ADAPTIVE
-	ACE_CHECK_IERROR(ACE_CUR_STEP>=1,"linearSystem::computeBestStep : ACE_CUR_STEP>=1");
+	ACE_CHECK_IERROR(ACE_CUR_STEP>=1,"linearSystem::computeAndAcceptStep : ACE_CUR_STEP>=1");
 	int curCoef = (1<<(ACE_CUR_STEP-1));
 	ACE_DOUBLE newcoef = coef * curCoef;
 	newH=newcoef*H;
@@ -1711,15 +1797,6 @@ void  linearSystem::computeBestStep(){
 	newH=mHori;
     }
 #endif
-      if (error > 1000){
-	cout<<"too big error "<<error<<"\n";
-
-	cout<<"mNormZ0 "<<mNormZ0<<endl;
-	cout<<"mAlpha "<<mAlpha<<endl;
-	cout<<"ACE_MAX_LOCAL_ERROR "<< ACE_MAX_LOCAL_ERROR <<endl;
-	cout<<"mzsti \n"<<*mzsti;
-
-      }
       if (newH < mHori){
 	newH = mHori;
 	mNbToSmall++;
@@ -1734,19 +1811,181 @@ void  linearSystem::computeBestStep(){
 	setStep(newH);
       //}
 
-      //restore current values.
-      *mxti=*mxticurrent;
-      *mzsti=*mzsticurrent;
-      mStepCmp=cmpSav;
-      mTcurrent=timeSav;
-    }
+    
 
-    //sav current state to be able to come back in tow steps
-    *mxtiprev=  *mxti ;
-    *mzstiprev=*mzsti ;
-    mAdaptiveStepEvaluation=false;
-
+      if (l_accept){
+	//accept the two previous step and go head
+	//restore current values.
+	*mxti=*mxticurrent;
+	*mzsti=*mzsticurrent;
+	mStepCmp=cmpSav;
+	mTcurrent=timeSav-H;
+	printStep(*mSimuStream,mzst_inter);
+	mTcurrent=timeSav;
+	printStep(*mSimuStream,mzsti);
+	
+	//sav current state to be able to come back in tow steps
+	*mxtiprev=  *mxti ;
+	*mzstiprev=*mzsti ;
+      }else{
+	//Do not eccept the tow previous step, and try with the new adptive step
+	//come back in the past.
+	*mxti = *mxtiprev;
+	*mzsti = *mzstiprev;
+	mStepCmp=cmpSav;
+	mTcurrent=timeSav-2*H;
+      }
+      mAdaptiveStepEvaluation=false;
   }
+}
+}
+
+void  linearSystem::computeAndAcceptStep_2(){
+  if (!ACE_WITH_ADAPTATIVE_TIME_STEPPING){
+    printStep(*mSimuStream,mzsti);
+    return;
+  }
+//    if (mStepCmp == 5){
+//      printStep(*mSimuStream,mzsti);
+//      setStep(5*mHori);
+//    }else{
+//      printStep(*mSimuStream,mzsti);
+//    }
+//    return;
+  mAdaptiveStepEvaluation=true;
+  ACE_DOUBLE timeSav = mTcurrent;
+  if (mStepCmp%2==0 ){
+    *mzst_inter=*mzsti;
+  }else{
+    //initialisation.
+    if (mStepCmp == 1){
+      //sav current state to be able to come back in tow steps
+      *mxtiprev=  *mxti ;
+      *mzstiprev=*mzsti ;
+      *mzst1 = *mzsti;
+      *mxt1 = *mxti;
+      printStep(*mSimuStream,mzsti);
+    }else{
+      mNbBacktrack++;
+      //backtrack excepted for the first step
+      int cmpSav = mStepCmp;
+      ACE_DOUBLE H = mH;
+      ACE_DOUBLE newH = mH;
+      ACE_DOUBLE errorX, errorZs=0;
+      ACE_DOUBLE coef;
+      ACE_DOUBLE buf1,buf2;
+      //save current state for error evaluation.
+      *mxticurrent = *mxti;
+      *mzsticurrent = *mzsti;
+      //come back in the past.
+      *mxti = *mxtiprev;
+      *mzsti = *mzstiprev;
+      //      cout<<"mzstiprev \n"<<*mzstiprev;
+      mTcurrent-=2*H;
+      //set step for evaluation
+      setStep(2*H);
+      //run
+      preparMLCP();
+      ACE_DOUBLE bidon = mzsti->getValue(0);
+      bool l_accept = false;
+      if (step()){
+	//compute error
+	//      cout<<"mzsti \n"<<*mzsti;
+	//      cout<<"mzsticurrent \n"<<*mzsticurrent;
+	*mxbuf=*mxti-*mxticurrent;
+	*mzsbuf=*mzsti-*mzsticurrent;
+	ACE_DOUBLE err=0;
+	ACE_DOUBLE aux=0;
+	ACE_DOUBLE sci=0;
+	int i;
+	for (i=0; i < mDimzs-1; i++){
+	  sci = ACE_ATOL_LOCAL + ACE_RTOL_LOCAL*fmax(mzst1->getValue(i),mzsti->getValue(i));
+	  aux=(mzsbuf->getValue(i)/sci);
+	  err+=aux*aux;
+	}
+	for (i=0; i < mDimx; i++){
+	  sci = ACE_ATOL_LOCAL + ACE_RTOL_LOCAL*fmax(mxt1->getValue(i),mxti->getValue(i));
+	  aux=(mxbuf->getValue(i)/sci);
+	  err+=aux*aux;
+	}
+	err=err/(mDimzs-1 + mDimx);
+// 	err=err/(mDimzs-1);
+	err=sqrt(err);
+
+	coef = 1/err;
+	if (coef >= 1){
+	  l_accept = true;
+	  coef = fmin(mAlphaMax,fmax(mAlphaMin,mAlpha/err));
+	}
+	//	coef=2;
+#ifdef PRE_COMPUTE_ADAPTIVE
+	ACE_CHECK_IERROR(ACE_CUR_STEP>=1,"linearSystem::computeAndAcceptStep : ACE_CUR_STEP>=1");
+	int curCoef = (1<<(ACE_CUR_STEP-1));
+	ACE_DOUBLE newcoef = coef * curCoef;
+	newH=newcoef*H;
+      }else{
+	newH=mHori;
+      }
+	
+#else
+      //      cout<<"tol "<<ACE_MAX_LOCAL_ERROR<<endl;
+      //      cout<<"error "<<error<<" ie: coef "<<coef<<endl;
+      newH = coef * H;
+    }else{
+	newH=mHori;
+    }
+#endif
+//     newH=mHori;
+//     if (mNbBacktrack ==1)
+//       newH=2*mHori;
+//     if (mNbBacktrack ==2)
+//       newH=4*mHori;
+//     if (mNbBacktrack ==3)
+//       newH=10*mHori;
+//     if (mNbBacktrack ==4)
+//       newH=3*mHori;
+    
+     
+      if (newH < mHori){
+	newH = mHori;
+	mNbToSmall++;
+      }else if (newH > mMaxHori){
+	newH = mMaxHori;
+	mNbToBig++;
+      }
+
+      if (timeSav + newH > mTstop)
+	setStep(mTstop - timeSav);
+      else
+	setStep(newH);
+
+    
+
+      if (l_accept){
+	//accept the two previous step and go head
+	//restore current values.
+	*mxti=*mxticurrent;
+	*mzsti=*mzsticurrent;
+	mStepCmp=cmpSav;
+	mTcurrent=timeSav-H;
+	printStep(*mSimuStream,mzst_inter);
+	mTcurrent=timeSav;
+	printStep(*mSimuStream,mzsti);
+	
+	//sav current state to be able to come back in tow steps
+	*mxtiprev=  *mxti ;
+	*mzstiprev=*mzsti ;
+      }else{
+	//Do not eccept the tow previous step, and try with the new adptive step
+	//come back in the past.
+	*mxti = *mxtiprev;
+	*mzsti = *mzstiprev;
+	mStepCmp=cmpSav;
+	mTcurrent=timeSav-2*H;
+      }
+      mAdaptiveStepEvaluation=false;
+  }
+}
 }
 void linearSystem::setStep(ACE_DOUBLE newH){
 #ifdef PRE_COMPUTE_ADAPTIVE
@@ -1766,6 +2005,7 @@ void linearSystem::setStep(ACE_DOUBLE newH){
 #else
   mH=newH;
   buildMLCP();
+  fillMLCP();
 #endif
   //  ACE_ERROR("linearSystem::setStep not implemeted");
 }

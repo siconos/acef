@@ -42,7 +42,8 @@ void aceMatrix::display(ostream& os) const{
     os <<"DENSE MATRIX ["<<dimRow<<","<<dimCol<<"]"<<endl;
     for (unsigned int i=0;i<dimRow;i++){
       for (unsigned int j=0;j<dimCol;j++){
-	os <<"\t"<<getValue(i,j);
+	//	os <<"\t"<<getValue(i,j);
+	printf("\t %8.10e",getValue(i,j));
       }
       os <<"\n";
     }

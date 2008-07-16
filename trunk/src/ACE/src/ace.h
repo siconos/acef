@@ -47,7 +47,8 @@ class component;
 extern int ACE_FORMULATION_WITH_INVERSION;//0 or 1
 //Adaptatve time stepping or SEMI-EXPLICT
 extern int ACE_WITH_ADAPTATIVE_TIME_STEPPING;//0 or 1
-extern ACE_DOUBLE ACE_MAX_LOCAL_ERROR;
+extern ACE_DOUBLE ACE_ATOL_LOCAL;
+extern ACE_DOUBLE ACE_RTOL_LOCAL;
 
 /*option for the MOS component*/
 extern int  ACE_MOS_NB_HYP;
@@ -136,6 +137,7 @@ void ACE_INTERNAL_ERROR(char *mess);
 void ACE_INTERNAL_WARNING(char *mess);
 void ACE_TYPE_TO_CHAR(int type,char* name);
 ofstream & ACE_GET_LOG_STREAM();
+ofstream & ACE_GET_LOG1_STREAM();
 
 //Raise an error if not b
 //check b is true

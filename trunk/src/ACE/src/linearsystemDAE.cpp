@@ -29,8 +29,10 @@ void linearSystemDAE::buildMLCP(){
 #ifdef PRE_COMPUTE_ADAPTIVE
     if (ACE_WITH_ADAPTATIVE_TIME_STEPPING)
 	mH=mHori*(1<<i);
-#endif    
-    scal(mH,*mR,*mhR[i]);
+#endif
+    if(mDimLambda){
+      scal(mH,*mR,*mhR[i]);
+    }
     //W=I-h*theta A2x
     mW[i]->zero();
     for(int j = 0; j < mDimx;j++)
@@ -52,6 +54,7 @@ void linearSystemDAE::fillMLCP(){
       mMLCP->mM21->setBlock(0,0,*mhR[ACE_CUR_STEP]);
       mMLCP->mM22->setBlock(0,0,*mW[ACE_CUR_STEP]);
       mMLCP->mM22->setBlock(0,mDimx,*mHThetaA2zs[ACE_CUR_STEP]);
+      mMLCP->update();
 }
 void linearSystemDAE::preparMLCP(){
     if (mDimx && mDimLambda){//both

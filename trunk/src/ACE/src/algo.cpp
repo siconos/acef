@@ -349,35 +349,44 @@ void algo::preparStep(double time){
 }
 void algo::simulate(){
   int cmp =0;
-  spls->initSimu();
   mSimuStream = new ofstream(mSimuFile);
-  dataPrint * pPrint;
-  ParserInitPrintElem();
-  //write first line.
-  (*mSimuStream)<<"Index\ttime";
-  while(ParserGetPrintElem((void**)&pPrint)){
-    (*mSimuStream)<<"\t\t";
-    (*mSimuStream)<<pPrint->name;
-  }
-  (*mSimuStream)<<endl<<endl;
-
-
-  ACE_times[ACE_TIMER_SIMULATION].start();
-  preparStep(spls->getCurrentTime());
-  spls->ExtractAndCompute2Sources();
-  spls->preparStep();
-  while(spls->step()){
-    if (ACE_MUET_LEVEL != ACE_MUET)
-      spls->printStep();
-    (*mSimuStream)<<cmp<<"\t";
-    cmp++;
-    spls->printStep(*mSimuStream);
+  spls->mCoef=1;
+  for (int i=0;i<1;i++){
+    spls->initSimu(mSimuStream);
+    dataPrint * pPrint;
+    ParserInitPrintElem();
+    //write first line.
+    //   (*mSimuStream)<<"Index\ttime";
+    //   while(ParserGetPrintElem((void**)&pPrint)){
+    //     (*mSimuStream)<<"\t\t";
+    //     (*mSimuStream)<<pPrint->name;
+    //   }
+    //   (*mSimuStream)<<endl<<endl;
+    
+    
+    ACE_times[ACE_TIMER_SIMULATION].start();
     preparStep(spls->getCurrentTime());
     spls->ExtractAndCompute2Sources();
     spls->preparStep();
+    while(spls->step()){
+      //    if (ACE_MUET_LEVEL != ACE_MUET)
+      //      spls->printStep();
+      //    (*mSimuStream)<<cmp<<"\t";
+      //    cmp++;
+      //    spls->printStep(*mSimuStream);
+      preparStep(spls->getCurrentTime());
+      spls->ExtractAndCompute2Sources();
+      spls->preparStep();
+    }
+    spls->printLog();
+    //    spls->mCoef=spls->mCoef*2;
+    ACE_RTOL_LOCAL=ACE_RTOL_LOCAL/2.0;
+    ACE_ATOL_LOCAL=ACE_ATOL_LOCAL/2.0;
   }
+  
   ACE_times[ACE_TIMER_SIMULATION].stop();
   spls->stopSimu();
+    
   mSimuStream->close();
   delete mSimuStream;
   mSimuStream=0;

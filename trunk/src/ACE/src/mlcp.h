@@ -29,6 +29,7 @@ public:
   bool solve();
   void stopSolver();
   bool initSolver();
+  void update();
   //  void addGuess(aceVector *mZ);
 
   //  void addGuess(unsigned long l);
@@ -96,15 +97,15 @@ private:
 
   //
   double* mMd;
-  double* mA;
-  double* mB;
-  double* mC;
-  double* mD;
-  double* ma;
-  double* mb;
-  double* mu;
-  double* mv;
-  double* mw;
+  //  double* mA;
+  //  double* mB;
+  //  double* mC;
+  //  double* mD;
+  //  double* ma;
+  //  double* mb;
+    double* mu;
+    double* mv;
+    double* mw;
 
   Index dim;
   Index start;

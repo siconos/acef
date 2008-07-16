@@ -10,8 +10,10 @@ int ACE_MUET_LEVEL=0;
 UBLAS_TYPE ACE_MAT_TYPE=DENSE;
 int ACE_FORMULATION_WITH_INVERSION=1;
 int ACE_WITH_ADAPTATIVE_TIME_STEPPING=0;
-ACE_DOUBLE ACE_MAX_LOCAL_ERROR=1e-3;
+ACE_DOUBLE ACE_ATOL_LOCAL=1e-3;
+ACE_DOUBLE ACE_RTOL_LOCAL=1e-2;
 static ofstream* ACE_LOG_FILE=0;
+static ofstream* ACE_LOG1_FILE=0;
 int ACE_CUR_STEP=0;
 int ACE_CMP_ADAT[ACE_NB_ADAPT_STEP+1];
 int  ACE_MOS_NB_HYP=3;
@@ -23,13 +25,18 @@ using namespace std;
 ofstream& ACE_GET_LOG_STREAM(){
   return *ACE_LOG_FILE;
 }
+ofstream& ACE_GET_LOG1_STREAM(){
+  return *ACE_LOG1_FILE;
+}
 
 void ACE_INIT(){
   ACE_INIT_TIME();
   ACE_LOG_FILE = new ofstream("ACE.log");
+  ACE_LOG1_FILE = new ofstream("ACE1.log");
 }
 void ACE_STOP(){
   delete ACE_LOG_FILE;
+  delete ACE_LOG1_FILE;
 }
 void ACE_INIT_TIME(){
   ACE_times[ACE_TIMER_MAIN].setName("main ");

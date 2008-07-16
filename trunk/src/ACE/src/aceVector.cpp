@@ -39,7 +39,8 @@ void aceVector::display(ostream& os) const{
   if (num == 1){
     os <<"DENSE VECTOR ["<<dimRow<<"]"<<endl;
     for (unsigned int i=0;i<dimRow;i++){
-	os <<"\t"<<getValue(i);
+      //	os <<"\t"<<getValue(i);
+      printf("\t %8.10e",getValue(i));
 	os <<"\n";
       }
   }else if (num ==4){

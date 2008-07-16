@@ -13,12 +13,12 @@ mlcp::mlcp(unsigned int Dlcp,unsigned int Dlin,int solverType){
   mDlcp = Dlcp;
   mDlin = Dlin;
   ACE_CHECK_IERROR(mDlcp+mDlin>0,"mlcp::mlcp dim null");
-  mA=0;
-  mB=0;
-  mC=0;
-  mD=0;
-  ma=0;
-  mb=0;
+//   mA=0;
+//   mB=0;
+//   mC=0;
+//   mD=0;
+//   ma=0;
+//   mb=0;
   mu=0;
   mv=0;
   mw=0;
@@ -43,17 +43,17 @@ mlcp::mlcp(unsigned int Dlcp,unsigned int Dlin,int solverType){
     
     mMd=(double *)calloc((mDlcp+mDlin)*(mDlcp+mDlin),sizeof(double));
 
-    mA=(double *)calloc(mDlin*mDlin,sizeof(double));
-    mC=(double *)calloc(mDlin*mDlcp,sizeof(double));
-    ma=(double *)calloc(mDlin,sizeof(double));
+//     mA=(double *)calloc(mDlin*mDlin,sizeof(double));
+//     mC=(double *)calloc(mDlin*mDlcp,sizeof(double));
+//     ma=(double *)calloc(mDlin,sizeof(double));
     mu=(double *)calloc(mDlin+mDlcp,sizeof(double));
     mw=(double *)calloc(mDlcp+mDlin,sizeof(double));
-    if (mDlcp){
-      mb=(double *)calloc(mDlcp,sizeof(double));
-      mD=(double *)calloc(mDlcp*mDlin,sizeof(double));
-      mB=(double *)calloc(mDlcp*mDlcp,sizeof(double));
-    }
-    mv=mu+mDlin;
+//     if (mDlcp){
+//       mb=(double *)calloc(mDlcp,sizeof(double));
+//       mD=(double *)calloc(mDlcp*mDlin,sizeof(double));
+//       mB=(double *)calloc(mDlcp*mDlcp,sizeof(double));
+//     }
+     mv=mu+mDlin;
     //  }
    
   mW1Z1=0;
@@ -121,6 +121,14 @@ bool mlcp::solveLinearSystem(){
     }
   return false;
 }
+/*
+ *input mQ1 and mQ2  =========> mProblem.q
+ *
+ * call mlcp_drivers
+ *
+ *
+ *output mu and mw ==========> mZ1, mZ2, mW1
+ */
 bool mlcp::solveWithNumerics(){
   int n = mDlin;
   int m = mDlcp;
@@ -132,6 +140,9 @@ bool mlcp::solveWithNumerics(){
     mProblem.q[i]=-mProblem.q[i];
 
   ACE_times[ACE_TIMER_SOLVE_PATH].start();
+//   printf("\nbegin\n");
+//   displayMLCP(&mProblem);
+//   printf("\nend\n");
   info=mlcp_driver( &mProblem, mu , mw , &mOptions,&mNumericsOptions);
   ACE_times[ACE_TIMER_SOLVE_PATH].stop();
   
@@ -153,18 +164,13 @@ void mlcp::stopSolver(){
     free(mOptions.dWork);
   }
 }
-bool mlcp::initSolver(){
-  int n = (int)mDlin;
-  int m = (int)mDlcp;
-
-
-  mM22->MatrixToFortran(mA);  
-  if (mDlcp){
-    mM21->MatrixToFortran(mC);
-    mM12->MatrixToFortran(mD);
-    mM11->MatrixToFortran(mB);
-  }
-  
+/*
+ *
+ *input M11,M12,M21 and M22 =======> mM =====> problem.M.matrix0 (ie mMd)
+ *
+ *
+ */
+void mlcp::update(){
   mM->setBlock(0,0,*mM22);
   if (mDlcp){
     mM->setBlock(0,mDlin,*mM21);
@@ -174,6 +180,20 @@ bool mlcp::initSolver(){
   //  printInPutABCDab();
   //  cout<<*mM;
   mM->MatrixToFortran(mMd);
+
+}
+bool mlcp::initSolver(){
+  int n = (int)mDlin;
+  int m = (int)mDlcp;
+
+
+//   mM22->MatrixToFortran(mA);  
+//   if (mDlcp){
+//     mM21->MatrixToFortran(mC);
+//     mM12->MatrixToFortran(mD);
+//     mM11->MatrixToFortran(mB);
+//   }
+  update();
   mNumericsOptions.verboseMode=0;
   //build the numerics mProblem:
   mProblem.n=n;
@@ -205,14 +225,14 @@ bool mlcp::initSolver(){
     mOptions.dparam[2]=1e-9;
 
   }else if (ACE_SOLVER_TYPE == ACE_SOLVER_PATH){
-    strcpy(mOptions.solverName,"DIRECT_PATH");
+    strcpy(mOptions.solverName,"PATH");
     mOptions.iparam[0]=0;/*VERBOSE*/
     mOptions.iparam[6]=0;/*VERBOSE*/
     mOptions.dparam[0]=1e-12;
     mOptions.dparam[5]=1e-12;
     mOptions.dparam[6]=1e-12;
   }else{
-    strcpy(mOptions.solverName,"DIRECT_ENUM");
+    strcpy(mOptions.solverName,"ENUM");
     mOptions.iparam[0]=0;/*VERBOSE*/
     mOptions.iparam[6]=0;/*VERBOSE*/
     mOptions.dSize=6;
@@ -276,22 +296,23 @@ mlcp::~mlcp(){
   mGuess.clear();
   if (mMd)
     free(mMd);
-  if (mA)
-    free(mA);
-  if(mB)
-    free(mB);
-  if(mC)
-    free(mC);
-  if (mD)
-    free(mD);
-  if(ma)
-    free(ma);
-  if(mb)
-    free(mb);
-  if(mu)
-    free(mu);
-//   if(mv)
-//     free(mv);
+//   if (mA)
+//     free(mA);
+//   if(mB)
+//     free(mB);
+//   if(mC)
+//     free(mC);
+//   if (mD)
+//     free(mD);
+//   if(ma)
+//     free(ma);
+//   if(mb)
+//     free(mb);
+   if(mu)
+     free(mu);
+  
+////   if(mv)
+////     free(mv);
   if(mw)
     free(mw);
 

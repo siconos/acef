@@ -60,12 +60,13 @@ public:
   //DISCRETISATION simulation
   void readInitialValue();
   virtual double getCurrentTime();
-  virtual void initSimu();
+  virtual void initSimu(ofstream* pstream);
   virtual void preparStep();
   /*compute the right side of the mlcp*/
   virtual void preparMLCP();
   virtual bool step();
   void stopSimu();
+  void printLog();
   virtual void computeZnstiFromX_Zs();
   /*build the mlcp:
   *
@@ -86,8 +87,9 @@ public:
    */
   virtual void fillMLCP();
   /*compute the largest time stepping that respect the ACE_MAX_LOCAL_ERROR*/
-  virtual void computeBestStep();
-
+  virtual void computeAndAcceptStep();
+  virtual void computeAndAcceptStep_2();
+  
   void ExtractAndCompute2Sources();
   void extractSources();
 
@@ -185,6 +187,9 @@ public:
   aceMatrix *mHWR[ACE_NB_ADAPT_STEP+1];
 
 
+  //Simulation
+  ofstream* mSimuStream;
+
   
   //DISCRETISATION
   aceVector *mxti;
@@ -228,6 +233,11 @@ public:
   aceVector *mzstiprev;
   aceVector *mxticurrent;
   aceVector *mzsticurrent;
+  aceVector *mzst_inter;
+  aceVector *mzst1;
+  aceVector *mxt1;
+  aceVector *mxbuf;
+  aceVector *mzsbuf;
   
 
   mlcp* mMLCP;
@@ -243,7 +253,12 @@ public:
   void printD1(ostream& os = cout);
   void printSystemInTabFile(char * file);
   void printSystem2(ostream& os = cout);
-  void printStep(ostream& os = cout);
+  void printStep(ostream& os,aceVector *pVzs);
+  ACE_DOUBLE computeAnalyticSolution(ACE_DOUBLE t);
+  ACE_DOUBLE mSommeError;
+  ACE_DOUBLE mCoef;
+
+  
   void printDiscretisation(ostream& os = cout);
 
   void allocForInitialValue();
@@ -253,7 +268,8 @@ protected:
   virtual void setStep(ACE_DOUBLE newH);
   bool mAdaptiveStepEvaluation;
 
-  ACE_DOUBLE mSerror;
+  ACE_DOUBLE mSerrorX;
+  ACE_DOUBLE mSerrorZs;
   int mNbToSmall;
   int mNbToBig;
   int mNbBacktrack;
