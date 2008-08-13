@@ -306,4 +306,102 @@ consider the following circuit:
     \input{deltaSigma.pstex_t}
  }
 }\end{figure}
+
+\newpage
+\section{Global error evaluation with the Buck converter}
+It consists in computing the experimental order of the simulation. Since the analytic solution is
+unknown, the reference trajectory is a simulation with a very small time step.
+\subsection{Evaluation}
+In the aim of compute the order of ACEF and Eldo, the following simulations have been performed:\\
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+\hline
+Time stepping & 10 ps & 20 ps & 40 ps & 80 ps & 160 ps & 320 ps & 640 ps & 1200 ps \\
+\hline
+ELDO Global error & 150 pA & 443 pA & 966 pA & 2.1 nA & 4.5 nA & 8.2 nA & 20 nA & 34 nA \\
+\hline
+ACEF Global error & 246 pA & 513 pA & 1026 pA & 2.2 nA & 4.7 nA & 9.2 nA & 21 nA & 40 nA \\
+\hline
+ELDO Log2(global error)& -32.6 & -31 & -30 & -28.8  & -27.7 & -26.8 & -25.6 & -24.8 \\
+\hline
+ACEF Log2(global error)& -31.9 & -30.8 & -29.8 & -28.7  & -27.7 & -26.7 & -25.5 & -24.5 \\
+\hline
+\end{tabular}\\
 \\
+The 5ps trajectory is the reference trajectory used to compute the global error of the other
+simulations. \\The following graphic shows the log2(Global error) as a function of log2(time
+step):\\
+\input{BuckGlobalError.tex}\\
+The experimental order of the global error is 1. So the experimental order of the method used at
+each step is 2.\\
+\newpage
+\section{News since January}
+
+\subsection{Software}
+
+\subsubsection{CMake}
+ACEF is used by the other cooperators of the VAL-AMS project, so it must be portable on different operating systems (Linux, MacOS, Windows) and
+different architecture. Because CMake is a tool able to managed these system configurations, all
+libraries are built with this tool.
+
+\subsubsection{Software delivery}
+
+ACEF has been delivered to Verimag. See the delivery document.
+
+\subsection{Siconos evolutions}
+
+\subsubsection{ACEF to SICONOS}
+see previous section.
+
+\subsubsection{Solver mlcp}
+A direct solver has been developed and integrated in SICONOS.
+
+\subsubsection{SICONOS profiling}
+Profile the time. Fix bug in SICONOS.
+
+\subsubsection{Numerics doxygen}
+Use doxygen in Numerics.
+
+\subsection{ACEF evolutions}
+
+\subsubsection{Parser}
+It consists in managing the following key words:\\
+ \begin{itemize}
+  \item[--] .tran: It describes the transient analysis.
+  \item[--] .print: It describes the output.
+  \item[--] .subskt: It consists in managing the sub-circuit.
+  \item[--] .IC: It consists in managing the initial condition.
+\end{itemize}
+\subsubsection{Comparator model}
+In NGSPICE, a comparator is not a default component. Usually, it is modelized with a mathematical
+relation (arctan). The LCP formulation is very adapted to modelize the comparator behavior. In ACEF,
+a special key word is used to defined a comparator.
+See delivery document for more details.
+
+\subsubsection{MOS parameters}
+
+ \begin{itemize}
+  \item[--] Number of hyper-plans. 
+  \item[--] Zero bias.
+  \item[--] Transconductance.
+\end{itemize}
+
+\subsubsection{Delta-sigma}
+Validation of ACEF with the Delta-sigma circuit. See previous section.
+
+\subsubsection{Adaptive time stepping}
+developpement.
+
+\subsubsection{DAE formulation}
+See previous section.
+
+\section{Future}
+ \begin{itemize}
+  \item[--] Error evaluation and ELDO comparisons. 
+  \item[--] Ideal comparator. 
+  \item[--] Run ACEF on specific circuit to demonstrate the powerful of the LCP formulation.
+  \item[--] Improve the MLCP solvers.
+  \item[--] review of the automatic circuit formulation without any matrix inversion.
+  \item[--] Industrial cooperation.
+  \item[--] Publi ? Brevet ?
+  
+\end{itemize}
