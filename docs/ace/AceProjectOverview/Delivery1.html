@@ -54,22 +54,46 @@
 </center>
 
 <h3>Require</h3>
-<p>ACEF requires siconos platform. Path (<a href="http://pages.cs.wisc.edu/~ferris/path.html"> http://pages.cs.wisc.edu/~ferris/path.html </a>) is an
+<p>ACEF requires the siconos platform. <br>
+Path (<a href="http://pages.cs.wisc.edu/~ferris/path.html"> http://pages.cs.wisc.edu/~ferris/path.html </a>) is an
 external library optionaly used by siconos.</p>
+<p>This delivery version is build with the pathFerris demo library. So the path library must be
+copie somewhere in the LD_LIBRARY_PATH, example:<br>
+
+<b>
+cp ...libpath46.so /usr/lib/<br>
+</b>
+
+ACEF need the boost graph module:<br>
+<b>
+sudo apt-get install libboost-graph1.33.1<br>
+sudo apt-get install libboost-graph-dev <br>
+</b>
+
+Siconos needs a library a DefaultPlugin.so, it must copie in the LD_LIBRARY_PATH, example: <br>
+
+<b>
+ln -s /usr/share/siconos-kernel/DefaultPlugin.so  /usr/lib/DefaultPlugin.so<br>
+</b>
+
+
+</p>
 <h3>Installation of acef and parser libraries</h3>
 These libraries are installed with the commande: <br>
--><b>dpkg -i parserAcef.deb</b><br>
--><b>dpkg -i acef.deb</b>
+<b>First, remove the previous version of siconos.</b><br>
+Now, the packages can be istalled:<br>
+-><b>sudo dpkg -i siconos-spiceparser-3.0.0-r124--i386-linux-debian-etch.deb </b><br>
+-><b>sudo dpkg -i siconos-numerics-3.0.0-r1262--i386-linux-debian-etch.deb </b><br>
+-><b>sudo dpkg -i siconos-kernel-3.0.0-r1262--i386-linux-debian-etch.deb </b><br>
+-><b>sudo dpkg -i siconos-acef-3.0.0-r124--i386-linux-debian-etch.deb </b><br>
+
 <h3>Main program compilation</h3>
-Because of cmake, the first step is to copy the code source in the following directory:<br>
-<b>->EXE :</b> It contains the main code.<br>
-The next step consists in creating an other directory to compile the executable. 
-<h4>Compilation with cmake</h4>
-In the build directory of the executable, use the <i>cmake</i> command:<br>
-<b>>cmake /..../src/EXE<br>
->make<br></b>
-The name of the generated executable is <i>noselect</i>. The executable is located in the directory
-<i>build_directory/src/noselect</i> 
+
+The source code mainSiconos.cpp must be compiled on your computer. The file <i> script </i> contains
+an example to compile the main program.<br>
+The generated executable is noselect, usage:<br>
+-> <b>noselect InverterChain10.cir DIRECT_PATH</b> <br>
+
 </div>
 <h2>Functionalities </h2>
 <p>This delivery contains all <a href="feature-set.html">Functionalities</a> of the release 1.</p>

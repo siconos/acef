@@ -300,9 +300,9 @@ toto
 
 \newpage
 consider the following circuit:
-\begin{figure}[h]
+\begin{figure}[h!]
 \centerline{
- \scalebox{0.7}{
+ \scalebox{0.6}{
     \input{deltaSigma.pstex_t}
  }
 }\end{figure}
@@ -405,3 +405,82 @@ See previous section.
   \item[--] Publi ? Brevet ?
   
 \end{itemize}
+
+\newpage
+\section{Example}
+This section shows a non-smooth circuit not correctly simulated with the SPICE like simulators.
+ 
+\subsection{A switched capacitor integrator}
+
+
+\begin{figure}[!h]
+\centerline{
+ \scalebox{0.7}{
+    \input{simpleIntegrator.pstex_t}
+ }
+ }\end{figure}
+
+
+
+The circuit includes switches controlled by an external pulse signal. It is like if the topology of the circuit is changed
+during the simulation. In fact, the switches are implemented using some MOS transistors.\\
+ACEF use a piece wise linear model to approximate as accurate than necessary the MOS characteristic
+shown in the fig?.\\
+
+
+\begin{eqnarray}
+I_{ds}=0 \qquad (V_{gs} < V_{T}) \and (V_{gs} < V_{T})\\
+I_{ds}=\frac{K}{2} * (V_{gs}-V{T})^2 \qquad (V_{gs} > V_{T}) \and (V_{gs} < V_{T})\\
+I_{ds}=K *((V_{gs}-V{T})*V_{ds} - \frac{1}{2}*V_{ds}^2 \qquad (V_{gs} > V_{T}) \and (V_{gs} > V_{T})\\
+I_{ds}=\frac{K}{2} * (V_{gs}-V{T})^2 \qquad (V_{gs} > V_{T}) \and (V_{gs} < V_{T})\\
+\end{eqnarray}
+
+This circuit is correctly simulated with ELDO and with ACEF. The fig? shows the output tension $U_{45}$.\\
+
+\subsection{ Integrator with a comparator}
+It consists in adding a comparator between the output and the input of the integrator. Like this,
+the output signal will oscillate between a positive and a negative value. So, the operating point of
+the circuit will go through the non regularity of the comparator, and may be will cause some problem of
+convergence.
+
+
+
+
+\subsubsection{Phase 2}
+The equivalent circuit is:
+
+Because the value of the gate $V_{g}=5V$ and $V_{T}=0.5$, the current trough the MOS is given by the following equation:
+\[I_{ds}=F(V_{d},V_{s})=K *((V_{gs}-V_{T})*V_{ds} - \frac{1}{2}*V_{ds}^2 \]
+The equation of the system is :\\
+$V_{1}, V_{4}$ and $V_{6}$ are constants.\\
+To compute the initial values, $(V_{2} - V_{3})$ is continuous because of capacitor $C_{1}$.
+\begin{eqnarray}
+F(V_{3},0)=-F(V_{2},V_{1})\\
+C_{1}\frac{d(V2-V3)}{dt} = -F(V_{2},V_{1})\\
+\end{eqnarray}
+
+The Maple integration of this system with maple validates the ACEF simulation.
+
+\subsubsection{Phase 1}
+The equivalent circuit is:
+
+Because the value of the gate $V_{g}=5V$ and $V_{T}=0.5$, the current trough the MOS is given by the following equation:
+\[I_{ds}=F(V_{d},V_{s})=K *((V_{gs}-V_{T})*V_{ds} - \frac{1}{2}*V_{ds}^2 \]
+The equation of the system is :\\
+To compute the initial values, $(V_{2} - V_{3})$ is continuous because of capacitor $C_{1}$.
+To compute the initial values, $(V_{4} - V_{5})$ is continuous because of capacitor $C_{2}$.
+\begin{eqnarray}
+F(V_{3},V_{4})=-F(V_{2},0)\\
+C_{1}\frac{d(V_{2}-V_{3})}{dt} = -F(V_{2},0)\\
+C_{2}\frac{d(V_{4}-V_{5})}{dt} = -F(V_{2},0)\\
+V_{5}=\alpha*V_{4}\\
+V_{1}=comp(V_{4}-V_{5})\\
+\end{eqnarray}
+
+The Maple integration of this system with maple validates the ACEF simulation.
+
+\subsubsection{Simulation with ELDO}
+During the simulation, it appears a lot of message about a non convergence of the Newton method.
+Moreover it is possible to get a large panel of simulation by changed some parameters.
+
+\newpage
