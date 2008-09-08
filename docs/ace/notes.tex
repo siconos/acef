@@ -408,7 +408,8 @@ See previous section.
 
 \newpage
 \section{Example}
-This section shows a non-smooth circuit not correctly simulated with the SPICE like simulators.
+This section shows circuit not correctly simulated with the SPICE like simulators. This example has
+been built to demonstrate that LCP methods are very stable to simulate non smooth components.
  
 \subsection{A switched capacitor integrator}
 
@@ -423,7 +424,10 @@ This section shows a non-smooth circuit not correctly simulated with the SPICE l
 
 
 The circuit includes switches controlled by an external pulse signal. It is like if the topology of the circuit is changed
-during the simulation. In fact, the switches are implemented using some MOS transistors.\\
+during the simulation. It means that the initial conditions are inconsistent because variables
+immediately before switching differ from that immediately after switching. In other words, some
+physical variables, mainly node voltages, are not continuous.\\
+In fact, the switches are implemented using some MOS transistors.\\
 ACEF use a piece wise linear model to approximate as accurate than necessary the MOS characteristic
 shown in the fig?.\\
 
@@ -437,12 +441,20 @@ I_{ds}=\frac{K}{2} * (V_{gs}-V{T})^2 \qquad (V_{gs} > V_{T}) \and (V_{gs} < V_{T
 
 This circuit is correctly simulated with ELDO and with ACEF. The fig? shows the output tension $U_{45}$.\\
 
+\input{acefSimpleIntegrator.tex}
+
 \subsection{ Integrator with a comparator}
-It consists in adding a comparator between the output and the input of the integrator. Like this,
+It consists in adding a comparator between the output and the input of the integrator. Consequently,
 the output signal will oscillate between a positive and a negative value. So, the operating point of
-the circuit will go through the non regularity of the comparator, and may be will cause some problem of
+the circuit will go through the non regularity of the comparator, and may be will cause some problems of
 convergence.
 
+\begin{figure}[!h]
+\centerline{
+ \scalebox{0.7}{
+    \input{compIntegrator.pstex_t}
+ }
+ }\end{figure}
 
 
 
@@ -453,13 +465,12 @@ Because the value of the gate $V_{g}=5V$ and $V_{T}=0.5$, the current trough the
 \[I_{ds}=F(V_{d},V_{s})=K *((V_{gs}-V_{T})*V_{ds} - \frac{1}{2}*V_{ds}^2 \]
 The equation of the system is :\\
 $V_{1}, V_{4}$ and $V_{6}$ are constants.\\
-To compute the initial values, $(V_{2} - V_{3})$ is continuous because of capacitor $C_{1}$.
+$(V_{2} - V_{3})$ is continuous because of capacitor $C_{1}$, it is necessary to compute the initial values.
 \begin{eqnarray}
 F(V_{3},0)=-F(V_{2},V_{1})\\
 C_{1}\frac{d(V2-V3)}{dt} = -F(V_{2},V_{1})\\
 \end{eqnarray}
 
-The Maple integration of this system with maple validates the ACEF simulation.
 
 \subsubsection{Phase 1}
 The equivalent circuit is:
@@ -467,8 +478,7 @@ The equivalent circuit is:
 Because the value of the gate $V_{g}=5V$ and $V_{T}=0.5$, the current trough the MOS is given by the following equation:
 \[I_{ds}=F(V_{d},V_{s})=K *((V_{gs}-V_{T})*V_{ds} - \frac{1}{2}*V_{ds}^2 \]
 The equation of the system is :\\
-To compute the initial values, $(V_{2} - V_{3})$ is continuous because of capacitor $C_{1}$.
-To compute the initial values, $(V_{4} - V_{5})$ is continuous because of capacitor $C_{2}$.
+$(V_{2} - V_{3})$ and  $(V_{4} - V_{5})$ ar continuous because of capacitor $C_{1}$, it is necessary to compute the initial values.
 \begin{eqnarray}
 F(V_{3},V_{4})=-F(V_{2},0)\\
 C_{1}\frac{d(V_{2}-V_{3})}{dt} = -F(V_{2},0)\\
@@ -477,10 +487,48 @@ V_{5}=\alpha*V_{4}\\
 V_{1}=comp(V_{4}-V_{5})\\
 \end{eqnarray}
 
-The Maple integration of this system with maple validates the ACEF simulation.
+\subsubsection{Acef simulation}
+The Maple integration of these previous systems validates the ACEF simulation. Many simulations have
+been perform by changed some parameters values.
+
+\input{acefCompIntegrator.tex}
 
 \subsubsection{Simulation with ELDO}
-During the simulation, it appears a lot of message about a non convergence of the Newton method.
-Moreover it is possible to get a large panel of simulation by changed some parameters.
+During the simulation, it appears a lot of messages about a non convergence of the Newton method.
+Moreover it is possible to get a large panel of simulation by changed the comparator coefficient.\\
+
+\begin{figure}[!h]
+comparator : Ecomp 1 0 VALUE={0.1 -1.5*tanh(100*(V(5)-V(4)))}
+\begin{center}
+ \scalebox{0.1}{
+\includegraphics{EldoCompInt100.eps}
+}
+\end{center}
+
+\end{figure}
+\begin{figure}[!h]
+comparator : Ecomp 1 0 VALUE={0.1 -1.5*tanh(1000*(V(5)-V(4)))}
+\begin{center}
+ \scalebox{0.1}{
+\includegraphics{EldoCompInt1000.eps}
+}
+\end{center}
+\end{figure}
+\begin{figure}[!h]
+comparator : Ecomp 1 0 VALUE={0.1 -1.5*tanh(10000*(V(5)-V(4)))}
+\begin{center}
+ \scalebox{0.1}{
+\includegraphics{EldoCompInt10000.eps}
+}
+\end{center}
+\end{figure}
+\begin{figure}[!h]
+A new set of value for $C_{1}$ and $C_{2}$
+\begin{center}
+ \scalebox{0.1}{
+\includegraphics{EldoCompIntCap.eps}
+}
+\end{center}
+\end{figure}
 
 \newpage
