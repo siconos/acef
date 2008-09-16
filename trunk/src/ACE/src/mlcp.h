@@ -56,7 +56,6 @@ public:
   
   aceVector *mQ1;
   aceVector *mQ2;
-  aceVector *mQ;
   aceMatrix *mM11;
   aceMatrix *mM12;
   aceMatrix *mM21;

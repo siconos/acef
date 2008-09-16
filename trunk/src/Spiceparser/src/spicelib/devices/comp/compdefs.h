@@ -32,6 +32,7 @@ typedef struct sCOMPinstance {
   double COMPVplus;
   double COMPVmoins;
   double COMPEpsilon;
+  double COMPOffset;
   int    COMPsenParmNo; 
 
 
@@ -53,6 +54,7 @@ typedef struct sCOMPmodel {       /* model structure for a resistor */
 #define COMP_VMIN 1
 #define COMP_VMAX 2
 #define COMP_VEPSILON 3
+#define COMP_VOFFSET 4
 
 /* model questions */
 

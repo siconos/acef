@@ -89,14 +89,17 @@ public:
   /*compute the largest time stepping that respect the ACE_MAX_LOCAL_ERROR*/
   virtual void computeAndAcceptStep();
   virtual void computeAndAcceptStep_2();
-  
+
+  /**
+     These fucntions are called at each step to update de terme source (Voltage source and Current source)
+   */
   void ExtractAndCompute2Sources();
   void extractSources();
 
   void extractDynamicSystemSource();
   void extractInteractionSource();
-  void computeDynamicSystemSource();
-  void computeInteractionSource();
+  void updateDynamicSystemSource();
+  void updateInteractionSource();
   
   long  mLogFrequency;
   long  mLogPrint;

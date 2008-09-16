@@ -8,9 +8,15 @@
 
 #include "componentlinear.h"
 
-// Class componentDYN
-// 
-// 
+/** The componentDYN class.
+*/
+
+
+/**
+ *
+ *It has a specufic equations menber.\n
+ *
+**************************************************************************/
 class componentDYN : public componentLINEAR {
 public:
   componentDYN();

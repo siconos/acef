@@ -14,10 +14,10 @@ componentCOMP::componentCOMP(dataCOMP *d)
   mNodeS=mData.nodeOut;
   mName = mData.name;
   mEpsilon = mData.vepsilon;
-  mVplus = mData.vmax;
-  mVmoins = mData.vmin;
+  mV2 = mData.vmax;
+  mV1 = mData.vmin;
   ACE_CHECK_ERROR(mEpsilon >0,"componentCOMP::componentCOMP, epsilon==0");
-  mD12= (mVmoins-mVplus)/(2.0*mEpsilon);
+  mD12= (mV1-mV2)/(2.0*mEpsilon);
   mD11= -mD12;
   
   mDimlambda=2;
@@ -29,8 +29,8 @@ componentCOMP::componentCOMP(dataCOMP *d)
 componentCOMP::~componentCOMP(){;}
 void componentCOMP::addUnknowns(){
   mI=algo::spls->addinZs(ACE_TYPE_I,this);
-  mVs=algo::spls->addinZns(ACE_TYPE_U,this);
-  mIndiceStartZns= mVs->mIndexInVector;
+  mVns=algo::spls->addinZns(ACE_TYPE_U,this);
+  mIndiceStartZns= mVns->mIndexInVector;
   mIndiceStartLambda= algo::spls->mDimLambda ;
   algo::spls->mDimLambda = algo::spls->mDimLambda + mDimlambda;
 }
@@ -50,7 +50,7 @@ void componentCOMP::stamp(){
   mEquation->mCoefs[i]+=+1;
   i= algo::spls->getIndexUnknown(ACE_TYPE_V,0);
   mEquation->mCoefs[i]-=1;
-  mEquation->mCoefs[mVs->mIndex]-=1;
+  mEquation->mCoefs[mVns->mIndex]-=1;
 
   //Y=Vp-Vn + I*lambda +- epsilon
   //Vp-Vn
@@ -72,10 +72,10 @@ void componentCOMP::stamp(){
   //Zns = Vplus +(d11 d12)lambda
   algo::spls->mC1l->setValue(mIndiceStartZns,mIndiceStartLambda,mD11);
   algo::spls->mC1l->setValue(mIndiceStartZns,mIndiceStartLambda+1,mD12);
-  algo::spls->mC1s->setValue(mIndiceStartZns,mVplus);
+  algo::spls->mC1s->setValue(mIndiceStartZns,mV2);
 }
 void componentCOMP::print(){
   componentNLINEAR::print();
-  printf("NodeS %d epsilon %f V+ %f V- %f\n",mNodeS,mEpsilon,mVplus,mVmoins);
+  printf("NodeS %d epsilon %f V1 %f V2 %f\n",mNodeS,mEpsilon,mV1,mV2);
   
 }

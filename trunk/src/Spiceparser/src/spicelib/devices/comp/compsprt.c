@@ -39,6 +39,7 @@ COMPsPrint(GENmodel *inModel, CKTcircuit *ckt)
 	    printf("  Vmin: %f \n",here->COMPVmoins);
 	    printf("  Vmax: %f \n",here->COMPVplus);
 	    printf("  Epsilon: %f \n",here->COMPEpsilon);
+	    printf("  Offset: %f \n",here->COMPOffset);
 
         }
     }

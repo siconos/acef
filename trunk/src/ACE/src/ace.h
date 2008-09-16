@@ -1,5 +1,22 @@
+/*
+ *
+ */
+/**
+ *\file ace.h
+  \brief This file contains declations of constants and tools used in the ACEF module.
+
+
+*/
+
 #ifndef ACE_H
 #define ACE_H
+
+/**
+ *
+ * define PRE_COMPUTE_ADAPTIVE to use the precompute adaptive time stepping.
+ *
+ *
+ */
 
 //#define PRE_COMPUTE_ADAPTIVE
 
@@ -20,7 +37,6 @@ class component;
 #define ACE_BIG_FLOAT 1e9
 
 
-
 #define ACE_TYPE_NO 0
 #define ACE_TYPE_RES 1
 #define ACE_TYPE_CAP 2
@@ -34,6 +50,7 @@ class component;
 #define ACE_TYPE_ARB 10
 #define ACE_TYPE_VCCS 11
 #define ACE_TYPE_BJT 12
+#define ACE_TYPE_RELAY 13
 
 
 
@@ -65,6 +82,7 @@ extern int ACE_CMP_ADAT[ACE_NB_ADAPT_STEP+1];
 
 
 /*
+
  *ACE_CUR_STEP means  ==> mH* 2 pow ACE_CUR_STEP
  */
 extern int ACE_CUR_STEP;
@@ -82,34 +100,23 @@ extern int ACE_CUR_STEP;
 #define ACE_TIMER_MAIN 0
 #define ACE_TIMER_EQUATION 1
 #define ACE_TIMER_SIMULATION 2
-#define ACE_TIMER_SOLVER 3
-#define ACE_TIMER_LS_STEP 4
-#define ACE_TIMER_SOLVE_ENUM 5
-#define ACE_TIMER_SOLVE_SIMPLEX 6
-#define ACE_TIMER_SOLVE_PATH 7
-#define ACE_TIMER_SOLVE_GUESS 8
-#define ACE_TIMER_SOLVE_LU 9
-#define ACE_TIMER_DIRECT 10
-#define ACE_TIMER_LU_DIRECT 11
-#define ACE_TIMER_SIMPLEX_FIRST 12
-#define ACE_TIMER_SIMPLEX_GUESS 13
-#define ACE_TIMER_SIMPLEX_TREE 14
-#define ACE_TIMER_SIMPLEX_TRY_NODE 15
-#define ACE_TIMER_COMPUTE_VAR 16
-#define ACE_TIMER_PROD_MAT 17
-#define ACE_TIMER_TEST 18
-#define ACE_TIMER_TEST_1 19
-#define ACE_TIMER_TEST_2 20
-#define ACE_TIMER_TEST_3 21
-#define ACE_TIMER_TEST_4 22
-#define ACE_TIMER_TEST_5 23
-#define ACE_TIMER_TEST_6 24
-#define ACE_TIMER_TEST_7 25
-#define ACE_TIMER_TEST_8 26
-#define ACE_TIMER_TEST_9 27
-#define ACE_TIMER_TEST_10 28
-#define ACE_TIMER_TEST_11 29
-#define ACE_TIMER_LAST 30
+#define ACE_TIMER_LS_STEP 3
+#define ACE_TIMER_SOLVE_NUMERICS 4
+#define ACE_TIMER_COMPUTE_VAR 5
+#define ACE_TIMER_PROD_MAT 6
+#define ACE_TIMER_TEST 7
+#define ACE_TIMER_TEST_1 8
+#define ACE_TIMER_TEST_2 9
+#define ACE_TIMER_TEST_3 10
+#define ACE_TIMER_TEST_4 11
+#define ACE_TIMER_TEST_5 12
+#define ACE_TIMER_TEST_6 13
+#define ACE_TIMER_TEST_7 14
+#define ACE_TIMER_TEST_8 15
+#define ACE_TIMER_TEST_9 16
+#define ACE_TIMER_TEST_10 17
+#define ACE_TIMER_TEST_11 18
+#define ACE_TIMER_LAST 19
 
 typedef std::vector<unknown *> unknowns;
 typedef std::vector<equation *> equations;
@@ -126,6 +133,10 @@ extern UBLAS_TYPE ACE_MAT_TYPE;
 extern int ACE_MUET_LEVEL; //0 verbose .... 10 muet
 #define ACE_MUET 10
 
+/**
+ * 
+ * \brief Must be call at the begining.
+ */
 
 void ACE_INIT();
 void ACE_STOP();
@@ -135,12 +146,24 @@ void ACE_ERROR(char * mess);
 void ACE_WARNING(char * mess);
 void ACE_INTERNAL_ERROR(char *mess);
 void ACE_INTERNAL_WARNING(char *mess);
+
+/**
+ * 
+ * \fn void ACE_TYPE_TO_CHAR(int type,char* name)
+ * \brief convert an integer to char
+ * \param[in] type is an integer.
+ * \param[out] the name of the type.
+ *
+ */
 void ACE_TYPE_TO_CHAR(int type,char* name);
+
 ofstream & ACE_GET_LOG_STREAM();
 ofstream & ACE_GET_LOG1_STREAM();
 
-//Raise an error if not b
-//check b is true
+/**
+ * 
+ * \brief Check b is true, raise an error if not b
+ */
 void ACE_CHECK_IERROR(bool b,char* mess);
 void ACE_CHECK_IWARNING(bool b,char* mess);
 void ACE_CHECK_WARNING(bool b,char* mess);

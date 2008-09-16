@@ -11,7 +11,8 @@ Copyright 1990 Regents of the University of California.  All rights reserved.
 IFparm COMPpTable[] = { /* parameters */ 
  IOPP(  "vmin", 	COMP_VMIN, 	     IF_REAL,    "Vmin"),
  IOPP(  "vmax", 	COMP_VMAX, 	     IF_REAL,    "Vmax"),
- IOPP(  "vepsilon", 	COMP_VEPSILON, 	     IF_REAL,    "Vepsilon")
+ IOPP(  "vepsilon", 	COMP_VEPSILON, 	     IF_REAL,    "Vepsilon"),
+ IOPP(  "voffset", 	COMP_VOFFSET, 	     IF_REAL,    "Voffset")
 };
 
 IFparm COMPmPTable[] = {
@@ -20,7 +21,8 @@ IFparm COMPmPTable[] = {
 char *COMPnames[] = {
     "Z+",
     "Z-",
-    "Zout"
+    "Zout",
+    "Zoffset"
 };
 
 int	COMPnSize = NUMELEMS(COMPnames);

@@ -413,6 +413,7 @@ void fillCompInfos(void *data, GENinstance *pInstance){
   p->vmin = here->COMPVmoins;
   p->vmax = here->COMPVplus;
   p->vepsilon = here->COMPEpsilon;
+  p->voffset = here->COMPOffset;
  }
 void MEperform(){
     CKTcircuit *circuit =0;

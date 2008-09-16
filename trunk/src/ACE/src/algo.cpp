@@ -13,6 +13,7 @@
 #include "componentvccs.h"
 #include "componentarb.h"
 #include "componentcomp.h"
+#include "componentrelay.h"
 #include "componentisrc.h"
 #include "componentmos.h"
 #include "componentbjt.h"
@@ -84,6 +85,9 @@ algo::~algo(){
   n= mComps.size();
   for(i=0;i<n;i++)
     delete mComps[i];
+  n= mRelays.size();
+  for(i=0;i<n;i++)
+    delete mRelays[i];
   delete spls;
   
  }
@@ -237,10 +241,17 @@ void algo::perform(){
  ParserInitComponentList("Comparator");
  dataCOMP dCOMP;
  while(ParserNextComponent(&dCOMP)){
-   componentCOMP *c=new componentCOMP(&dCOMP);
-   c->addUnknowns();
-   c->addEquations();
-   mComps.push_back(c);   
+   if (dCOMP.vepsilon == 0){
+     componentRELAY *c=new componentRELAY(&dCOMP);
+     c->addUnknowns();
+     c->addEquations();
+     mRelays.push_back(c);   
+   }else{
+     componentCOMP *c=new componentCOMP(&dCOMP);
+     c->addUnknowns();
+     c->addEquations();
+     mComps.push_back(c);
+   }
  }
  
  
@@ -326,6 +337,9 @@ void algo::stamp(){
   n = mComps.size();
   for(i=0;i<n;i++)
     mComps[i]->stamp();
+  n = mRelays.size();
+  for(i=0;i<n;i++)
+    mRelays[i]->stamp();
   n = mVccs.size();
   for(i=0;i<n;i++)
     mVccs[i]->stamp();
@@ -457,6 +471,11 @@ void algo::printComponents(){
   printf("-->%d COMPARATOR:\n",n);
   for(i=0;i<n;i++)
     mComps[i]->print();
+
+  n=mRelays.size();
+  printf("-->%d RELAY:\n",n);
+  for(i=0;i<n;i++)
+    mRelays[i]->print();
   
 
   

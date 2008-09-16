@@ -28,7 +28,6 @@ mlcp::mlcp(unsigned int Dlcp,unsigned int Dlin,int solverType){
   mZ2=0;
   mQ1=0;
   mQ2=0;
-  mQ=0;
   mM11=0;
   mM12=0;
   mM21=0;
@@ -66,7 +65,6 @@ mlcp::mlcp(unsigned int Dlcp,unsigned int Dlin,int solverType){
   mM = new aceMatrix(Dlcp+Dlin,Dlcp+Dlin);
 
   mTryM = false;
-  mQ= new aceVector(Dlcp+Dlin);
 
   if (mDlcp){
     mW1Z1 = (int*)calloc(mDlcp,sizeof(int));
@@ -139,12 +137,14 @@ bool mlcp::solveWithNumerics(){
   for (int i=0;i<mDlin+mDlcp;i++)
     mProblem.q[i]=-mProblem.q[i];
 
-  ACE_times[ACE_TIMER_SOLVE_PATH].start();
+  ACE_times[ACE_TIMER_SOLVE_NUMERICS].start();
 //   printf("\nbegin\n");
 //   displayMLCP(&mProblem);
 //   printf("\nend\n");
+//    printInPut();
+
   info=mlcp_driver( &mProblem, mu , mw , &mOptions,&mNumericsOptions);
-  ACE_times[ACE_TIMER_SOLVE_PATH].stop();
+  ACE_times[ACE_TIMER_SOLVE_NUMERICS].stop();
   
   mZ1->FortranToVector(mv);
   mZ2->FortranToVector(mu);
@@ -213,7 +213,13 @@ bool mlcp::initSolver(){
   mOptions.dSize = 9;
   mOptions.dparam = (double*) malloc(10*sizeof(double));
   mOptions.filterOn = 0;
-  mOptions.iparam[5]=5;/*Number of registered configurations*/
+  mOptions.iparam[5]=15;/*Number of registered configurations*/
+  
+  //If adaptive time stepping, then mlcp formulation will change
+  if(ACE_WITH_ADAPTATIVE_TIME_STEPPING)
+    mOptions.iparam[8]=1;
+  else
+    mOptions.iparam[8]=0;
   
   if (ACE_SOLVER_TYPE == ACE_SOLVER_SIMPLEX){
     strcpy(mOptions.solverName,"DIRECT_SIMPLEX");
@@ -225,14 +231,14 @@ bool mlcp::initSolver(){
     mOptions.dparam[2]=1e-9;
 
   }else if (ACE_SOLVER_TYPE == ACE_SOLVER_PATH){
-    strcpy(mOptions.solverName,"PATH");
+    strcpy(mOptions.solverName,"DIRECT_PATH");
     mOptions.iparam[0]=0;/*VERBOSE*/
     mOptions.iparam[6]=0;/*VERBOSE*/
     mOptions.dparam[0]=1e-12;
     mOptions.dparam[5]=1e-12;
     mOptions.dparam[6]=1e-12;
   }else{
-    strcpy(mOptions.solverName,"ENUM");
+    strcpy(mOptions.solverName,"DIRECT_ENUM");
     mOptions.iparam[0]=0;/*VERBOSE*/
     mOptions.iparam[6]=0;/*VERBOSE*/
     mOptions.dSize=6;
@@ -254,13 +260,12 @@ bool mlcp::initSolver(){
 }
 bool mlcp::solve(){
   bool res =false;
-  ACE_times[ACE_TIMER_SOLVER].start();
   if (!mDlcp){
     res = solveLinearSystem();
   }else{
     res = solveWithNumerics();
+    //    printOutPut();
   }
-  ACE_STOP_SOLVER_TIME();
   return res;
 }
 
@@ -283,8 +288,6 @@ mlcp::~mlcp(){
     delete mQ1;
   if (mQ2)
     delete mQ2;
-  if (mQ)
-    delete mQ;
   if (mM11)
     delete mM11;
   if (mM12)
@@ -350,24 +353,19 @@ void mlcp::printInPut(ostream& os)
 {
   if (ACE_MUET_LEVEL == ACE_MUET)
     return;
-  os<<"mlcp print input"<<endl;
-  os<<"dim lcp:\t"<<mDlcp<<"\tlin\t"<<mDlin;
-  os<<"M:\n";
-  os<<(*mM);
-  os<<"Q:\n"<<endl;
-  os<<(*mQ);
+  displayMLCP(&mProblem);
 }
 void mlcp::printOutPut(ostream& os){
-//   if (ACE_MUET_LEVEL == ACE_MUET )
-//     return;
+   if (ACE_MUET_LEVEL == ACE_MUET )
+     return;
   os<<"mlcp print output"<<endl;
-  os<<"Z1:\n";
+  os<<"v ie Z1:\n";
   if (mZ1)
     os<<(*mZ1);
-  os<<"Z2:\n";
+  os<<"u ie Z2:\n";
   if (mZ2)
     os<<(*mZ2);
-  os<<"W1:\n";
+  os<<"w ie W1:\n";
   if (mW1)
     os<<(*mW1);
 }

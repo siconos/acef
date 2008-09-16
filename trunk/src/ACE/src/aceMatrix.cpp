@@ -43,9 +43,11 @@ void aceMatrix::display(ostream& os) const{
     for (unsigned int i=0;i<dimRow;i++){
       for (unsigned int j=0;j<dimCol;j++){
 	//	os <<"\t"<<getValue(i,j);
-	printf("\t %8.10e",getValue(i,j));
+	if (j)
+	  printf(",");
+	printf(" %f",getValue(i,j));
       }
-      os <<"\n";
+      os <<";\n";
     }
   }else if (num ==4){
     os <<"SPARSE MATRIX ["<<dimRow<<","<<dimCol<<"]"<<endl;

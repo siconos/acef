@@ -1,6 +1,10 @@
 #include "ACEF.h"
 
 int main(int argc, char **argv){
+  /*MOS Parameters*/
+  ACE_MOS_NB_HYP=2;
+  ACE_MOS_POWER_SUPPLY=5.0;
+
   if (argc<6){
     printf("usage : toto file.cir ENUM|SIMPLEX|PATH 10 DENSE|SPARSE INV/NOINV [FIX/ADAPT]\n");
     return 0;
@@ -32,8 +36,8 @@ int main(int argc, char **argv){
   if (!strcmp(argv[5],"NOINV"))
     ACE_FORMULATION_WITH_INVERSION=0;
   if (argc > 6 && !strcmp(argv[6],"ADAPT")){
-    ACE_RTOL_LOCAL=1e-4;
-    ACE_ATOL_LOCAL=1e-4;
+    ACE_RTOL_LOCAL=1e-3;
+    ACE_ATOL_LOCAL=1e-3;
     ACE_WITH_ADAPTATIVE_TIME_STEPPING=1;
   }
     

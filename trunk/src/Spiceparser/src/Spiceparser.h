@@ -149,6 +149,7 @@ typedef struct {
     double vmin;
     double vmax;
     double vepsilon;
+    double voffset;
   } dataCOMP;
 
 #ifdef __cplusplus

@@ -35,6 +35,7 @@ public:
   components mMos;
   components mBjt;
   components mComps;
+  components mRelays;
   char mFile[ACE_CHAR_LENGTH];
   ofstream* mSimuStream;
   char mSimuFile[ACE_CHAR_LENGTH];

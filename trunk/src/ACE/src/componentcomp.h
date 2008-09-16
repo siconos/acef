@@ -14,13 +14,13 @@
 class componentCOMP : public componentNLINEAR {
 public:
   dataCOMP mData;
-  ACE_DOUBLE mVplus;
-  ACE_DOUBLE mVmoins;
+  ACE_DOUBLE mV2;
+  ACE_DOUBLE mV1;
   ACE_DOUBLE mEpsilon;
   ACE_DOUBLE mD11;
   ACE_DOUBLE mD12;
   int mNodeS;
-  unknown *mVs;
+  unknown *mVns;
   
   componentCOMP(dataCOMP *d);
   virtual void  addUnknowns ();

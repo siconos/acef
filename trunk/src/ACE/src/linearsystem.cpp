@@ -314,6 +314,12 @@ void linearSystem::set2matrix(){
   mB2s=mB1s;
   mD2s=mD1s;
 
+  if (mDimLambda){
+    //(*mD2s)=(*mD1s)+prod(*mD1zns,*mC1s);
+    ACEprod(*mD1zns,*mC1s,*mD2s,false);
+  }
+
+  
   if (mDimzns){
     if (mDimx){
       ACEprod(*mA1zns,*mC1l,*mR);
@@ -555,7 +561,7 @@ void linearSystem::readInitialValue(){
     for (i=0;i<mDimx;i++){
       mxti->setValueIfNotNull(i,0);
     }
-     mxti->setValueIfNotNull(1,10.0/2000);
+    //DIODEBRIDGE :     mxti->setValueIfNotNull(1,10.0/2000);
 
     ParserInitICvalue();
     while(ParserGetICvalue(&i,&useIc,&aux)){
@@ -564,7 +570,7 @@ void linearSystem::readInitialValue(){
 	cout<<"set value from netlist :v_"<<i<<"="<<aux<<endl;
       }
     }
-    printStep(*mSimuStream,mzsti);
+    //    printStep(*mSimuStream,mzsti);
 
     /*for each x of type TENSION, compute the initial value with V init*/
     for(i=0; i <(int) mx.size(); i++){
@@ -741,7 +747,6 @@ void linearSystem::preparMLCP(){
     //(*mPfree) = prod(*mD2xW,*mxfree) + (*mD2s);
     ACEprod(*(mD2xW[ACE_CUR_STEP]),*mxfree,*mPfree,true);
     *mPfree+=*mD2s;
-    
     //(*mQfree) = prod(*mB2xW,*mxfree) + (*mB2s);
     ACEprod(*mB2xW[ACE_CUR_STEP],*mxfree,*mQfree,true);
     *mQfree+=*mB2s;
@@ -771,10 +776,10 @@ void linearSystem::preparMLCP(){
     //  *(mMLCP->mQ1)= *mPfree;  
     //*(mMLCP->mQ2)= *mQfree;
   }
-//   cout<<"mMLCP->mQ1\n";
-//   (mMLCP->mQ1)->display();
-//   cout<<"mMLCP->mQ2\n";
-//   (mMLCP->mQ2)->display();
+//    cout<<"mMLCP->mQ1\n";
+//    (mMLCP->mQ1)->display();
+//    cout<<"mMLCP->mQ2\n";
+//    (mMLCP->mQ2)->display();
 
 }
 void linearSystem::computeZnstiFromX_Zs(){
@@ -862,11 +867,11 @@ void linearSystem::printLog(){
   ACE_GET_LOG_STREAM()<<"linearSystem::stopSimu, total error X step: "<<mSerrorX<<endl;
   ACE_GET_LOG_STREAM()<<"linearSystem::stopSimu,  h, error somme, number of step, average: "<<mH<<" "<<mSommeError<<" "<<mStepCmp<<" "<<mSommeError/mStepCmp<<endl;
   ACE_GET_LOG_STREAM()<<"linearSystem::stopSimu,  log10(average), log10(h)"<<log10(mSommeError/mStepCmp)<<" "<<log10(mH)<<endl;
-  if (ACE_WITH_ADAPTATIVE_TIME_STEPPING){
-    ACE_GET_LOG1_STREAM()<<log10(mSommeError/mStepCmp)<<"\t"<<log10(ACE_RTOL_LOCAL)<<endl;
-  }else{
-    ACE_GET_LOG1_STREAM()<<log10(mSommeError/mStepCmp)<<"\t"<<log10(mH)<<endl;
-  }
+//   if (ACE_WITH_ADAPTATIVE_TIME_STEPPING){
+//     ACE_GET_LOG1_STREAM()<<log10(mSommeError/mStepCmp)<<"\t"<<log10(ACE_RTOL_LOCAL)<<endl;
+//   }else{
+//     ACE_GET_LOG1_STREAM()<<log10(mSommeError/mStepCmp)<<"\t"<<log10(mH)<<endl;
+//   }
   for (int i=0;i < ACE_NB_ADAPT_STEP+1;i++)
     ACE_GET_LOG_STREAM()<<"linearSystem::stopSimu, step number : "<< i << " : "<< ACE_CMP_ADAT[i]<<endl;
  }
@@ -1253,7 +1258,7 @@ void linearSystem::extractSources(){
   extractInteractionSource();
   extractDynamicSystemSource();
 }
-void linearSystem::computeDynamicSystemSource(){
+void linearSystem::updateDynamicSystemSource(){
   if (mDimx && mDimLambda){
     //(*mA2s)=(*mA1s)+prod(*mA1zns,*mC1s);
     ACEprod(*mA1zns,*mC1s,*mA2s,false);
@@ -1262,21 +1267,11 @@ void linearSystem::computeDynamicSystemSource(){
     
   }
 }
-void linearSystem::computeInteractionSource(){
-  if (mDimx && mDimLambda){
-    
-    ACEprod(*mB1zns,*mC1s,*mB2s,false);
-    //prod(*mB1zns,*mC1s,*mB2s);
-    //(*mB2s)+=(*mB1s);
-
-    ACEprod(*mD1zns,*mC1s,*mD2s,false);
-    //prod(*mD1zns,*mC1s,*mD2s);
-    //(*mD2s)+=(*mD1s);
-  }else if (mDimLambda){
+void linearSystem::updateInteractionSource(){
+  
+  if (mDimLambda){
     //(*mB2s)=(*mB1s)+prod(*mB1zns,*mC1s);
     ACEprod(*mB1zns,*mC1s,*mB2s,false);
-    //(*mD2s)=(*mD1s)+prod(*mD1zns,*mC1s);
-    ACEprod(*mD1zns,*mC1s,*mD2s,false);
   }
 }
 
@@ -1291,8 +1286,8 @@ void linearSystem::ExtractAndCompute2Sources(){
 //   cout<<*mA2s;
 //   cout<<"mC1s\n";
 //   cout<<*mC1s;
-  computeDynamicSystemSource();
-  computeInteractionSource();
+  updateDynamicSystemSource();
+  updateInteractionSource();
 
 //   if (mDimx && mDimLambda){
 //     //(*mA2s)=(*mA1s)+prod(*mA1zns,*mC1s);
@@ -1317,12 +1312,12 @@ void linearSystem::ExtractAndCompute2Sources(){
 //     ACEprod(*mD1zns,*mC1s,*mD2s,false);
 //   }
 //   cout<<"ExtractAndCompute2Sources output:\n";
-//   cout<<"mA2s\n";
-//   cout<<*mA2s;
-//   cout<<"mB2s\n";
-//   cout<<*mB2s;
-//   cout<<"mD2s\n";
-//   cout<<*mD2s;
+   //   cout<<"mA2s\n";
+   //   cout<<*mA2s;
+  // cout<<"mB2s\n";
+  // cout<<*mB2s;
+  // cout<<"mD2s\n";
+  // cout<<*mD2s;
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -1483,44 +1478,49 @@ ACE_DOUBLE linearSystem::computeAnalyticSolution(ACE_DOUBLE t){
 
   
 }
+void printHeaderCSV(ostream& os){
+  os<<".HEADER"<<endl;
+  os<<"..NAMES"<<endl;
+  os<<"Time,I(L1)"<<endl;
+  os<<"..UNITS"<<endl;
+  os<<"s,Current(A)"<<endl;
+  os<<"..DATATYPES"<<endl;
+  os<<"double,double"<<endl;
+  os<<"..WAVEFORM_TYPES"<<endl;
+  os<<",analog"<<endl;
+  os<<"..AXIS_SPACING"<<endl;
+  os<<"linear"<<endl;
+  os<<"..FOLDER_NAME"<<endl;
+  os<<"BuckConverter, TRAN"<<endl;
+  os<<".DATA"<<endl;
+
+}
 void linearSystem::printStep(ostream& os,aceVector *pVzs){
 //   int i;
-//   bool printALL = false;
-//   ACE_DOUBLE curDate = getCurrentTime();
-//   if (printALL){
-// //     os << "xt("<<curDate<<")\t";
-// //     if (mxti)
-// //       for (i=0;i<mDimx;i++)
-// //  	os << mxti->getValue(i)<<"\t";
-// //    os << "zs("<<curDate<<")\t";
-//     os << curDate<<"\t";
-//     for (i=0;i<mDimzs-1;i++)
-//       os << mzsti->getValue(i)<<"\t";
-  
-// //     os << "zns("<<curDate<<")\t";
-// //     if (mznsti)
-// //       for (i=0;i<mDimzns;i++)
-// //  	os << mznsti->getValue(i)<<"\t";
-//     os<<"\n";
-//   }else{
-//     if (mStepCmp%mLogPrint==0){
-//             os <<curDate<<"\t"<<mxti->getValue(4)<<"\n";
-// 	    //      os << curDate <<"\t"<<mzsti->getValue(0) - mzsti->getValue(2)<<"\n";
-      
-//     }
-//   }
-  ACE_DOUBLE v = computeAnalyticSolution(getCurrentTime());
+   bool printALL = true;
+   ACE_DOUBLE curDate = getCurrentTime();
+   if (!printALL){
+     if (curDate==0.0)
+       printHeaderCSV(os);
+     os <<curDate<<","<<mxti->getValue(4)<<"\n";
+     return;
+   }
+
+//  ACE_DOUBLE v = computeAnalyticSolution(getCurrentTime());
 
   dataPrint * pPrint;
   double aux;
   ParserInitPrintElem();
   os<<getCurrentTime();
+  //  os <<"\t"<<mxti->getValue(4); // for buck with out inverter
+  //os <<"\t"<<mxti->getValue(14); // for buck with inverter
+//   return;
   while(ParserGetPrintElem((void**)&pPrint)){
     os<<"\t\t";
     aux = pVzs->getValue(pPrint->node1-1);
     if (pPrint->node2 >0)
       aux -=  pVzs->getValue(pPrint->node2-1);
-    mSommeError += fabs(v-aux);
+    //  mSommeError += fabs(v-aux);
     
     os << aux;
   }
@@ -1759,6 +1759,7 @@ void  linearSystem::computeAndAcceptStep(){
 	//compute error
 	//      cout<<"mzsti \n"<<*mzsti;
 	//      cout<<"mzsticurrent \n"<<*mzsticurrent;
+	ACE_DOUBLE NormCurrX = mxti->norm2();
 	*mxbuf=*mxti-*mxticurrent;
 	*mzsbuf=*mzsti-*mzsticurrent;
 	buf2=mzsbuf->normInf();
@@ -1769,15 +1770,15 @@ void  linearSystem::computeAndAcceptStep(){
 	mSerrorZs+=errorZs;
 	//compute new step
       
-	coef = fmin(
-		    mNormZ0*ACE_RTOL_LOCAL/errorZs,
-		    mNormX0*ACE_RTOL_LOCAL/errorX
-		    );
+	coef = //fmin(
+	  mNormZ0*ACE_RTOL_LOCAL/errorZs;//,
+	//		    fmax(mNormX0,NormCurrX)*ACE_RTOL_LOCAL/errorX
+	//	    );
 	if (coef >=1){
-	  coef = fmin(
-		      fmin(mAlphaMax,fmax(mAlphaMin,mAlpha*mNormZ0*ACE_RTOL_LOCAL/errorZs)),
-		      fmin(mAlphaMax,fmax(mAlphaMin,mAlpha*mNormX0*ACE_RTOL_LOCAL/errorX))
-		      );
+	  coef = //fmin(
+	    fmin(mAlphaMax,fmax(mAlphaMin,mAlpha*mNormZ0*ACE_RTOL_LOCAL/errorZs));//,
+	    //     fmin(mAlphaMax,fmax(mAlphaMin,mAlpha*mNormX0*ACE_RTOL_LOCAL/errorX))
+	    //      );
 	  l_accept =true;
 	}
 #ifdef PRE_COMPUTE_ADAPTIVE
@@ -1797,6 +1798,10 @@ void  linearSystem::computeAndAcceptStep(){
 	newH=mHori;
     }
 #endif
+    
+    if (H<=mHori)
+      l_accept=true;
+
       if (newH < mHori){
 	newH = mHori;
 	mNbToSmall++;
@@ -1945,7 +1950,10 @@ void  linearSystem::computeAndAcceptStep_2(){
 //     if (mNbBacktrack ==4)
 //       newH=3*mHori;
     
-     
+
+      if (H<=mHori)
+	l_accept=true;
+    
       if (newH < mHori){
 	newH = mHori;
 	mNbToSmall++;

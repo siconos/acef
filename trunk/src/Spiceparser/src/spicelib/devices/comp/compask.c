@@ -37,6 +37,9 @@ COMPask(CKTcircuit *ckt, GENinstance *inst, int which, IFvalue *value,
         case COMP_VEPSILON:
             value->rValue = fast->COMPEpsilon;
             return(OK);
+        case COMP_VOFFSET:
+            value->rValue = fast->COMPOffset;
+            return(OK);
         default:
             return(E_BADPARM);
     }

@@ -23,6 +23,9 @@ COMPparam(int param, IFvalue *value, GENinstance *inst, IFvalue *select)
         case COMP_VEPSILON:
             here->COMPEpsilon = value->rValue;
             break;
+        case COMP_VOFFSET:
+            here->COMPOffset = value->rValue;
+            break;
         default:
             return(E_BADPARM);
     }
