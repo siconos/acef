@@ -274,24 +274,24 @@ void algo::perform(){
  printComponents();
  spls->preparForStamp();
  stamp();
- //  spls->printEquations();
+   spls->printEquations();
  
  //compute matrix: x'=A1x * mx + A1zs * mZs + A1zns * mZns;
  ACE_times[ACE_TIMER_TEST_1].start();
  spls->computedxdt();
  ACE_times[ACE_TIMER_TEST_1].stop();
  stampAfterInvertion();
- ACE_MESSAGE("final equation ;\n");
- spls->printEquations();
+  ACE_MESSAGE("final equation ;\n");
+  spls->printEquations();
  ACE_times[ACE_TIMER_TEST_2].start();
  spls->buildLinearSystem();
  ACE_times[ACE_TIMER_TEST_2].stop();
- spls->printA1();
- spls->printB1();
- spls->printC1();
- spls->printD1();
+  spls->printA1();
+  spls->printB1();
+  spls->printC1();
+  spls->printD1();
  spls->set2matrix();
- spls->printSystem2();
+  spls->printSystem2();
  ACE_times[ACE_TIMER_EQUATION].stop();
 }
 ////////////////////////////////////////////////////////////////////// STAMP
@@ -408,6 +408,9 @@ void algo::simulate(){
 }
 ////////////////////////////////////////////////////////////////////// PRINT
 void algo::printComponents(){
+  if (ACE_MUET_LEVEL == ACE_MUET)
+    return;
+
   int n =0;
   int i;
   ACE_MESSAGE("ACE components:\n");

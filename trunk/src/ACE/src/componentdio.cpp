@@ -45,10 +45,19 @@ void componentDIO::stamp(){
 
   //stamp C1 and D1 system:
   algo::spls->mC1l->setValue(mIndiceStartZns,mIndiceStartLambda,-1);
+  ACE_CHECK_IERROR(mIndiceStartLambda == mIndiceStartZns,"dio model component, mIndiceStartLambda != mIndiceStartZns");
+  //Bug since the begining, previous code : A lot of test has been validated is the following wrong code :
+  //   if (mNodeNeg)
+  //     algo::spls->mD1zs->setValue(mIndiceStartZns,mNodeNeg-1,1);
+  //   if (mNodePos)
+  //     algo::spls->mD1zs->setValue(mIndiceStartZns,mNodePos-1,-1);
+
+  //may be mIndiceStartLambda == mIndiceStartZns. Else big problem.
+  
   if (mNodeNeg)
-    algo::spls->mD1zs->setValue(mIndiceStartZns,mNodeNeg-1,1);
+    algo::spls->mD1zs->setValue(mIndiceStartLambda,mNodeNeg-1,1);
   if (mNodePos)
-    algo::spls->mD1zs->setValue(mIndiceStartZns,mNodePos-1,-1);
+    algo::spls->mD1zs->setValue(mIndiceStartLambda,mNodePos-1,-1);
   
 }
 

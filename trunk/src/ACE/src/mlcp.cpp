@@ -194,7 +194,10 @@ bool mlcp::initSolver(){
 //     mM11->MatrixToFortran(mB);
 //   }
   update();
-  mNumericsOptions.verboseMode=0;
+  if (ACE_MUET_LEVEL)
+    mNumericsOptions.verboseMode=0;
+  else
+    mNumericsOptions.verboseMode=1;
   //build the numerics mProblem:
   mProblem.n=n;
   mProblem.m=m;
@@ -229,6 +232,19 @@ bool mlcp::initSolver(){
     mOptions.dparam[0]=1e-12;
     mOptions.dparam[1]=1e-12;
     mOptions.dparam[2]=1e-9;
+
+  }else if (ACE_SOLVER_TYPE == ACE_SOLVER_FB){
+    strcpy(mOptions.solverName,"DIRECT_FB");
+
+    mNumericsOptions.verboseMode=1;
+    mOptions.iparam[0]=20000;
+    mOptions.iparam[1]=0;/*VERBOSE*/
+    mOptions.iparam[6]=0;/*VERBOSE*/
+    mOptions.iparam[8]=0;/*update prb*/
+    mOptions.dparam[0]=1e-10;
+    mOptions.dparam[1]=1e-10;
+    mOptions.dparam[2]=1e-10;
+    mOptions.dparam[6]=1e-12;
 
   }else if (ACE_SOLVER_TYPE == ACE_SOLVER_PATH){
     strcpy(mOptions.solverName,"DIRECT_PATH");
@@ -351,8 +367,8 @@ void mlcp::printInPutABCDab(ostream& os)
 }
 void mlcp::printInPut(ostream& os)
 {
-  if (ACE_MUET_LEVEL == ACE_MUET)
-    return;
+//   if (ACE_MUET_LEVEL == ACE_MUET)
+//     return;
   displayMLCP(&mProblem);
 }
 void mlcp::printOutPut(ostream& os){

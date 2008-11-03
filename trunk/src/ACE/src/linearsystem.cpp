@@ -852,7 +852,7 @@ bool linearSystem::step(){
     }
     computeZnstiFromX_Zs();
   }else{
-    ACE_GET_LOG_STREAM()<<"linearSystem::step, solver failled!!!"<<endl;
+    ACE_GET_LOG_STREAM()<<"linearSystem::step number,"<< mStepCmp<<" solver failled!!!"<<endl;
   }
   ACE_times[ACE_TIMER_COMPUTE_VAR].stop();
   ACE_times[ACE_TIMER_LS_STEP].stop();
@@ -1059,7 +1059,8 @@ void linearSystem::computedxdt(){
   if(!mA)
     return;
   try{
-    cout<<"mA\n"<<(*mA);
+    if (ACE_MUET_LEVEL != ACE_MUET)
+      cout<<"mA\n"<<(*mA);
     if (ACE_MAT_TYPE == SPARSE){
       //*aaux=*mA;
       mPxAux->set(*mA);
@@ -1070,7 +1071,8 @@ void linearSystem::computedxdt(){
     }else{
       mA->PLUInverseInPlace();
     }
-    cout<<"mA-1\n"<<(*mA);
+    if (ACE_MUET_LEVEL != ACE_MUET)
+      cout<<"mA-1\n"<<(*mA);
   }
   catch(SiconosException e)
     {
@@ -1082,8 +1084,10 @@ void linearSystem::computedxdt(){
       std::cout << "Exception caught." << endl;
       ACE_INTERNAL_ERROR("linearSystem::computedxdt");
     }
-  cout<<"inv A:\n-----\n";
-  cout<<(*mA);
+  if (ACE_MUET_LEVEL != ACE_MUET){
+    cout<<"inv A:\n-----\n";
+    cout<<(*mA);
+  }
 
   try{
     if (mA)
@@ -1429,6 +1433,9 @@ void linearSystem::extractNonDynBockInMat(aceMatrix * m, int IndexBegin, int Ind
   //0=B2x*x + B2zs*Zs + B2l*lambda + B2s
   //Y=D2x*x + D2zs*Zs + D2l*lambda + D2s
 void linearSystem::printSystem2(ostream& os){
+    if (ACE_MUET_LEVEL == ACE_MUET)
+    return;
+
   os<<"R=A1zns*C1l\nx'=A2x*x + A2zs*Zs + R*lambda+A2s\n0=B2x*x + B2zs*Zs + B2l*lambda + B2s\nY=D2x*x + D2zs*Zs + D2l*lambda + D2s\n";
   os<<"R:\n";
   if (mR)
@@ -1528,7 +1535,10 @@ void linearSystem::printStep(ostream& os,aceVector *pVzs){
 }
 
 void linearSystem::printEquations(ostream& os ){
+  if (ACE_MUET_LEVEL == ACE_MUET)
+    return;
   int i,n =0;
+  
   
   printf("--->linearSystem with %d equations whose %d dynamic equations.\n",mNbEquations,mNbDynEquations);
   printf("x\n");
@@ -1577,6 +1587,9 @@ void linearSystem::printEquations(ostream& os ){
 }
 
 void linearSystem::printABCDs(ostream& os ){
+  if (ACE_MUET_LEVEL == ACE_MUET)
+    return;
+
   os <<"Ax'=Bx+CZs+DZns+s\n";
   os <<"-----------------\n";
   os <<"A:\n";
@@ -1596,6 +1609,9 @@ void linearSystem::printABCDs(ostream& os ){
     os <<(*ms);
  }
 void linearSystem::printA1(ostream& os ){
+  if (ACE_MUET_LEVEL == ACE_MUET)
+    return;
+
   os <<"system x'=A1x+A1zs+A1zns+s\n";
   os <<"A1x:\n";
   if (mA1x)
@@ -1611,6 +1627,9 @@ void linearSystem::printA1(ostream& os ){
     os << (*mA1s);
  }
 void linearSystem::printB1(ostream& os ){
+  if (ACE_MUET_LEVEL == ACE_MUET)
+    return;
+
   os <<"0 = B1x*x + B1zs*Zs + B1zns*Zns + B1s\n";
   os <<"B1x:\n";
   if (mB1x)
@@ -1626,6 +1645,9 @@ void linearSystem::printB1(ostream& os ){
     os << (*mB1s);
  }
 void linearSystem::printC1(ostream& os ){
+  if (ACE_MUET_LEVEL == ACE_MUET)
+    return;
+
   os <<"Zns = C1x*x + C1s*Zs + C1l*lamdba + C1s\n";
   os <<"C1x:\n";
   if (mC1x)
@@ -1641,6 +1663,9 @@ void linearSystem::printC1(ostream& os ){
     os << (*mC1s);
  }
 void linearSystem::printD1(ostream& os ){
+  if (ACE_MUET_LEVEL == ACE_MUET)
+    return;
+
   os <<"Y = D1x*x + D1s*Zs + D1ns*Zns + D1l*lambda +D1s\n";
   os <<"D1x:\n";
   if (mD1x)
@@ -1659,6 +1684,9 @@ void linearSystem::printD1(ostream& os ){
     os << (*mD1s);
  }
 void linearSystem::printDiscretisation(ostream& os){
+  if (ACE_MUET_LEVEL == ACE_MUET)
+    return;
+
   os <<"W(I - h*ThetaA2x)"<<endl;
   if (mW)
     os << mW;

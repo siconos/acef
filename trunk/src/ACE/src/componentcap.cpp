@@ -106,6 +106,8 @@ void componentCAP::stampAfterInvertion(){
   }
 }
 void componentCAP::printI(){
+  if (ACE_MUET_LEVEL == ACE_MUET)
+    return;
   printf("print cap i coefs %s:\n",mName?mName:"no_name");
   if (mICoefs)
     for (int i =0; i <= algo::spls->mNbUnknowns; i++)
