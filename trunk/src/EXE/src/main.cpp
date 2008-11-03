@@ -6,7 +6,7 @@ int main(int argc, char **argv){
   ACE_MOS_POWER_SUPPLY=5.0;
 
   if (argc<6){
-    printf("usage : toto file.cir ENUM|SIMPLEX|PATH 10 DENSE|SPARSE INV/NOINV [FIX/ADAPT]\n");
+    printf("usage : toto file.cir ENUM|SIMPLEX|PATH|FB 10 DENSE|SPARSE INV/NOINV [FIX/ADAPT]\n");
     return 0;
   }
   if (!strcmp(argv[2],"ENUM")){
@@ -15,8 +15,10 @@ int main(int argc, char **argv){
     ACE_SOLVER_TYPE = ACE_SOLVER_SIMPLEX;
   }else if(!strcmp(argv[2],"PATH")){
     ACE_SOLVER_TYPE = ACE_SOLVER_PATH;
+  }else if(!strcmp(argv[2],"FB")){
+    ACE_SOLVER_TYPE = ACE_SOLVER_FB;
   }else{
-    printf("usage : toto file.cir ENUM|SIMPLEX|PATH 10\n");
+    printf("usage : toto file.cir ENUM|SIMPLEX|PATH|FB 10\n");
     return 0;
   }
   if (!strcmp(argv[3],"0"))

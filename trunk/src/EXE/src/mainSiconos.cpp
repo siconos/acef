@@ -14,7 +14,7 @@ static  algo *sAlgo=0;
 void (bLDS) (double t, unsigned int N, double* b, unsigned int z, double*zz){
   sAlgo->preparStep(t);
   sAlgo->spls->extractDynamicSystemSource();
-  sAlgo->spls->computeDynamicSystemSource();
+  sAlgo->spls->updateDynamicSystemSource();
   for (unsigned int i=0;i<N;i++){
     b[i]= sAlgo->spls->mA2s->getValue(i);
   }
@@ -23,9 +23,9 @@ void (bLDS) (double t, unsigned int N, double* b, unsigned int z, double*zz){
 void (DAEbLDS) (double t, unsigned int N, double* b, unsigned int z, double*zz){
   sAlgo->preparStep(t);
   sAlgo->spls->extractDynamicSystemSource();
-  sAlgo->spls->computeDynamicSystemSource();
+  sAlgo->spls->updateDynamicSystemSource();
   sAlgo->spls->extractInteractionSource();
-  sAlgo->spls->computeInteractionSource();
+  sAlgo->spls->updateInteractionSource();
   unsigned int s = sAlgo->spls->mB2s->dimRow;
   for (unsigned int i=0;i<N-s;i++){
     b[i]= sAlgo->spls->mA2s->getValue(i);
@@ -38,7 +38,7 @@ void (DAEbLDS) (double t, unsigned int N, double* b, unsigned int z, double*zz){
 void (eLDS) (double t, unsigned int N, double* e, unsigned int z, double*zz){
   sAlgo->preparStep(t);
   sAlgo->spls->extractInteractionSource();
-  sAlgo->spls->computeInteractionSource();
+  sAlgo->spls->updateInteractionSource();
   int s = sAlgo->spls->mB2s->dimRow;
   int m = sAlgo->spls->mD2s->dimRow;
   for (int i=0;i<s ;i++){
@@ -51,7 +51,7 @@ void (eLDS) (double t, unsigned int N, double* e, unsigned int z, double*zz){
 void (DAEeLDS) (double t, unsigned int N, double* e, unsigned int z, double*zz){
   sAlgo->preparStep(t);
   sAlgo->spls->extractInteractionSource();
-  sAlgo->spls->computeInteractionSource();
+  sAlgo->spls->updateInteractionSource();
   int m = sAlgo->spls->mD2s->dimRow;
   for (int i=0;i<m ;i++){
     e[i]= sAlgo->spls->mD2s->getValue(i);
