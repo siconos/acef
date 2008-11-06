@@ -17,9 +17,13 @@ public:
   virtual bool step();
   virtual void buildMLCP();
   virtual void fillMLCP();
+  virtual void extractDynamicSystemSource();
 
+  
   void preparMLCP();
 
+  virtual void printA1(ostream& os );
+  virtual void printSystem2(ostream& os = cout);
 
 protected:
   

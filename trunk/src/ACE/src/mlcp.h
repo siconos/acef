@@ -4,6 +4,12 @@
 |   |*| |+| |=| |
 |D B| |v| |b| |w|
 0<z*v>0
+
+
+{M11 M12} Z1  a  W1
+{       }*  +  =
+{M21 M22} Z2  b  0
+
 **************************************************************************/
 
 #ifndef MLCP_ACE_H
@@ -109,6 +115,9 @@ private:
   Index dim;
   Index start;
   Index end;
+
+  int * mIwork;
+  double * mDwork;
 
 
 };

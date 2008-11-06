@@ -48,6 +48,7 @@ public:
   //0 = B1x*x + B1zs*Zs + B1zns*Zns + B1s
   void buildLinearSystem();
 
+  void buildABCDs();
 
   //
   //R=A1zns*C1l
@@ -96,7 +97,7 @@ public:
   void ExtractAndCompute2Sources();
   void extractSources();
 
-  void extractDynamicSystemSource();
+  virtual void extractDynamicSystemSource();
   void extractInteractionSource();
   void updateDynamicSystemSource();
   void updateInteractionSource();
@@ -198,6 +199,7 @@ public:
   aceVector *mxti;
   aceVector *mzsti;
   aceVector *mznsti;
+  aceVector *mlti;
   aceVector *mxfree;
 
  
@@ -250,12 +252,12 @@ public:
   
   void printEquations(ostream& os = cout);
   void printABCDs(ostream& os = cout);
-  void printA1(ostream& os = cout);
+  virtual void printA1(ostream& os = cout);
   void printB1(ostream& os = cout);
   void printC1(ostream& os = cout);
   void printD1(ostream& os = cout);
   void printSystemInTabFile(char * file);
-  void printSystem2(ostream& os = cout);
+  virtual void printSystem2(ostream& os = cout);
   void printStep(ostream& os,aceVector *pVzs);
   ACE_DOUBLE computeAnalyticSolution(ACE_DOUBLE t);
   ACE_DOUBLE mSommeError;
@@ -276,11 +278,10 @@ protected:
   int mNbToSmall;
   int mNbToBig;
   int mNbBacktrack;
-
-private:
-  void buildABCDs();
   void extractDynBockInMat(aceMatrix * m, int IndexBegin, int IndexEnd);
   void extractDynBockInVect(aceVector * V);
+
+private:
   void extractNonDynBockInMat(aceMatrix * m, int IndexBegin, int IndexEnd);
   void extractNonDynBockInVect(aceVector * V);
 

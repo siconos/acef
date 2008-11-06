@@ -5,7 +5,7 @@
 #include "SimpleVector.h"
 /*
 {M11 M12} Z1  a  W1
-{       }*  =  +
+{       }*  +  =
 {M21 M22} Z2  b  0
 */
 mlcp::mlcp(unsigned int Dlcp,unsigned int Dlin,int solverType){
@@ -63,6 +63,8 @@ mlcp::mlcp(unsigned int Dlcp,unsigned int Dlin,int solverType){
   mPourCent=0;
 
   mM = new aceMatrix(Dlcp+Dlin,Dlcp+Dlin);
+  mIwork=0;
+  mDwork=0;
 
   mTryM = false;
 
@@ -134,8 +136,8 @@ bool mlcp::solveWithNumerics(){
   int info;
   mQ2->VectorToFortran(mProblem.q);
   mQ1->VectorToFortran(mProblem.q+mDlin);
-  for (int i=0;i<mDlin+mDlcp;i++)
-    mProblem.q[i]=-mProblem.q[i];
+  /*  for (int i=0;i<mDlin+mDlcp;i++)
+      mProblem.q[i]=-mProblem.q[i];*/
 
   ACE_times[ACE_TIMER_SOLVE_NUMERICS].start();
 //   printf("\nbegin\n");
@@ -160,8 +162,12 @@ void mlcp::stopSolver(){
   free(mOptions.dparam);
   if (mDlcp){
     mlcp_driver_reset(&mProblem,&mOptions);
-    free(mOptions.iWork);
-    free(mOptions.dWork);
+    if (mIwork)
+      free(mIwork);
+    if (mDwork)
+      free(mDwork);
+    mIwork=0;
+    mDwork=0;
   }
 }
 /*
@@ -217,7 +223,7 @@ bool mlcp::initSolver(){
   mOptions.dparam = (double*) malloc(10*sizeof(double));
   mOptions.filterOn = 0;
   mOptions.iparam[5]=15;/*Number of registered configurations*/
-  
+  mOptions.iparam[7]=0;
   //If adaptive time stepping, then mlcp formulation will change
   if(ACE_WITH_ADAPTATIVE_TIME_STEPPING)
     mOptions.iparam[8]=1;
@@ -227,8 +233,8 @@ bool mlcp::initSolver(){
   if (ACE_SOLVER_TYPE == ACE_SOLVER_SIMPLEX){
     strcpy(mOptions.solverName,"DIRECT_SIMPLEX");
     mOptions.iparam[0]=1000000;
-    mOptions.iparam[1]=0;/*VERBOSE*/
-    mOptions.iparam[6]=0;/*VERBOSE*/
+    mOptions.iparam[1]= mNumericsOptions.verboseMode;/*VERBOSE*/
+    mOptions.iparam[6]= mNumericsOptions.verboseMode;/*VERBOSE*/
     mOptions.dparam[0]=1e-12;
     mOptions.dparam[1]=1e-12;
     mOptions.dparam[2]=1e-9;
@@ -236,27 +242,26 @@ bool mlcp::initSolver(){
   }else if (ACE_SOLVER_TYPE == ACE_SOLVER_FB){
     strcpy(mOptions.solverName,"DIRECT_FB");
 
-    mNumericsOptions.verboseMode=1;
     mOptions.iparam[0]=20000;
-    mOptions.iparam[1]=0;/*VERBOSE*/
-    mOptions.iparam[6]=0;/*VERBOSE*/
+    mOptions.iparam[1]= mNumericsOptions.verboseMode;/*VERBOSE*/
+    mOptions.iparam[6]= mNumericsOptions.verboseMode;/*VERBOSE*/
     mOptions.iparam[8]=0;/*update prb*/
-    mOptions.dparam[0]=1e-10;
-    mOptions.dparam[1]=1e-10;
-    mOptions.dparam[2]=1e-10;
+    mOptions.dparam[0]=1e-12;
+    mOptions.dparam[1]=1e-12;
+    mOptions.dparam[2]=1e-12;
     mOptions.dparam[6]=1e-12;
 
   }else if (ACE_SOLVER_TYPE == ACE_SOLVER_PATH){
     strcpy(mOptions.solverName,"DIRECT_PATH");
-    mOptions.iparam[0]=0;/*VERBOSE*/
-    mOptions.iparam[6]=0;/*VERBOSE*/
+    mOptions.iparam[0]= mNumericsOptions.verboseMode;/*VERBOSE*/
+    mOptions.iparam[6]= mNumericsOptions.verboseMode;/*VERBOSE*/
     mOptions.dparam[0]=1e-12;
     mOptions.dparam[5]=1e-12;
     mOptions.dparam[6]=1e-12;
   }else{
     strcpy(mOptions.solverName,"DIRECT_ENUM");
-    mOptions.iparam[0]=0;/*VERBOSE*/
-    mOptions.iparam[6]=0;/*VERBOSE*/
+    mOptions.iparam[0]= mNumericsOptions.verboseMode;/*VERBOSE*/
+    mOptions.iparam[6]= mNumericsOptions.verboseMode;/*VERBOSE*/
     mOptions.dSize=6;
     mOptions.dparam[0]=1e-12;
     mOptions.dparam[5]=1e-12;
@@ -267,8 +272,10 @@ bool mlcp::initSolver(){
   if (mDlcp){
     int nbInts = mlcp_driver_get_iwork(&mProblem,&mOptions);
     int nbDoubles = mlcp_driver_get_dwork(&mProblem,&mOptions);
-    mOptions.iWork = (int*)malloc( nbInts*sizeof(int));
-    mOptions.dWork = (double*)malloc( nbDoubles*sizeof(double));
+    mIwork=(int*)malloc( nbInts*sizeof(int));
+    mOptions.iWork = mIwork;
+    mDwork = (double*)malloc( nbDoubles*sizeof(double));
+    mOptions.dWork = mDwork;
     mlcp_driver_init(&mProblem,&mOptions);
   }
 

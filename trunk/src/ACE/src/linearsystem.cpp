@@ -571,7 +571,7 @@ void linearSystem::readInitialValue(){
       }
     }
     //    printStep(*mSimuStream,mzsti);
-
+    mzsti->setValueIfNotNull(2,-5e-2);
     /*for each x of type TENSION, compute the initial value with V init*/
     for(i=0; i <(int) mx.size(); i++){
       unknown* u = mx[i];
@@ -764,17 +764,17 @@ void linearSystem::preparMLCP(){
 //   (mQfree)->display();
   if(ACE_MAT_TYPE == SPARSE){
     (mMLCP->mQ1)->set(*(mPfree));
-    scal(-1,*(mMLCP->mQ1),*(mMLCP->mQ1));
+    //    scal(-1,*(mMLCP->mQ1),*(mMLCP->mQ1));
     //  *(mMLCP->mQ1)= *mPfree;  
     //*(mMLCP->mQ2)= *mQfree;
     (mMLCP->mQ2)->set(*(mQfree));
-    scal(-1,*(mMLCP->mQ2),*(mMLCP->mQ2));
+    //    scal(-1,*(mMLCP->mQ2),*(mMLCP->mQ2));
   }else{
+      //  scal(-1,*mPfree,*(mMLCP->mQ1));
+      //scal(-1,*mQfree,*(mMLCP->mQ2));
     if (mDimLambda)
-      scal(-1,*mPfree,*(mMLCP->mQ1));
-    scal(-1,*mQfree,*(mMLCP->mQ2));
-    //  *(mMLCP->mQ1)= *mPfree;  
-    //*(mMLCP->mQ2)= *mQfree;
+      *(mMLCP->mQ1)= *mPfree;  
+    *(mMLCP->mQ2)= *mQfree;
   }
 //    cout<<"mMLCP->mQ1\n";
 //    (mMLCP->mQ1)->display();
@@ -1250,7 +1250,7 @@ void linearSystem::extractDynamicSystemSource(){
   if (mDimx){
     extractDynBockInVect(ms);
     //(*mA1s)=prod(*mA,*ms);
-    ACEprod(*mA,*ms,*mA1s,true);
+    ACEprod(*mA,*ms,*mA1s,true); 
   }
 
 }
@@ -1475,13 +1475,18 @@ void linearSystem::printSystem2(ostream& os){
     os<<(*mD2s);
 }
 ACE_DOUBLE linearSystem::computeAnalyticSolution(ACE_DOUBLE t){
-  ACE_DOUBLE R=1000;
+  /*  ACE_DOUBLE R=1000;
   ACE_DOUBLE L=1e-2;
   ACE_DOUBLE C=1e-6;
 
   ACE_DOUBLE a = -t/(2.0*R*C);
   ACE_DOUBLE w = t*sqrt((1.0/(L*C)-(1.0/(4.0*R*R*C*C))));
-  return fabs(10.0*exp(a)*cos(w));
+  return fabs(10.0*exp(a)*cos(w));*/
+  ACE_DOUBLE R=100;
+  ACE_DOUBLE C=1e-6;
+
+  ACE_DOUBLE a = -5*exp(-t/(R*C));
+  return a;
 
   
 }
@@ -1513,7 +1518,7 @@ void linearSystem::printStep(ostream& os,aceVector *pVzs){
      return;
    }
 
-//  ACE_DOUBLE v = computeAnalyticSolution(getCurrentTime());
+   //  ACE_DOUBLE v = computeAnalyticSolution(getCurrentTime());
 
   dataPrint * pPrint;
   double aux;

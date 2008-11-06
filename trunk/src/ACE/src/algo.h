@@ -22,6 +22,10 @@ public:
   void stampAfterInvertion();
   void preparStep(double time);
   void simulate();
+  void parseComponents();
+
+
+
 
   components mInds;
   components mCaps;
@@ -41,6 +45,8 @@ public:
   char mSimuFile[ACE_CHAR_LENGTH];
 
 protected:
+  void performWithInversion();
+  void performMNA();
 private:
     
 

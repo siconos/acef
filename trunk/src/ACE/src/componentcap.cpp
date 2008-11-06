@@ -46,6 +46,7 @@ componentCAP::~componentCAP(){
 
 }
 
+
 void componentCAP::stampBeforeInvertion(){
   //KCL dyn equations
   if (mU){
@@ -71,9 +72,9 @@ void componentCAP::stampBeforeInvertion(){
 	algo::spls->KCL(mData.nodePos)->mCoefs[mU->mDynIndex]-=mData.value;
       dyn = true;
     }else{
-       ;//stamp KCL with current(afterinvertion)
-   }
-   ACE_CHECK_IWARNING(dyn,"componentCAP::stampBeforeInvertion : no dyn KCL");
+      ;//stamp KCL with current(afterinvertion)
+    }
+    ACE_CHECK_IWARNING(dyn,"componentCAP::stampBeforeInvertion : no dyn KCL");
   }else{
     ACE_INTERNAL_WARNING("componentCAP::stampBeforeInvertion component without U.");
   }

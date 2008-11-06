@@ -5,6 +5,7 @@
 #include "algo.h"
 #include "linearsystemDAE.h"
 #include "componentcap.h"
+#include "componentcapdae.h"
 #include "componentind.h"
 #include "componentres.h"
 #include "componentdio.h"
@@ -28,6 +29,8 @@ algo::algo(char * file){
     spls = new linearSystem();
   else
     spls = new linearSystemDAE();
+    
+  
   strncpy(mFile,file,strlen(file)-3);
   strcat(mFile,"txt");
   
@@ -92,69 +95,8 @@ algo::~algo(){
   
  }
 
-////////////////////////////////////////////////////////////////////// ALGO
-void algo::perform(){
-  ACE_times[ACE_TIMER_EQUATION].start();
- spls->mNbNodes = ParserGetNbElementsOfType("Node");
- spls->initKCL();
- spls->addVUnknowns();
- //BUILD x VECTOR
- //get CAPACITOR from parser
- initGraph(spls->mNbNodes,ParserGetNbElementsOfType("Capacitor"));
- ParserInitComponentList("Capacitor");
- dataCAP dCap;
- while(ParserNextComponent(&dCap)){
-   componentCAP *c=new componentCAP(&dCap);
-   mCaps.push_back(c);
-   
-   int np = dCap.nodePos;
-   int nn = dCap.nodeNeg;
-   unknown *uout;
-   if (!spls->isUnknown(ACE_TYPE_U,c,&uout)){
-     c->addTensionUnknown();
-     c->addTensionEquation();
-     if (np == 0){
-       equationKCL *eq=spls->KCL(nn);
-       ACE_CHECK_IERROR(eq->mAvailable,"algo::perform : KCL not available");
-       spls->addKCLinDyn(nn);
-     }else if(nn ==0){
-       equationKCL *eq=spls->KCL(np);
-       ACE_CHECK_IERROR(eq->mAvailable,"algo::perform : KCL not available");
-       spls->addKCLinDyn(np);
-     }else{
-       //add only edge not connected on node 0.
-       graphAddEdge(np,nn,c);
-     }
-   }else{
-     c->mU=uout;
-   }
-  }
- computeGraphMST();
+void algo::parseComponents(){
  
- int n1;
- int n2;
- componentCAP *c=0;
- while (nextEdgeInMST(n1,n2,&c)){
-      
-      if (spls->KCL(n1)->mAvailable) {
-	spls->addKCLinDyn(n1);
-      }
-      else if (spls->KCL(n2)->mAvailable){
-	spls->addKCLinDyn(n2);
-      }else{
-	ACE_MESSAGE("algo::perform : Add unknown current in capacitor branche!!\n");
-	c->addCurrentUnknown();
-	c->addCurrentEquation();
-	
-      }
- }
-
- while (nextEdgeOutMST(n1,n2,&c)){   
-   c->addCurrentUnknown();
-   c->addCurrentEquation();
- }
- stopGraph();
-
  //get INDUCTOR from parser
  ParserInitComponentList("Inductor");
  dataIND dInd;
@@ -272,9 +214,127 @@ void algo::perform(){
    mIsrcs.push_back(c);   
  }
  printComponents();
+
+}
+
+void algo::performMNA(){
+  //ACE_FORMULATION_WITH_INVERSION == 0
+  ParserInitComponentList("Capacitor");
+  dataCAP dCap;
+  while(ParserNextComponent(&dCap)){
+   componentCAPDAE *c=new componentCAPDAE(&dCap);
+   mCaps.push_back(c);
+   int np = dCap.nodePos;
+   int nn = dCap.nodeNeg;
+   //Tension unknown management
+   unknown *uout;
+   if (!spls->isUnknown(ACE_TYPE_U,c,&uout)){
+     c->addTensionUnknown();
+     c->addTensionEquation();
+   }else{
+     c->mU=uout;
+   }
+   //Current unknown management
+   c->addCurrentUnknown();
+   c->addCurrentEquation();
+  }
+  parseComponents();
+  spls->preparForStamp();
+  stamp();
+  spls->printEquations();
+
+  //compute Ax'=Bx+CZs+DZns+s
+  spls->buildABCDs();
+
+
+  spls->buildLinearSystem();
+  spls->printA1();
+  spls->printB1();
+  spls->printC1();
+  spls->printD1();
+  
+  spls->set2matrix();
+  spls->printSystem2();
+ 
+}
+
+////////////////////////////////////////////////////////////////////// ALGO
+void algo::perform(){
+  ACE_times[ACE_TIMER_EQUATION].start();
+  spls->mNbNodes = ParserGetNbElementsOfType("Node");
+  spls->initKCL();
+  spls->addVUnknowns();
+
+  if (!ACE_FORMULATION_WITH_INVERSION)
+    performMNA();
+  else
+    performWithInversion();
+  ACE_times[ACE_TIMER_EQUATION].stop();
+}
+  
+void algo::performWithInversion(){
+ //BUILD x VECTOR
+ //get CAPACITOR from parser
+ initGraph(spls->mNbNodes,ParserGetNbElementsOfType("Capacitor"));
+ ParserInitComponentList("Capacitor");
+ dataCAP dCap;
+ while(ParserNextComponent(&dCap)){
+   componentCAP *c=new componentCAP(&dCap);
+   mCaps.push_back(c);
+   
+   int np = dCap.nodePos;
+   int nn = dCap.nodeNeg;
+   unknown *uout;
+   if (!spls->isUnknown(ACE_TYPE_U,c,&uout)){
+     c->addTensionUnknown();
+     c->addTensionEquation();
+     if (np == 0){
+       equationKCL *eq=spls->KCL(nn);
+       ACE_CHECK_IERROR(eq->mAvailable,"algo::perform : KCL not available");
+       spls->addKCLinDyn(nn);
+     }else if(nn ==0){
+       equationKCL *eq=spls->KCL(np);
+       ACE_CHECK_IERROR(eq->mAvailable,"algo::perform : KCL not available");
+       spls->addKCLinDyn(np);
+     }else{
+       //add only edge not connected on node 0.
+       graphAddEdge(np,nn,c);
+     }
+   }else{
+     c->mU=uout;
+   }
+  }
+ computeGraphMST();
+ 
+ int n1;
+ int n2;
+ componentCAP *c=0;
+ while (nextEdgeInMST(n1,n2,&c)){
+      
+      if (spls->KCL(n1)->mAvailable) {
+	spls->addKCLinDyn(n1);
+      }
+      else if (spls->KCL(n2)->mAvailable){
+	spls->addKCLinDyn(n2);
+      }else{
+	ACE_MESSAGE("algo::perform : Add unknown current in capacitor branche!!\n");
+	c->addCurrentUnknown();
+	c->addCurrentEquation();
+	
+      }
+ }
+
+ while (nextEdgeOutMST(n1,n2,&c)){   
+   c->addCurrentUnknown();
+   c->addCurrentEquation();
+ }
+ stopGraph();
+ parseComponents();
+
  spls->preparForStamp();
  stamp();
-   spls->printEquations();
+
+ spls->printEquations();
  
  //compute matrix: x'=A1x * mx + A1zs * mZs + A1zns * mZns;
  ACE_times[ACE_TIMER_TEST_1].start();
@@ -292,7 +352,6 @@ void algo::perform(){
   spls->printD1();
  spls->set2matrix();
   spls->printSystem2();
- ACE_times[ACE_TIMER_EQUATION].stop();
 }
 ////////////////////////////////////////////////////////////////////// STAMP
 //with x'=A1x * mx + A1zs * mZs + A1zns * mZns, compute curent in all capacitor branche, and fill KCL law
@@ -311,7 +370,7 @@ void algo::stamp(){
     mInds[i]->stamp();
   n = mCaps.size();
   for(i=0;i<n;i++)
-    ((componentCAP *)(mCaps[i]))->stampBeforeInvertion();
+    ((componentCAP *)(mCaps[i]))->stampBeforeInvertion();//even if !ACE_FORMULATION_WITH_INVERSION.
   n = mRess.size();
   for(i=0;i<n;i++)
     mRess[i]->stamp();

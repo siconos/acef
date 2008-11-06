@@ -35,7 +35,7 @@ public:
    *
    *
    */
-  void  stampBeforeInvertion ();
+  virtual void  stampBeforeInvertion ();
   /*
    *
    *
