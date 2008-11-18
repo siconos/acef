@@ -12,7 +12,6 @@
  *When possible, current go from Neg node to Pos node(for KCL law).\n
  *tension = V_neg - V_pos\n
  *
- * here a image\n
  * \image html componentConvention.jpg
 **************************************************************************/
 

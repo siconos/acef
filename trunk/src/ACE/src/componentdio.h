@@ -1,3 +1,27 @@
+/**
+
+Diode component.\n
+Spice syntax : D1 np nn DIODEF\n
+
+acef formulation:
+
+
+\f[
+Zns=(Id)
+\f]
+\f[
+Zns=\lambda
+\f]
+
+\f[
+Y=Vn-Vp
+\f]
+
+\f[
+0 \leq Y \, \perp \, \lambda \geq 0
+\f]
+
+*/
 /************************************************************************
   			componentdio.h 
 **************************************************************************/

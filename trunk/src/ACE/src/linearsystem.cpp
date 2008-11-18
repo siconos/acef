@@ -867,11 +867,11 @@ void linearSystem::printLog(){
   ACE_GET_LOG_STREAM()<<"linearSystem::stopSimu, total error X step: "<<mSerrorX<<endl;
   ACE_GET_LOG_STREAM()<<"linearSystem::stopSimu,  h, error somme, number of step, average: "<<mH<<" "<<mSommeError<<" "<<mStepCmp<<" "<<mSommeError/mStepCmp<<endl;
   ACE_GET_LOG_STREAM()<<"linearSystem::stopSimu,  log10(average), log10(h)"<<log10(mSommeError/mStepCmp)<<" "<<log10(mH)<<endl;
-//   if (ACE_WITH_ADAPTATIVE_TIME_STEPPING){
-//     ACE_GET_LOG1_STREAM()<<log10(mSommeError/mStepCmp)<<"\t"<<log10(ACE_RTOL_LOCAL)<<endl;
-//   }else{
-//     ACE_GET_LOG1_STREAM()<<log10(mSommeError/mStepCmp)<<"\t"<<log10(mH)<<endl;
-//   }
+  if (ACE_WITH_ADAPTATIVE_TIME_STEPPING){
+    ACE_GET_LOG1_STREAM()<<log10(mSommeError/mStepCmp)<<"\t"<<log10(ACE_RTOL_LOCAL)<<endl;
+  }else{
+    ACE_GET_LOG1_STREAM()<<log10(mSommeError/mStepCmp)<<"\t"<<log10(mH)<<endl;
+  }
   for (int i=0;i < ACE_NB_ADAPT_STEP+1;i++)
     ACE_GET_LOG_STREAM()<<"linearSystem::stopSimu, step number : "<< i << " : "<< ACE_CMP_ADAT[i]<<endl;
  }
@@ -1475,18 +1475,18 @@ void linearSystem::printSystem2(ostream& os){
     os<<(*mD2s);
 }
 ACE_DOUBLE linearSystem::computeAnalyticSolution(ACE_DOUBLE t){
-  /*  ACE_DOUBLE R=1000;
+    ACE_DOUBLE R=1000;
   ACE_DOUBLE L=1e-2;
   ACE_DOUBLE C=1e-6;
 
   ACE_DOUBLE a = -t/(2.0*R*C);
   ACE_DOUBLE w = t*sqrt((1.0/(L*C)-(1.0/(4.0*R*R*C*C))));
-  return fabs(10.0*exp(a)*cos(w));*/
-  ACE_DOUBLE R=100;
+  return fabs(10.0*exp(a)*cos(w));
+  /*  ACE_DOUBLE R=100;
   ACE_DOUBLE C=1e-6;
 
   ACE_DOUBLE a = -5*exp(-t/(R*C));
-  return a;
+  return a;*/
 
   
 }
@@ -1518,7 +1518,7 @@ void linearSystem::printStep(ostream& os,aceVector *pVzs){
      return;
    }
 
-   //  ACE_DOUBLE v = computeAnalyticSolution(getCurrentTime());
+   //     ACE_DOUBLE v = computeAnalyticSolution(getCurrentTime());
 
   dataPrint * pPrint;
   double aux;
@@ -1532,9 +1532,10 @@ void linearSystem::printStep(ostream& os,aceVector *pVzs){
     aux = pVzs->getValue(pPrint->node1-1);
     if (pPrint->node2 >0)
       aux -=  pVzs->getValue(pPrint->node2-1);
-    //  mSommeError += fabs(v-aux);
+    // mSommeError += fabs(v-aux);
     
-    os << aux;
+      os << aux ;
+      //      os << aux << "\t"<<v;
   }
   os<<endl;
 }

@@ -228,7 +228,7 @@ void algo::performMNA(){
    int nn = dCap.nodeNeg;
    //Tension unknown management
    unknown *uout;
-   if (!spls->isUnknown(ACE_TYPE_U,c,&uout)){
+   if (!spls->isUnknown(ACE_TYPE_U,c,&uout) || 1){
      c->addTensionUnknown();
      c->addTensionEquation();
    }else{

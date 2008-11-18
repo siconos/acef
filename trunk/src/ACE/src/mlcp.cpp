@@ -246,9 +246,9 @@ bool mlcp::initSolver(){
     mOptions.iparam[1]= mNumericsOptions.verboseMode;/*VERBOSE*/
     mOptions.iparam[6]= mNumericsOptions.verboseMode;/*VERBOSE*/
     mOptions.iparam[8]=0;/*update prb*/
-    mOptions.dparam[0]=1e-12;
-    mOptions.dparam[1]=1e-12;
-    mOptions.dparam[2]=1e-12;
+    mOptions.dparam[0]=1e-10;
+    mOptions.dparam[1]=1e-10;
+    mOptions.dparam[2]=1e-10;
     mOptions.dparam[6]=1e-12;
 
   }else if (ACE_SOLVER_TYPE == ACE_SOLVER_PATH){

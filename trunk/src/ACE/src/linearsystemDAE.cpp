@@ -127,6 +127,8 @@ bool linearSystemDAE::step(){
       }
     }
     computeZnstiFromX_Zs();
+  }else{
+    ACE_WARNING("linearSystemDAE::step, simulation stoped because mlcp solver failed!\n");
   }
   ACE_times[ACE_TIMER_COMPUTE_VAR].stop();
   ACE_times[ACE_TIMER_LS_STEP].stop();
