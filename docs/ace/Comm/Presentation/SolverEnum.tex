@@ -1,0 +1,57 @@
+
+\frame
+{
+\frametitle{MLCP to linear system}
+\begin{block}{ Given a MLCP}
+ \begin{equation}\label{eq:mlcp1}
+ \begin{cases}
+M \left(\begin{array}{c}
+   U\\
+   V
+   \end{array}\right) + q = \left(\begin{array}{c}
+   0\\
+   W
+   \end{array}\right) \\
+      0 \le V \perp     W   \ge 0
+
+      \end{cases}
+\end{equation}
+
+
+\end{block}
+
+\begin{block}{A linear system}
+
+Let $I_v$ and $I_w$, tow complementary subsets of $\{1,..,m\}$ and
+looking for a solution such that : \\
+\[
+\begin{cases}
+U_i=0 \textrm{ for } i \in I_v \\
+ W_i=0 \textrm{ for } i \in I_w
+\end{cases}
+ \]
+
+
+
+
+\[\textrm{Solve the linear system: }N \left(\begin{array}{c}
+   U\\
+   VW
+   \end{array}\right) = -q   \textrm{   With   }
+   \begin{cases}
+   N_{.i}=M_{.i} \textrm{ for } i \in \{1..n\}\\
+   N_{.i}=M_{.i} \textrm{ for } i-n \in I_w\\
+   N_{.i}=-e_{i} \textrm{ for } i-n \in I_u
+\end{cases}
+\]
+\[ \textrm { Solution if the complementarity hold: }
+\begin{cases}
+W_i \ge 0 \textrm{ for } i \in I_v  \\
+U_i \ge 0 \textrm{ for } i \in I_w
+\end{cases}
+\]
+An enumeratif algorithm consists in solving the $2^m$ cases.
+
+\end{block}
+
+}
