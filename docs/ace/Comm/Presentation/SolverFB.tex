@@ -1,0 +1,99 @@
+
+\frame
+{
+\frametitle{A reformulation using the Fischer-Burmeister function}
+\begin{block}{ The Fischer-Burmeister function}
+ 
+\[\phi (a,b) = a+b-\sqrt{a^2+b^2} \textrm{ and the merit function: } \psi (a,b) = \| \psi(a,b)\|^2 \]
+Note that:
+\[  0 \le a \perp     b   \ge 0 \Longleftrightarrow \phi (a,b) =0 \Longleftrightarrow (a,b) \textrm{is a
+global minimum of } \psi \]
+\end{block}
+
+ Properties of theses functions: $\phi$ is strongly semi-smooth, $\psi$ is continuously defferentiable.
+
+\begin{figure}[h]
+\centerline{
+ \scalebox{0.35}{
+    \input{FischerB.pstex_t}
+    \input{Psi.pstex_t}
+ }
+}
+\end{figure}
+
+ 
+
+}
+
+\frame
+{
+\frametitle{A reformulation using the Fischer-Burmeister function}
+
+
+\begin{block}{ MLCP reformulation}
+
+\begin{equation}
+  \begin{array}{cc}
+   \begin{cases}
+    A u + C v + a =0 \\
+    {0} \le {v} \perp     Du +B v +b   \ge {0}
+    \end{cases}&
+   \begin{cases}
+   \Phi :\mathbb{R}^{n+m} \longrightarrow \mathbb{R}^{n+m}\\
+   \Phi(z)=\left(\begin{array}{c}
+   \left(\begin{array}{cc}
+   A&C
+   \end{array}\right)z\\
+   \phi(z_{n+1},(D_{1.}B_{1.})z)\\
+   .\\
+   .\\
+   \phi(z_{n+m},(D_{m.}B_{m.})z)
+   \end{array}\right)=0
+    \end{cases}
+  \end{array}
+\end{equation}
+This problem consists now in finding the global minimum of the merit function $\Psi(z)=\| \Phi(z)\|^2$.
+ 
+\end{block}
+
+
+
+
+}
+
+
+\frame
+{
+
+\begin{equation}
+  \begin{array}{c}
+   \begin{cases}
+    M1 \left(\begin{array}{c} u\\ v\end{array}\right)  + a =0 \\
+    {0} \le {v} \perp     M2\left(\begin{array}{c} u\\ v\end{array}\right) +b   \ge {0}\\
+    \textrm{ changement de variable : }
+    N \left(\begin{array}{c} \tilde{u}\\ \tilde{v}\end{array}\right)=  \left(\begin{array}{c} u\\ v\end{array}\right)\\
+    M1N \left(\begin{array}{c} \tilde{u}\\ \tilde{v}\end{array}\right)  + a =0 \\
+    {0} \le {\left(N \left(\begin{array}{c} \tilde{u}\\ \tilde{v}\end{array}\right)\right)_{n..n+m}} \perp     M2N\left(\begin{array}{c} \tilde{u}\\ \tilde{v}\end{array}\right) +b   \ge {0}\\
+    
+    \end{cases}\\\\
+   \begin{cases}
+   \Phi :\mathbb{R}^{n+m} \longrightarrow \mathbb{R}^{n+m}\\
+   \Phi \left(\begin{array}{c} \tilde{u}\\ \tilde{v}\end{array}\right)=\left(\begin{array}{c}
+  
+   M1N
+   \left(\begin{array}{c} \tilde{u}\\ \tilde{v}\end{array}\right)_i\\
+   \phi((N \left(\begin{array}{c} \tilde{u}\\ \tilde{v}\end{array}\right))_i,(M2N\left(\begin{array}{c} \tilde{u}\\ \tilde{v}\end{array}\right)_i)\\
+   .\\
+   .
+   \end{array}\right)=0
+    \end{cases}
+  \end{array}
+\end{equation}
+  reste a choisir N pour condiionner $\left(\begin{array}{cc} 0&I\\A&C\\D&B\end{array}\right)$
+
+
+ 
+ 
+
+
+}

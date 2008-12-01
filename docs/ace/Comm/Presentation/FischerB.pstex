@@ -1,0 +1,2449 @@
+%!PS-Adobe-2.0 EPSF-2.0
+%%Title: FischerB.fig
+%%Creator: fig2dev Version 3.2 Patchlevel 4
+%%CreationDate: Mon Dec  1 17:10:25 2008
+%%For: bonnefon@duparc (olivier bonnefon)
+%%BoundingBox: 0 0 578 409
+%%Magnification: 1.0000
+%%EndComments
+/$F2psDict 200 dict def
+$F2psDict begin
+$F2psDict /mtrx matrix put
+/col-1 {0 setgray} bind def
+/col0 {0.000 0.000 0.000 srgb} bind def
+/col1 {0.000 0.000 1.000 srgb} bind def
+/col2 {0.000 1.000 0.000 srgb} bind def
+/col3 {0.000 1.000 1.000 srgb} bind def
+/col4 {1.000 0.000 0.000 srgb} bind def
+/col5 {1.000 0.000 1.000 srgb} bind def
+/col6 {1.000 1.000 0.000 srgb} bind def
+/col7 {1.000 1.000 1.000 srgb} bind def
+/col8 {0.000 0.000 0.560 srgb} bind def
+/col9 {0.000 0.000 0.690 srgb} bind def
+/col10 {0.000 0.000 0.820 srgb} bind def
+/col11 {0.530 0.810 1.000 srgb} bind def
+/col12 {0.000 0.560 0.000 srgb} bind def
+/col13 {0.000 0.690 0.000 srgb} bind def
+/col14 {0.000 0.820 0.000 srgb} bind def
+/col15 {0.000 0.560 0.560 srgb} bind def
+/col16 {0.000 0.690 0.690 srgb} bind def
+/col17 {0.000 0.820 0.820 srgb} bind def
+/col18 {0.560 0.000 0.000 srgb} bind def
+/col19 {0.690 0.000 0.000 srgb} bind def
+/col20 {0.820 0.000 0.000 srgb} bind def
+/col21 {0.560 0.000 0.560 srgb} bind def
+/col22 {0.690 0.000 0.690 srgb} bind def
+/col23 {0.820 0.000 0.820 srgb} bind def
+/col24 {0.500 0.190 0.000 srgb} bind def
+/col25 {0.630 0.250 0.000 srgb} bind def
+/col26 {0.750 0.380 0.000 srgb} bind def
+/col27 {1.000 0.500 0.500 srgb} bind def
+/col28 {1.000 0.630 0.630 srgb} bind def
+/col29 {1.000 0.750 0.750 srgb} bind def
+/col30 {1.000 0.880 0.880 srgb} bind def
+/col31 {1.000 0.840 0.000 srgb} bind def
+/col32 {0.000 0.000 0.000 srgb} bind def
+/col33 {0.000 0.000 0.996 srgb} bind def
+/col34 {0.000 0.996 0.000 srgb} bind def
+/col35 {0.000 0.996 0.996 srgb} bind def
+/col36 {0.996 0.000 0.000 srgb} bind def
+/col37 {0.996 0.000 0.996 srgb} bind def
+/col38 {0.996 0.996 0.000 srgb} bind def
+/col39 {0.996 0.996 0.996 srgb} bind def
+/col40 {0.000 0.000 0.562 srgb} bind def
+/col41 {0.000 0.000 0.688 srgb} bind def
+/col42 {0.000 0.000 0.812 srgb} bind def
+/col43 {0.527 0.805 0.996 srgb} bind def
+/col44 {0.000 0.562 0.000 srgb} bind def
+/col45 {0.000 0.688 0.000 srgb} bind def
+/col46 {0.000 0.812 0.000 srgb} bind def
+/col47 {0.000 0.562 0.562 srgb} bind def
+/col48 {0.000 0.688 0.688 srgb} bind def
+/col49 {0.000 0.812 0.812 srgb} bind def
+/col50 {0.562 0.000 0.000 srgb} bind def
+/col51 {0.688 0.000 0.000 srgb} bind def
+/col52 {0.812 0.000 0.000 srgb} bind def
+/col53 {0.562 0.000 0.562 srgb} bind def
+/col54 {0.688 0.000 0.688 srgb} bind def
+/col55 {0.812 0.000 0.812 srgb} bind def
+/col56 {0.500 0.188 0.000 srgb} bind def
+/col57 {0.625 0.250 0.000 srgb} bind def
+/col58 {0.750 0.375 0.000 srgb} bind def
+/col59 {0.996 0.500 0.500 srgb} bind def
+/col60 {0.996 0.625 0.625 srgb} bind def
+/col61 {0.996 0.750 0.750 srgb} bind def
+/col62 {0.996 0.875 0.875 srgb} bind def
+/col63 {0.996 0.840 0.000 srgb} bind def
+/col64 {0.000 0.000 0.000 srgb} bind def
+/col65 {0.996 0.996 0.996 srgb} bind def
+
+end
+save
+newpath 0 409 moveto 0 0 lineto 578 0 lineto 578 409 lineto closepath clip newpath
+0.7 407.8 translate
+1 -1 scale
+
+/cp {closepath} bind def
+/ef {eofill} bind def
+/gr {grestore} bind def
+/gs {gsave} bind def
+/sa {save} bind def
+/rs {restore} bind def
+/l {lineto} bind def
+/m {moveto} bind def
+/rm {rmoveto} bind def
+/n {newpath} bind def
+/s {stroke} bind def
+/sh {show} bind def
+/slc {setlinecap} bind def
+/slj {setlinejoin} bind def
+/slw {setlinewidth} bind def
+/srgb {setrgbcolor} bind def
+/rot {rotate} bind def
+/sc {scale} bind def
+/sd {setdash} bind def
+/ff {findfont} bind def
+/sf {setfont} bind def
+/scf {scalefont} bind def
+/sw {stringwidth} bind def
+/tr {translate} bind def
+/tnt {dup dup currentrgbcolor
+  4 -2 roll dup 1 exch sub 3 -1 roll mul add
+  4 -2 roll dup 1 exch sub 3 -1 roll mul add
+  4 -2 roll dup 1 exch sub 3 -1 roll mul add srgb}
+  bind def
+/shd {dup dup currentrgbcolor 4 -2 roll mul 4 -2 roll mul
+  4 -2 roll mul srgb} bind def
+/reencdict 12 dict def /ReEncode { reencdict begin
+/newcodesandnames exch def /newfontname exch def /basefontname exch def
+/basefontdict basefontname findfont def /newfont basefontdict maxlength dict def
+basefontdict { exch dup /FID ne { dup /Encoding eq
+{ exch dup length array copy newfont 3 1 roll put }
+{ exch newfont 3 1 roll put } ifelse } { pop pop } ifelse } forall
+newfont /FontName newfontname put newcodesandnames aload pop
+128 1 255 { newfont /Encoding get exch /.notdef put } for
+newcodesandnames length 2 idiv { newfont /Encoding get 3 1 roll put } repeat
+newfontname newfont definefont pop end } def
+/isovec [
+8#055 /minus 8#200 /grave 8#201 /acute 8#202 /circumflex 8#203 /tilde
+8#204 /macron 8#205 /breve 8#206 /dotaccent 8#207 /dieresis
+8#210 /ring 8#211 /cedilla 8#212 /hungarumlaut 8#213 /ogonek 8#214 /caron
+8#220 /dotlessi 8#230 /oe 8#231 /OE
+8#240 /space 8#241 /exclamdown 8#242 /cent 8#243 /sterling
+8#244 /currency 8#245 /yen 8#246 /brokenbar 8#247 /section 8#250 /dieresis
+8#251 /copyright 8#252 /ordfeminine 8#253 /guillemotleft 8#254 /logicalnot
+8#255 /hyphen 8#256 /registered 8#257 /macron 8#260 /degree 8#261 /plusminus
+8#262 /twosuperior 8#263 /threesuperior 8#264 /acute 8#265 /mu 8#266 /paragraph
+8#267 /periodcentered 8#270 /cedilla 8#271 /onesuperior 8#272 /ordmasculine
+8#273 /guillemotright 8#274 /onequarter 8#275 /onehalf
+8#276 /threequarters 8#277 /questiondown 8#300 /Agrave 8#301 /Aacute
+8#302 /Acircumflex 8#303 /Atilde 8#304 /Adieresis 8#305 /Aring
+8#306 /AE 8#307 /Ccedilla 8#310 /Egrave 8#311 /Eacute
+8#312 /Ecircumflex 8#313 /Edieresis 8#314 /Igrave 8#315 /Iacute
+8#316 /Icircumflex 8#317 /Idieresis 8#320 /Eth 8#321 /Ntilde 8#322 /Ograve
+8#323 /Oacute 8#324 /Ocircumflex 8#325 /Otilde 8#326 /Odieresis 8#327 /multiply
+8#330 /Oslash 8#331 /Ugrave 8#332 /Uacute 8#333 /Ucircumflex
+8#334 /Udieresis 8#335 /Yacute 8#336 /Thorn 8#337 /germandbls 8#340 /agrave
+8#341 /aacute 8#342 /acircumflex 8#343 /atilde 8#344 /adieresis 8#345 /aring
+8#346 /ae 8#347 /ccedilla 8#350 /egrave 8#351 /eacute
+8#352 /ecircumflex 8#353 /edieresis 8#354 /igrave 8#355 /iacute
+8#356 /icircumflex 8#357 /idieresis 8#360 /eth 8#361 /ntilde 8#362 /ograve
+8#363 /oacute 8#364 /ocircumflex 8#365 /otilde 8#366 /odieresis 8#367 /divide
+8#370 /oslash 8#371 /ugrave 8#372 /uacute 8#373 /ucircumflex
+8#374 /udieresis 8#375 /yacute 8#376 /thorn 8#377 /ydieresis] def
+/Helvetica /Helvetica-iso isovec ReEncode
+/$F2psBegin {$F2psDict begin /$F2psEnteredState save def} def
+/$F2psEnd {$F2psEnteredState restore end} def
+
+$F2psBegin
+10 setmiterlimit
+0 slj 0 slc
+ 0.06000 0.06000 sc
+%
+% Fig objects follow
+%
+% 
+% here starts figure with depth 0
+%  1 Thickness 
+%  3 setalufunction 
+%  -1 -1 200000 200000 setclipzone 
+%  /Times-Roman findfont 160 scalefont setfont 
+%  fillsolid 
+%  0 Setcolor 
+%  fillsolid 
+%  0 Setcolor 
+% Polyline
+n 0 0 m 9600 0 l 9600 6784 l 0 6784 l
+ cp 
+%  Object : 0 drawbox -<34>-  
+% Polyline
+7.500 slw
+n 0 0 m 9600 0 l 9600 6784 l 0 6784 l
+ cp gs col65 1.00 shd ef gr gs col65 s gr 
+%  0 Setcolor 
+%  33 Setcolor 
+%  Object : 0 drawpoly -<pat:-34,areafill=20,white=31>-  
+% Polyline
+n 8400 2516 m 7228 848 l 1200 1172 l 1200 4268 l 2372 5936 l 8400 5612 l
+
+ cp gs col65 1.00 shd ef gr gs col65 s gr 
+%  33 Setcolor 
+%  /absolu true def 
+%  0 Setcolor 
+%  1 Thickness 
+%  Object : 0 segments -<0>-  
+% Polyline
+ [30] 0 sd
+n 7228 3944 m
+ 1200 4268 l gs col35 s gr  [] 0 sd
+%  Object : 1 segments -<0>-  
+% Polyline
+ [30] 0 sd
+n 7228 3944 m
+ 8400 5612 l gs col35 s gr  [] 0 sd
+%  Object : 2 segments -<0>-  
+% Polyline
+ [30] 0 sd
+n 7228 3944 m
+ 7228 848 l gs col35 s gr  [] 0 sd
+%  32 Setcolor 
+%  1 Thickness 
+%  32 Setcolor 
+%  /closeflag false def 
+%  Object : 0 drawpoly -<pat:0,areafill=-1,white=31>-  
+% Polyline
+n 8400 2516 m 7228 848 l 1200 1172 l 1200 4268 l 2372 5936 l 8400 5612 l
+
+ 8400 2516 l  cp gs col64 s gr 
+%  32 Setcolor 
+%  Object : 0 segments -<0>-  
+% Polyline
+n 1200 4268 m
+ 1118 4151 l gs col64 s gr 
+%  Object : 0 segments -<0>-  
+% Polyline
+n 1200 4268 m
+ 1159 4209 l gs col64 s gr 
+%  Object : 0 segments -<0>-  
+% Polyline
+n 1200 4096 m
+ 1159 4037 l gs col64 s gr 
+%  32 Setcolor 
+%  Object : 0 segments -<0>-  
+% Polyline
+n 1200 3924 m
+ 1118 3807 l gs col64 s gr 
+%  Object : 0 segments -<0>-  
+% Polyline
+n 1200 3924 m
+ 1159 3865 l gs col64 s gr 
+%  Object : 0 segments -<0>-  
+% Polyline
+n 1200 3752 m
+ 1159 3693 l gs col64 s gr 
+%  32 Setcolor 
+%  Object : 0 segments -<0>-  
+% Polyline
+n 1200 3580 m
+ 1118 3463 l gs col64 s gr 
+%  Object : 0 segments -<0>-  
+% Polyline
+n 1200 3580 m
+ 1159 3521 l gs col64 s gr 
+%  Object : 0 segments -<0>-  
+% Polyline
+n 1200 3408 m
+ 1159 3349 l gs col64 s gr 
+%  32 Setcolor 
+%  Object : 0 segments -<0>-  
+% Polyline
+n 1200 3236 m
+ 1118 3119 l gs col64 s gr 
+%  Object : 0 segments -<0>-  
+% Polyline
+n 1200 3236 m
+ 1159 3177 l gs col64 s gr 
+%  Object : 0 segments -<0>-  
+% Polyline
+n 1200 3064 m
+ 1159 3005 l gs col64 s gr 
+%  32 Setcolor 
+%  Object : 0 segments -<0>-  
+% Polyline
+n 1200 2892 m
+ 1118 2775 l gs col64 s gr 
+%  Object : 0 segments -<0>-  
+% Polyline
+n 1200 2892 m
+ 1159 2833 l gs col64 s gr 
+%  Object : 0 segments -<0>-  
+% Polyline
+n 1200 2720 m
+ 1159 2661 l gs col64 s gr 
+%  32 Setcolor 
+%  Object : 0 segments -<0>-  
+% Polyline
+n 1200 2548 m
+ 1118 2431 l gs col64 s gr 
+%  Object : 0 segments -<0>-  
+% Polyline
+n 1200 2548 m
+ 1159 2489 l gs col64 s gr 
+%  Object : 0 segments -<0>-  
+% Polyline
+n 1200 2376 m
+ 1159 2317 l gs col64 s gr 
+%  32 Setcolor 
+%  Object : 0 segments -<0>-  
+% Polyline
+n 1200 2204 m
+ 1118 2087 l gs col64 s gr 
+%  Object : 0 segments -<0>-  
+% Polyline
+n 1200 2204 m
+ 1159 2145 l gs col64 s gr 
+%  Object : 0 segments -<0>-  
+% Polyline
+n 1200 2032 m
+ 1159 1973 l gs col64 s gr 
+%  32 Setcolor 
+%  Object : 0 segments -<0>-  
+% Polyline
+n 1200 1860 m
+ 1118 1743 l gs col64 s gr 
+%  Object : 0 segments -<0>-  
+% Polyline
+n 1200 1860 m
+ 1159 1801 l gs col64 s gr 
+%  Object : 0 segments -<0>-  
+% Polyline
+n 1200 1688 m
+ 1159 1629 l gs col64 s gr 
+%  32 Setcolor 
+%  Object : 0 segments -<0>-  
+% Polyline
+n 1200 1516 m
+ 1118 1399 l gs col64 s gr 
+%  Object : 0 segments -<0>-  
+% Polyline
+n 1200 1516 m
+ 1159 1457 l gs col64 s gr 
+%  Object : 0 segments -<0>-  
+% Polyline
+n 1200 1344 m
+ 1159 1285 l gs col64 s gr 
+%  32 Setcolor 
+%  Object : 0 segments -<0>-  
+% Polyline
+n 1200 1172 m
+ 1118 1055 l gs col64 s gr 
+%  32 Setcolor 
+%  Object : 0 segments -<0>-  
+% Polyline
+n 2372 5936 m
+ 2454 6053 l gs col64 s gr 
+%  Object : 0 segments -<0>-  
+% Polyline
+n 2774 5914 m
+ 2815 5972 l gs col64 s gr 
+%  Object : 0 segments -<0>-  
+% Polyline
+n 3176 5893 m
+ 3217 5951 l gs col64 s gr 
+%  32 Setcolor 
+%  Object : 0 segments -<0>-  
+% Polyline
+n 3577 5871 m
+ 3659 5988 l gs col64 s gr 
+%  Object : 0 segments -<0>-  
+% Polyline
+n 3979 5850 m
+ 4020 5908 l gs col64 s gr 
+%  Object : 0 segments -<0>-  
+% Polyline
+n 4381 5828 m
+ 4422 5886 l gs col64 s gr 
+%  32 Setcolor 
+%  Object : 0 segments -<0>-  
+% Polyline
+n 4783 5806 m
+ 4865 5923 l gs col64 s gr 
+%  Object : 0 segments -<0>-  
+% Polyline
+n 5185 5785 m
+ 5226 5843 l gs col64 s gr 
+%  Object : 0 segments -<0>-  
+% Polyline
+n 5587 5763 m
+ 5628 5821 l gs col64 s gr 
+%  32 Setcolor 
+%  Object : 0 segments -<0>-  
+% Polyline
+n 5989 5741 m
+ 6071 5858 l gs col64 s gr 
+%  Object : 0 segments -<0>-  
+% Polyline
+n 6391 5720 m
+ 6432 5778 l gs col64 s gr 
+%  Object : 0 segments -<0>-  
+% Polyline
+n 6792 5698 m
+ 6833 5756 l gs col64 s gr 
+%  32 Setcolor 
+%  Object : 0 segments -<0>-  
+% Polyline
+n 7194 5677 m
+ 7276 5794 l gs col64 s gr 
+%  Object : 0 segments -<0>-  
+% Polyline
+n 7596 5655 m
+ 7637 5713 l gs col64 s gr 
+%  Object : 0 segments -<0>-  
+% Polyline
+n 7998 5633 m
+ 8039 5691 l gs col64 s gr 
+%  32 Setcolor 
+%  Object : 0 segments -<0>-  
+% Polyline
+n 8400 5612 m
+ 8482 5729 l gs col64 s gr 
+%  32 Setcolor 
+%  Object : 0 segments -<0>-  
+% Polyline
+n 2372 5936 m
+ 2229 5943 l gs col64 s gr 
+%  Object : 0 segments -<0>-  
+% Polyline
+n 2372 5936 m
+ 2300 5939 l gs col64 s gr 
+%  Object : 0 segments -<0>-  
+% Polyline
+n 2294 5825 m
+ 2222 5828 l gs col64 s gr 
+%  Object : 0 segments -<0>-  
+% Polyline
+n 2216 5714 m
+ 2144 5717 l gs col64 s gr 
+%  32 Setcolor 
+%  Object : 0 segments -<0>-  
+% Polyline
+n 2137 5602 m
+ 1994 5609 l gs col64 s gr 
+%  Object : 0 segments -<0>-  
+% Polyline
+n 2137 5602 m
+ 2065 5605 l gs col64 s gr 
+%  Object : 0 segments -<0>-  
+% Polyline
+n 2059 5491 m
+ 1987 5494 l gs col64 s gr 
+%  Object : 0 segments -<0>-  
+% Polyline
+n 1981 5380 m
+ 1909 5383 l gs col64 s gr 
+%  32 Setcolor 
+%  Object : 0 segments -<0>-  
+% Polyline
+n 1903 5269 m
+ 1760 5276 l gs col64 s gr 
+%  Object : 0 segments -<0>-  
+% Polyline
+n 1903 5269 m
+ 1831 5272 l gs col64 s gr 
+%  Object : 0 segments -<0>-  
+% Polyline
+n 1825 5158 m
+ 1753 5161 l gs col64 s gr 
+%  Object : 0 segments -<0>-  
+% Polyline
+n 1747 5046 m
+ 1675 5049 l gs col64 s gr 
+%  32 Setcolor 
+%  Object : 0 segments -<0>-  
+% Polyline
+n 1669 4935 m
+ 1526 4942 l gs col64 s gr 
+%  Object : 0 segments -<0>-  
+% Polyline
+n 1669 4935 m
+ 1597 4938 l gs col64 s gr 
+%  Object : 0 segments -<0>-  
+% Polyline
+n 1591 4824 m
+ 1519 4827 l gs col64 s gr 
+%  Object : 0 segments -<0>-  
+% Polyline
+n 1512 4713 m
+ 1440 4716 l gs col64 s gr 
+%  32 Setcolor 
+%  Object : 0 segments -<0>-  
+% Polyline
+n 1434 4602 m
+ 1291 4609 l gs col64 s gr 
+%  Object : 0 segments -<0>-  
+% Polyline
+n 1434 4602 m
+ 1362 4605 l gs col64 s gr 
+%  Object : 0 segments -<0>-  
+% Polyline
+n 1356 4490 m
+ 1284 4493 l gs col64 s gr 
+%  Object : 0 segments -<0>-  
+% Polyline
+n 1278 4379 m
+ 1206 4382 l gs col64 s gr 
+%  32 Setcolor 
+%  Object : 0 segments -<0>-  
+% Polyline
+n 1200 4268 m
+ 1057 4275 l gs col64 s gr 
+%  32 Setcolor 
+%  /Helvetica findfont 160 scalefont setfont 
+%  /Helvetica findfont 160 scalefont setfont 
+%  32 Setcolor 
+%  0 Setcolor 
+%  1 Thickness 
+%  32 Setcolor 
+%  Object : 0 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 6985 3718 m 6927 3654 l 7228 3659 l 7287 3721 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 1 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 7044 3780 m 6985 3718 l 7287 3721 l 7345 3780 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 2 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 7103 3839 m 7044 3780 l 7345 3780 l 7404 3836 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 3 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 7161 3893 m 7103 3839 l 7404 3836 l 7463 3888 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 4 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 7220 3944 m 7161 3893 l 7463 3888 l 7521 3936 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 5 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 7278 3989 m 7220 3944 l 7521 3936 l 7580 3978 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 6 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 7337 4029 m 7278 3989 l 7580 3978 l 7638 4016 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 7 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 7396 4062 m 7337 4029 l 7638 4016 l 7697 4047 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 8 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 7454 4088 m 7396 4062 l 7697 4047 l 7756 4072 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 9 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 7513 4106 m 7454 4088 l 7756 4072 l 7814 4090 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 10 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 7571 4117 m 7513 4106 l 7814 4090 l 7873 4101 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 11 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 7630 4120 m 7571 4117 l 7873 4101 l 7931 4105 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 12 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 7688 4116 m 7630 4120 l 7931 4105 l 7990 4103 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 13 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 7747 4106 m 7688 4116 l 7990 4103 l 8048 4095 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 14 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 7806 4090 m 7747 4106 l 8048 4095 l 8107 4082 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 15 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 7864 4069 m 7806 4090 l 8107 4082 l 8166 4063 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 16 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 7923 4043 m 7864 4069 l 8166 4063 l 8224 4040 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 17 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 7981 4014 m 7923 4043 l 8224 4040 l 8283 4014 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 18 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 8040 3981 m 7981 4014 l 8283 4014 l 8341 3984 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 19 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 8099 3946 m 8040 3981 l 8341 3984 l 8400 3951 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  32 Setcolor 
+%  /absolu true def 
+%  32 Setcolor 
+%  Object : 0 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 6684 3713 m 6625 3646 l 6927 3654 l 6985 3718 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 1 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 6743 3778 m 6684 3713 l 6985 3718 l 7044 3780 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 2 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 6801 3839 m 6743 3778 l 7044 3780 l 7103 3839 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 3 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 6860 3897 m 6801 3839 l 7103 3839 l 7161 3893 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 4 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 6918 3951 m 6860 3897 l 7161 3893 l 7220 3944 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 5 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 6977 3999 m 6918 3951 l 7220 3944 l 7278 3989 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 6 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 7036 4041 m 6977 3999 l 7278 3989 l 7337 4029 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 7 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 7094 4076 m 7036 4041 l 7337 4029 l 7396 4062 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 8 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 7153 4103 m 7094 4076 l 7396 4062 l 7454 4088 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 9 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 7211 4122 m 7153 4103 l 7454 4088 l 7513 4106 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 10 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 7270 4133 m 7211 4122 l 7513 4106 l 7571 4117 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 11 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 7328 4135 m 7270 4133 l 7571 4117 l 7630 4120 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 12 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 7387 4129 m 7328 4135 l 7630 4120 l 7688 4116 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 13 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 7446 4116 m 7387 4129 l 7688 4116 l 7747 4106 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 14 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 7504 4097 m 7446 4116 l 7747 4106 l 7806 4090 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 15 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 7563 4072 m 7504 4097 l 7806 4090 l 7864 4069 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 16 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 7621 4044 m 7563 4072 l 7864 4069 l 7923 4043 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 17 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 7680 4011 m 7621 4044 l 7923 4043 l 7981 4014 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 18 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 7739 3976 m 7680 4011 l 7981 4014 l 8040 3981 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 19 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 7797 3938 m 7739 3976 l 8040 3981 l 8099 3946 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  32 Setcolor 
+%  /absolu true def 
+%  32 Setcolor 
+%  Object : 0 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 6383 3704 m 6324 3634 l 6625 3646 l 6684 3713 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 1 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 6441 3772 m 6383 3704 l 6684 3713 l 6743 3778 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 2 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 6500 3837 m 6441 3772 l 6743 3778 l 6801 3839 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 3 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 6558 3898 m 6500 3837 l 6801 3839 l 6860 3897 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 4 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 6617 3955 m 6558 3898 l 6860 3897 l 6918 3951 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 5 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 6676 4007 m 6617 3955 l 6918 3951 l 6977 3999 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 6 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 6734 4052 m 6676 4007 l 6977 3999 l 7036 4041 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 7 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 6793 4090 m 6734 4052 l 7036 4041 l 7094 4076 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 8 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 6851 4119 m 6793 4090 l 7094 4076 l 7153 4103 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 9 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 6910 4138 m 6851 4119 l 7153 4103 l 7211 4122 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 10 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 6968 4148 m 6910 4138 l 7211 4122 l 7270 4133 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 11 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 7027 4148 m 6968 4148 l 7270 4133 l 7328 4135 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 12 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 7086 4140 m 7027 4148 l 7328 4135 l 7387 4129 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 13 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 7144 4124 m 7086 4140 l 7387 4129 l 7446 4116 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 14 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 7203 4101 m 7144 4124 l 7446 4116 l 7504 4097 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 15 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 7261 4073 m 7203 4101 l 7504 4097 l 7563 4072 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 16 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 7320 4041 m 7261 4073 l 7563 4072 l 7621 4044 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 17 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 7379 4006 m 7320 4041 l 7621 4044 l 7680 4011 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 18 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 7437 3967 m 7379 4006 l 7680 4011 l 7739 3976 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 19 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 7496 3926 m 7437 3967 l 7739 3976 l 7797 3938 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  32 Setcolor 
+%  /absolu true def 
+%  32 Setcolor 
+%  Object : 0 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 6081 3692 m 6023 3619 l 6324 3634 l 6383 3704 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 1 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 6140 3763 m 6081 3692 l 6383 3704 l 6441 3772 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 2 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 6198 3831 m 6140 3763 l 6441 3772 l 6500 3837 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 3 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 6257 3896 m 6198 3831 l 6500 3837 l 6558 3898 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 4 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 6316 3957 m 6257 3896 l 6558 3898 l 6617 3955 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 5 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 6374 4013 m 6316 3957 l 6617 3955 l 6676 4007 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 6 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 6433 4062 m 6374 4013 l 6676 4007 l 6734 4052 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 7 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 6491 4103 m 6433 4062 l 6734 4052 l 6793 4090 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 8 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 6550 4134 m 6491 4103 l 6793 4090 l 6851 4119 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 9 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 6608 4155 m 6550 4134 l 6851 4119 l 6910 4138 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 10 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 6667 4164 m 6608 4155 l 6910 4138 l 6968 4148 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 11 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 6726 4162 m 6667 4164 l 6968 4148 l 7027 4148 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 12 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 6784 4150 m 6726 4162 l 7027 4148 l 7086 4140 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 13 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 6843 4130 m 6784 4150 l 7086 4140 l 7144 4124 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 14 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 6901 4103 m 6843 4130 l 7144 4124 l 7203 4101 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 15 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 6960 4071 m 6901 4103 l 7203 4101 l 7261 4073 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 16 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 7019 4035 m 6960 4071 l 7261 4073 l 7320 4041 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 17 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 7077 3996 m 7019 4035 l 7320 4041 l 7379 4006 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 18 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 7136 3955 m 7077 3996 l 7379 4006 l 7437 3967 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 19 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 7194 3911 m 7136 3955 l 7437 3967 l 7496 3926 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  32 Setcolor 
+%  /absolu true def 
+%  32 Setcolor 
+%  Object : 0 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 5780 3675 m 5721 3600 l 6023 3619 l 6081 3692 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 1 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 5838 3749 m 5780 3675 l 6081 3692 l 6140 3763 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 2 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 5897 3821 m 5838 3749 l 6140 3763 l 6198 3831 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 3 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 5956 3890 m 5897 3821 l 6198 3831 l 6257 3896 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 4 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 6014 3955 m 5956 3890 l 6257 3896 l 6316 3957 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 5 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 6073 4016 m 6014 3955 l 6316 3957 l 6374 4013 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 6 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 6131 4070 m 6073 4016 l 6374 4013 l 6433 4062 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 7 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 6190 4115 m 6131 4070 l 6433 4062 l 6491 4103 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 8 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 6248 4149 m 6190 4115 l 6491 4103 l 6550 4134 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 9 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 6307 4171 m 6248 4149 l 6550 4134 l 6608 4155 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 10 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 6366 4179 m 6307 4171 l 6608 4155 l 6667 4164 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 11 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 6424 4174 m 6366 4179 l 6667 4164 l 6726 4162 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 12 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 6483 4158 m 6424 4174 l 6726 4162 l 6784 4150 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 13 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 6541 4133 m 6483 4158 l 6784 4150 l 6843 4130 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 14 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 6600 4101 m 6541 4133 l 6843 4130 l 6901 4103 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 15 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 6659 4065 m 6600 4101 l 6901 4103 l 6960 4071 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 16 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 6717 4025 m 6659 4065 l 6960 4071 l 7019 4035 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 17 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 6776 3983 m 6717 4025 l 7019 4035 l 7077 3996 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 18 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 6834 3938 m 6776 3983 l 7077 3996 l 7136 3955 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 19 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 6893 3892 m 6834 3938 l 7136 3955 l 7194 3911 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  32 Setcolor 
+%  /absolu true def 
+%  32 Setcolor 
+%  Object : 0 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 5478 3653 m 5420 3575 l 5721 3600 l 5780 3675 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 1 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 5537 3730 m 5478 3653 l 5780 3675 l 5838 3749 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 2 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 5596 3805 m 5537 3730 l 5838 3749 l 5897 3821 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 3 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 5654 3879 m 5596 3805 l 5897 3821 l 5956 3890 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 4 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 5713 3949 m 5654 3879 l 5956 3890 l 6014 3955 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 5 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 5771 4015 m 5713 3949 l 6014 3955 l 6073 4016 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 6 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 5830 4075 m 5771 4015 l 6073 4016 l 6131 4070 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 7 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 5888 4125 m 5830 4075 l 6131 4070 l 6190 4115 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 8 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 5947 4164 m 5888 4125 l 6190 4115 l 6248 4149 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 9 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 6006 4187 m 5947 4164 l 6248 4149 l 6307 4171 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 10 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 6064 4193 m 6006 4187 l 6307 4171 l 6366 4179 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 11 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 6123 4184 m 6064 4193 l 6366 4179 l 6424 4174 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 12 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 6181 4162 m 6123 4184 l 6424 4174 l 6483 4158 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 13 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 6240 4132 m 6181 4162 l 6483 4158 l 6541 4133 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 14 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 6299 4095 m 6240 4132 l 6541 4133 l 6600 4101 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 15 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 6357 4054 m 6299 4095 l 6600 4101 l 6659 4065 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 16 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 6416 4010 m 6357 4054 l 6659 4065 l 6717 4025 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 17 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 6474 3964 m 6416 4010 l 6717 4025 l 6776 3983 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 18 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 6533 3916 m 6474 3964 l 6776 3983 l 6834 3938 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 19 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 6592 3867 m 6533 3916 l 6834 3938 l 6893 3892 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  32 Setcolor 
+%  /absolu true def 
+%  32 Setcolor 
+%  Object : 0 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 5177 3626 m 5118 3545 l 5420 3575 l 5478 3653 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 1 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 5236 3705 m 5177 3626 l 5478 3653 l 5537 3730 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 2 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 5294 3784 m 5236 3705 l 5537 3730 l 5596 3805 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 3 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 5353 3861 m 5294 3784 l 5596 3805 l 5654 3879 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 4 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 5411 3936 m 5353 3861 l 5654 3879 l 5713 3949 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 5 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 5470 4007 m 5411 3936 l 5713 3949 l 5771 4015 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 6 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 5528 4074 m 5470 4007 l 5771 4015 l 5830 4075 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 7 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 5587 4132 m 5528 4074 l 5830 4075 l 5888 4125 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 8 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 5646 4178 m 5587 4132 l 5888 4125 l 5947 4164 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 9 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 5704 4203 m 5646 4178 l 5947 4164 l 6006 4187 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 10 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 5763 4207 m 5704 4203 l 6006 4187 l 6064 4193 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 11 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 5821 4191 m 5763 4207 l 6064 4193 l 6123 4184 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 12 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 5880 4162 m 5821 4191 l 6123 4184 l 6181 4162 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 13 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 5939 4124 m 5880 4162 l 6181 4162 l 6240 4132 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 14 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 5997 4082 m 5939 4124 l 6240 4132 l 6299 4095 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 15 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 6056 4036 m 5997 4082 l 6299 4095 l 6357 4054 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 16 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 6114 3988 m 6056 4036 l 6357 4054 l 6416 4010 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 17 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 6173 3939 m 6114 3988 l 6416 4010 l 6474 3964 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 18 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 6232 3888 m 6173 3939 l 6474 3964 l 6533 3916 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 19 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 6290 3837 m 6232 3888 l 6533 3916 l 6592 3867 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  32 Setcolor 
+%  /absolu true def 
+%  32 Setcolor 
+%  Object : 0 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 4876 3591 m 4817 3510 l 5118 3545 l 5177 3626 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 1 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 4934 3673 m 4876 3591 l 5177 3626 l 5236 3705 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 2 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 4993 3754 m 4934 3673 l 5236 3705 l 5294 3784 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 3 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 5051 3834 m 4993 3754 l 5294 3784 l 5353 3861 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 4 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 5110 3914 m 5051 3834 l 5353 3861 l 5411 3936 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 5 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 5168 3991 m 5110 3914 l 5411 3936 l 5470 4007 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 6 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 5227 4065 m 5168 3991 l 5470 4007 l 5528 4074 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 7 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 5286 4133 m 5227 4065 l 5528 4074 l 5587 4132 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 8 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 5344 4189 m 5286 4133 l 5587 4132 l 5646 4178 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 9 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 5403 4220 m 5344 4189 l 5646 4178 l 5704 4203 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 10 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 5461 4218 m 5403 4220 l 5704 4203 l 5763 4207 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 11 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 5520 4192 m 5461 4218 l 5763 4207 l 5821 4191 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 12 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 5579 4153 m 5520 4192 l 5821 4191 l 5880 4162 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 13 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 5637 4108 m 5579 4153 l 5880 4162 l 5939 4124 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 14 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 5696 4060 m 5637 4108 l 5939 4124 l 5997 4082 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 15 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 5754 4010 m 5696 4060 l 5997 4082 l 6056 4036 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 16 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 5813 3958 m 5754 4010 l 6056 4036 l 6114 3988 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 17 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 5872 3907 m 5813 3958 l 6114 3988 l 6173 3939 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 18 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 5930 3854 m 5872 3907 l 6173 3939 l 6232 3888 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 19 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 5989 3802 m 5930 3854 l 6232 3888 l 6290 3837 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  32 Setcolor 
+%  /absolu true def 
+%  32 Setcolor 
+%  Object : 0 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 4574 3550 m 4516 3467 l 4817 3510 l 4876 3591 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 1 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 4633 3633 m 4574 3550 l 4876 3591 l 4934 3673 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 2 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 4691 3716 m 4633 3633 l 4934 3673 l 4993 3754 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 3 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 4750 3798 m 4691 3716 l 4993 3754 l 5051 3834 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 4 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 4808 3881 m 4750 3798 l 5051 3834 l 5110 3914 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 5 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 4867 3962 m 4808 3881 l 5110 3914 l 5168 3991 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 6 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 4926 4043 m 4867 3962 l 5168 3991 l 5227 4065 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 7 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 4984 4122 m 4926 4043 l 5227 4065 l 5286 4133 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 8 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 5043 4193 m 4984 4122 l 5286 4133 l 5344 4189 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 9 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 5101 4236 m 5043 4193 l 5344 4189 l 5403 4220 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 10 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 5160 4222 m 5101 4236 l 5403 4220 l 5461 4218 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 11 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 5219 4180 m 5160 4222 l 5461 4218 l 5520 4192 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 12 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 5277 4131 m 5219 4180 l 5520 4192 l 5579 4153 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 13 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 5336 4079 m 5277 4131 l 5579 4153 l 5637 4108 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 14 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 5394 4027 m 5336 4079 l 5637 4108 l 5696 4060 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 15 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 5453 3974 m 5394 4027 l 5696 4060 l 5754 4010 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 16 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 5512 3920 m 5453 3974 l 5754 4010 l 5813 3958 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 17 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 5570 3867 m 5512 3920 l 5813 3958 l 5872 3907 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 18 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 5629 3813 m 5570 3867 l 5872 3907 l 5930 3854 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 19 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 5687 3759 m 5629 3813 l 5930 3854 l 5989 3802 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  32 Setcolor 
+%  /absolu true def 
+%  32 Setcolor 
+%  Object : 0 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 4273 3501 m 4214 3418 l 4516 3467 l 4574 3550 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 1 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 4331 3585 m 4273 3501 l 4574 3550 l 4633 3633 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 2 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 4390 3668 m 4331 3585 l 4633 3633 l 4691 3716 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 3 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 4448 3752 m 4390 3668 l 4691 3716 l 4750 3798 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 4 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 4507 3835 m 4448 3752 l 4750 3798 l 4808 3881 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 5 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 4566 3918 m 4507 3835 l 4808 3881 l 4867 3962 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 6 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 4624 4002 m 4566 3918 l 4867 3962 l 4926 4043 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 7 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 4683 4085 m 4624 4002 l 4926 4043 l 4984 4122 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 8 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 4741 4169 m 4683 4085 l 4984 4122 l 5043 4193 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 9 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 4800 4252 m 4741 4169 l 5043 4193 l 5101 4236 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 10 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 4859 4198 m 4800 4252 l 5101 4236 l 5160 4222 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 11 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 4917 4144 m 4859 4198 l 5160 4222 l 5219 4180 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 12 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 4976 4089 m 4917 4144 l 5219 4180 l 5277 4131 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 13 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 5034 4035 m 4976 4089 l 5277 4131 l 5336 4079 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 14 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 5093 3981 m 5034 4035 l 5336 4079 l 5394 4027 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 15 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 5152 3927 m 5093 3981 l 5394 4027 l 5453 3974 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 16 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 5210 3873 m 5152 3927 l 5453 3974 l 5512 3920 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 17 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 5269 3818 m 5210 3873 l 5512 3920 l 5570 3867 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 18 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 5327 3764 m 5269 3818 l 5570 3867 l 5629 3813 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 19 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 5386 3710 m 5327 3764 l 5629 3813 l 5687 3759 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  32 Setcolor 
+%  /absolu true def 
+%  32 Setcolor 
+%  Object : 0 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 3971 3445 m 3913 3362 l 4214 3418 l 4273 3501 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 1 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 4030 3528 m 3971 3445 l 4273 3501 l 4331 3585 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 2 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 4088 3611 m 4030 3528 l 4331 3585 l 4390 3668 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 3 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 4147 3693 m 4088 3611 l 4390 3668 l 4448 3752 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 4 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 4206 3776 m 4147 3693 l 4448 3752 l 4507 3835 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 5 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 4264 3857 m 4206 3776 l 4507 3835 l 4566 3918 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 6 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 4323 3938 m 4264 3857 l 4566 3918 l 4624 4002 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 7 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 4381 4016 m 4323 3938 l 4624 4002 l 4683 4085 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 8 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 4440 4087 m 4381 4016 l 4683 4085 l 4741 4169 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 9 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 4499 4131 m 4440 4087 l 4741 4169 l 4800 4252 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 10 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 4557 4117 m 4499 4131 l 4800 4252 l 4859 4198 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 11 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 4616 4075 m 4557 4117 l 4859 4198 l 4917 4144 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 12 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 4674 4026 m 4616 4075 l 4917 4144 l 4976 4089 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 13 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 4733 3974 m 4674 4026 l 4976 4089 l 5034 4035 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 14 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 4792 3922 m 4733 3974 l 5034 4035 l 5093 3981 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 15 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 4850 3868 m 4792 3922 l 5093 3981 l 5152 3927 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 16 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 4909 3815 m 4850 3868 l 5152 3927 l 5210 3873 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 17 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 4967 3762 m 4909 3815 l 5210 3873 l 5269 3818 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 18 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 5026 3708 m 4967 3762 l 5269 3818 l 5327 3764 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 19 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 5084 3654 m 5026 3708 l 5327 3764 l 5386 3710 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  32 Setcolor 
+%  /absolu true def 
+%  32 Setcolor 
+%  Object : 0 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 3670 3381 m 3611 3299 l 3913 3362 l 3971 3445 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 1 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 3728 3463 m 3670 3381 l 3971 3445 l 4030 3528 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 2 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 3787 3544 m 3728 3463 l 4030 3528 l 4088 3611 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 3 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 3846 3624 m 3787 3544 l 4088 3611 l 4147 3693 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 4 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 3904 3703 m 3846 3624 l 4147 3693 l 4206 3776 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 5 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 3963 3781 m 3904 3703 l 4206 3776 l 4264 3857 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 6 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 4021 3855 m 3963 3781 l 4264 3857 l 4323 3938 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 7 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 4080 3923 m 4021 3855 l 4323 3938 l 4381 4016 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 8 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 4139 3978 m 4080 3923 l 4381 4016 l 4440 4087 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 9 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 4197 4009 m 4139 3978 l 4440 4087 l 4499 4131 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 10 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 4256 4008 m 4197 4009 l 4499 4131 l 4557 4117 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 11 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 4314 3981 m 4256 4008 l 4557 4117 l 4616 4075 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 12 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 4373 3943 m 4314 3981 l 4616 4075 l 4674 4026 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 13 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 4432 3898 m 4373 3943 l 4674 4026 l 4733 3974 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 14 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 4490 3849 m 4432 3898 l 4733 3974 l 4792 3922 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 15 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 4549 3799 m 4490 3849 l 4792 3922 l 4850 3868 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 16 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 4607 3748 m 4549 3799 l 4850 3868 l 4909 3815 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 17 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 4666 3696 m 4607 3748 l 4909 3815 l 4967 3762 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 18 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 4724 3644 m 4666 3696 l 4967 3762 l 5026 3708 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 19 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 4783 3591 m 4724 3644 l 5026 3708 l 5084 3654 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  32 Setcolor 
+%  /absolu true def 
+%  32 Setcolor 
+%  Object : 0 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 3368 3310 m 3310 3230 l 3611 3299 l 3670 3381 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 1 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 3427 3390 m 3368 3310 l 3670 3381 l 3728 3463 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 2 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 3486 3468 m 3427 3390 l 3728 3463 l 3787 3544 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 3 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 3544 3545 m 3486 3468 l 3787 3544 l 3846 3624 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 4 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 3603 3620 m 3544 3545 l 3846 3624 l 3904 3703 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 5 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 3661 3692 m 3603 3620 l 3904 3703 l 3963 3781 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 6 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 3720 3759 m 3661 3692 l 3963 3781 l 4021 3855 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 7 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 3779 3817 m 3720 3759 l 4021 3855 l 4080 3923 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 8 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 3837 3862 m 3779 3817 l 4080 3923 l 4139 3978 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 9 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 3896 3888 m 3837 3862 l 4139 3978 l 4197 4009 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 10 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 3954 3891 m 3896 3888 l 4197 4009 l 4256 4008 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 11 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 4013 3875 m 3954 3891 l 4256 4008 l 4314 3981 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 12 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 4072 3846 m 4013 3875 l 4314 3981 l 4373 3943 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 13 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 4130 3809 m 4072 3846 l 4373 3943 l 4432 3898 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 14 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 4189 3766 m 4130 3809 l 4432 3898 l 4490 3849 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 15 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 4247 3720 m 4189 3766 l 4490 3849 l 4549 3799 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 16 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 4306 3672 m 4247 3720 l 4549 3799 l 4607 3748 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 17 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 4364 3623 m 4306 3672 l 4607 3748 l 4666 3696 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 18 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 4423 3573 m 4364 3623 l 4666 3696 l 4724 3644 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 19 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 4482 3522 m 4423 3573 l 4724 3644 l 4783 3591 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  32 Setcolor 
+%  /absolu true def 
+%  32 Setcolor 
+%  Object : 0 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 3067 3233 m 3008 3155 l 3310 3230 l 3368 3310 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 1 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 3126 3309 m 3067 3233 l 3368 3310 l 3427 3390 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 2 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 3184 3385 m 3126 3309 l 3427 3390 l 3486 3468 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 3 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 3243 3458 m 3184 3385 l 3486 3468 l 3544 3545 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 4 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 3301 3528 m 3243 3458 l 3544 3545 l 3603 3620 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 5 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 3360 3594 m 3301 3528 l 3603 3620 l 3661 3692 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 6 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 3419 3654 m 3360 3594 l 3661 3692 l 3720 3759 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 7 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 3477 3705 m 3419 3654 l 3720 3759 l 3779 3817 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 8 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 3536 3743 m 3477 3705 l 3779 3817 l 3837 3862 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 9 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 3594 3766 m 3536 3743 l 3837 3862 l 3896 3888 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 10 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 3653 3773 m 3594 3766 l 3896 3888 l 3954 3891 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 11 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 3712 3763 m 3653 3773 l 3954 3891 l 4013 3875 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 12 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 3770 3741 m 3712 3763 l 4013 3875 l 4072 3846 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 13 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 3829 3711 m 3770 3741 l 4072 3846 l 4130 3809 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 14 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 3887 3674 m 3829 3711 l 4130 3809 l 4189 3766 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 15 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 3946 3633 m 3887 3674 l 4189 3766 l 4247 3720 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 16 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 4004 3589 m 3946 3633 l 4247 3720 l 4306 3672 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 17 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 4063 3543 m 4004 3589 l 4306 3672 l 4364 3623 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 18 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 4122 3495 m 4063 3543 l 4364 3623 l 4423 3573 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 19 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 4180 3447 m 4122 3495 l 4423 3573 l 4482 3522 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  32 Setcolor 
+%  /absolu true def 
+%  32 Setcolor 
+%  Object : 0 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 2766 3149 m 2707 3074 l 3008 3155 l 3067 3233 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 1 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 2824 3223 m 2766 3149 l 3067 3233 l 3126 3309 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 2 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 2883 3295 m 2824 3223 l 3126 3309 l 3184 3385 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 3 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 2941 3364 m 2883 3295 l 3184 3385 l 3243 3458 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 4 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 3000 3430 m 2941 3364 l 3243 3458 l 3301 3528 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 5 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 3059 3490 m 3000 3430 l 3301 3528 l 3360 3594 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 6 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 3117 3544 m 3059 3490 l 3360 3594 l 3419 3654 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 7 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 3176 3589 m 3117 3544 l 3419 3654 l 3477 3705 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 8 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 3234 3624 m 3176 3589 l 3477 3705 l 3536 3743 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 9 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 3293 3645 m 3234 3624 l 3536 3743 l 3594 3766 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 10 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 3352 3653 m 3293 3645 l 3594 3766 l 3653 3773 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 11 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 3410 3648 m 3352 3653 l 3653 3773 l 3712 3763 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 12 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 3469 3632 m 3410 3648 l 3712 3763 l 3770 3741 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 13 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 3527 3607 m 3469 3632 l 3770 3741 l 3829 3711 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 14 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 3586 3576 m 3527 3607 l 3829 3711 l 3887 3674 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 15 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 3644 3539 m 3586 3576 l 3887 3674 l 3946 3633 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 16 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 3703 3499 m 3644 3539 l 3946 3633 l 4004 3589 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 17 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 3762 3457 m 3703 3499 l 4004 3589 l 4063 3543 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 18 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 3820 3412 m 3762 3457 l 4063 3543 l 4122 3495 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 19 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 3879 3366 m 3820 3412 l 4122 3495 l 4180 3447 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  32 Setcolor 
+%  /absolu true def 
+%  32 Setcolor 
+%  Object : 0 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 2464 3061 m 2406 2988 l 2707 3074 l 2766 3149 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 1 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 2523 3132 m 2464 3061 l 2766 3149 l 2824 3223 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 2 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 2581 3200 m 2523 3132 l 2824 3223 l 2883 3295 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 3 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 2640 3265 m 2581 3200 l 2883 3295 l 2941 3364 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 4 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 2699 3326 m 2640 3265 l 2941 3364 l 3000 3430 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 5 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 2757 3382 m 2699 3326 l 3000 3430 l 3059 3490 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 6 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 2816 3431 m 2757 3382 l 3059 3490 l 3117 3544 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 7 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 2874 3472 m 2816 3431 l 3117 3544 l 3176 3589 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 8 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 2933 3503 m 2874 3472 l 3176 3589 l 3234 3624 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 9 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 2992 3524 m 2933 3503 l 3234 3624 l 3293 3645 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 10 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 3050 3533 m 2992 3524 l 3293 3645 l 3352 3653 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 11 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 3109 3531 m 3050 3533 l 3352 3653 l 3410 3648 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 12 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 3167 3519 m 3109 3531 l 3410 3648 l 3469 3632 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 13 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 3226 3499 m 3167 3519 l 3469 3632 l 3527 3607 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 14 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 3284 3472 m 3226 3499 l 3527 3607 l 3586 3576 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 15 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 3343 3440 m 3284 3472 l 3586 3576 l 3644 3539 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 16 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 3402 3404 m 3343 3440 l 3644 3539 l 3703 3499 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 17 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 3460 3365 m 3402 3404 l 3703 3499 l 3762 3457 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 18 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 3519 3324 m 3460 3365 l 3762 3457 l 3820 3412 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 19 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 3577 3280 m 3519 3324 l 3820 3412 l 3879 3366 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  32 Setcolor 
+%  /absolu true def 
+%  32 Setcolor 
+%  Object : 0 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 2163 2968 m 2104 2898 l 2406 2988 l 2464 3061 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 1 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 2221 3036 m 2163 2968 l 2464 3061 l 2523 3132 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 2 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 2280 3101 m 2221 3036 l 2523 3132 l 2581 3200 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 3 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 2339 3162 m 2280 3101 l 2581 3200 l 2640 3265 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 4 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 2397 3219 m 2339 3162 l 2640 3265 l 2699 3326 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 5 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 2456 3271 m 2397 3219 l 2699 3326 l 2757 3382 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 6 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 2514 3316 m 2456 3271 l 2757 3382 l 2816 3431 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 7 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 2573 3354 m 2514 3316 l 2816 3431 l 2874 3472 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 8 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 2632 3383 m 2573 3354 l 2874 3472 l 2933 3503 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 9 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 2690 3402 m 2632 3383 l 2933 3503 l 2992 3524 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 10 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 2749 3412 m 2690 3402 l 2992 3524 l 3050 3533 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 11 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 2807 3412 m 2749 3412 l 3050 3533 l 3109 3531 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 12 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 2866 3404 m 2807 3412 l 3109 3531 l 3167 3519 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 13 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 2924 3388 m 2866 3404 l 3167 3519 l 3226 3499 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 14 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 2983 3365 m 2924 3388 l 3226 3499 l 3284 3472 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 15 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 3042 3337 m 2983 3365 l 3284 3472 l 3343 3440 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 16 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 3100 3305 m 3042 3337 l 3343 3440 l 3402 3404 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 17 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 3159 3269 m 3100 3305 l 3402 3404 l 3460 3365 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 18 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 3217 3231 m 3159 3269 l 3460 3365 l 3519 3324 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 19 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 3276 3190 m 3217 3231 l 3519 3324 l 3577 3280 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  32 Setcolor 
+%  /absolu true def 
+%  32 Setcolor 
+%  Object : 0 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 1861 2871 m 1803 2804 l 2104 2898 l 2163 2968 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 1 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 1920 2936 m 1861 2871 l 2163 2968 l 2221 3036 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 2 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 1979 2998 m 1920 2936 l 2221 3036 l 2280 3101 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 3 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 2037 3056 m 1979 2998 l 2280 3101 l 2339 3162 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 4 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 2096 3109 m 2037 3056 l 2339 3162 l 2397 3219 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 5 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 2154 3158 m 2096 3109 l 2397 3219 l 2456 3271 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 6 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 2213 3200 m 2154 3158 l 2456 3271 l 2514 3316 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 7 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 2272 3235 m 2213 3200 l 2514 3316 l 2573 3354 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 8 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 2330 3262 m 2272 3235 l 2573 3354 l 2632 3383 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 9 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 2389 3281 m 2330 3262 l 2632 3383 l 2690 3402 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 10 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 2447 3291 m 2389 3281 l 2690 3402 l 2749 3412 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 11 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 2506 3293 m 2447 3291 l 2749 3412 l 2807 3412 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 12 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 2564 3287 m 2506 3293 l 2807 3412 l 2866 3404 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 13 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 2623 3274 m 2564 3287 l 2866 3404 l 2924 3388 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 14 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 2682 3255 m 2623 3274 l 2924 3388 l 2983 3365 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 15 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 2740 3231 m 2682 3255 l 2983 3365 l 3042 3337 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 16 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 2799 3202 m 2740 3231 l 3042 3337 l 3100 3305 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 17 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 2857 3170 m 2799 3202 l 3100 3305 l 3159 3269 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 18 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 2916 3134 m 2857 3170 l 3159 3269 l 3217 3231 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 19 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 2975 3096 m 2916 3134 l 3217 3231 l 3276 3190 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  32 Setcolor 
+%  /absolu true def 
+%  32 Setcolor 
+%  Object : 0 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 1560 2772 m 1501 2707 l 1803 2804 l 1861 2871 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 1 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 1619 2833 m 1560 2772 l 1861 2871 l 1920 2936 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 2 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 1677 2892 m 1619 2833 l 1920 2936 l 1979 2998 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 3 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 1736 2947 m 1677 2892 l 1979 2998 l 2037 3056 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 4 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 1794 2997 m 1736 2947 l 2037 3056 l 2096 3109 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 5 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 1853 3043 m 1794 2997 l 2096 3109 l 2154 3158 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 6 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 1912 3082 m 1853 3043 l 2154 3158 l 2213 3200 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 7 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 1970 3115 m 1912 3082 l 2213 3200 l 2272 3235 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 8 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 2029 3141 m 1970 3115 l 2272 3235 l 2330 3262 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 9 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 2087 3160 m 2029 3141 l 2330 3262 l 2389 3281 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 10 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 2146 3170 m 2087 3160 l 2389 3281 l 2447 3291 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 11 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 2204 3174 m 2146 3170 l 2447 3291 l 2506 3293 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 12 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 2263 3170 m 2204 3174 l 2506 3293 l 2564 3287 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 13 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 2322 3160 m 2263 3170 l 2564 3287 l 2623 3274 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 14 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 2380 3143 m 2322 3160 l 2623 3274 l 2682 3255 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 15 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 2439 3122 m 2380 3143 l 2682 3255 l 2740 3231 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 16 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 2497 3096 m 2439 3122 l 2740 3231 l 2799 3202 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 17 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 2556 3067 m 2497 3096 l 2799 3202 l 2857 3170 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 18 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 2615 3034 m 2556 3067 l 2857 3170 l 2916 3134 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 19 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 2673 2999 m 2615 3034 l 2916 3134 l 2975 3096 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  32 Setcolor 
+%  /absolu true def 
+%  32 Setcolor 
+%  Object : 0 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 1259 2669 m 1200 2607 l 1501 2707 l 1560 2772 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 1 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 1317 2728 m 1259 2669 l 1560 2772 l 1619 2833 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 2 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 1376 2784 m 1317 2728 l 1619 2833 l 1677 2892 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 3 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 1434 2836 m 1376 2784 l 1677 2892 l 1736 2947 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 4 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 1493 2884 m 1434 2836 l 1736 2947 l 1794 2997 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 5 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 1552 2927 m 1493 2884 l 1794 2997 l 1853 3043 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 6 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 1610 2964 m 1552 2927 l 1853 3043 l 1912 3082 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 7 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 1669 2995 m 1610 2964 l 1912 3082 l 1970 3115 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 8 drawpoly -<pat:2,areafill=20,white=31>-  
+% Polyline
+n 1727 3020 m 1669 2995 l 1970 3115 l 2029 3141 l
+ cp gs col33 1.00 shd ef gr gs col64 s gr 
+%  Object : 9 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 1786 3038 m 1727 3020 l 2029 3141 l 2087 3160 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 10 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 1844 3049 m 1786 3038 l 2087 3160 l 2146 3170 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 11 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 1903 3054 m 1844 3049 l 2146 3170 l 2204 3174 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 12 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 1962 3052 m 1903 3054 l 2204 3174 l 2263 3170 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 13 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 2020 3044 m 1962 3052 l 2263 3170 l 2322 3160 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 14 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 2079 3030 m 2020 3044 l 2322 3160 l 2380 3143 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 15 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 2137 3011 m 2079 3030 l 2380 3143 l 2439 3122 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 16 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 2196 2989 m 2137 3011 l 2439 3122 l 2497 3096 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 17 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 2255 2962 m 2196 2989 l 2497 3096 l 2556 3067 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 18 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 2313 2932 m 2255 2962 l 2556 3067 l 2615 3034 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  Object : 19 drawpoly -<pat:4,areafill=20,white=31>-  
+% Polyline
+n 2372 2899 m 2313 2932 l 2615 3034 l 2673 2999 l
+ cp gs col35 1.00 shd ef gr gs col64 s gr 
+%  32 Setcolor 
+%  /absolu true def 
+%  32 Setcolor 
+%  1 Thickness 
+%  Object : 0 segments -<0>-  
+% Polyline
+n 2372 2840 m
+ 8400 2516 l gs col64 s gr 
+%  Object : 1 segments -<0>-  
+% Polyline
+n 2372 2840 m
+ 1200 1172 l gs col64 s gr 
+%  Object : 2 segments -<0>-  
+% Polyline
+n 2372 2840 m
+ 2372 5936 l gs col64 s gr 
+%  32 Setcolor 
+%  /absolu true def 
+%  32 Setcolor 
+%  /Helvetica findfont 160 scalefont setfont 
+%  /Helvetica findfont 160 scalefont setfont 
+%  32 Setcolor 
+%  /Helvetica findfont 160 scalefont setfont 
+%  0 Setcolor 
+%  /Helvetica findfont 160 scalefont setfont 
+%  /Helvetica findfont 160 scalefont setfont 
+%  /Helvetica findfont 160 scalefont setfont 
+%  0 Setcolor 
+%  /Helvetica findfont 160 scalefont setfont 
+%  /Helvetica findfont 160 scalefont setfont 
+%  /Helvetica findfont 160 scalefont setfont 
+%  0 Setcolor 
+%  /Helvetica findfont 160 scalefont setfont 
+%  /Helvetica findfont 160 scalefont setfont 
+%  /Helvetica findfont 160 scalefont setfont 
+%  0 Setcolor 
+%  /Helvetica findfont 160 scalefont setfont 
+%  /Helvetica findfont 160 scalefont setfont 
+%  /Helvetica findfont 160 scalefont setfont 
+%  0 Setcolor 
+%  /Helvetica findfont 160 scalefont setfont 
+%  /Helvetica findfont 160 scalefont setfont 
+%  /Helvetica findfont 160 scalefont setfont 
+%  0 Setcolor 
+%  /Helvetica findfont 160 scalefont setfont 
+%  /Helvetica findfont 160 scalefont setfont 
+%  /Helvetica findfont 160 scalefont setfont 
+%  0 Setcolor 
+%  /Helvetica findfont 160 scalefont setfont 
+%  /Helvetica findfont 160 scalefont setfont 
+%  /Helvetica findfont 160 scalefont setfont 
+%  0 Setcolor 
+%  /Helvetica findfont 160 scalefont setfont 
+%  /Helvetica findfont 160 scalefont setfont 
+%  /Helvetica findfont 160 scalefont setfont 
+%  0 Setcolor 
+%  /Helvetica findfont 160 scalefont setfont 
+%  /Helvetica findfont 160 scalefont setfont 
+%  /Helvetica findfont 160 scalefont setfont 
+%  0 Setcolor 
+%  /Helvetica findfont 160 scalefont setfont 
+%  /Helvetica findfont 160 scalefont setfont 
+%  32 Setcolor 
+%  /Helvetica findfont 160 scalefont setfont 
+/Helvetica-iso ff 150.00 scf sf
+577 4130 m
+gs 1 -1 sc (-0.10) col64 sh gr
+%  /Helvetica findfont 160 scalefont setfont 
+%  32 Setcolor 
+%  /Helvetica findfont 160 scalefont setfont 
+/Helvetica-iso ff 150.00 scf sf
+577 3786 m
+gs 1 -1 sc (-0.05) col64 sh gr
+%  /Helvetica findfont 160 scalefont setfont 
+%  32 Setcolor 
+%  /Helvetica findfont 160 scalefont setfont 
+/Helvetica-iso ff 150.00 scf sf
+669 3442 m
+gs 1 -1 sc (0.00) col64 sh gr
+%  /Helvetica findfont 160 scalefont setfont 
+%  32 Setcolor 
+%  /Helvetica findfont 160 scalefont setfont 
+/Helvetica-iso ff 150.00 scf sf
+669 3098 m
+gs 1 -1 sc (0.05) col64 sh gr
+%  /Helvetica findfont 160 scalefont setfont 
+%  32 Setcolor 
+%  /Helvetica findfont 160 scalefont setfont 
+/Helvetica-iso ff 150.00 scf sf
+669 2754 m
+gs 1 -1 sc (0.10) col64 sh gr
+%  /Helvetica findfont 160 scalefont setfont 
+%  32 Setcolor 
+%  /Helvetica findfont 160 scalefont setfont 
+/Helvetica-iso ff 150.00 scf sf
+669 2410 m
+gs 1 -1 sc (0.15) col64 sh gr
+%  /Helvetica findfont 160 scalefont setfont 
+%  32 Setcolor 
+%  /Helvetica findfont 160 scalefont setfont 
+/Helvetica-iso ff 150.00 scf sf
+669 2066 m
+gs 1 -1 sc (0.20) col64 sh gr
+%  /Helvetica findfont 160 scalefont setfont 
+%  32 Setcolor 
+%  /Helvetica findfont 160 scalefont setfont 
+/Helvetica-iso ff 150.00 scf sf
+669 1722 m
+gs 1 -1 sc (0.25) col64 sh gr
+%  /Helvetica findfont 160 scalefont setfont 
+%  32 Setcolor 
+%  /Helvetica findfont 160 scalefont setfont 
+/Helvetica-iso ff 150.00 scf sf
+669 1378 m
+gs 1 -1 sc (0.30) col64 sh gr
+%  /Helvetica findfont 160 scalefont setfont 
+%  32 Setcolor 
+%  /Helvetica findfont 160 scalefont setfont 
+/Helvetica-iso ff 150.00 scf sf
+669 1034 m
+gs 1 -1 sc (0.35) col64 sh gr
+%  /Helvetica findfont 160 scalefont setfont 
+%  32 Setcolor 
+/Helvetica-iso ff 150.00 scf sf
+480 2746 m
+gs 1 -1 sc  90.1 rot (Z) col64 sh gr
+%  32 Setcolor 
+%  /Helvetica findfont 160 scalefont setfont 
+%  /Helvetica findfont 160 scalefont setfont 
+%  0 Setcolor 
+%  /Helvetica findfont 160 scalefont setfont 
+%  /Helvetica findfont 160 scalefont setfont 
+%  /Helvetica findfont 160 scalefont setfont 
+%  /Helvetica findfont 160 scalefont setfont 
+%  /Helvetica findfont 160 scalefont setfont 
+%  0 Setcolor 
+%  /Helvetica findfont 160 scalefont setfont 
+%  /Helvetica findfont 160 scalefont setfont 
+%  /Helvetica findfont 160 scalefont setfont 
+%  /Helvetica findfont 160 scalefont setfont 
+%  /Helvetica findfont 160 scalefont setfont 
+%  0 Setcolor 
+%  /Helvetica findfont 160 scalefont setfont 
+%  /Helvetica findfont 160 scalefont setfont 
+%  /Helvetica findfont 160 scalefont setfont 
+%  /Helvetica findfont 160 scalefont setfont 
+%  /Helvetica findfont 160 scalefont setfont 
+%  0 Setcolor 
+%  /Helvetica findfont 160 scalefont setfont 
+%  /Helvetica findfont 160 scalefont setfont 
+%  /Helvetica findfont 160 scalefont setfont 
+%  0 Setcolor 
+%  /Helvetica findfont 160 scalefont setfont 
+%  /Helvetica findfont 160 scalefont setfont 
+%  /Helvetica findfont 160 scalefont setfont 
+%  0 Setcolor 
+%  /Helvetica findfont 160 scalefont setfont 
+%  /Helvetica findfont 160 scalefont setfont 
+%  /Helvetica findfont 160 scalefont setfont 
+%  0 Setcolor 
+%  /Helvetica findfont 160 scalefont setfont 
+%  /Helvetica findfont 160 scalefont setfont 
+%  /Helvetica findfont 160 scalefont setfont 
+%  0 Setcolor 
+%  /Helvetica findfont 160 scalefont setfont 
+%  /Helvetica findfont 160 scalefont setfont 
+%  32 Setcolor 
+%  /Helvetica findfont 160 scalefont setfont 
+/Helvetica-iso ff 150.00 scf sf
+2536 6362 m
+gs 1 -1 sc (-0.10) col64 sh gr
+%  /Helvetica findfont 160 scalefont setfont 
+%  32 Setcolor 
+%  /Helvetica findfont 160 scalefont setfont 
+/Helvetica-iso ff 150.00 scf sf
+3741 6297 m
+gs 1 -1 sc (-0.06) col64 sh gr
+%  /Helvetica findfont 160 scalefont setfont 
+%  32 Setcolor 
+%  /Helvetica findfont 160 scalefont setfont 
+/Helvetica-iso ff 150.00 scf sf
+4947 6232 m
+gs 1 -1 sc (-0.02) col64 sh gr
+%  /Helvetica findfont 160 scalefont setfont 
+%  32 Setcolor 
+%  /Helvetica findfont 160 scalefont setfont 
+/Helvetica-iso ff 150.00 scf sf
+6153 6167 m
+gs 1 -1 sc (0.02) col64 sh gr
+%  /Helvetica findfont 160 scalefont setfont 
+%  32 Setcolor 
+%  /Helvetica findfont 160 scalefont setfont 
+/Helvetica-iso ff 150.00 scf sf
+7358 6103 m
+gs 1 -1 sc (0.06) col64 sh gr
+%  /Helvetica findfont 160 scalefont setfont 
+%  32 Setcolor 
+%  /Helvetica findfont 160 scalefont setfont 
+/Helvetica-iso ff 150.00 scf sf
+8564 6038 m
+gs 1 -1 sc (0.10) col64 sh gr
+%  /Helvetica findfont 160 scalefont setfont 
+%  32 Setcolor 
+/Helvetica-iso ff 150.00 scf sf
+6225 6385 m
+gs 1 -1 sc (X) col64 sh gr
+%  32 Setcolor 
+%  /Helvetica findfont 160 scalefont setfont 
+%  /Helvetica findfont 160 scalefont setfont 
+%  0 Setcolor 
+%  /Helvetica findfont 160 scalefont setfont 
+%  /Helvetica findfont 160 scalefont setfont 
+%  /Helvetica findfont 160 scalefont setfont 
+%  /Helvetica findfont 160 scalefont setfont 
+%  /Helvetica findfont 160 scalefont setfont 
+%  0 Setcolor 
+%  /Helvetica findfont 160 scalefont setfont 
+%  /Helvetica findfont 160 scalefont setfont 
+%  /Helvetica findfont 160 scalefont setfont 
+%  /Helvetica findfont 160 scalefont setfont 
+%  /Helvetica findfont 160 scalefont setfont 
+%  0 Setcolor 
+%  /Helvetica findfont 160 scalefont setfont 
+%  /Helvetica findfont 160 scalefont setfont 
+%  /Helvetica findfont 160 scalefont setfont 
+%  /Helvetica findfont 160 scalefont setfont 
+%  /Helvetica findfont 160 scalefont setfont 
+%  0 Setcolor 
+%  /Helvetica findfont 160 scalefont setfont 
+%  /Helvetica findfont 160 scalefont setfont 
+%  /Helvetica findfont 160 scalefont setfont 
+%  /Helvetica findfont 160 scalefont setfont 
+%  /Helvetica findfont 160 scalefont setfont 
+%  0 Setcolor 
+%  /Helvetica findfont 160 scalefont setfont 
+%  /Helvetica findfont 160 scalefont setfont 
+%  /Helvetica findfont 160 scalefont setfont 
+%  /Helvetica findfont 160 scalefont setfont 
+%  /Helvetica findfont 160 scalefont setfont 
+%  0 Setcolor 
+%  /Helvetica findfont 160 scalefont setfont 
+%  /Helvetica findfont 160 scalefont setfont 
+%  32 Setcolor 
+%  /Helvetica findfont 160 scalefont setfont 
+/Helvetica-iso ff 150.00 scf sf
+1627 6142 m
+gs 1 -1 sc (-0.10) col64 sh gr
+%  /Helvetica findfont 160 scalefont setfont 
+%  32 Setcolor 
+%  /Helvetica findfont 160 scalefont setfont 
+/Helvetica-iso ff 150.00 scf sf
+1392 5808 m
+gs 1 -1 sc (-0.06) col64 sh gr
+%  /Helvetica findfont 160 scalefont setfont 
+%  32 Setcolor 
+%  /Helvetica findfont 160 scalefont setfont 
+/Helvetica-iso ff 150.00 scf sf
+1158 5475 m
+gs 1 -1 sc (-0.02) col64 sh gr
+%  /Helvetica findfont 160 scalefont setfont 
+%  32 Setcolor 
+%  /Helvetica findfont 160 scalefont setfont 
+/Helvetica-iso ff 150.00 scf sf
+1016 5141 m
+gs 1 -1 sc (0.02) col64 sh gr
+%  /Helvetica findfont 160 scalefont setfont 
+%  32 Setcolor 
+%  /Helvetica findfont 160 scalefont setfont 
+/Helvetica-iso ff 150.00 scf sf
+781 4808 m
+gs 1 -1 sc (0.06) col64 sh gr
+%  /Helvetica findfont 160 scalefont setfont 
+%  32 Setcolor 
+%  /Helvetica findfont 160 scalefont setfont 
+/Helvetica-iso ff 150.00 scf sf
+547 4474 m
+gs 1 -1 sc (0.10) col64 sh gr
+%  /Helvetica findfont 160 scalefont setfont 
+%  32 Setcolor 
+/Helvetica-iso ff 150.00 scf sf
+1040 5937 m
+gs 1 -1 sc (Y) col64 sh gr
+% here ends figure;
+$F2psEnd
+rs
+showpage
