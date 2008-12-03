@@ -1,7 +1,7 @@
 #include "ACEF.h"
 #include "linearsystem.h"
 
-#include "SiconosKernel.h"
+#include "SiconosKernel.hpp"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -64,16 +64,20 @@ void (DAEeLDS) (double t, unsigned int N, double* e, unsigned int z, double*zz){
 /*main program*/
 int main(int argc, char **argv){
   if (argc<3){
-    printf("usage : noselect file.cir ENUM|SIMPLEX|PATH|DIRECT_ENUM|DIRECT_SIMPLEX|DIRECT_PATH [INV/NOINV]\n");
+    printf("usage : noselect file.cir ENUM|SIMPLEX|PATH|DIRECT_ENUM|DIRECT_SIMPLEX|DIRECT_PATH [INV/NOINV/MNA]\n");
     return 0;
   }
+  ACE_FORMULATION=ACE_FORMULATION_SEMI_EXPLICT;
+
   /*MOS Parameters*/
   ACE_MOS_NB_HYP=3;
   ACE_MOS_POWER_SUPPLY=3.0;
   /*formulation with inversion ?*/
   if (argc>3){
     if (!strcmp(argv[3],"NOINV"))
-      ACE_FORMULATION_WITH_INVERSION=0;
+      ACE_FORMULATION=ACE_FORMULATION_WITHOUT_INVERT;
+    if (!strcmp(argv[3],"MNA"))
+      ACE_FORMULATION=ACE_FORMULATION_MNA;
   }
 
 
@@ -205,7 +209,7 @@ int main(int argc, char **argv){
   aceVector* DAE_X0 =0;
   aceVector* DAE_As =0;
   
-  if (!ACE_FORMULATION_WITH_INVERSION){
+  if (ACE_FORMULATION==ACE_FORMULATION_WITHOUT_INVERT){
     dimX += s;
     DAE_M = new aceMatrix(dimX,dimX);
     DAE_A = new aceMatrix(dimX,dimX);
@@ -220,11 +224,11 @@ int main(int argc, char **argv){
   double finalTime = h*sAlgo->spls->mStepNumber ;
 
   //*****BUILD THE DYNAMIC SYSTEM
-  FirstOrderLinearTIDS * aDS = 0;
-  if (ACE_FORMULATION_WITH_INVERSION){
-    aDS = new FirstOrderLinearTIDS(1,*(sAlgo->spls->mxti),*(sAlgo->spls->mA2x),*(sAlgo->spls->mA2s));
+  SP::FirstOrderLinearDS aDS ;
+  if (ACE_FORMULATION==ACE_FORMULATION_SEMI_EXPLICT){
+    aDS.reset(new FirstOrderLinearDS(*(sAlgo->spls->mxti),*(sAlgo->spls->mA2x),*(sAlgo->spls->mA2s)));
     aDS->setComputeBFunction(&bLDS);
-  }else{
+  }else if (ACE_FORMULATION==ACE_FORMULATION_WITHOUT_INVERT){
     DAE_As->setBlock(0,*(sAlgo->spls->mA2s));
     DAE_As->setBlock(ACEFdimX,*(sAlgo->spls->mB2s));
     DAE_X0->setBlock(0,*(sAlgo->spls->mxti));
@@ -235,20 +239,22 @@ int main(int argc, char **argv){
     DAE_A->setBlock(ACEFdimX,ACEFdimX,*(sAlgo->spls->mB2zs));
     for (int ii =0; ii < ACEFdimX; ii++)
       DAE_M->setValue(ii,ii,1);
-    aDS = new FirstOrderLinearTIDS(1,*DAE_X0,*DAE_A,*DAE_As);
-    aDS->setMPtr(DAE_M);
+    aDS.reset(new FirstOrderLinearDS(*DAE_X0,*DAE_A,*DAE_As));
+    aDS->setM(*DAE_M);
     aDS->setComputeBFunction(&DAEbLDS);
+  }else{
+    ACE_INTERNAL_ERROR("main, ACE_FORMULATION not managed");
   }
   cout<<"FirstOrderLinearTIDS with :"<<endl;
   aDS->display();
-  DynamicalSystemsSet Inter_DS;
+  DynamicalSystemsSet  Inter_DS ;
   Inter_DS.insert(aDS);
 
   //******BUILD THE RELATION
   aceMatrix* C= 0;
   aceMatrix* D= 0;
   aceMatrix* B= 0;
-  if (ACE_FORMULATION_WITH_INVERSION){
+  if (ACE_FORMULATION==ACE_FORMULATION_SEMI_EXPLICT){
     C= new aceMatrix(s+m,dimX);
     D= new aceMatrix(s+m,s+m);
     B= new aceMatrix(dimX,s+m);
@@ -260,7 +266,7 @@ int main(int argc, char **argv){
     D->setBlock(s,s,*(sAlgo->spls->mD2l));
     B->setBlock(0,0,*(sAlgo->spls->mA2zs));
     B->setBlock(0,s,*(sAlgo->spls->mR));
-  }else{//FORMULATION DAE
+  }else  if (ACE_FORMULATION==ACE_FORMULATION_WITHOUT_INVERT){
     C= new aceMatrix(m,dimX);
     D= new aceMatrix(m,m);
     B= new aceMatrix(dimX,m);
@@ -272,9 +278,9 @@ int main(int argc, char **argv){
     B->setBlock(0,0,*(sAlgo->spls->mR));
     B->setBlock(ACEFdimX,0,*(sAlgo->spls->mB2l));
   }
-  FirstOrderLinearR * aR = new FirstOrderLinearR(C,B);
+  SP::FirstOrderLinearR aR( new FirstOrderLinearR(*C,*B));
   aR->setD(*D);
-  if (ACE_FORMULATION_WITH_INVERSION){
+  if (ACE_FORMULATION==ACE_FORMULATION_SEMI_EXPLICT){
     aR->setComputeEFunction(&eLDS);
   }else{
     aR->setComputeEFunction(&DAEeLDS);
@@ -283,63 +289,64 @@ int main(int argc, char **argv){
   aR->display();
 
   //*****BUILD THE NSLAW
-  NonSmoothLaw * aNSL=0;
+  SP::NonSmoothLaw aNSL;
   int NSLawSize=0;
-  if (ACE_FORMULATION_WITH_INVERSION){
+  if (ACE_FORMULATION==ACE_FORMULATION_SEMI_EXPLICT){
     NSLawSize=m+s;
-    aNSL = new MixedComplementarityConditionNSL(m,s);
+    aNSL.reset(new MixedComplementarityConditionNSL(m,s));
   }else{
     NSLawSize=m;
-    aNSL = new ComplementarityConditionNSL(m);
+    aNSL.reset(new ComplementarityConditionNSL(m));
   }
 
   //****BUILD THE INTERACTION
-  Interaction * aI = new Interaction("MLCP",Inter_DS,1,NSLawSize,aNSL,aR);
+  SP::Interaction aI( new Interaction("MLCP",Inter_DS,1,NSLawSize,aNSL,aR));
   //****BUILD THE SYSTEM
-  NonSmoothDynamicalSystem * aNSDS = new NonSmoothDynamicalSystem(aDS,aI);
+  SP::NonSmoothDynamicalSystem  aNSDS( new NonSmoothDynamicalSystem(aDS,aI));
   
-  Model * aM = new Model(0,finalTime);
+  SP::Model  aM( new Model(0,finalTime));
   aM->setNonSmoothDynamicalSystemPtr(aNSDS);
-  TimeDiscretisation * aTD = new TimeDiscretisation(h,aM);
-  TimeStepping *aS = new TimeStepping(aTD);
+  SP::TimeDiscretisation  aTD( new TimeDiscretisation(0,h));
+  SP::TimeStepping aS ( new TimeStepping(aTD));
   
   //*****BUILD THE STEP INTEGRATOR
-  OneStepIntegrator * aMoreau =0;
-  if (ACE_FORMULATION_WITH_INVERSION){
-    aMoreau = new Moreau(aDS,0.5,aS);
+  SP::OneStepIntegrator  aMoreau ;
+  if (ACE_FORMULATION==ACE_FORMULATION_SEMI_EXPLICT){
+    aMoreau.reset( new Moreau(aDS,0.5));
   }else{
-    aMoreau = new Moreau2(aDS,0.5,aS);
+    aMoreau.reset( new Moreau2(aDS,0.5));
   }
-  
-  NonSmoothSolver * mySolver = new NonSmoothSolver((*solverName),iparam,dparam,floatWorkingMem,intWorkingMem);
+  aS->recordIntegrator(aMoreau);
+  SP::NonSmoothSolver  mySolver( new NonSmoothSolver((*solverName),iparam,dparam,floatWorkingMem,intWorkingMem));
 
   //**** BUILD THE STEP NS PROBLEM
-  MLCP * aMLCP =0;
-  if (ACE_FORMULATION_WITH_INVERSION){
-    aMLCP = new MLCP(aS,mySolver,"MLCP");
+  SP::MLCP  aMLCP ;
+  if (ACE_FORMULATION==ACE_FORMULATION_SEMI_EXPLICT){
+    aMLCP.reset(new MLCP(mySolver,"MLCP"));
   }else{
-    aMLCP = new MLCP2(aS,mySolver,"MLCP2");
+    aMLCP.reset(new MLCP2(mySolver,"MLCP2"));
   }
-  aS->initialize();
+  aS->recordNonSmoothProblem(aMLCP);
+  aM->initialize(aS);
   //  Alloc working mem for the solver
   if (ACE_SOLVER_TYPE==ACE_SOLVER_NUMERICS_DIRECT_ENUM ||
       ACE_SOLVER_TYPE==ACE_SOLVER_ENUM  ||
       ACE_SOLVER_TYPE==ACE_SOLVER_NUMERICS_DIRECT_SIMPLEX ||
       ACE_SOLVER_TYPE==ACE_SOLVER_NUMERICS_DIRECT_PATH){
-    int aux =mlcp_driver_get_iwork(aMLCP->getNumericsMLCP(),mySolver->getNumericsSolverOptionsPtr());
+    int aux =mlcp_driver_get_iwork(aMLCP->getNumericsMLCP().get(),mySolver->getNumericsSolverOptionsPtr().get());
     intWorkingMem = (int*)malloc(aux*sizeof(int));
     mySolver->getNumericsSolverOptionsPtr()->iWork = intWorkingMem;
-    aux =mlcp_driver_get_dwork(aMLCP->getNumericsMLCP(),mySolver->getNumericsSolverOptionsPtr());
+    aux =mlcp_driver_get_dwork(aMLCP->getNumericsMLCP().get(),mySolver->getNumericsSolverOptionsPtr().get());
     floatWorkingMem = (double*)malloc(aux*sizeof(double));
     mySolver->getNumericsSolverOptionsPtr()->dWork = floatWorkingMem;
   }
   /*init solver*/
-  mlcp_driver_init(aMLCP->getNumericsMLCP(),mySolver->getNumericsSolverOptionsPtr());
+  mlcp_driver_init(aMLCP->getNumericsMLCP().get(),mySolver->getNumericsSolverOptionsPtr().get());
 
   
-  SiconosVector * x = aDS->getXPtr();
-  SiconosVector * y = aI->getYPtr(0);
-  SiconosVector * lambda = aI->getLambdaPtr(0);
+  SP::SiconosVector  x = aDS->getXPtr();
+  SP::SiconosVector  y = aI->getYPtr(0);
+  SP::SiconosVector  lambda = aI->getLambdaPtr(0);
 
 
   unsigned int count = 0; // events counter. 
@@ -387,7 +394,7 @@ int main(int argc, char **argv){
       pout <<(k+1)*h;
       while(ParserGetPrintElem((void**)&pPrint)){
 	pout<<"\t\t";
-	if (ACE_FORMULATION_WITH_INVERSION){
+	if (ACE_FORMULATION==ACE_FORMULATION_SEMI_EXPLICT){
 	  double aux = (*lambda)(pPrint->node1-1);
 	  if (pPrint->node2 >0)
 	    aux -= (*lambda)(pPrint->node2-1);
