@@ -8,7 +8,10 @@ equationVD::equationVD(char * name){
   mName = name;
 }
 void equationVD::print(){
-  printf("VD");
+  if (mLine > -1)
+    printf("VD%d",mLine);
+  else
+    printf("VD");
   if (mName)
     printf(mName);
   printf("\t");

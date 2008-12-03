@@ -9,7 +9,8 @@
 
 // Class componentLINEAR
 // 
-// 
+//
+
 class componentLINEAR : public component {
   
 public:

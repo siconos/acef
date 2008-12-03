@@ -4,8 +4,10 @@
 **************************************************************************/
 #include "algo.h"
 #include "linearsystemDAE.h"
+#include "linearsystemMNA.h"
 #include "componentcap.h"
 #include "componentcapdae.h"
+#include "componentcapmna.h"
 #include "componentind.h"
 #include "componentres.h"
 #include "componentdio.h"
@@ -25,10 +27,15 @@ linearSystem * algo::spls;
 
 algo::algo(char * file){
   ACE_CHECK_IERROR(strlen(file) < ACE_CHAR_LENGTH && strlen(file) >3,"algo::algo: file name length!");
-  if (ACE_FORMULATION_WITH_INVERSION)
+  if (ACE_FORMULATION == ACE_FORMULATION_SEMI_EXPLICT)
     spls = new linearSystem();
-  else
+  else if (ACE_FORMULATION == ACE_FORMULATION_WITHOUT_INVERT)
     spls = new linearSystemDAE();
+  else if (ACE_FORMULATION == ACE_FORMULATION_MNA)
+    spls = new linearSystemMNA();
+  else
+    ACE_INTERNAL_ERROR("algo::algo, ACE_FORMULATION wrong type");
+    
     
   
   strncpy(mFile,file,strlen(file)-3);
@@ -217,46 +224,7 @@ void algo::parseComponents(){
 
 }
 
-void algo::performMNA(){
-  //ACE_FORMULATION_WITH_INVERSION == 0
-  ParserInitComponentList("Capacitor");
-  dataCAP dCap;
-  while(ParserNextComponent(&dCap)){
-   componentCAPDAE *c=new componentCAPDAE(&dCap);
-   mCaps.push_back(c);
-   int np = dCap.nodePos;
-   int nn = dCap.nodeNeg;
-   //Tension unknown management
-   unknown *uout;
-   if (!spls->isUnknown(ACE_TYPE_U,c,&uout) || 1){
-     c->addTensionUnknown();
-     c->addTensionEquation();
-   }else{
-     c->mU=uout;
-   }
-   //Current unknown management
-   c->addCurrentUnknown();
-   c->addCurrentEquation();
-  }
-  parseComponents();
-  spls->preparForStamp();
-  stamp();
-  spls->printEquations();
 
-  //compute Ax'=Bx+CZs+DZns+s
-  spls->buildABCDs();
-
-
-  spls->buildLinearSystem();
-  spls->printA1();
-  spls->printB1();
-  spls->printC1();
-  spls->printD1();
-  
-  spls->set2matrix();
-  spls->printSystem2();
- 
-}
 
 ////////////////////////////////////////////////////////////////////// ALGO
 void algo::perform(){
@@ -265,14 +233,18 @@ void algo::perform(){
   spls->initKCL();
   spls->addVUnknowns();
 
-  if (!ACE_FORMULATION_WITH_INVERSION)
+  if (ACE_FORMULATION == ACE_FORMULATION_SEMI_EXPLICT)
+    performSemiExplicit();
+  else if (ACE_FORMULATION == ACE_FORMULATION_WITHOUT_INVERT)
+    performWithOutInvert();
+  else if (ACE_FORMULATION == ACE_FORMULATION_MNA)
     performMNA();
   else
-    performWithInversion();
+    ACE_INTERNAL_ERROR("algo::perform, ACE_FORMULATION wrong value.");
   ACE_times[ACE_TIMER_EQUATION].stop();
 }
   
-void algo::performWithInversion(){
+void algo::performSemiExplicit(){
  //BUILD x VECTOR
  //get CAPACITOR from parser
  initGraph(spls->mNbNodes,ParserGetNbElementsOfType("Capacitor"));
@@ -353,6 +325,73 @@ void algo::performWithInversion(){
  spls->set2matrix();
   spls->printSystem2();
 }
+
+void algo::performWithOutInvert(){
+  //ACE_FORMULATION == ACE_FORMULATION_WITHOUT_INVERT
+  ParserInitComponentList("Capacitor");
+  dataCAP dCap;
+  while(ParserNextComponent(&dCap)){
+   componentCAPDAE *c=new componentCAPDAE(&dCap);
+   mCaps.push_back(c);
+   int np = dCap.nodePos;
+   int nn = dCap.nodeNeg;
+   //Tension unknown management
+   unknown *uout;
+   if (!spls->isUnknown(ACE_TYPE_U,c,&uout) || 1){
+     c->addTensionUnknown();
+     c->addTensionEquation();
+   }else{
+     c->mU=uout;
+   }
+   //Current unknown management
+   c->addCurrentUnknown();
+   c->addCurrentEquation();
+  }
+  parseComponents();
+  spls->preparForStamp();
+  stamp();
+  spls->printEquations();
+
+  //compute Ax'=Bx+CZs+DZns+s
+  spls->buildABCDs();
+
+
+  spls->buildLinearSystem();
+  spls->printA1();
+  spls->printB1();
+  spls->printC1();
+  spls->printD1();
+  
+  spls->set2matrix();
+  spls->printSystem2();
+}
+
+void algo::performMNA(){
+  //ACE_FORMULATION == ACE_FORMULATION_MNA
+   //get INDUCTOR from parser
+  ParserInitComponentList("Capacitor");
+  dataCAP dCap;
+  while(ParserNextComponent(&dCap)){
+    componentCAPMNA *c=new componentCAPMNA(&dCap); 
+    mCaps.push_back(c);
+    c->addUnknowns();
+    c->addEquations();
+  }
+  parseComponents();
+  spls->preparForStamp();
+  stamp();
+  spls->printEquations();
+
+  //compute Ax'=Bx+CZs+DZns+s
+  spls->buildABCDs();
+  spls->printA1();
+  spls->printC1();
+  spls->printD1();
+  
+  spls->set2matrix();
+  spls->printSystem2();
+ 
+}
 ////////////////////////////////////////////////////////////////////// STAMP
 //with x'=A1x * mx + A1zs * mZs + A1zns * mZns, compute curent in all capacitor branche, and fill KCL law
 void algo::stampAfterInvertion(){
@@ -370,7 +409,7 @@ void algo::stamp(){
     mInds[i]->stamp();
   n = mCaps.size();
   for(i=0;i<n;i++)
-    ((componentCAP *)(mCaps[i]))->stampBeforeInvertion();//even if !ACE_FORMULATION_WITH_INVERSION.
+    ((componentCAP *)(mCaps[i]))->stampBeforeInvertion();//even if ACE_FORMULATION_WITHOUT_INVERT.
   n = mRess.size();
   for(i=0;i<n;i++)
     mRess[i]->stamp();

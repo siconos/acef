@@ -28,7 +28,7 @@
 class unknown;
 class equation;
 class component;
-#include "SiconosAlgebra.h"
+#include "SiconosAlgebra.hpp"
 
 #define ACE_INF 1e-17   
 #define ACE_NULL_COEF_MAT 1e-17 
@@ -54,14 +54,21 @@ class component;
 
 
 
+
 #define ACE_TYPE_U 108
 #define ACE_TYPE_V 109
 #define ACE_TYPE_I 110
 
 #define ACE_CHAR_LENGTH 124
 
-//DAE or SEMI-EXPLICT
-extern int ACE_FORMULATION_WITH_INVERSION;//0 or 1
+//X'=....
+#define ACE_FORMULATION_SEMI_EXPLICT 0
+//MX'= . with cap current unknowns
+#define ACE_FORMULATION_WITHOUT_INVERT 1
+//MNA
+#define ACE_FORMULATION_MNA 2
+//DAE, SEMI-EXPLICT, MNA
+extern int ACE_FORMULATION;//0 or 1
 //Adaptatve time stepping or SEMI-EXPLICT
 extern int ACE_WITH_ADAPTATIVE_TIME_STEPPING;//0 or 1
 extern ACE_DOUBLE ACE_ATOL_LOCAL;

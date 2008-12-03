@@ -23,7 +23,7 @@ public:
   linearSystem();
   virtual ~linearSystem();
   void preparForStamp();
-  void allocMemory();
+  virtual void allocMemory();
   void initKCL();
   void addVUnknowns();
   bool isUnknown (int type, component* c,unknown **uout);
@@ -281,7 +281,7 @@ protected:
   void extractDynBockInMat(aceMatrix * m, int IndexBegin, int IndexEnd);
   void extractDynBockInVect(aceVector * V);
 
-private:
+
   void extractNonDynBockInMat(aceMatrix * m, int IndexBegin, int IndexEnd);
   void extractNonDynBockInVect(aceVector * V);
 

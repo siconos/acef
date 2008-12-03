@@ -28,6 +28,7 @@ public:
   friend void ACEprod(const aceMatrix& A, const aceVector& x, aceVector& b, bool init = true);
 
 };
+TYPEDEF_SPTR(aceMatrix);
 
 #endif //ACEMATRIX_H
 

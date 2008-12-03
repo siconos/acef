@@ -5,6 +5,9 @@
 #include "equationten.h"
 equationTEN::equationTEN(){;}
 void equationTEN::print(){
- printf("TEN\t");
+  if (mLine > -1)
+    printf("TEN%d\t",mLine);
+  else
+    printf("TEN\t");
  equation::print();
 }

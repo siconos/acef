@@ -45,7 +45,8 @@ public:
   char mSimuFile[ACE_CHAR_LENGTH];
 
 protected:
-  void performWithInversion();
+  void performSemiExplicit();
+  void performWithOutInvert();
   void performMNA();
 private:
     
