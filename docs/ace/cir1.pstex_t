@@ -1,5 +1,5 @@
 \begin{picture}(0,0)%
-\includegraphics{cir1.pstex}%
+\includegraphics{../ace/cir1.pstex}%
 \end{picture}%
 \setlength{\unitlength}{3947sp}%
 %

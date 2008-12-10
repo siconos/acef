@@ -4,7 +4,7 @@ This example shows we have to manage the capacitor cycle.\\
 \begin{figure}[h]
 \centerline{
  \scalebox{0.6}{
-    \input{cir5.pstex_t}
+    \input{../ace/cir5.pstex_t}
  }
 }\end{figure}\\
 $x=^{t}(U_{12},U_{23},U_{34},U_{41})$$Z_{s}=(V_{1},V_{2},V_{3},V_{4},V_{5},I_{50})$\\
@@ -52,7 +52,9 @@ KCL(1)\\KCL(2)\\KCL(3)\\I_{41}
   0&0&0&0&0&0&1\\
 \end{array}\right)Z_{s}
 \]
-So, we obtain $x'=A1_{zs}Z_{s}$. Therefore all capacitor's currents are known:$I_{12}=I_{23}=I_{41}+\frac{V1}{R},I_{43}=I_{41}+\frac{V1}{R}+\frac{V5}{R}-\frac{V3}{R}$\\
+So, we obtain $x'=A1_{zs}Z_{s}$. Therefore all capacitor's currents are
+known:$I_{12}=I_{23}=I_{41}+\frac{V1}{R},I_{43}=I_{41}+\frac{V1}{R}+\frac{V5}{R}-\frac{V3}{R}$\\
+The last step consists in writing the missing equations:
  \[\left(\begin{array}{c}
   \\
 KCL(4)\\KCL(5)\\U_{12}\\U_{23}\\U_{34}\\U_{41}\\VD_{50}
