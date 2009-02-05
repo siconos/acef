@@ -174,7 +174,7 @@ $Z_{ns}=^{t}(I_{2},I_{3},I_{4},I_{5}$),
 $Z_{s} = ^{t}(V_{1},V_{2},V_{3})$
 \subsection{Diode non smooth model instance}
 
-\[ \beta = z_{i} = I_{i}\]
+\[ z_{i} = I_{i}\]
 \[ \alpha =U_{i}\]
 \[z_{i}=1l_{i}+0\alpha\]
 \[y_{i}=1\alpha+0l_{i}\]
@@ -188,13 +188,13 @@ $Z_{s} = ^{t}(V_{1},V_{2},V_{3})$
 \[Y=\left(\begin{array}{cc}
 0&0\\
 0&0\\
-1&0\\
-1&0\end{array}\right) x+
+0&0\\
+0&0\end{array}\right) x+
 \left(\begin{array}{ccc}
 0&1&0\\
 0&0&1\\
-0&0&-1\\
-0&-1&0\end{array}
+1&0&-1\\
+1&-1&0\end{array}
 \right) Z_{s} + 0Z_{ns} +0\lambda\]
 
 \[0 \leq Y \, \perp \, \lambda \geq 0\]
@@ -242,6 +242,11 @@ Y=0x+
 \end{array}
 \right)
 \]
+The first is the KCL at the node 1.\\
+The second line is the inductor law.\\
+The third line is the KCL at the node 3.\\
+The fourth line is the KCL at node 2.\\
+The fifth line is $U_1 + V_1=0$.\\
 
 \subsection{Simulation}
 C= 1 uF\\
