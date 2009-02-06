@@ -53,18 +53,18 @@
 <img src=softArchi.jpg align=top>
 </center>
 
-<h3>Require</h3>
-<p>ACEF requires the siconos platform. <br>
-Path (<a href="http://pages.cs.wisc.edu/~ferris/path.html"> http://pages.cs.wisc.edu/~ferris/path.html </a>) is an
-external library optionaly used by siconos.</p>
-<p>This delivery version is build with the pathFerris demo library. So the path library must be
-copie somewhere in the LD_LIBRARY_PATH, example:<br>
+<h3>Requisite</h3>
+<p>ACEF requires the siconos platform, and optionelly, Path (<a
+href="http://pages.cs.wisc.edu/~ferris/path.html"> http://pages.cs.wisc.edu/~ferris/path.html </a>),
+an external library used by siconos.</p>
+<p>This delivery version is built with the pathFerris demo library. So the path library must be
+copied somewhere in the LD_LIBRARY_PATH, example:<br>
 
 <b>
 cp ...libpath46.so /usr/lib/<br>
 </b>
 
-ACEF need the boost graph module:<br>
+ACEF needs the boost graph module:<br>
 <b>
 sudo apt-get install libboost-graph1.33.1<br>
 sudo apt-get install libboost-graph-dev <br>
@@ -79,9 +79,9 @@ ln -s /usr/share/siconos-kernel/DefaultPlugin.so  /usr/lib/DefaultPlugin.so<br>
 
 </p>
 <h3>Installation of acef and parser libraries</h3>
-These libraries are installed with the commande: <br>
-<b>First, remove the previous version of siconos.</b><br>
-Now, the packages can be istalled:<br>
+These libraries are installed with the command: <br>
+<b>If a previous version has been installed, remove the previous version of siconos.</b><br>
+Now, the packages can be installed:<br>
 -><b>sudo dpkg -i siconos-spiceparser-3.0.0-r124--i386-linux-debian-etch.deb </b><br>
 -><b>sudo dpkg -i siconos-numerics-3.0.0-r1262--i386-linux-debian-etch.deb </b><br>
 -><b>sudo dpkg -i siconos-kernel-3.0.0-r1262--i386-linux-debian-etch.deb </b><br>
@@ -92,7 +92,7 @@ Now, the packages can be istalled:<br>
 The source code mainSiconos.cpp must be compiled on your computer. The file <i> script </i> contains
 an example to compile the main program.<br>
 The generated executable is noselect, usage:<br>
--> <b>noselect InverterChain10.cir DIRECT_PATH</b> <br>
+-> <b>noselecs InverterChain10.cir DIRECT_PATH</b> <br>
 
 </div>
 <h2>Functionalities </h2>
@@ -101,9 +101,8 @@ The generated executable is noselect, usage:<br>
 The input of the main program is like a spice Netlist. The NGSPICE User Manual contains all the informations about the netlist format
 (<a href= "http://ngspice.sourceforge.net/docs.html">
 http://ngspice.sourceforge.net/docs.html</a>).<br>
-The following figure presentes the circuit elements managed in ACEF. 
+The following figure presents the circuit elements managed in ACEF. 
 <TABLE BORDER="1">
-  <CAPTION> circuit elements </CAPTION>
   <TR>
 	<TH> Name </TH>
 	<TH> code </TH>
@@ -165,7 +164,7 @@ A model transistor is a necessary information. It specifies witch kind of transi
 LEVEL=1 is a necessary option for the parser, but is not used in ACEF.<br>
 VT0 is the zero-bias voltage.<br>
 KP is the transconductance parameter.<br>
-The others parameters of the model are ignored.<br>
+The other parameters of the model are ignored.<br>
 ACEF use a piecewise linear model for the transistor. The number of hyperplan is a parameter
 available in the main program.
 <h4> The comparator component</h4>
@@ -180,14 +179,15 @@ else V(Noutput) is an interpoled value.<br>
 
 
 <h3>Transient Analysis</h3>
-The <b>.tran</b> line contains the time interval of the simulation, example :<br>
+The <b>.tran</b> line contains the time interval of the simulation, Example :<br>
 <b>.tran 1ns 100ns </b> specified a simulation from 0 to 100ns with a fixed time stepping of 1ns.
 <h3>Output</h3>
-The <b>.input</b> line defines the output of the simulation, example:<br>
-<b>.print tran V(4) V(23,27)</b>. The output could be any voltage or any tension. This software version doesn't display any current.<br>
-The result is writted in a file <i>circuit.sim</i>.
+The <b>.input</b> line defines the output of the simulation, Example:<br>
+<b>.print tran V(4) V(23,27)</b>. The output could be any voltage or any tension. This software
+version does not display currents.<br>
+The result is written in a file <i>circuit.sim</i>.
 <h3>Initial conditions</h3>
-The <b>.ic </b> line defines the initial conditions, example:<br>
+The <b>.ic </b> line defines the initial conditions, Example:<br>
 <b>.ic V(10)=1</b><br>
 This line forces the initial node voltages.
 <br>
