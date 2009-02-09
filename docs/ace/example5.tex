@@ -1,5 +1,16 @@
  
-\subsection{Example 5}
+\subsection{One  example with  a capacitor  loop}
+
+\begin{ndrva}
+  Mettre a jour les notations.
+
+
+   Z_s --> z
+
+   A --> M
+\end{ndrva}
+
+
 This example shows we have to manage the capacitor cycle.\\
 \begin{figure}[h]
 \centerline{
@@ -7,7 +18,10 @@ This example shows we have to manage the capacitor cycle.\\
     \input{../ace/cir5.pstex_t}
  }
 }\end{figure}\\
-$x=^{t}(U_{12},U_{23},U_{34},U_{41})$$Z_{s}=(V_{1},V_{2},V_{3},V_{4},V_{5},I_{50})$\\
+
+
+\paragraph{Standard MNA Algorithm}
+ \texttt{texte ::} $x=^{t}(U_{12},U_{23},U_{34},U_{41})$$Z_{s}=(V_{1},V_{2},V_{3},V_{4},V_{5},I_{50})$\\
 Start to write Ax'=...\
 \[\left(\begin{array}{c}
   \\
@@ -20,9 +34,16 @@ KCL(1)\\KCL(2)\\KCL(3)\\KCL(4)
   -C&C&0&0\\
   0&-C&C&0\\
   0&0&-C&C\\  
-\end{array}\right)x'=
+\end{array}\right)x'= RHS
 \]
-This matrix is not regular because of the cycle \{1-2,2-3,3-4,4-1\}. A solution could be to use the Minimum
+where the Right-hand-side  $RHS$ is not here detailed.
+This matrix is not regular because of the cycle \{1-2,2-3,3-4,4-1\}. 
+
+
+
+\paragraph{The proposed Algorithm \ref{Algo:}}
+
+A solution could be to use the Minimum
 Spanning Tree \{1-2,2-3,3-4\} to write the KCL law. About the last tension, $U_{41}$, there are tow
 ways:
 \begin{enumerate}
