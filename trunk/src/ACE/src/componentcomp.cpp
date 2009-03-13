@@ -39,6 +39,11 @@ void componentCOMP::addEquations(){
   mEquation=algo::spls->addVdEquation(mName);
 }
 void componentCOMP::stamp(){
+  if (ACE_FORMULATION ==  ACE_FORMULATION_MNA_V || ACE_FORMULATION ==  ACE_FORMULATION_STAMP_ONLY){
+    stampMNA_V();
+    return;
+  }
+
   int i=mI->mIndex;
   //stamp equations.
   algo::spls->KCL(mNodeS)->mCoefs[i]=1;
@@ -77,5 +82,45 @@ void componentCOMP::stamp(){
 void componentCOMP::print(){
   componentNLINEAR::print();
   printf("NodeS %d epsilon %f V1 %f V2 %f\n",mNodeS,mEpsilon,mV1,mV2);
+  
+}
+void componentCOMP::stampMNA_V(){
+
+
+  int i=mI->mIndex;
+  //stamp equations.
+  algo::spls->KCL(mNodeS)->mCoefs[i]=1;
+  //because ie = ie'=0
+
+  //Zns = Vj-Vk mB1..
+  //VD laws
+  i= algo::spls->getIndexUnknown(ACE_TYPE_V,mNodeS);
+  mEquation->mCoefs[i]+=+1;
+  i= algo::spls->getIndexUnknown(ACE_TYPE_V,0);
+  mEquation->mCoefs[i]-=1;
+  mEquation->mCoefs[mVns->mIndex]-=1;
+
+  //Y=Vp-Vn + I*lambda +- epsilon
+  //Vp-Vn
+  if (mNodePos >0){
+    algo::spls->mD1x->setValue(mIndiceStartLambda,mNodePos-1,1);
+    algo::spls->mD1x->setValue(mIndiceStartLambda+1,mNodePos-1,1);
+  }
+  if (mNodeNeg >0){
+    algo::spls->mD1x->setValue(mIndiceStartLambda,mNodeNeg-1,-1);
+    algo::spls->mD1x->setValue(mIndiceStartLambda+1,mNodeNeg-1,-1);
+  }
+  //I*lambda
+  algo::spls->mD1l->setValue(mIndiceStartLambda,mIndiceStartLambda,1);
+  algo::spls->mD1l->setValue(mIndiceStartLambda+1,mIndiceStartLambda+1,1);
+  //+-epsilon
+  algo::spls->mD1s->setValue(mIndiceStartLambda,mEpsilon);
+  algo::spls->mD1s->setValue(mIndiceStartLambda+1,-mEpsilon);
+
+  //Zns = Vplus +(d11 d12)lambda
+  algo::spls->mC1l->setValue(mIndiceStartZns,mIndiceStartLambda,mD11);
+  algo::spls->mC1l->setValue(mIndiceStartZns,mIndiceStartLambda+1,mD12);
+  algo::spls->mC1s->setValue(mIndiceStartZns,mV2);
+
   
 }

@@ -97,6 +97,11 @@ void componentMOS::addUnknowns(){
   algo::spls->mDimLambda = algo::spls->mDimLambda + mDimlambda;
 }
 void componentMOS::stamp(){
+  if (ACE_FORMULATION ==  ACE_FORMULATION_MNA_V || ACE_FORMULATION ==  ACE_FORMULATION_STAMP_ONLY){
+    stampMNA_V();
+    return;
+  }
+
   int ind=0;
   int i=mI->mIndex;
   //stamp equations.
@@ -137,7 +142,47 @@ void componentMOS::stamp(){
 
   
 }
+void componentMOS::stampMNA_V(){
+  int ind=0;
+  int i=mI->mIndex;
+  //stamp equations.
+  algo::spls->KCL(mNodeNeg)->mCoefs[i]-=mMode*1;
+  algo::spls->KCL(mNodePos)->mCoefs[i]+=mMode*1;
 
+  //Zns = B*lamdba
+  for (ind=0;ind < mNbHyp;ind++){
+    algo::spls->mC1l->setValue(mIndiceStartZns,mIndiceStartLambda+ind,mCoefs[ind]);
+    algo::spls->mC1l->setValue(mIndiceStartZns,mIndiceStartLambda+mNbHyp+ind,-mCoefs[ind]);
+  }
+  
+  //Y=C*zs+I*lambda+hyp
+
+  //C*zs
+  if (mNodeD){
+    for(ind=0;ind < mNbHyp;ind++)
+      algo::spls->mD1x->setValue(mIndiceStartLambda+mNbHyp+ind,mNodeD-1,mMode);
+  }
+  if (mNodeG){
+    for(ind=0;ind < mDimlambda;ind++)
+      algo::spls->mD1x->setValue(mIndiceStartLambda+ind,mNodeG-1,-mMode);
+  }
+  if (mNodeS){
+    for(ind=0;ind < mNbHyp;ind++)
+      algo::spls->mD1x->setValue(mIndiceStartLambda+ind,mNodeS-1,mMode);
+  }
+
+  //I*lambda
+  for(ind=0;ind < mDimlambda;ind++)
+    algo::spls->mD1l->setValue(mIndiceStartLambda+ind,mIndiceStartLambda+ind,1);
+  
+  //hyp
+  for(ind=0;ind < mNbHyp;ind++){
+      algo::spls->mD1s->setValue(mIndiceStartLambda+ind,mHyp[ind]);
+      algo::spls->mD1s->setValue(mIndiceStartLambda+mNbHyp+ind,mHyp[ind]);
+    }
+
+  
+}
 componentMOS::~componentMOS(){
   free(mCoefs);
   free(mHyp);

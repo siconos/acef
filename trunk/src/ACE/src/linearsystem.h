@@ -25,7 +25,7 @@ public:
   void preparForStamp();
   virtual void allocMemory();
   void initKCL();
-  void addVUnknowns();
+  virtual void addVUnknowns();
   bool isUnknown (int type, component* c,unknown **uout);
   void addKCLinDyn(int j);
 
@@ -39,7 +39,8 @@ public:
   equationIND* addIndEquation();
   equationVD* addVdEquation(char* name =0);
   equationTEN* addTenEquation();
-  int getIndexUnknown (int type,int node);
+  virtual int getIndexUnknown (int type,int node);
+  virtual int getDynIndexUnknown (int type,int node){;};
 
   //write x'=A1x * mx + A1zs * mZs + A1zns * mZns;
   void computedxdt();
@@ -56,7 +57,8 @@ public:
   //0=B2x*x + B2zs*Zs + B2l*lambda + B2s
   //Y=D2x*x + D2zs*Zs + D2l*lambda + D2s
   //
-  void set2matrix();
+  virtual void alloc2Matrix();
+  virtual void set2matrix();
 
   //DISCRETISATION simulation
   void readInitialValue();
@@ -94,13 +96,13 @@ public:
   /**
      These fucntions are called at each step to update de terme source (Voltage source and Current source)
    */
-  void ExtractAndCompute2Sources();
+  virtual void ExtractAndCompute2Sources();
   void extractSources();
 
   virtual void extractDynamicSystemSource();
-  void extractInteractionSource();
-  void updateDynamicSystemSource();
-  void updateInteractionSource();
+  virtual void extractInteractionSource();
+  virtual void updateDynamicSystemSource();
+  virtual void updateInteractionSource();
   
   long  mLogFrequency;
   long  mLogPrint;
@@ -119,6 +121,10 @@ public:
   int mDimx;
   int mDimzs;
   int mDimzns;
+  /*mV0x = 1 if V0 is in x else mV0x=0*/
+  int mV0x;
+  /*mV0zs = 1 if V0 is in zs else mV0zs=0*/
+  int mV0zs;
 
   int mRS;
   bool mReAlloc;
@@ -239,6 +245,7 @@ public:
   aceVector *mxticurrent;
   aceVector *mzsticurrent;
   aceVector *mzst_inter;
+  aceVector *mxt_inter;
   aceVector *mzst1;
   aceVector *mxt1;
   aceVector *mxbuf;
@@ -258,7 +265,7 @@ public:
   void printD1(ostream& os = cout);
   void printSystemInTabFile(char * file);
   virtual void printSystem2(ostream& os = cout);
-  void printStep(ostream& os,aceVector *pVzs);
+  virtual void printStep(ostream& os,aceVector *pVx,aceVector *pVzs);
   ACE_DOUBLE computeAnalyticSolution(ACE_DOUBLE t);
   ACE_DOUBLE mSommeError;
   ACE_DOUBLE mCoef;
@@ -266,7 +273,7 @@ public:
   
   void printDiscretisation(ostream& os = cout);
 
-  void allocForInitialValue();
+  virtual void allocForInitialValue();
 
 
 protected:
@@ -293,7 +300,7 @@ protected:
   void freeC1Matrix();
   void allocD1Matrix();
   void freeD1Matrix();
-  void allocDiscretisation();
+  virtual void allocDiscretisation();
   void freeDiscretisation();
   void freeForInitialValue();
   

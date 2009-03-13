@@ -7,7 +7,11 @@
 #include "linearsystem.h"
 using namespace std;
 // Class linearSystem
-// 
+//
+// MX'= AX + R*lambda +s
+// Y = DX + E*lambda +s
+// 0<Y ortho lambda >0
+//
 // Ax'=Bx+CZs+DZns+s
 class linearSystemMNA : public linearSystem {
 public:

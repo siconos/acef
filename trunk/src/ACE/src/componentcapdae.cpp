@@ -16,6 +16,7 @@ Unp = Vn-Vp
 
 Cd(Unp)/dt = i
 
+i is added in the vector of unknowns. i is used to fill the KCL
 
 */
 

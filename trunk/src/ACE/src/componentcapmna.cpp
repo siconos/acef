@@ -14,7 +14,7 @@
 
 Unp = Vn-Vp
 
-Cd(Unp)/dt = i
+i = Cd(Unp)/dt is used for the KCL
 
 
 */

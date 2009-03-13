@@ -117,7 +117,7 @@ bool linearSystemDAE::step(){
       ACE_ERROR("linearSystemDAE::preparStep not implemented\n");
       mzsti->set(*(mMLCP->mZ2));
     }else{
-      for (int i=0; i< mDimzs-1; i++){
+      for (int i=0; i< mzsti->size(); i++){
 	mzsti->setValue(i,mMLCP->mZ2->getValue(mDimx+i));
       }
     }

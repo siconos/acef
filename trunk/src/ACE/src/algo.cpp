@@ -5,9 +5,12 @@
 #include "algo.h"
 #include "linearsystemDAE.h"
 #include "linearsystemMNA.h"
+#include "linearsystemMNA_V.h"
+#include "linearsystemSTAMP_ONLY.h"
 #include "componentcap.h"
 #include "componentcapdae.h"
 #include "componentcapmna.h"
+#include "componentcapmna_v.h"
 #include "componentind.h"
 #include "componentres.h"
 #include "componentdio.h"
@@ -33,6 +36,10 @@ algo::algo(char * file){
     spls = new linearSystemDAE();
   else if (ACE_FORMULATION == ACE_FORMULATION_MNA)
     spls = new linearSystemMNA();
+  else if (ACE_FORMULATION == ACE_FORMULATION_MNA_V)
+    spls = new linearSystemMNA_V();
+  else if (ACE_FORMULATION == ACE_FORMULATION_STAMP_ONLY)
+    spls = new linearSystemSTAMP_ONLY();
   else
     ACE_INTERNAL_ERROR("algo::algo, ACE_FORMULATION wrong type");
     
@@ -239,6 +246,8 @@ void algo::perform(){
     performWithOutInvert();
   else if (ACE_FORMULATION == ACE_FORMULATION_MNA)
     performMNA();
+  else if (ACE_FORMULATION == ACE_FORMULATION_MNA_V || ACE_FORMULATION == ACE_FORMULATION_STAMP_ONLY )
+    performMNA_V();
   else
     ACE_INTERNAL_ERROR("algo::perform, ACE_FORMULATION wrong value.");
   ACE_times[ACE_TIMER_EQUATION].stop();
@@ -361,9 +370,10 @@ void algo::performWithOutInvert(){
   spls->printB1();
   spls->printC1();
   spls->printD1();
-  
+
   spls->set2matrix();
   spls->printSystem2();
+  
 }
 
 void algo::performMNA(){
@@ -392,6 +402,34 @@ void algo::performMNA(){
   spls->printSystem2();
  
 }
+void algo::performMNA_V(){
+  //ACE_FORMULATION == ACE_FORMULATION_MNA_V
+   //get INDUCTOR from parser
+  ParserInitComponentList("Capacitor");
+  dataCAP dCap;
+  while(ParserNextComponent(&dCap)){
+    componentCAPMNA_V *c=new componentCAPMNA_V(&dCap); 
+    mCaps.push_back(c);
+    c->addUnknowns();
+    c->addEquations();
+  }
+  parseComponents();
+  spls->preparForStamp();
+  stamp();
+  spls->printEquations();
+
+  //compute Ax'=Bx+CZs+DZns+s
+  spls->buildABCDs();
+  spls->printA1();
+  spls->printC1();
+  spls->printD1();
+  if (ACE_FORMULATION == ACE_FORMULATION_MNA_V){
+    spls->set2matrix();
+    spls->printSystem2();
+  }
+}
+
+
 ////////////////////////////////////////////////////////////////////// STAMP
 //with x'=A1x * mx + A1zs * mZs + A1zns * mZns, compute curent in all capacitor branche, and fill KCL law
 void algo::stampAfterInvertion(){

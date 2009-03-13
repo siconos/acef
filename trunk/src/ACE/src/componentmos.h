@@ -72,6 +72,7 @@ public:
   componentMOS(dataMOS1 *d,int nbHyp);
   virtual void  addUnknowns ();
   virtual void  stamp ();
+  void stampMNA_V();
   virtual ~componentMOS();
   virtual void print();
 

@@ -45,7 +45,7 @@ void aceMatrix::display(ostream& os) const{
 	//	os <<"\t"<<getValue(i,j);
 	if (j)
 	  printf(",");
-	printf(" %f",getValue(i,j));
+	printf(" %.10e",getValue(i,j));
       }
       os <<";\n";
     }

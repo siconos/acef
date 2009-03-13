@@ -64,6 +64,8 @@ public:
   virtual void  addUnknowns ();
   virtual void  addEquations ();
   virtual void  stamp ();
+  void stampMNA_V();
+
   virtual void  print ();
 
   virtual ~componentCOMP();

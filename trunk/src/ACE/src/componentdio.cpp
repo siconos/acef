@@ -53,11 +53,17 @@ void componentDIO::stamp(){
   //     algo::spls->mD1zs->setValue(mIndiceStartZns,mNodePos-1,-1);
 
   //may be mIndiceStartLambda == mIndiceStartZns. Else big problem.
-  
-  if (mNodeNeg)
-    algo::spls->mD1zs->setValue(mIndiceStartLambda,mNodeNeg-1,1);
-  if (mNodePos)
-    algo::spls->mD1zs->setValue(mIndiceStartLambda,mNodePos-1,-1);
+  if (ACE_FORMULATION !=  ACE_FORMULATION_MNA_V && ACE_FORMULATION !=  ACE_FORMULATION_STAMP_ONLY){
+    if (mNodeNeg)
+      algo::spls->mD1zs->setValue(mIndiceStartLambda,mNodeNeg-1,1);
+    if (mNodePos)
+      algo::spls->mD1zs->setValue(mIndiceStartLambda,mNodePos-1,-1);
+  }else{
+    if (mNodeNeg)
+      algo::spls->mD1x->setValue(mIndiceStartLambda,mNodeNeg-1,1);
+    if (mNodePos)
+      algo::spls->mD1x->setValue(mIndiceStartLambda,mNodePos-1,-1);
+  }
   
 }
 

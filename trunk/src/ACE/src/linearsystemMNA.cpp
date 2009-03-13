@@ -92,33 +92,47 @@ void linearSystemMNA::buildMLCP(){
     *mW[i] += mH*mTheta*(*mA2x);
     scal(mH*mTheta,*mA2zs,*mHThetaA2zs[i]);
   }
-  *(mMLCP->mM11) = *mD2l;
-  mMLCP->mM12->setBlock(0,0,*mD2x);
-  mMLCP->mM12->setBlock(0,mDimx,*mD2zs);
+  if (mDimLambda){
+    *(mMLCP->mM11) = *mD2l;
+    mMLCP->mM12->setBlock(0,0,*mD2x);
+    mMLCP->mM12->setBlock(0,mDimx,*mD2zs);
+  }
   
 }
 void linearSystemMNA::fillMLCP(){
-      mMLCP->mM21->setBlock(0,0,*mhR[ACE_CUR_STEP]);
-      mMLCP->mM22->setBlock(0,0,*mW[ACE_CUR_STEP]);
-      mMLCP->mM22->setBlock(0,mDimx,*mHThetaA2zs[ACE_CUR_STEP]);
-      mMLCP->update();
+   if(mDimLambda)
+     mMLCP->mM21->setBlock(0,0,*mhR[ACE_CUR_STEP]);
+   mMLCP->mM22->setBlock(0,0,*mW[ACE_CUR_STEP]);
+   mMLCP->mM22->setBlock(0,mDimx,*mHThetaA2zs[ACE_CUR_STEP]);
+   mMLCP->update();
 }
 void linearSystemMNA::preparMLCP(){
-    if (mDimx && mDimLambda){//both
+    if (mDimx ){//both
     //(*mxfree) = mA*(*mxti) + mH*((1-mTheta)*(prod(*mA2x,*mxti)+prod(*mA2zs,*mzsti) + (*mA2sti))+mThetap*(*mA2s));
     //mxfree->display();
+      double aux;
+      double aux1;
     ACEprod(*mA2zs,*mzsti,*mxfree,true);
+    aux=mxfree->getValue(2);
     ACEprod(*mA2x,*mxti,*mxfree,false);
+    aux=mxfree->getValue(2);
+    aux1=mA2sti->getValue(2);
     *mxfree+=*mA2sti;
+    aux=mxfree->getValue(2);
     scal((1-mTheta),*mxfree,*mxfree);
+    aux=mxfree->getValue(2);
     *mxfree+=mThetap*(*mA2s);
+    aux=mxfree->getValue(2);
     scal(mH,*mxfree,*mxfree);
+    aux=mxfree->getValue(2);
     ACEprod(*mA,*mxti,*mxfree,false);
+    aux=mxfree->getValue(2);
+    //    cout<<"mxfree"<<*mxfree<<endl;
  
-  } else if(mDimx){//only x
-    (*mxfree) =  mH*(1-mTheta)*prod(*mA2x,*mxti)+mH*(1-mTheta)*prod(*mA2zs,*mzsti)+mH*(*mA2s);
+  } /*else if(mDimx){
+      (*mxfree) =  mH*(1-mTheta)*(prod(*mA2x,*mxti)+prod(*mA2zs,*mzsti)+(*mA2sti))+mH*(*mA2s);
     ACEprod(*mA,*mxti,*mxfree,false);
-  }else if (mDimLambda){//only lambda
+    }*/else if (mDimLambda){//only lambda
     ;
   }else{
     ;
@@ -143,6 +157,8 @@ void linearSystemMNA::preparMLCP(){
 
 bool linearSystemMNA::step(){
   //  cout<<"*******************begin step "<<mTcurrent<<" to ";
+  //     cout<<"before\n"<< *(mMLCP->mM22)<<endl;
+
   ACE_times[ACE_TIMER_LS_STEP].start();
   mStepCmp++;
   mAllStepCmp++;
@@ -158,6 +174,8 @@ bool linearSystemMNA::step(){
   }
   mTcurrent += mH;
   bool res = mMLCP->solve();
+  if(!mDimLambda)
+    fillMLCP();
   ACE_times[ACE_TIMER_COMPUTE_VAR].start();
   if (res){
     //*mzsti=*(mMLCP->mZ2);
@@ -249,6 +267,8 @@ void linearSystemMNA::printA1(ostream& os ){
 void linearSystemMNA::extractDynamicSystemSource(){
   if (mDimx)
     extractDynBockInVect(ms);// NB : mA1s=ms
+  //  cout<<"source\n"<<*ms<<endl;
+  //  cout<<"ms\n"<<*ms<<endl;
   
 
 }

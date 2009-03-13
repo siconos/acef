@@ -104,9 +104,12 @@ mlcp::mlcp(unsigned int Dlcp,unsigned int Dlin,int solverType){
 }
 bool mlcp::solveLinearSystem(){
   try{
+    //cout<<"lin. sys:\n"<<*mM22<<endl;
+    //cout<<"mq2\n"<<*mQ2<<endl;
     mM22->PLUForwardBackwardInPlace(*mQ2);
     for (int lin=0;lin<mDlin;lin++)
-      mZ2->setValue(lin,mQ2->getValue(lin));
+      mZ2->setValue(lin,-mQ2->getValue(lin));/*because of mM22x = mQ2 */
+    //cout<<"solZ\n"<<*mZ2<<endl;
     return true;
   }
   catch(SiconosException e)
@@ -246,13 +249,13 @@ bool mlcp::initSolver(){
     mOptions.iparam[1]= mNumericsOptions.verboseMode;/*VERBOSE*/
     mOptions.iparam[6]= mNumericsOptions.verboseMode;/*VERBOSE*/
     mOptions.iparam[8]=0;/*update prb*/
-    mOptions.dparam[0]=1e-10;
-    mOptions.dparam[1]=1e-10;
-    mOptions.dparam[2]=1e-10;
+    mOptions.dparam[0]=1e-12;
+    mOptions.dparam[1]=1e-12;
+    mOptions.dparam[2]=1e-12;
     mOptions.dparam[6]=1e-12;
 
   }else if (ACE_SOLVER_TYPE == ACE_SOLVER_PATH){
-    strcpy(mOptions.solverName,"DIRECT_PATH");
+    strcpy(mOptions.solverName,"PATH");
     mOptions.iparam[0]= mNumericsOptions.verboseMode;/*VERBOSE*/
     mOptions.iparam[6]= mNumericsOptions.verboseMode;/*VERBOSE*/
     mOptions.dparam[0]=1e-12;
