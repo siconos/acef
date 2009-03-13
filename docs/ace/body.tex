@@ -125,6 +125,54 @@ q=\left(\begin{array}{c}x_{free}\\B_{2s}(t_{i+1})\\ D_{2s} (t_{i+1})\end{array}\
 
 \newpage
 
+\subsection{Sketch of an Implicit Moreau time--stepping scheme, case STAMP ONLY}
+\begin{eqnarray}
+Mx'=A_{1x}x +A_{1z}z + A_{1ns}z_{ns}+A_{1s}&\label{eq2stamp}\\
+0=B_{1x}x+B_{1z}z + B_{1ns}z_{ns}+B_{1s}&\label{eq3stamp}\\
+z_{ns}= C_{1x}x+C_{1z}z+C_{1\lambda}\lambda +C_{1s}&\label{eq4stamp}\\
+Y=D_{1x}x +D_{1z}z+D_{1ns}z_{ns}+D_{1\lambda}\lambda+D_{1s}&\label{eq5stamp}\\
+0 \leq Y \, \perp \, \lambda \geq 0
+\end{eqnarray}
+
+
+ The time--discretization of the equation~(\ref{eq2stamp}) yields:
+\[Mx(t_{i+1}) - Mx(t_{i})=h\theta A_{1x}x(t_{i+1})+h(1-\theta)A_{1x}x(t_{i}) +h\theta
+A_{1z}z(t_{i+1}) +\]
+\[h(1-\theta)A_{1z}z(t_{i}) + h\theta
+A_{1zns}z_{ns}(t_{i+1}) + h(1-\theta)A_{1zns}z_{ns}(t_{i})+\]
+\[h\theta 'A_{1s}(t_{i+1}) + h(1-\theta ')A_{1s}(t_{i})\]
+Let $W=(M-h\theta A_{1x}) .$
+\begin{eqnarray}
+Wx(t_{i+1})=x_{free}+h\theta A_{1z}z(t_{i+1})+h\theta A_{1zns}z_{ns}(t_{i+1}) &\label{eq6stamp}
+\end{eqnarray}
+With:
+\[x_{free}=(M+h(1-\theta)A_{1x})x(t_{i}) + h(1-\theta )A_{1z}z(t_{i}) +h(1-\theta )A_{1zns}z_{ns}(t_{i}) + h\theta 'A_{1s}(t_{i+1}) +
+h(1-\theta ')A_{1s}(t_{i})\]
+equation~(\ref{eq3stamp}) discretization:
+\[0 = B_{1x}x(t_{i+1})+B_{1z}z(t_{i+1}) +B_{1zns}z_{ns}(t_{i+1}) + B_{1s}(t_{i+1})\]
+equation~(\ref{eq4stamp}) discretization:
+\[0=C_{1x}x(t_{i+1})+C_{1z}z(t_{i+1}) -z_{ns}(t_{i+1})+C_{1\lambda}\lambda(t_{i+1})+C_{1s}(t_{i+1})\]
+equation~(\ref{eq5stamp}) discretization:
+\[Y(t_{i+1})=D_{1x}x(t_{i+1})+D_{1z}z(t_{i+1}) +D_{1zns}z_{ns}(t_{i+1})+D_{1\lambda}\lambda(t_{i+1})+D_{1s}(t_{i+1})\]
+
+\paragraph{MLCP instance}
+We identify a MLCP:\\
+
+\[w=\left(\begin{array}{c}0\\0\\0\\Y(t_{i+1})\end{array}\right) \qquad
+z=\left(\begin{array}{c}x(t_{i+1})\\z(t_{i+1})\\z_{ns}(t_{i+1})\\ \lambda (t_{i+1})\end{array}\right) \qquad
+q=\left(\begin{array}{c}x_{free}\\B_{1s}(t_{i+1})\\C_{1s}(t_{i+1})\\ D_{1s}
+  (t_{i+1})\end{array}\right)\]
+
+\[M=\left(\begin{array}{cccc}
+  -W&h \theta A_{1z}&A_{1zns}&0\\
+  B_{1x}&B_{1z}&B_{1zns}&0 \\
+  C_{1x}&C_{1z}&-I&C_{1 \lambda} \\
+  D_{1x} &  D_{1z} &D_{1zns} & D_{1 \lambda} \end{array}\right)\]
+\[W=MZ+q\]
+\[0 \leq Y(t_{i+1}) \, \perp \, \lambda (t_{i+1}) \geq 0\]
+
+\newpage
+
 \section {Cost of the automatic circuit equation formulation}
 To evaluate the cost of the automatic circuit equation, we define the following notation:\\
 $N_{b}$ is the number of branches.\\
