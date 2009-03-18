@@ -1,7 +1,8 @@
  
 \subsection{One  example with  a capacitor  loop}
 
-This example shows we have to manage the capacitor cycle.\\
+The first paragraph of this section shows that standard MNA leads to a full implicit DAE. In the second
+paragraph the previous algorithms are applied and leads to a semi-explicit system.
 \begin{figure}[h]
 \centerline{
  \scalebox{0.6}{
@@ -11,49 +12,43 @@ This example shows we have to manage the capacitor cycle.\\
 
 
 \paragraph{Standard MNA Algorithm}
- \texttt{texte ::} $x=^{t}(U_{12},U_{23},U_{34},U_{41})$$z=(V_{1},V_{2},V_{3},V_{4},V_{5},I_{50})$\\
-Start to write Mx'=...\
+It consists in writing the system with the following unknowns $x=^{t}(U_{12},U_{23},U_{34},U_{41})$$z=(V_{1},V_{2},V_{3},V_{4},V_{5},I_{50})$\\
+Start to write $M \dot x=...$\
 \[\left(\begin{array}{c}
   \\
 KCL(1)\\KCL(2)\\KCL(3)\\KCL(4)
 \end{array}\right)
 \left(\begin{array}{cccc}
-  U_{12}'&U_{23}'&U_{34}'&U_{41}'\\
+  \dot U_{12}&\dot U_{23}&\dot U_{34}&\dot U_{41}\\
   \hline
   C&0&0&-C\\
   -C&C&0&0\\
   0&-C&C&0\\
   0&0&-C&C\\  
-\end{array}\right)x'= RHS
+\end{array}\right) \dot x= RHS
 \]
-where the Right-hand-side  $RHS$ is not here detailed.
-This matrix is not regular because of the cycle \{1-2,2-3,3-4,4-1\}. 
+The obtained matrix is not regular because of the cycle \{1-2,2-3,3-4,4-1\}, so it leads to a
+implicit DAE. The Right-hand-side  $RHS$ is not here detailed. 
 
 
 
 \paragraph{The proposed Algorithm~\ref{Algo:ACEF1}}
-
-A solution could be to use the Minimum
-Spanning Tree \{1-2,2-3,3-4\} to write the KCL law. About the last tension, $U_{41}$, there are tow
-ways:
-\begin{enumerate}
-\item add a unknown $I_{41} in z$ and write CU'=I
-\item Find the linear relation $U_{41}'= \sum_{jk}^{}a_{jk}U_{kj}'$, and replace $U_{ki}'$.
-\end{enumerate}
-The matrices become:\\
-Start to write Mx'=...\
+The previous algorithms are now performed. The chosen solution is to use the Minimum
+Spanning Tree \{1-2,2-3,3-4\} to write the KCL law. About the capacitive branch (41), $I_{41}$ is
+added in the vector of unknowns z.
+The algorithm \ref{Build a regular N} provides the following semi-explicit system: 
 \[\left(\begin{array}{c}
   \\
 KCL(1)\\KCL(2)\\KCL(3)\\I_{41}
 \end{array}\right)
 \left(\begin{array}{cccc}
-  U_{12}'&U_{23}'&U_{34}'&U_{41}'\\
+  \dot U_{12}&\dot U_{23}&\dot U_{34}&\dot U_{41}\\
   \hline
   C&0&0&-C\\
   -C&C&0&0\\
   0&-C&C&0\\
   0&0&0&C\\  
-\end{array}\right)x'=0x+
+\end{array}\right) \dot x=0x+
 \left(\begin{array}{ccccccc}
   V_{1}&V_{2}&V_{3}&V_{4}&V_{5}&I_{50}&I_{41}\\
   \hline
@@ -63,9 +58,17 @@ KCL(1)\\KCL(2)\\KCL(3)\\I_{41}
   0&0&0&0&0&0&1\\
 \end{array}\right)z
 \]
-So, we obtain $x'=A1_{z}z$. Therefore all capacitor's currents are
-known:$I_{12}=I_{23}=I_{41}+\frac{V1}{R},I_{43}=I_{41}+\frac{V1}{R}+\frac{V5}{R}-\frac{V3}{R}$\\
-The last step consists in writing the missing equations:
+Multiply this line by $N^{-1}$ and all the currents are written like a linear combination of the
+unknowns:
+\begin{enumerate}
+\item [--] $I_{41}$ is an unknown.
+\item [--] $I_{12}=I_{41}-\frac{V_1}{R}$.
+\item [--] $I_{23}=I_{41}-\frac{V_1}{R}$.
+\item [--] $I_{43}=I_{41}-\frac{V_1}{R} - \frac{V_3-V_5}{R}$.
+\end{enumerate}
+
+The last step consists in writing the missing equations, using the current expression getting from the
+ previous system:
  \[\left(\begin{array}{c}
   \\
 KCL(4)\\KCL(5)\\U_{12}\\U_{23}\\U_{34}\\U_{41}\\VD_{50}
@@ -98,4 +101,5 @@ KCL(4)\\KCL(5)\\U_{12}\\U_{23}\\U_{34}\\U_{41}\\VD_{50}
 \end{array}\right)
  \]
 $N_{I}=N_{E}=11$\\
-
+Note that the first line KCL(1) is the fact that the current that
+go in the capacitor cycle is equals to the current that go out.
