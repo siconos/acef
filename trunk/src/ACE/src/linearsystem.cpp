@@ -579,7 +579,6 @@ void linearSystem::readInitialValue(){
     for (i=0;i<mDimx-mV0x;i++){
       mxti->setValueIfNotNull(i,0);
     }
-    //DIODEBRIDGE :     mxti->setValueIfNotNull(1,10.0/2000);
 
     ParserInitICvalue();
     while(ParserGetICvalue(&i,&useIc,&aux)){
@@ -592,6 +591,10 @@ void linearSystem::readInitialValue(){
 	cout<<"set value from netlist :v_"<<i<<"="<<aux<<endl;
       }
     }
+    //DIODEBRIDGE :     mxti->setValueIfNotNull(1,10.0/2000);
+//         mxti->setValueIfNotNull(3,1/200);
+//         mznsti->setValueIfNotNull(0,-0.01);
+//         mznsti->setValueIfNotNull(3,-0.01);
     //    printStep(*mSimuStream,mzsti);
     //    mzsti->setValueIfNotNull(2,-5e-2);
     /*for each x of type TENSION, compute the initial value with V init*/

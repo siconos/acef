@@ -26,12 +26,12 @@ linearSystemSTAMP_ONLY::~linearSystemSTAMP_ONLY(){
 
 void linearSystemSTAMP_ONLY::buildMLCP(){
   if (!mMLCP){
-    mMLCP = new mlcp(mDimLambda, mDimx-mV0x + mDimzns,ACE_SOLVER_TYPE);
+    mMLCP = new mlcp(mDimLambda, mNbDynEquations + mDimzns,ACE_SOLVER_TYPE);
     mMLCP->mM22->eye();
     (*mMLCP->mM22)=-1*(*mMLCP->mM22);
     mMLCP->mM21->zero();
-    mA_A1 = new aceMatrix(mDimx-mV0x,mDimx-mV0x,ACE_MAT_TYPE);
-    mA1sti = new aceVector(mDimx-mV0x,ACE_MAT_TYPE);
+    mA_A1 = new aceMatrix(mNbDynEquations,mDimx-mV0x,ACE_MAT_TYPE);
+    mA1sti = new aceVector(mNbDynEquations,ACE_MAT_TYPE);
   }
   *mA_A1=*mA+(mH*(1-mTheta))*(*mA1x);
 
@@ -67,16 +67,16 @@ void linearSystemSTAMP_ONLY::fillMLCP(){
     mMLCP->mM12->setBlock(0,mDimx-mV0x,*mD1zs);
   mMLCP->mM12->setBlock(0,mDimx-mV0x+mDimzs-mV0zs,*mD1zns);
 
-  mMLCP->mM21->setBlock(mDimx-mV0x,0,*mC1l);
+  mMLCP->mM21->setBlock(mNbDynEquations,0,*mC1l);
 
   mMLCP->mM22->setBlock(0,0,*(mW[ACE_CUR_STEP]));
   if (mA1zs)
     mMLCP->mM22->setBlock(0,mDimx-mV0x,(mH*mTheta)*(*mA1zs));
   mMLCP->mM22->setBlock(0,mDimx-mV0x+mDimzs-mV0zs,(mH*mTheta)*(*mA1zns));
   
-  mMLCP->mM22->setBlock(mDimx-mV0x,0,*mC1x);
+  mMLCP->mM22->setBlock(mNbDynEquations,0,*mC1x);
   if (mC1zs)
-    mMLCP->mM22->setBlock(mDimx-mV0x,mDimx-mV0x,*mC1zs);
+    mMLCP->mM22->setBlock(mNbDynEquations,mDimx-mV0x,*mC1zs);
 }
 void linearSystemSTAMP_ONLY::preparMLCP(){
   if (mDimx && mDimLambda){//both
@@ -102,7 +102,7 @@ void linearSystemSTAMP_ONLY::preparMLCP(){
   }
   
   mMLCP->mQ2->setBlock(0,*mxfree);
-  mMLCP->mQ2->setBlock(mDimx-mV0x,*mC1s);
+  mMLCP->mQ2->setBlock(mNbDynEquations,*mC1s);
   *( mMLCP->mQ1)=*mD1s;
 }
 
@@ -126,7 +126,6 @@ bool linearSystemSTAMP_ONLY::step(){
   }
   mTcurrent += mH;
   ACE_CMP_ADAT[ACE_CUR_STEP]++;
-  //  mMLCP->printInPutABCDab();
   bool res = mMLCP->solve();
   //  mMLCP->printOutPut();
   ACE_times[ACE_TIMER_COMPUTE_VAR].start();
@@ -135,7 +134,8 @@ bool linearSystemSTAMP_ONLY::step(){
       for (int i=0; i< mxti->size() ; i++){
 	mxti->setValue(i,mMLCP->mZ2->getValue(i));
       }
-      mxti->display();
+//       cout<<"*************************mxti\n";
+//       mxti->display();
       if (mzsti)
 	for (int i=0; i< mzsti->size(); i++){
 	  mzsti->setValue(i,mMLCP->mZ2->getValue(mDimx-mV0x+i));
@@ -143,7 +143,11 @@ bool linearSystemSTAMP_ONLY::step(){
       for (int i=0; i< mznsti->size(); i++){
 	mznsti->setValue(i,mMLCP->mZ2->getValue(mDimx-mV0x+mDimzs-mV0zs+i));
       }
-    }
+//       cout<<"*************************mznsti\n";
+//       mznsti->display();
+//       cout<<"*************************mZ1\n";
+//       mMLCP->mZ1->display();
+     }
 
   }else{
     ACE_GET_LOG_STREAM()<<"linearSystemSTAMP_ONLY::step number,"<< mStepCmp<<" solver failled!!!"<<endl;
@@ -154,10 +158,11 @@ bool linearSystemSTAMP_ONLY::step(){
 }
 
 void linearSystemSTAMP_ONLY::ExtractAndCompute2Sources(){
-    if (mDimx)
+  if (mDimx)
     *mA1sti=*mA1s;
   extractSources();
-
+//   cout<<"linearSystemSTAMP_ONLY::ExtractAndCompute2Sources"<<endl;
+//   mA1s->display();
   
 }
 
