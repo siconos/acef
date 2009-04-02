@@ -1,0 +1,174 @@
+
+\frame
+{
+
+\frametitle{A switched circuit. \footnote{IEEE 2006. Closed-Loop Switched Circuits. P. Mafeezzonni, L. Codecasa, D. D'Amore}}
+  \begin{figure}[!h]
+   \centerline{
+   \scalebox{0.9}{
+    \input{CS.pstex_t}
+    }
+ } 
+ \end{figure}
+
+
+
+ 
+}
+
+\frame
+{
+
+\frametitle{A switched circuit.}
+  \begin{figure}[!h]
+   \centerline{
+   \scalebox{0.9}{
+    \input{CSRES.pstex_t}
+    }
+ } 
+ \end{figure}
+\begin{block}{Model}
+\begin{equation}
+\begin{array}{cc}
+R_s= \begin{cases}
+R_{on} \qquad \text{if $V_3-V_2 \geq 0$}\\
+R_{off} \qquad \text{if $V_3-V_2 < 0$}\\
+\end{cases}&
+R_d= \begin{cases}
+R_{on} \qquad \text{if $V_1 < 0$}\\
+R_{off} \qquad \text{if $V_1 \geq 0$}\\
+\end{cases}
+\end{array}
+\end{equation}
+\end{block}
+
+ }
+
+ \frame
+{
+
+\frametitle{t=0, $I_L=0$}
+  \begin{figure}[!h]
+   \centerline{
+   \scalebox{0.9}{
+    \input{CST0.pstex_t}
+    }
+ } 
+ \end{figure}
+\begin{block}{An equivalent linear circuit}
+While the diode and the switch stay, in the same state, the Newton-Raphson algorithm converges in
+one iteration. It is a linear circuit.
+\end{block}
+
+
+ }
+
+ \frame
+{
+
+\frametitle{t=$t_1$, the switch change of state.}
+
+  \begin{figure}[!h]
+   \centerline{
+   \scalebox{0.9}{
+    \input{CSTstep0.pstex_t}
+    }
+ } 
+ \end{figure}
+
+ \begin{block}{Newton-Raphson iterations}
+\begin{equation}
+\begin{array}{|c|c|c|c|c|c|c|}
+\hline
+&$k=0$&$k=1$&$k=2$&$k=3$&$k=4$&...\\
+\hline
+S&ON&&&&&\\
+\hline
+D&OFF&&&&&\\
+\hline
+\end{array}
+\end{equation}
+\end{block}
+
+
+ }
+
+\frame
+{
+
+\frametitle{t=$t_1$, the switch change of state.}
+  \begin{figure}[!h]
+   \centerline{
+   \scalebox{0.9}{
+    \input{CSTstep1.pstex_t}
+    }
+ } 
+ \end{figure}
+  \begin{block}{Newton-Raphson iterations}
+\begin{equation}
+\begin{array}{|c|c|c|c|c|c|c|}
+\hline
+&$k=0$&$k=1$&$k=2$&$k=3$&$k=4$&...\\
+\hline
+S&ON&OFF&&&&\\
+\hline
+D&OFF&OFF&&&&\\
+\hline
+\end{array}
+\end{equation}
+\end{block}
+
+ }
+  \frame
+{
+
+\frametitle{t:$t_1 \to t_1+h$, first Newton-Raphson iteration.}
+  \begin{figure}[!h]
+   \centerline{
+   \scalebox{0.9}{
+    \input{CSTstep2.pstex_t}
+    }
+ } 
+ \end{figure}
+  \begin{block}{Newton-Raphson iterations}
+\begin{equation}
+\begin{array}{|c|c|c|c|c|c|c|}
+\hline
+&$k=0$&$k=1$&$k=2$&$k=3$&$k=4$&...\\
+\hline
+S&ON&OFF&ON&&&\\
+\hline
+D&OFF&OFF&ON&&&\\
+\hline
+\end{array}
+\end{equation}
+\end{block}
+
+
+ }
+  \frame
+{
+
+\frametitle{t:$t_1 \to t_1+h$, second Newton-Raphson iteration.}
+  \begin{figure}[!h]
+   \centerline{
+   \scalebox{0.9}{
+    \input{CSTstep1.pstex_t}
+    }
+ } 
+ \end{figure}
+   \begin{block}{Newton-Raphson iterations}
+\begin{equation}
+\begin{array}{|c|c|c|c|c|c|c|}
+\hline
+&$k=0$&$k=1$&$k=2$&$k=3$&$k=4$&...\\
+\hline
+S&ON&OFF&ON&OFF&ON&...\\
+\hline
+D&OFF&OFF&ON&OFF&ON&...\\
+\hline
+\end{array}
+\end{equation}
+\end{block}
+
+ }
