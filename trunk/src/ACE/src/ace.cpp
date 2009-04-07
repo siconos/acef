@@ -184,3 +184,10 @@ double stopTime(int ID){
 #endif
   return 0;
 }
+unsigned int ACE_GET_ID(char* type,char* name){
+  return ParserGetId(type,name);
+}
+void ACE_SET_INPUT(char* type,unsigned int id, double v){
+  ParserSetIputFromId(type,id,v);
+}
+

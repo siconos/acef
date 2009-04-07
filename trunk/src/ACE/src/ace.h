@@ -187,4 +187,11 @@ void ACE_CHECK_ERROR(bool b,char* mess);
 void ACE_INIT_TIME();
 void ACE_PRINT_TIME();
 void ACE_STOP_SOLVER_TIME();
+
+/*
+ *Functions to set input
+ *
+ */
+unsigned int ACE_GET_ID(char* type,char* name);
+void ACE_SET_INPUT(char* type,unsigned int id, double v);
 #endif //ACE_H
