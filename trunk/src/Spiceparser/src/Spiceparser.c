@@ -56,3 +56,11 @@ int ParserGetPrintElem(void ** p){
 int ParserInitSimulation(int type,double val){
   return initSimulation(type,val);
 }
+void ParserSetIputFromId(char* type,unsigned int id,double v){
+  if (id)
+    setIputFromId(type, id, v);
+  
+}
+unsigned int ParserGetId(char* type,char* name){
+  return getId( type, name);
+}

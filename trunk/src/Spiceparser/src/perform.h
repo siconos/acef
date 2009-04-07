@@ -27,7 +27,8 @@ int getPrintElem(void ** p);
 
 int initSimulation(int type,double val);
 
-
+void setIputFromId(char* type,unsigned int id,double v);
+unsigned int getId(char* type,char* name);
 
 
 #endif

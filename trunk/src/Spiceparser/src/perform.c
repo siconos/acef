@@ -609,4 +609,66 @@ int getNbElementsOfType(char* type){
   printf("parser : getNbElementsOfType not implemented %s \n",type);
   return -1;
 }
+void setIputFromId(char* type,unsigned int id,double v){
+  int ltype;
+  VSRCinstance *herev;
+  ISRCinstance *herei;
 
+  ltype = INPtypelook(type);
+  
+  switch(ltype){
+  case 46:
+    herev = (VSRCinstance *)psInstance;
+    herev->VSRCdcValue = v;
+    break;
+  case 27:
+    herei = (ISRCinstance *)psInstance;
+    herei->ISRCdcValue = v;
+    break;
+  default:
+    printf("ERROR parser/src/perform.c : setIputFromId not yet implemented \n");
+    return ;
+  }
+
+  
+}
+unsigned int getId(char* type,char* name){
+  VSRCinstance *herev;
+  ISRCinstance *herei;
+  initComponentList(type);
+  while(psInstance){
+    switch(sType){
+    case 2:
+    case 38:
+    case 25:
+      printf("parser : getId not implemented %s \n",type);
+      break;
+    case 46:
+      herev = (VSRCinstance *)psInstance;
+      if (!strcmp(herev->VSRCname,name)){
+	return (unsigned int) psInstance;
+      }
+      break;
+    case 27:
+      herei = (ISRCinstance *)psInstance;
+      if (!strcmp(herei->ISRCname,name)){
+	return (unsigned int) psInstance;
+      }
+      break;
+    default :
+      printf("ERROR parser/src/perform.c : getId not yet implemented \n");
+      return 0;
+    }
+    psInstance = psInstance->GENnextInstance;
+    if (!psInstance){
+      if (psModel){
+	psModel=psModel->GENnextModel;
+	if (psModel)
+	  psInstance = psModel->GENinstances;
+      } 
+    }
+  }
+  return 0;
+
+  
+}

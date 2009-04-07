@@ -43,6 +43,10 @@ int ParserComputeSourcesValues(double time);
   
   int ParserInitSimulation(int type,double val);
 
+  void ParserSetIputFromId(char* type,unsigned int id,double v);
+  unsigned int ParserGetId(char* type,char* name);
+
+
 typedef struct {
   char *name;
   int nodePos;
