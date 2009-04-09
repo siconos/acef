@@ -27,12 +27,15 @@
     }
  } 
  \end{figure}
-\begin{block}{Model}
+\begin{block}{Model and equations}
+
 \begin{equation}
 \begin{array}{cc}
+L \dot I_L + R_E(R_s,R_d)I_L + U_E(R_s,R_d) =0&
+\frac{R_d}{R_s+R_d} (20 - R_sI_L)-V_1=0\\
 R_s= \begin{cases}
-R_{on} \qquad \text{if $V_3-V_2 \geq 0$}\\
-R_{off} \qquad \text{if $V_3-V_2 < 0$}\\
+R_{on} \qquad \text{if $V_3-V1 \geq 0$}\\
+R_{off} \qquad \text{if $V_3-V1 < 0$}\\
 \end{cases}&
 R_d= \begin{cases}
 R_{on} \qquad \text{if $V_1 < 0$}\\
@@ -40,10 +43,26 @@ R_{off} \qquad \text{if $V_1 \geq 0$}\\
 \end{cases}
 \end{array}
 \end{equation}
+
 \end{block}
 
  }
 
+\frame{
+\frametitle{Newton-Raphson algorithm $t_n \to t_{n+1}$}
+
+  \begin{figure}[h]
+   \centerline{
+   \scalebox{0.6}{
+    \input{NR_ALGO.pstex_t}
+    }
+ } 
+ \end{figure}
+
+
+}
+
+ 
  \frame
 {
 
@@ -55,12 +74,13 @@ R_{off} \qquad \text{if $V_1 \geq 0$}\\
     }
  } 
  \end{figure}
-\begin{block}{An equivalent linear circuit}
-While the diode and the switch stay, in the same state, the Newton-Raphson algorithm converges in
+ 
+
+ \begin{block}{An linear behavior}
+While the diode and the switch stay in the same state, the Newton-Raphson algorithm converges in
 one iteration. It is a linear circuit.
+
 \end{block}
-
-
  }
 
  \frame
