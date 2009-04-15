@@ -19,7 +19,6 @@
 \frame
 {
 
-\frametitle{A switched circuit.}
   \begin{figure}[!h]
    \centerline{
    \scalebox{0.9}{
@@ -29,10 +28,17 @@
  \end{figure}
 \begin{block}{Model and equations}
 
+\[
+\begin{cases}
+L \dot I_L + R_E(R_s,R_d)I_L + U_E(R_s,R_d) =0 \\
+\frac{R_d}{R_s+R_d} (20 - R_sI_L)-V_1=0\\
+V_3=s(t)
+\end{cases}
+\]
+
+
 \begin{equation}
 \begin{array}{cc}
-L \dot I_L + R_E(R_s,R_d)I_L + U_E(R_s,R_d) =0&
-\frac{R_d}{R_s+R_d} (20 - R_sI_L)-V_1=0\\
 R_s= \begin{cases}
 R_{on} \qquad \text{if $V_3-V1 \geq 0$}\\
 R_{off} \qquad \text{if $V_3-V1 < 0$}\\
@@ -48,19 +54,6 @@ R_{off} \qquad \text{if $V_1 \geq 0$}\\
 
  }
 
-\frame{
-\frametitle{Newton-Raphson algorithm $t_n \to t_{n+1}$}
-
-  \begin{figure}[h]
-   \centerline{
-   \scalebox{0.6}{
-    \input{NR_ALGO.pstex_t}
-    }
- } 
- \end{figure}
-
-
-}
 
  
  \frame
@@ -86,7 +79,7 @@ one iteration. It is a linear circuit.
  \frame
 {
 
-\frametitle{t=$t_1$, the switch change of state.}
+\frametitle{t=$t_N$, the switch will change of state during $t_N \to t_{N+1}$.}
 
   \begin{figure}[!h]
    \centerline{
@@ -116,7 +109,7 @@ D&OFF&&&&&\\
 \frame
 {
 
-\frametitle{t=$t_1$, the switch change of state.}
+\frametitle{$t_N \to t_{N+1}$, first iteration.}
   \begin{figure}[!h]
    \centerline{
    \scalebox{0.9}{
@@ -142,7 +135,7 @@ D&OFF&OFF&&&&\\
   \frame
 {
 
-\frametitle{t:$t_1 \to t_1+h$, first Newton-Raphson iteration.}
+\frametitle{t:$t_1 \to t_1+h$, second iteration.}
   \begin{figure}[!h]
    \centerline{
    \scalebox{0.9}{
@@ -169,11 +162,11 @@ D&OFF&OFF&ON&&&\\
   \frame
 {
 
-\frametitle{t:$t_1 \to t_1+h$, second Newton-Raphson iteration.}
+\frametitle{t:$t_1 \to t_1+h$, next iterations.}
   \begin{figure}[!h]
    \centerline{
    \scalebox{0.9}{
-    \input{CSTstep1.pstex_t}
+    \input{CSTstep3.pstex_t}
     }
  } 
  \end{figure}

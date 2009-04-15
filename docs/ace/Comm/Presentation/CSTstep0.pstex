@@ -1,7 +1,7 @@
 %!PS-Adobe-2.0 EPSF-2.0
-%%Title: /scratch/gforge/noselecs/docs/ace/Comm/Presentation/CSTstep0.fig
+%%Title: CSTstep0.fig
 %%Creator: fig2dev Version 3.2 Patchlevel 4
-%%CreationDate: Thu Apr  2 15:28:22 2009
+%%CreationDate: Wed Apr 15 15:24:13 2009
 %%For: bonnefon@duparc (olivier bonnefon)
 %%BoundingBox: 0 0 264 128
 %%Magnification: 1.0000
@@ -162,18 +162,6 @@ n 1125 4275 m
 % Polyline
 n 1200 4050 m
  1200 3600 l gs col0 s gr 
-% Polyline
-n 3267 3900 m 3417 3750 l
- 3417 3825 l gs col0 s gr 
-% Polyline
-n 3417 3750 m
- 3342 3750 l gs col0 s gr 
-% Polyline
-n 4500 3525 m 4650 3375 l
- 4650 3450 l gs col0 s gr 
-% Polyline
-n 4650 3375 m
- 4575 3375 l gs col0 s gr 
 % Polyline
 n 4725 3675 m 4875 3825 l
  4875 3750 l gs col0 s gr 

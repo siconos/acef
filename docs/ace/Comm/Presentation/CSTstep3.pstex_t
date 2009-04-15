@@ -1,5 +1,5 @@
 \begin{picture}(0,0)%
-\includegraphics{CSTstep1.pstex}%
+\includegraphics{CSTstep3.pstex}%
 \end{picture}%
 \setlength{\unitlength}{3947sp}%
 %
@@ -20,8 +20,8 @@
 }}}}
 \put(4276,-2836){\makebox(0,0)[lb]{\smash{{\SetFigFont{12}{14.4}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}$V_3=1.20$}%
 }}}}
-\put(2551,-3061){\makebox(0,0)[lb]{\smash{{\SetFigFont{12}{14.4}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}$I_L=1.22$}%
+\put(2551,-3061){\makebox(0,0)[lb]{\smash{{\SetFigFont{12}{14.4}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}$I_L=1.21$}%
 }}}}
-\put(3676,-2686){\makebox(0,0)[lb]{\smash{{\SetFigFont{12}{14.4}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}$V_2=1.22$}%
+\put(3676,-2686){\makebox(0,0)[lb]{\smash{{\SetFigFont{12}{14.4}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}$V_2=1.21$}%
 }}}}
 \end{picture}%
