@@ -9,16 +9,16 @@
  Before go ahead, the unknowns vector X is decomposed in:
 \begin{itemize}
 \item x which contains only the dynamic unknowns(currents in inductor and tensions from capacitor branches)
-\item $Z_{s}$ which contains only the non dynamic unknowns(Voltage nodes,... ).
+\item z which contains only the non dynamic unknowns(Voltage nodes,... ).
 \end{itemize}
   \end{block}
   
  \begin{block}{A good choice of unknowns yields the following system:}
  
  \begin{eqnarray}
-x'=A_{2x}x +A_{2zs}Z_{s} +R \lambda +A_{2s}&\label{eq2}\\
-0=B_{2x}x+B_{2zs}Z_{s} + B_{2\lambda}\lambda + B_{2s}&\label{eq3}\\
-Y=D_{2x}x+D_{2zs}Z_{s}+D_{2\lambda}\lambda + D_{2s} &\label{eq4}\\
+x'=A_{2x}x +A_{2z}z +R \lambda +A_{2s}&\label{eq2}\\
+0=B_{2x}x+B_{2z}z + B_{2\lambda}\lambda + B_{2s}&\label{eq3}\\
+Y=D_{2x}x+D_{2z}z+D_{2\lambda}\lambda + D_{2s} &\label{eq4}\\
 0 \leq Y \, \perp \, \lambda \geq 0&\label{eqperp}
 \end{eqnarray}
 
