@@ -193,7 +193,7 @@ for $i \in I_z$:
 \[F_{i}=-e_{mi}\]
 with $e_{mi}$ the $i^{th}$ vector base of $\RR^m$\\
 The linear system \ref{system1} is solved, and the sign of the solution must be check.
-\subsection{First linear system formulation}
+\subsection{Equivalent linear system formulation}
 The MLCP becomes:\\
 \[\label{system2} M_{2} \left(\begin{array}{c} z_{1}\\ \widetilde{z_{2}}
 \end{array}\right)+\left(\begin{array}{c} a\\ \widetilde{b}\end{array}\right)=0 \]
@@ -334,6 +334,8 @@ step):\\
 The experimental order of the global error is 1. So the experimental order of the method used at
 each step is 2.\\
 \newpage
+\section{Adaptive time stepping}
+An adaptive time stepping has been developed and tested. 
 \section{News since January}
 
 \subsection{Software}
@@ -500,7 +502,7 @@ Moreover it is possible to get a large panel of simulation by changed the compar
 \begin{figure}[!h]
 comparator : Ecomp 1 0 VALUE={0.1 -1.5*tanh(100*(V(5)-V(4)))}
 \begin{center}
- \scalebox{0.1}{
+ \scalebox{0.05}{
 \includegraphics{EldoCompInt100.eps}
 }
 \end{center}
@@ -509,7 +511,7 @@ comparator : Ecomp 1 0 VALUE={0.1 -1.5*tanh(100*(V(5)-V(4)))}
 \begin{figure}[!h]
 comparator : Ecomp 1 0 VALUE={0.1 -1.5*tanh(1000*(V(5)-V(4)))}
 \begin{center}
- \scalebox{0.1}{
+ \scalebox{0.05}{
 \includegraphics{EldoCompInt1000.eps}
 }
 \end{center}
@@ -517,7 +519,7 @@ comparator : Ecomp 1 0 VALUE={0.1 -1.5*tanh(1000*(V(5)-V(4)))}
 \begin{figure}[!h]
 comparator : Ecomp 1 0 VALUE={0.1 -1.5*tanh(10000*(V(5)-V(4)))}
 \begin{center}
- \scalebox{0.1}{
+ \scalebox{0.05}{
 \includegraphics{EldoCompInt10000.eps}
 }
 \end{center}
@@ -525,10 +527,61 @@ comparator : Ecomp 1 0 VALUE={0.1 -1.5*tanh(10000*(V(5)-V(4)))}
 \begin{figure}[!h]
 A new set of value for $C_{1}$ and $C_{2}$
 \begin{center}
- \scalebox{0.1}{
+ \scalebox{0.05}{
 \includegraphics{EldoCompIntCap.eps}
 }
 \end{center}
 \end{figure}
-
+tata
 \newpage
+toto
+\newpage
+\section{Gauss-Seidel for electronic}
+
+\subsection{build a MLCS preserving non-smooth components}
+Suppose Non-smooth components has been indexed in [1..l].\\
+A component of index i, is defined by a constitutive Non-Smooth relation:
+\[NSLAW_i(Z_{ns_i},Y_i,\lambda _i)\]
+It is easy to build the following MLCS:
+\[N \dot X=F_1(X,Z,t)\]
+\[0=F_2(X,Z,t)\]
+\[Z_{ns}= AX+BZ\]
+\[\{NSLAW_i(Zns_i,Y_i,\lambda _i) /\ i \in [1..l]\}\]
+
+That becomes after discretization :
+\[0=F_k(X_{k+1},Z_{k+1},t_{k+1})\]
+\[Zns_{k+1}= (AX_{k+1}+BZ_{k+1}) \]
+\[\{NSLAW_i(Zns_i,Y_i,\lambda _i) /\ i \in [1..l]\}\]
+
+
+
+\subsection{A Gauss-Seidel algorithm}
+Given a partition of set P of [1..l]. For each p in P, it consists in considering the non-smooth law
+of components in p. The others are linearized. 
+
+\[0=F_k(X_{k+1},Z_{k+1},t_{k+1})\]
+\[(Zns_{k+1})_i= (AX_{k+1}+BZ_{k+1})_i \textrm{ for i in p} \]
+\[\{NSLAW_i(Zns_i,Y_i,\lambda _i) /\ i \in p\}\]
+\[\{C Zns_i +D Y_i +E \lambda _i =0/\ i \notin p\}\]
+
+
+for p in P consider the following MLCP:
+
+\begin{algorithm}[H]
+\caption{Gauss-Seidel }
+\sf
+\begin{algorithmic}
+\REQUIRE A partition of set P of [1..l]. \\
+\WHILE {no CV}
+\FORALL{p in P}
+
+\STATE Solve the corresponding MLCP.
+
+\ENDFOR
+\ENDWHILE
+
+\label{Algo:GAUSS_SEIDEL}
+\end{algorithmic}
+\end{algorithm}
+
+Remark : $X_{k+1}$ could be replaced by $Z_{k+1}$, it reduces the size of the MLCP

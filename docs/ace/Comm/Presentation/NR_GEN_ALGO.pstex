@@ -1,9 +1,9 @@
 %!PS-Adobe-2.0 EPSF-2.0
 %%Title: NR_GEN_ALGO.fig
 %%Creator: fig2dev Version 3.2 Patchlevel 4
-%%CreationDate: Wed Apr 15 12:25:04 2009
+%%CreationDate: Thu Apr 16 15:36:10 2009
 %%For: bonnefon@duparc (olivier bonnefon)
-%%BoundingBox: 0 0 486 177
+%%BoundingBox: 0 0 418 234
 %%Magnification: 1.0000
 %%EndComments
 /$F2psDict 200 dict def
@@ -45,8 +45,8 @@ $F2psDict /mtrx matrix put
 
 end
 save
-newpath 0 177 moveto 0 0 lineto 486 0 lineto 486 177 lineto closepath clip newpath
--90.0 329.2 translate
+newpath 0 234 moveto 0 0 lineto 418 0 lineto 418 234 lineto closepath clip newpath
+-117.0 329.2 translate
 1 -1 scale
 
 /cp {closepath} bind def
@@ -132,9 +132,6 @@ $F2psBegin
 % here starts figure with depth 50
 % Polyline
 7.500 slw
-n 4125 3075 m 5490 3075 l 5490 2550 l 4125 2550 l
- cp gs col0 s gr 
-% Polyline
 n 4800 3975 m 4800 4875 l
  4875 4800 l gs col0 s gr 
 % Polyline
@@ -179,15 +176,81 @@ n 3150 3750 m 3675 3750 l 3750 3750 l
 % Polyline
 n 2475 3600 m 3150 3600 l 3150 3900 l 2475 3900 l
  cp gs col0 s gr 
+% Polyline
+n 4125 3075 m 5490 3075 l 5490 2550 l 4125 2550 l
+ cp gs col0 s gr 
+% Polyline
+n 6600 2925 m
+ 8700 2925 l gs col0 s gr 
+% Polyline
+ [30] 0 sd
+n 6900 2925 m
+ 6900 1800 l gs col0 s gr  [] 0 sd
+% Polyline
+n 6900 1800 m
+ 7050 2925 l gs col1 s gr 
+% Polyline
+ [30] 0 sd
+n 7050 2925 m
+ 7050 2325 l gs col0 s gr  [] 0 sd
+% Polyline
+n 7050 2325 m
+ 7575 2925 l gs col1 s gr 
+% Polyline
+ [30] 0 sd
+n 7575 2925 m
+ 7575 2700 l gs col0 s gr  [] 0 sd
+% Polyline
+n 7575 2700 m
+ 8025 2925 l gs col1 s gr 
+% Polyline
+ [30] 0 sd
+n 8025 2925 m
+ 8025 2850 l gs col0 s gr  [] 0 sd
+% Polyline
+n 8025 2850 m
+ 8250 2925 l gs col1 s gr 
+% Polyline
+2 slj
+n 6900 1650 m 6900 1652 l 6900 1656 l 6901 1663 l 6902 1674 l 6903 1689 l
+ 6905 1707 l 6907 1728 l 6909 1751 l 6912 1777 l 6915 1803 l
+ 6918 1831 l 6922 1860 l 6927 1890 l 6932 1921 l 6939 1954 l
+ 6946 1988 l 6955 2025 l 6964 2062 l 6975 2100 l 6988 2140 l
+ 7000 2176 l 7010 2205 l 7018 2227 l 7024 2243 l 7027 2254 l
+ 7029 2262 l 7031 2266 l 7031 2269 l 7032 2271 l 7034 2275 l
+ 7037 2281 l 7043 2290 l 7052 2303 l 7064 2321 l 7081 2344 l
+ 7101 2371 l 7125 2400 l 7150 2428 l 7174 2453 l 7195 2474 l
+ 7211 2490 l 7222 2502 l 7229 2509 l 7234 2514 l 7236 2517 l
+ 7238 2519 l 7239 2520 l 7243 2523 l 7250 2528 l 7261 2535 l
+ 7279 2545 l 7304 2560 l 7337 2578 l 7377 2600 l 7425 2625 l
+ 7463 2644 l 7501 2661 l 7536 2677 l 7567 2691 l 7594 2703 l
+ 7617 2713 l 7636 2722 l 7651 2728 l 7663 2733 l 7672 2737 l
+ 7680 2741 l 7688 2744 l 7695 2747 l 7704 2750 l 7715 2754 l
+ 7728 2759 l 7746 2765 l 7769 2772 l 7797 2781 l 7831 2792 l
+ 7871 2805 l 7918 2819 l 7970 2834 l 8025 2850 l 8077 2864 l
+ 8128 2877 l 8176 2889 l 8220 2900 l 8259 2909 l 8294 2917 l
+ 8325 2923 l 8352 2928 l 8375 2933 l 8396 2936 l 8414 2939 l
+ 8430 2942 l 8446 2944 l 8462 2946 l 8478 2948 l 8495 2950 l
+ 8513 2953 l 8533 2956 l 8556 2960 l 8582 2964 l 8610 2969 l
+ 8641 2975 l 8674 2981 l 8709 2987 l 8743 2994 l 8775 3000 l
+ 8792 3003 l 8808 3006 l 8822 3009 l 8835 3011 l 8846 3013 l
+ 8856 3015 l 8864 3016 l 8871 3017 l 8876 3018 l 8881 3019 l
+ 8885 3019 l 8887 3019 l 8889 3019 l 8890 3019 l 8889 3019 l
+ 8888 3018 l 8886 3017 l 8884 3017 l 8881 3016 l 8878 3015 l
+ 8875 3014 l 8871 3013 l 8867 3012 l 8863 3011 l 8859 3010 l
+ 8855 3009 l 8851 3008 l 8847 3007 l 8843 3006 l 8839 3005 l
+ 8836 3004 l 8833 3003 l 8830 3002 l 8828 3002 l 8826 3001 l
+ 8824 3001 l 8823 3001 l 8822 3000 l 8821 3000 l
+ 8820 3000 l gs col4 s gr 
 /Times-Roman-iso ff 180.00 scf sf
 6525 3750 m
 gs 1 -1 sc (Yes) col0 sh gr
 /Times-Roman-iso ff 180.00 scf sf
-1500 4500 m
-gs 1 -1 sc ( ) col0 sh gr
-/Times-Roman-iso ff 180.00 scf sf
 2475 3825 m
 gs 1 -1 sc (k=k+1) col0 sh gr
+/Times-Roman-iso ff 180.00 scf sf
+1950 4500 m
+gs 1 -1 sc ( ) col0 sh gr
 % here ends figure;
 $F2psEnd
 rs
