@@ -1,5 +1,11 @@
 \frame
 {
+  \frametitle{Basics on circuit topology and analysis}
+
+}
+
+\frame
+{
   \frametitle{Circuit branch}
 \begin{figure}[h]
 \centerline{
@@ -31,12 +37,16 @@ currents flowing towards that node is equal to the sum of currents flowing away 
  }
 }
 \end{figure}
-With this example 
-\[-I_{1}+I_{2}+I_{3}=0 \qquad (KCL1)\]
-\[-I_{3}+I_{4}=0 \qquad (KCL2)\]
-\[I_{1}-I_{2}-I_{4}=0 \qquad (KCL0)\]
+With this example $N_n=2$, $N_b=4$.
+\[
+\begin{array}{c l }
+-I_{1}+I_{2}+I_{3}=0 & (KCL1)\\
+-I_{3}+I_{4}=0 & (KCL2) \\
+I_{1}-I_{2}-I_{4}=0 & (KCL0 = -KCL1 - KCL2)\\
+\end{array}
+\]
 or the matrix formulation :
-\[AI=0\]
+\[AI=0 \qquad \textrm{ with ${A} \in \RR^{N_n \times N_b}$ }\]
 where A is known as the incidence matrix and I is the vector of branch currents.
 
 }
@@ -45,6 +55,7 @@ where A is known as the incidence matrix and I is the vector of branch currents.
 \newtheorem{kvl}{The Kirchhoff Voltage Law (KVL)}
 \begin{kvl}
 The directed sum of the electrical differences around a closed circuit must be zero.
+
 \end{kvl}
 \begin{figure}[h]
 \centerline{
@@ -53,12 +64,16 @@ The directed sum of the electrical differences around a closed circuit must be z
  }
 }
 \end{figure}
-With this example 
-\[U_{1}+U_{2}=0\]
-\[ -U_{2}+U_{3}+U_{4}=0\]
-\[ U_{1}+U_{3}+U_{4}=0\]
+With this example $N_n=2$, $N_b=4$.
+\[
+\begin{array}{c l }
+U_{1}+U_{2}=0 & (L1)\\
+ -U_{2}+U_{3}+U_{4}=0&(L2)\\
+ U_{1}+U_{3}+U_{4}=0&(L3 = L2 - L1)
+ \end{array}
+ \]
 or the matrix formulation :
-\[BU=0\]
+\[BU=0 \qquad \textrm{ with ${B} \in \RR^{N_b - N_n \times N_b}$ }\]
 where B is known as the loop matrix and U is the vector of branch tensions.
 }
 

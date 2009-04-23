@@ -35,19 +35,20 @@ global minimum of } \psi \]
 \begin{equation}
   \begin{array}{cc}
    \begin{cases}
-    A u + C v + a =0 \\
-    {0} \le {v} \perp     Du +B v +b   \ge {0}
+    A u + C \lambda + a =0 \\
+    y=Du +B \lambda +b\\
+    {0} \le \lambda \perp     y   \ge {0}
     \end{cases}&
    \begin{cases}
    \Phi :\mathbb{R}^{n+m} \longrightarrow \mathbb{R}^{n+m}\\
    \Phi(z)=\left(\begin{array}{c}
    \left(\begin{array}{cc}
    A&C
-   \end{array}\right)z\\
-   \phi(z_{n+1},(D_{1.}B_{1.})z)\\
+   \end{array}\right)z+a\\
+   \phi(z_{n+1},(D_{1.}B_{1.})z+b_1)\\
    .\\
    .\\
-   \phi(z_{n+m},(D_{m.}B_{m.})z)
+   \phi(z_{n+m},(D_{m.}B_{m.})z+b_n)
    \end{array}\right)=0
     \end{cases}
   \end{array}
@@ -55,8 +56,6 @@ global minimum of } \psi \]
 This problem consists now in finding the global minimum of the merit function $\Psi(z)=\| \Phi(z)\|^2$.
  
 \end{block}
-
-
 
 
 }

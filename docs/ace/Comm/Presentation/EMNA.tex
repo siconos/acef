@@ -13,7 +13,7 @@
 \end{itemize}
   \end{block}
   
- \begin{block}{A good choice of unknowns yields the following system:}
+ \begin{block}{A specific choice of unknowns yields the following system:}
  
  \begin{eqnarray}
 x'=A_{2x}x +A_{2z}z +R \lambda +A_{2s}&\label{eq2}\\
@@ -21,6 +21,10 @@ x'=A_{2x}x +A_{2z}z +R \lambda +A_{2s}&\label{eq2}\\
 Y=D_{2x}x+D_{2z}z+D_{2\lambda}\lambda + D_{2s} &\label{eq4}\\
 0 \leq Y \, \perp \, \lambda \geq 0&\label{eqperp}
 \end{eqnarray}
+\begin{itemize}
+\item x which contains only the dynamic unknowns(currents in inductor and tensions from capacitor branches)
+\item z which contains only the non dynamic unknowns(Voltage nodes,... ).
+\end{itemize}
 
   \end{block}
 

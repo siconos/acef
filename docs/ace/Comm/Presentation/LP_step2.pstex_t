@@ -9,21 +9,21 @@
   \fontfamily{#3}\fontseries{#4}\fontshape{#5}%
   \selectfont}%
 \fi\endgroup%
-\begin{picture}(8028,3364)(526,-3344)
-\put(5326,-3286){\makebox(0,0)[lb]{\smash{{\SetFigFont{12}{14.4}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}$V_2=0$}%
+\begin{picture}(7936,3364)(526,-3344)
+\put(2401,-136){\makebox(0,0)[lb]{\smash{{\SetFigFont{12}{14.4}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}$\lambda_1 \geq 0 \qquad \lambda_2\geq 0 \qquad y_1\geq 0 \qquad y_2\geq 0$}%
 }}}}
-\put(7801,-3286){\makebox(0,0)[lb]{\smash{{\SetFigFont{12}{14.4}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}$W_2=0$}%
+\put(2176,-361){\makebox(0,0)[lb]{\smash{{\SetFigFont{12}{14.4}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}(LP solution : $\lambda_1=0 \qquad \lambda_2=3 \qquad y_1=0 \qquad y_2= 2.6$)}%
 }}}}
-\put(1651,-1861){\makebox(0,0)[lb]{\smash{{\SetFigFont{12}{14.4}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}$V_1=0$}%
+\put(1651,-1861){\makebox(0,0)[lb]{\smash{{\SetFigFont{12}{14.4}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}$\lambda_1=0$}%
 }}}}
-\put(6526,-1861){\makebox(0,0)[lb]{\smash{{\SetFigFont{12}{14.4}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}$W_1=0$}%
+\put(6526,-1861){\makebox(0,0)[lb]{\smash{{\SetFigFont{12}{14.4}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}$y_1=0$}%
 }}}}
-\put(2401,-136){\makebox(0,0)[lb]{\smash{{\SetFigFont{12}{14.4}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}$V_1 \geq 0 \qquad V_2\geq 0 \qquad W_1\geq 0 \qquad W2\geq 0$}%
+\put(526,-3211){\makebox(0,0)[lb]{\smash{{\SetFigFont{12}{14.4}{\rmdefault}{\mddefault}{\itdefault}{\color[rgb]{0,0,0}$\lambda_2=0$}%
 }}}}
-\put(2176,-361){\makebox(0,0)[lb]{\smash{{\SetFigFont{12}{14.4}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}(LP solution : $V_1=0 \qquad V_2=3 \qquad W_1=0 \qquad W_2= 2.6$)}%
+\put(2851,-3286){\makebox(0,0)[lb]{\smash{{\SetFigFont{12}{14.4}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}$y_2=0$}%
 }}}}
-\put(526,-3211){\makebox(0,0)[lb]{\smash{{\SetFigFont{12}{14.4}{\rmdefault}{\mddefault}{\itdefault}{\color[rgb]{0,0,0}$V_2=0$}%
+\put(5326,-3286){\makebox(0,0)[lb]{\smash{{\SetFigFont{12}{14.4}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}$\lambda_2=0$}%
 }}}}
-\put(2851,-3286){\makebox(0,0)[lb]{\smash{{\SetFigFont{12}{14.4}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}$W_2=0$}%
+\put(7801,-3286){\makebox(0,0)[lb]{\smash{{\SetFigFont{12}{14.4}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}$y_2=0$}%
 }}}}
 \end{picture}%

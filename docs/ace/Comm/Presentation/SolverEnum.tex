@@ -1,3 +1,8 @@
+\frame
+{
+  \frametitle{Mixed Linear Complementarity Problem solvers}
+
+}
 
 \frame
 {
@@ -6,13 +11,13 @@
  \begin{equation}\label{eq:mlcp1}
  \begin{cases}
 M \left(\begin{array}{c}
-   U\\
-   V
+   u\\
+   \lambda
    \end{array}\right) + q = \left(\begin{array}{c}
    0\\
-   W
+   y
    \end{array}\right) \\
-      0 \le V \perp     W   \ge 0
+      0 \le \lambda \perp     y   \ge 0
 
       \end{cases}
 \end{equation}
@@ -22,12 +27,12 @@ M \left(\begin{array}{c}
 
 \begin{block}{A linear system}
 
-Let $I_v$ and $I_w$, tow complementary subsets of $\{1,..,m\}$ and
+Let $I_\lambda$ and $I_y$, tow complementary subsets of $\{1,..,m\}$ and
 looking for a solution such that : \\
 \[
 \begin{cases}
-U_i=0 \textrm{ for } i \in I_v \\
- W_i=0 \textrm{ for } i \in I_w
+\lambda_i=0 \textrm{ for } i \in I_\lambda \\
+ y_i=0 \textrm{ for } i \in I_y
 \end{cases}
  \]
 
@@ -35,19 +40,19 @@ U_i=0 \textrm{ for } i \in I_v \\
 
 
 \[\textrm{Solve the linear system: }N \left(\begin{array}{c}
-   U\\
-   VW
+   u\\
+   \lambda y
    \end{array}\right) = -q   \textrm{   With   }
    \begin{cases}
    N_{.i}=M_{.i} \textrm{ for } i \in \{1..n\}\\
-   N_{.i}=M_{.i} \textrm{ for } i-n \in I_w\\
-   N_{.i}=-e_{i} \textrm{ for } i-n \in I_u
+   N_{.i}=M_{.i} \textrm{ for } i-n \in I_y\\
+   N_{.i}=-e_{i} \textrm{ for } i-n \in I_\lambda
 \end{cases}
 \]
 \[ \textrm { Solution if the complementarity hold: }
 \begin{cases}
-W_i \ge 0 \textrm{ for } i \in I_v  \\
-U_i \ge 0 \textrm{ for } i \in I_w
+y_i \ge 0 \textrm{ for } i \in I_\lambda  \\
+\lambda_i \ge 0 \textrm{ for } i \in I_y
 \end{cases}
 \]
 An enumeratif algorithm consists in solving the $2^m$ cases.

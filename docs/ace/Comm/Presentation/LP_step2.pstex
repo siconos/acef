@@ -1,9 +1,9 @@
 %!PS-Adobe-2.0 EPSF-2.0
 %%Title: LP_step2.fig
 %%Creator: fig2dev Version 3.2 Patchlevel 4
-%%CreationDate: Mon Nov 17 15:25:53 2008
+%%CreationDate: Thu Apr 23 15:25:16 2009
 %%For: bonnefon@duparc (olivier bonnefon)
-%%BoundingBox: 0 0 482 202
+%%BoundingBox: 0 0 477 202
 %%Magnification: 1.0000
 %%EndComments
 /$F2psDict 200 dict def
@@ -45,7 +45,7 @@ $F2psDict /mtrx matrix put
 
 end
 save
-newpath 0 202 moveto 0 0 lineto 482 0 lineto 482 202 lineto closepath clip newpath
+newpath 0 202 moveto 0 0 lineto 477 0 lineto 477 202 lineto closepath clip newpath
 -31.5 251.0 translate
 1 -1 scale
 
@@ -94,12 +94,6 @@ $F2psBegin
 % here starts figure with depth 50
 % Polyline
 7.500 slw
-n 6750 3075 m
- 5550 3975 l gs col0 s gr 
-% Polyline
-n 6750 3075 m
- 8025 3975 l gs col0 s gr 
-% Polyline
 n 4350 1275 m
  1950 2475 l gs col0 s gr 
 % Polyline
@@ -113,6 +107,12 @@ n 1950 3000 m
  [60] 0 sd
 n 1950 3000 m
  3150 3900 l gs col0 s gr  [] 0 sd
+% Polyline
+n 6750 3075 m
+ 5550 3975 l gs col0 s gr 
+% Polyline
+n 6750 3075 m
+ 8025 3975 l gs col0 s gr 
 /Times-Roman ff 180.00 scf sf
 1200 2925 m
 gs 1 -1 sc (The minimization failed) col0 sh gr
