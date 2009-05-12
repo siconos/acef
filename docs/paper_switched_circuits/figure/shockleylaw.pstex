@@ -1,0 +1,164 @@
+%!PS-Adobe-2.0 EPSF-2.0
+%%Title: shockleylaw.fig
+%%Creator: fig2dev Version 3.2 Patchlevel 5
+%%CreationDate: Tue May  5 17:19:08 2009
+%%For: brogliat@delassus (bernard brogliato)
+%%BoundingBox: 0 0 176 155
+%Magnification: 0.3500
+%%EndComments
+/$F2psDict 200 dict def
+$F2psDict begin
+$F2psDict /mtrx matrix put
+/col-1 {0 setgray} bind def
+/col0 {0.000 0.000 0.000 srgb} bind def
+/col1 {0.000 0.000 1.000 srgb} bind def
+/col2 {0.000 1.000 0.000 srgb} bind def
+/col3 {0.000 1.000 1.000 srgb} bind def
+/col4 {1.000 0.000 0.000 srgb} bind def
+/col5 {1.000 0.000 1.000 srgb} bind def
+/col6 {1.000 1.000 0.000 srgb} bind def
+/col7 {1.000 1.000 1.000 srgb} bind def
+/col8 {0.000 0.000 0.560 srgb} bind def
+/col9 {0.000 0.000 0.690 srgb} bind def
+/col10 {0.000 0.000 0.820 srgb} bind def
+/col11 {0.530 0.810 1.000 srgb} bind def
+/col12 {0.000 0.560 0.000 srgb} bind def
+/col13 {0.000 0.690 0.000 srgb} bind def
+/col14 {0.000 0.820 0.000 srgb} bind def
+/col15 {0.000 0.560 0.560 srgb} bind def
+/col16 {0.000 0.690 0.690 srgb} bind def
+/col17 {0.000 0.820 0.820 srgb} bind def
+/col18 {0.560 0.000 0.000 srgb} bind def
+/col19 {0.690 0.000 0.000 srgb} bind def
+/col20 {0.820 0.000 0.000 srgb} bind def
+/col21 {0.560 0.000 0.560 srgb} bind def
+/col22 {0.690 0.000 0.690 srgb} bind def
+/col23 {0.820 0.000 0.820 srgb} bind def
+/col24 {0.500 0.190 0.000 srgb} bind def
+/col25 {0.630 0.250 0.000 srgb} bind def
+/col26 {0.750 0.380 0.000 srgb} bind def
+/col27 {1.000 0.500 0.500 srgb} bind def
+/col28 {1.000 0.630 0.630 srgb} bind def
+/col29 {1.000 0.750 0.750 srgb} bind def
+/col30 {1.000 0.880 0.880 srgb} bind def
+/col31 {1.000 0.840 0.000 srgb} bind def
+
+end
+save
+newpath 0 155 moveto 0 0 lineto 176 0 lineto 176 155 lineto closepath clip newpath
+-37.5 172.4 translate
+1 -1 scale
+
+/cp {closepath} bind def
+/ef {eofill} bind def
+/gr {grestore} bind def
+/gs {gsave} bind def
+/sa {save} bind def
+/rs {restore} bind def
+/l {lineto} bind def
+/m {moveto} bind def
+/rm {rmoveto} bind def
+/n {newpath} bind def
+/s {stroke} bind def
+/sh {show} bind def
+/slc {setlinecap} bind def
+/slj {setlinejoin} bind def
+/slw {setlinewidth} bind def
+/srgb {setrgbcolor} bind def
+/rot {rotate} bind def
+/sc {scale} bind def
+/sd {setdash} bind def
+/ff {findfont} bind def
+/sf {setfont} bind def
+/scf {scalefont} bind def
+/sw {stringwidth} bind def
+/tr {translate} bind def
+/tnt {dup dup currentrgbcolor
+  4 -2 roll dup 1 exch sub 3 -1 roll mul add
+  4 -2 roll dup 1 exch sub 3 -1 roll mul add
+  4 -2 roll dup 1 exch sub 3 -1 roll mul add srgb}
+  bind def
+/shd {dup dup currentrgbcolor 4 -2 roll mul 4 -2 roll mul
+  4 -2 roll mul srgb} bind def
+/$F2psBegin {$F2psDict begin /$F2psEnteredState save def} def
+/$F2psEnd {$F2psEnteredState restore end} def
+
+$F2psBegin
+10 setmiterlimit
+0 slj 0 slc
+ 0.02100 0.02100 sc
+%
+% Fig objects follow
+%
+% 
+% here starts figure with depth 50
+% Polyline
+0 slj
+0 slc
+7.500 slw
+gs  clippath
+9880 4455 m 10065 4455 l 10065 4395 l 9880 4395 l 9880 4395 l 10030 4425 l 9880 4455 l cp
+eoclip
+n 1800 4425 m
+ 10050 4425 l gs col0 s gr gr
+
+% arrowhead
+n 9880 4455 m 10030 4425 l 9880 4395 l 9910 4425 l 9880 4455 l 
+ cp gs 0.00 setgray ef gr  col0 s
+% Polyline
+gs  clippath
+3780 1145 m 3780 960 l 3720 960 l 3720 1145 l 3720 1145 l 3750 995 l 3780 1145 l cp
+eoclip
+n 3750 5400 m
+ 3750 975 l gs col0 s gr gr
+
+% arrowhead
+n 3780 1145 m 3750 995 l 3720 1145 l 3750 1115 l 3780 1145 l 
+ cp gs 0.00 setgray ef gr  col0 s
+% Polyline
+2 slj
+90.000 slw
+n 3375 1271 m 3375 1273 l 3375 1276 l 3375 1283 l 3375 1294 l 3375 1309 l
+ 3375 1329 l 3375 1355 l 3375 1387 l 3375 1424 l 3376 1467 l
+ 3376 1515 l 3376 1569 l 3376 1626 l 3377 1687 l 3377 1752 l
+ 3377 1818 l 3378 1886 l 3378 1955 l 3378 2025 l 3379 2094 l
+ 3379 2163 l 3380 2230 l 3380 2296 l 3381 2360 l 3382 2422 l
+ 3382 2482 l 3383 2540 l 3384 2596 l 3384 2649 l 3385 2701 l
+ 3386 2750 l 3387 2798 l 3388 2844 l 3389 2888 l 3390 2931 l
+ 3391 2972 l 3392 3012 l 3393 3051 l 3394 3089 l 3396 3126 l
+ 3397 3162 l 3398 3198 l 3400 3234 l 3402 3279 l 3404 3323 l
+ 3407 3368 l 3410 3412 l 3413 3456 l 3416 3500 l 3420 3543 l
+ 3424 3587 l 3429 3630 l 3434 3673 l 3440 3716 l 3447 3758 l
+ 3454 3800 l 3462 3842 l 3470 3882 l 3480 3922 l 3490 3962 l
+ 3501 4000 l 3513 4037 l 3525 4074 l 3538 4109 l 3553 4142 l
+ 3568 4175 l 3583 4206 l 3600 4236 l 3617 4264 l 3635 4292 l
+ 3654 4317 l 3674 4342 l 3695 4365 l 3717 4387 l 3739 4408 l
+ 3763 4427 l 3788 4446 l 3807 4460 l 3828 4473 l 3850 4486 l
+ 3872 4498 l 3896 4510 l 3920 4522 l 3946 4533 l 3973 4543 l
+ 4002 4554 l 4031 4564 l 4062 4573 l 4094 4583 l 4128 4591 l
+ 4163 4600 l 4200 4608 l 4238 4616 l 4277 4624 l 4318 4631 l
+ 4360 4637 l 4404 4644 l 4449 4650 l 4495 4656 l 4542 4661 l
+ 4591 4666 l 4641 4671 l 4692 4676 l 4744 4680 l 4797 4684 l
+ 4851 4688 l 4906 4691 l 4962 4694 l 5019 4697 l 5076 4700 l
+ 5135 4702 l 5194 4705 l 5254 4707 l 5314 4709 l 5375 4711 l
+ 5437 4713 l 5500 4715 l 5564 4716 l 5629 4718 l 5695 4719 l
+ 5763 4721 l 5810 4722 l 5857 4723 l 5906 4724 l 5956 4725 l
+ 6006 4726 l 6058 4727 l 6110 4729 l 6164 4730 l 6220 4731 l
+ 6276 4732 l 6335 4733 l 6395 4734 l 6456 4735 l 6520 4737 l
+ 6585 4738 l 6653 4739 l 6723 4740 l 6794 4742 l 6869 4743 l
+ 6945 4744 l 7024 4746 l 7105 4747 l 7189 4749 l 7275 4750 l
+ 7364 4752 l 7455 4753 l 7548 4755 l 7644 4757 l 7742 4758 l
+ 7841 4760 l 7943 4762 l 8046 4763 l 8151 4765 l 8257 4767 l
+ 8363 4769 l 8470 4770 l 8577 4772 l 8683 4774 l 8788 4776 l
+ 8892 4777 l 8993 4779 l 9093 4781 l 9189 4782 l 9281 4784 l
+ 9370 4785 l 9454 4786 l 9533 4788 l 9606 4789 l 9675 4790 l
+ 9737 4791 l 9793 4792 l 9843 4793 l 9887 4793 l 9925 4794 l
+ 9957 4795 l 9983 4795 l 10004 4795 l 10021 4796 l 10033 4796 l
+ 10041 4796 l 10046 4796 l 10049 4796 l
+ 10050 4796 l gs col0 s gr 
+% here ends figure;
+$F2psEnd
+rs
+showpage
+%%Trailer
+%EOF

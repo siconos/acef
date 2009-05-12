@@ -1,0 +1,52 @@
+This is BibTeX, Version 0.99c (Web2C 7.5.4)
+The top-level auxiliary file: CircuitSimul.aux
+The style file: plain.bst
+Database file #1: CircuitSimulation.bib
+Warning--I didn't find a database entry for "fig:NMOS"
+Name 1 in "Stevens, S.N., and Lin, P.M." has a comma at the end for entry stevens1981
+while executing---line 1049 of file plain.bst
+Warning--can't use both author and editor fields in moreau1988
+Name 1 in "Stevens, S.N., and Lin, P.M." has a comma at the end for entry stevens1981
+while executing---line 1090 of file plain.bst
+You've used 36 entries,
+            2118 wiz_defined-function locations,
+            901 strings with 13934 characters,
+and the built_in function-call counts, 11757 in all, are:
+= -- 1135
+> -- 512
+< -- 7
++ -- 207
+- -- 164
+* -- 919
+:= -- 1971
+add.period$ -- 110
+call.type$ -- 36
+change.case$ -- 185
+chr.to.int$ -- 0
+cite$ -- 37
+duplicate$ -- 426
+empty$ -- 956
+format.name$ -- 164
+if$ -- 2454
+int.to.chr$ -- 0
+int.to.str$ -- 36
+missing$ -- 40
+newline$ -- 185
+num.names$ -- 72
+pop$ -- 158
+preamble$ -- 1
+purify$ -- 154
+quote$ -- 0
+skip$ -- 278
+stack$ -- 0
+substring$ -- 802
+swap$ -- 59
+text.length$ -- 7
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 134
+warning$ -- 1
+while$ -- 104
+width$ -- 38
+write$ -- 405
+(There were 2 error messages)

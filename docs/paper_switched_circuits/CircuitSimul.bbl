@@ -1,0 +1,228 @@
+\begin{thebibliography}{10}
+
+\bibitem{acary-brogliato2008}
+V.~Acary and B.~Brogliato.
+\newblock {\em Numerical Methods for Nonsmooth Dynamical Systems. Applications
+  in Mechanics and Electronics}, volume~35 of {\em Lecture Notes in Applied and
+  Computational Mechanics}.
+\newblock Springer Verlag, Heidelberg, 2008.
+
+\bibitem{Acary-Perignon2007}
+V.~Acary and F.~P\'erignon.
+\newblock An introduction to {{\sc siconos}}.
+\newblock Technical Report TR-0340, INRIA,
+  http://hal.inria.fr/inria-00162911/en/, 2007.
+
+\bibitem{mathmod}
+V.~Acary and F.~P\'erignon.
+\newblock {\sc siconos}: a software platform for modeling, simulation, analysis
+  and control of nonsmooth dynamical systems.
+\newblock {\em Simulation News Europe}, 17(3/4):19--26, December 2007.
+
+\bibitem{adly2007}
+K.~Addi, S.~Adly, B.~Brogliato, and D.~Goeleven.
+\newblock A method using the approach of {M}oreau and {P}anagiotopoulos for the
+  mathematical formulation of non-regular circuits in electronics.
+\newblock {\em Nonlinear Analysis: Hybrid Systems}, 1(1):30--43, March 2007.
+
+\bibitem{addi2009}
+K.~Addi, B.~Brogliato, and D.~Goeleven.
+\newblock A qualitative mathematical analysis of a class of linear variational
+  inequalities via semi-complementarity problems: applications in electronics.
+\newblock {\em Mathematical Programming A}, 2008.
+\newblock in press, DOI 10.1007/s10107-009-0268-7.
+
+\bibitem{batlle2005}
+C.~Batlle, E.~Fossas, and A.~Miralles.
+\newblock Generalized discontinuous conduction modes in the complementarity
+  formalism.
+\newblock {\em IEEE Transactions on Circuits and Systems--II: Express Briefs},
+  52(8):447--451, August 2005.
+
+\bibitem{biolek2007}
+D.~Biolek and J.~Dobes.
+\newblock Computer simulation of continuous-time and switched circuits:
+  limitations of {SPICE}-family programs and pending issues.
+\newblock In {\em Radioelektronika, 17th Int. Conference}, Brno, Czech
+  Republic, 24-25 April 2007.
+
+\bibitem{camlibel2002}
+M.~K. Camlibel, W.P.M.H. Heemels, and J.M. Schumacher.
+\newblock Consistency of a time-stepping method for a class of piecewise-linear
+  networks.
+\newblock {\em IEEE Trans. Circuits and systems I}, 49:349--357, 2002.
+
+\bibitem{chua1985}
+L.O. Chua and A.C. Dang.
+\newblock Canocical piecewise-linear analysis: Part ii -- tracing dirving-point
+  and transfer characteristics.
+\newblock {\em IEEE Transactions on Circuits and Systems}, CAS-32(5):417--444,
+  May 1985.
+
+\bibitem{chua1983}
+L.O. Chua and R.L.P. Ying.
+\newblock Canonical piecewise-linear analysis.
+\newblock {\em IEEE Transactions on Circuits and Systems}, CAS-30(3):125--140,
+  March 1983.
+
+\bibitem{chung1994}
+H.S.H Chung and A.~Ioinovici.
+\newblock Fast computer aided simulation of switching power regulators based on
+  progressive analysis of the switches'state.
+\newblock {\em IEEE Transactions on Power Electronics}, 9(2):206--212, March
+  1994.
+
+\bibitem{enge2005}
+O.~Enge and P.~Maisser.
+\newblock Modelling electromechanical systems with electrical switching
+  components using the linear complementarity problem.
+\newblock {\em Multibody System Dynamics}, 13:421--445, 2005.
+
+\bibitem{facchinei}
+F.~Facchinei and J.~S. Pang.
+\newblock {\em Finite-dimensional Variational Inequalities and Complementarity
+  Problems}, volume I \& II of {\em Springer Series in Operations Research}.
+\newblock Springer Verlag NY. Inc., 2003.
+
+\bibitem{frasca2008}
+R.~Frasca, M.K. Camlibel, I.C. Goknar, and F.~Vasca.
+\newblock State jump rules in linear passive networks with ideal switches.
+\newblock In {\em IEEE Int. Symp. on Circuits and Systems (ISCAS)}, Seattle,
+  Washington, May 2008.
+
+\bibitem{galias2006}
+Z.~Galias and X.~Yu.
+\newblock Complex discretization behaviors of a simple sliding-mode control
+  system.
+\newblock {\em IEEE Transactions on Circuits and Systems -- II: Express
+  Briefs}, 53(8):652--656, August 2006.
+
+\bibitem{giaouris2008}
+D.~Giaouris, S.~Banerjee, B.~Zahawi, and V.~Pickert.
+\newblock Stability analysis of the continuous-conduction-mode buck converter
+  via {F}ilippov's method.
+\newblock {\em IEEE Transactions on Circuits and Systems--I: Regular Papers},
+  55(4):1084--1096, May 2008.
+
+\bibitem{glocker2005}
+C.~Glocker.
+\newblock Models of non-smooth switches in electrical systems.
+\newblock {\em Int. J. of Circuit Theory and Applications}, 33:205--234, 2005.
+
+\bibitem{goelevenJOTA}
+D.~Goeleven.
+\newblock Existence and uniqueness for a linear mixed variational inequality
+  arising in electrical circuits with transistors.
+\newblock {\em Journal of Optimization Theory and Applications},
+  138(3):397--406, September 2008.
+
+\bibitem{hiriart1992}
+J.B. Hiriart-Urruty and C.~Lemar\'echal.
+\newblock {\em Convex Analysis and Minimization Algorithms}.
+\newblock Springer Verlag, Heidelberg, 1993.
+\newblock (two volumes).
+
+\bibitem{jean1999}
+M.~Jean.
+\newblock The non-smooth contact dynamics method.
+\newblock {\em Comput. Methods Appl. Mech. Eng.}, 177(3-4):235--257, 1999.
+
+\bibitem{chua1978}
+S.M. Kang and L.O. Chua.
+\newblock A global representation of multidimensional piecewise-linear
+  functions with linear partitions.
+\newblock {\em IEEE Transactions on Circuits and Systems}, CAS-25(11):938--940,
+  November 1978.
+
+\bibitem{leenaerts-bokhoven1998}
+D.M.W. Leenaerts and W.M.G. van Bokhoven.
+\newblock {\em Piecewise Linear Modeling and Analysis}.
+\newblock Kluwer, New-York, 1998.
+
+\bibitem{leenaerts1999}
+D.M. Leenarts.
+\newblock On linear dynamic complementarity systems.
+\newblock {\em IEEE Transactions on Circuits and Systems--I: Fundamental Theory
+  and Applications}, 46(8):1022--1026, August 1999.
+
+\bibitem{maffezzoni2006}
+P.~Maffezzoni, L.~Codecasa, and D.~D'Amore.
+\newblock Event-driven time-domain simulation of closed-loop switched circuits.
+\newblock {\em IEEE Transactions on Computer-Aided Design of Integrated
+  Circuits and Systems}, 25(11):2413--2426, November 2006.
+
+\bibitem{mayaram2000}
+K.~Mayaram, D.C. Lee, D.A. Moinian, and J.~Roychowdhury.
+\newblock Computer-aided circuit analysis tools for {RFIC} simulation:
+  algorithms, features, and limitations.
+\newblock {\em IEEE Transactions on Circuits and Systems--II: Analog and
+  Digital Signal Processing}, 47(4):274--286, April 2000.
+
+\bibitem{moller2007}
+M.~Moeller and C.~Glocker.
+\newblock Non-smooth modelling of electrical systems using the flux aproach.
+\newblock {\em Nonlinear Dynamics}, 50:273--295, 2007.
+
+\bibitem{moreau1988}
+J.J. Moreau.
+\newblock {\em Unilateral contact and dry friction in finite freedom dynamics},
+  volume 302 of {\em CISM Courses and Lectures}, chapter~1, pages 1--82.
+\newblock Springer Verlag, International Center for Mechanical Sciences, 1988.
+
+\bibitem{moreau1999}
+J.J. Moreau.
+\newblock Numerical aspects of the sweeping process.
+\newblock {\em Comput. Methods Appl. Mech. Eng.}, 177(3-4):329--349, 1999.
+
+\bibitem{stevens1981}
+S.N. Stevens and P.M. Lin.
+\newblock Analysis of piecewise-linear resistive networks using complementarity
+  pivot theory.
+\newblock {\em IEEE Transactions on Circuits and Systems}, CAS-28(5):429--441,
+  May 1981.
+
+\bibitem{bokhoven1978}
+W.M.G. van Bokhoven and J.A.G. Jess.
+\newblock Some new aspects of {$P$} and {$P_{0}$} matrices and their
+  application to networks with ideal diodes.
+\newblock In {\em IEEE Int. Symp. Circuits and Systems}, pages 806--810, 1978.
+
+\bibitem{vandenberghe1989}
+L.~Vandenberghe, B.L. De~Moor, and J.~Vandewalle.
+\newblock The generalized linear complementarity problem applied to the
+  complete analysis of resistive piecewise-linear circuits.
+\newblock {\em IEEE Transactions on Circuits and Systems}, 36(11):1382--1391,
+  November 1989.
+
+\bibitem{vasca2009}
+F.~Vasca, L.~Iannelli, M.K. Camlibel, and R.~Frasca.
+\newblock A new perspective for modelling power electronics converters:
+  complementarity framework.
+\newblock {\em IEEE Transactions on Power Electronics}, 24(2):456--468,
+  February 2009.
+
+\bibitem{vlach1997}
+J.~Vlach and A.~Opal.
+\newblock Modern {CAD} methods for analysis of switched networks.
+\newblock {\em IEEE Transactions on Cricuits and Systems--I: Fundamental Theory
+  and Applications}, 44(8):759--762, August 1997.
+
+\bibitem{vlach1995a}
+J.~Vlach, J.M. Wojciecchowski, and A.~Opal.
+\newblock Analysis of nonlinear networks with inconsistent initial conditions.
+\newblock {\em IEEE Transactions on Circuits and Systems--I: Fundamental Theory
+  and Applications}, 42(4):195--200, April 1995.
+
+\bibitem{yuan2003}
+F.~Yuan and A.~Opal.
+\newblock Computer methods for switched circuits.
+\newblock {\em IEEE Transactions on Circuits and Systems--I: Fundamental Theory
+  and Applications}, 50(8):1013--1024, August 2003.
+
+\bibitem{vlach1995b}
+L.~Zhu and J.~Vlach.
+\newblock Analysis and steady state of nonlinear networks with ideal switches.
+\newblock {\em IEEE Transactions on Circuits and Systems--I: Fundamental Theory
+  and Applications}, 42(4):212--214, April 1995.
+
+\end{thebibliography}
