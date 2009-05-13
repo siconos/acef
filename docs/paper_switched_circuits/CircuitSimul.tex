@@ -16,23 +16,23 @@
 \setlength{\oddsidemargin}{0cm}
 
 %\renewcommand{\baselinestretch}{2.0}
-\DeclareMathOperator{\argmin}{argmin}
+%\DeclareMathOperator{\argmin}{argmin}
 \DeclareMathOperator{\argmax}{argmax}
 \DeclareMathOperator{\minimize}{minimize}
 \DeclareMathOperator{\support}{supp}
-\DeclareMathOperator{\proj}{proj}
-\DeclareMathOperator{\sgn}{sgn}
+%\DeclareMathOperator{\proj}{proj}
+%\DeclareMathOperator{\sgn}{sgn}
 %%%%%%%%%%%%%%%%%% Ajout Vincent
 %\usepackage{rotating}
 \usepackage{algorithmic}
 \usepackage{algorithm}
 %\newcommand{\Frac}[2]{\displaystyle \frac{#1}{#2}}
 %\renewcommand{\baselinestretch}{2.0}                                                                               
-\newcommand{\contract}{{\,\Bar{\Bar\otimes}\,}}
-\newcommand{\scontract}{{\,{\Bar\otimes}\,}}
-\newcommand{\tcontract}{{\,{\Bar{\Bar{\Bar\otimes}}}\,}}
+%\newcommand{\contract}{{\,\Bar{\Bar\otimes}\,}}
+%\newcommand{\scontract}{{\,{\Bar\otimes}\,}}
+%\newcommand{\tcontract}{{\,{\Bar{\Bar{\Bar\otimes}}}\,}}
 
-
+\input{macro.tex}
 \usepackage{showlabels}
 \usepackage{fancyhdr}\usepackage{lastpage}
 
@@ -54,26 +54,7 @@
 \endgroup
 
 
-%----------------------------------------------------------------------
-%             Redaction note environnement V.ACARY
-%----------------------------------------------------------------------
-% Faut etre fou pour s'amuser a pondre des notes pareilles
 
-{\newtheorem{ndr1va}{\textbf{\textsc{Redaction note V.A.}}}[section]}
-
-\newenvironment{ndrva}%
-{%
-\noindent\begin{ndr1va}\hrule\vspace{1em}%
-\ttfamily\small \  \\
-\indent}%
-{%
-\begin{flushright}%
-\  \\
-%\vspace{-1.5em}\ding{111}
-\end{flushright}%
-\vspace{-1.5em}\hrule
-\end{ndr1va}%
-}
 
 
 \usepackage{pifont}
@@ -110,9 +91,9 @@
 \newtheorem{theorem}{Theorem}
 
 \newcommand{\CC}{\mbox{\rm $~\vrule height6.6pt width0.5pt depth0.25pt\!\!$C}}
-\newcommand{\ZZ}{\mbox{\rm \lower0.3pt\hbox{$\angle\!\!\!$}Z}}
-\newcommand{\RR}{\mbox{\rm $I\!\!R$}}
-\newcommand{\NN}{\mbox{\rm $I\!\!N$}}
+%\newcommand{\ZZ}{\mbox{\rm \lower0.3pt\hbox{$\angle\!\!\!$}Z}}
+%\newcommand{\RR}{\mbox{\rm $I\!\!R$}}
+%\newcommand{\NN}{\mbox{\rm $I\!\!N$}}
 \newcommand{\Qend}{\hfill $\Box$}
 
 %\newcommand{\ie}{i.e.}
@@ -186,15 +167,27 @@ The objective of this paper is twofold: first it is shown on an academic example
 
 The NSDS approach for the  modelling of piecewise linear components in electrical circuits has been described in detail  in several of the above cited publications, and will just be recalled here for the sake of readability. Depending on one's tastes, the current-voltage law of non-smooth electronic devices may take the form of various types of complementarity relations, or of inclusions into normal cones, or more generally of inclusions like $v \in {\cal F}(i)$ for some set-valued function ${\cal F}: \RR \rightarrow \RR$ \cite{adly2007,glocker2005}. Let us provide details on three non-smooth devices that will be used in the next examples of sections \ref{section3} and \ref{section4}. 
 
-\paragraph{Non-smooth  diodes:} Three models of diodes are depicted in figure \ref{figdiodes}: the smooth exponential model in figure \ref{figdiodes} (a), ideal diodes with possible residual current $-a$ and voltage $-b$ in figure \ref{figdiodes} (b), and the ``hybrid'' model which considers the two modes separately with an associated script in figure \ref{figdiodes} (c). The piecewise-linear model in figure  \ref{figdiodes} (b) is chosen in this paper. The drawbacks of the Shockley law is that it introduces stiffness in the dynamical equations. The hybrid model becomes rapidly unusable if the number $m$ of diodes increases, since the number of modes to be described in the associated script varies as $2^{m}$. This will be shown on the converter example. On the contrary the ideal model of figure  \ref{figdiodes} (b) yields, when introduced in the dynamics, complementarity problems or equivalently inclusions into normal cones, that yield time-stepping methods for which efficient solvers exist. Showing the efficiency of these methods is the object of this paper.
+\paragraph{Non-smooth  diodes:}  The notation for the currents and the potentials at the ports of
+the diode is depicted on figure \cite{fig:DIODE}.
+
+\begin{figure}
+  \centering
+  \input{./figure/diode.pstex_t}
+  \caption{diode Symbol}
+  \label{fig:DIODE}
+\end{figure}
+
+
+Three models of diodes are depicted in figure \ref{figdiodes}: the smooth exponential model in figure \ref{figdiodes} (a), ideal diodes with possible residual current $-a$ and voltage $-b$ in figure \ref{figdiodes} (b), and the ``hybrid'' model which considers the two modes separately with an associated script in figure \ref{figdiodes} (c). The piecewise-linear model in figure  \ref{figdiodes} (b) is chosen in this paper. The drawbacks of the Shockley law is that it introduces stiffness in the dynamical equations. The hybrid model becomes rapidly unusable if the number $m$ of diodes increases, since the number of modes to be described in the associated script varies as $2^{m}$. This will be shown on the converter example. On the contrary the ideal model of figure  \ref{figdiodes} (b) yields, when introduced in the dynamics, complementarity problems or equivalently inclusions into normal cones, that yield time-stepping methods for which efficient solvers exist. Showing the efficiency of these methods is the object of this paper.
 
 \begin{figure}
  \begin{center}
-    \begin{tabular}{ccc}
-      smooth modeling & non-smooth modeling & hybrid modeling \\ \\
+    \begin{tabular}{cccc}
+      smooth modeling & non-smooth modeling & hybrid modeling &equivalent resistor model\\ \\
       \scalebox{0.5}{\input{./figure/shockleylaw.pstex_t}}
       &   \scalebox{0.5}{\input{./figure/figdiode.pstex_t}}
-      &  \scalebox{0.6}{\input{./figure/hybrid_diode.pstex_t}} \\ 
+      &  \scalebox{0.6}{\input{./figure/hybrid_diode.pstex_t}}
+      &  \scalebox{0.6}{\input{./figure/diodeReq.pstex_t}}\\ 
   \mbox{{\footnotesize    $ i(t) =  i_s \exp(- \frac{v(t)}{\alpha} - 1  $}}
       & \mbox{{\footnotesize $ 0\leq i(t)+a \perp v(t)+b \geq 0  $ }}
       &
@@ -204,11 +197,19 @@ The NSDS approach for the  modelling of piecewise linear components in electrica
        \ i(t) &=& \mathbf{if}\quad \mathsf{off} \quad \mathbf{then}\quad 0
         \quad \mathbf{else}\quad \mathsf{s}
       \end{array} $ }}
+      &
+\mbox{{\footnotesize  $v(t)=\left\{\begin{array}{ll} R_{off}\; i(t) & \mbox{if}\;v(t) < 0 \\   R_{on}\; i(t) & \mbox{if}\;v(t) \geq  0  \end{array}\right.$ }}
 \end{tabular}
   \end{center}
-\caption{Three models of diodes.}
+\caption{four models of diodes.}
 \label{figdiodes}
 \end{figure}
+
+\begin{ndrob}
+  Using the model \ref{figdiodes} (b) leads a condition number of the MLCP matrix near
+  $\frac{R_off}{R_on}$, that cause trouble with the Fisher-Burmeister algorithm.\\
+  Using \ref{figdiodes} (b) leads to smaller condition number of the system.
+\end{ndrob}
 
 Quite similar developments and comments may be made for ideal Zener diodes, piecewise linear practical diodes and practical Zener diodes, see e.g. \cite{acary-brogliato2008,addi2009}. 
 
@@ -223,7 +224,19 @@ Quite similar developments and comments may be made for ideal Zener diodes, piec
 %\end{figure}
 
 
-\paragraph{Non-smooth switches:} The switches are modelled in two ways in this paper. The first model, that is applied to the elementary example of section \ref{section3}, consists of:
+\paragraph{Non-smooth switches:}The notation for the currents and the potentials at the ports of
+the ideal switch is depicted on figure \cite{fig:IDEAL_SWITCH}.
+
+
+\begin{figure}
+  \centering
+  \scalebox{0.7}{
+  \input{./figure/IdealSwitch.pstex_t}
+  }
+  \caption{Ideal Switch Symbol}
+  \label{fig:IDEAL_SWITCH}
+\end{figure}
+The switches are modelled in two ways in this paper. The first model, that is applied to the elementary example of section \ref{section3}, consists of:
 
 \begin{equation}\label{switchmodel1}
 v(t)=\left\{\begin{array}{ll} R_{off}\; i(t) & \mbox{if}\;u_{c}(t) < 0 \\   R_{on}\; i(t) & \mbox{if}\;u_{c}(t) \geq  0  \end{array}\right.
@@ -291,16 +304,33 @@ The above electronic devices models may all be represented as inclusions, or gen
 i(t) \in \{b\}+N_{]-\infty,a]}(v(t))
 \end{equation} 
 
-Similar inclusions for ideal Zener diodes may be found in \cite{acary-brogliato2008,addi2009}. 
+Similar inclusions for ideal Zener diodes may be found in \cite{acary-brogliato2008,addi2009}. \\
 
+And the inclusions model of the ideal diode of figure \ref{figdiodes} (d).
+
+\begin{equation}
+  \label{eq:63diode}
+  \begin{array}[l]{l}
+    v(t)=(\lambda_2+R_{on})*i(t) \\
+    y_1=R_{off}-\lambda_2-R_{on}\\
+    y_2=v(t)+\lambda_1\\
+    0 \leq \left(\begin{array}{c}
+y_1\\
+y_2
+  \end{array}\right) \perp \left(\begin{array}{c}
+\lambda_1\\
+\lambda_2
+  \end{array}\right) \geq 0
+\end{array}
+\end{equation}
 
 \paragraph{Non-smooth switches:} The ideal switch is modeled with non-linear complementarity relations:
 
 \begin{equation}
-  \label{eq:63}
+  \label{eq:63switch}
   \begin{array}[l]{l}
-    v(t)=(\lambda_2+R_1)*i(t) \\
-    y_1=R_2-\lambda_2-R_1\\
+    v(t)=(\lambda_2+R_{on})*i(t) \\
+    y_1=R_{off}-\lambda_2-R_{on}\\
     y_2=U_c+\lambda_1\\
     0 \leq \left(\begin{array}{c}
 y_1\\
@@ -463,27 +493,102 @@ Starting from the dynamics in (\ref{eq:71}) the discrete-time scheme is as follo
 \label{section3}
 
 
-This section is devoted to modelling and simulation of the circuit in figure \ref{figcircuit1}. In \cite{maffezzoni2006} it is shown that Newton-Raphson based methods fail to converge on such a circuit, with the switch model as in (\ref{switchmodel1}). On the contrary the OSNSP solver correctly behaves on the same model.  
+This section is devoted to modelling and simulation of the circuit in figure \ref{fig:figcircuit1}. In \cite{maffezzoni2006} it is shown that Newton-Raphson based methods fail to converge on such a circuit, with the switch model as in (\ref{switchmodel1}). On the contrary the OSNSP solver correctly behaves on the same model.  
 
+\begin{figure}[h]
+  \centering
+   \scalebox{0.9}{
+  \input{./figure/CS.pstex_t}
+  }
+  \caption{switched circuit}
+  \label{fig:figcircuit1}
+\end{figure}
 
-\subsection{The dynamical equations}
+\subsection{The dynamical system}
 \label{section31}
+The system of this section is getting using an algorithm of automatic circuit equation formulation.
+In a first step, the vector of unknowns is build, in a second step, the dynamical system is
+written, and, in a last step, the non-smooth law is added.
 
+\subsubsection{The vector of unknowns}
+Applying the algorithm leads to the following vector of unknowns:
+\[\left(\begin{array}{ccccccccc}
+V_1&V_2&V_3&V_4&I_L&I_{03}&I_{04}&I_s&I_d
+\end{array}\right)\]
+\subsubsection{Build the dynamical equations}
+It consists in writing the KCL at each node, the constitutive equation of the smooth branch, and the
+non-smooth law of the other. It leads to the  system \ref{eq:72}
 
+\begin{equation}
+  \label{eq:72}
+ \left\{ \begin{array}{l l l}
+    \begin{array}{c}
+      L \dot I_L = V_1-V2\\
+      I_d+I_s-I_L=0\\
+      I_L-\frac{V_2}{R}=0\\
+      I_{03}=0\\
+      I_{04}-I_{s}=0\\
+      V_4=20\\
+      V_3=s(t)\\
+\end{array}
+& \left.\begin{array}{c}
+      \\
+      \\
+      \\
+      \\
+      \\
+      \\
+      \\
+\end{array}\right\}& \text{ Differential Algebraic Equations}\\[2mm]
+  \begin{array}{c}
+    0 = V_1-V_4+I_s(\lambda_2+R_{on}) \\
+    0 = V_1+I_d(\lambda_4+R_{on}) \\
+    y_1 = R_{off}-\lambda_2-R_{on}\\
+    y_2 = V_3-V_2+\lambda_1\\
+    y_3 = R_{off}-\lambda_4-R_{on}\\
+    y_4 = -V_1+\lambda_3\\
+  \end{array} & \left.\begin{array}{c}
+     \\
+     \\
+    \\
+    \\
+    \\
+    \\
+  \end{array}\right\} & \begin{array}{l}
+   \text{Input/output relations }\\
+   \text{on non-smooth components}
+  \end{array}  \\[5mm]
+  \begin{array}{c}
+  0 \leq y \perp \lambda \geq 0
+\end{array} 
+& \left.\begin{array}{c}\\ \end{array}\right\}  &  \text{ "Inclusion rule"}\\ 
+\end{array}\right.
+\end{equation}
 
 \subsection{Numerical results with {\sc siconos}}
 \label{section32}
-
-
 
 
 \begin{remark}
 In \cite{maffezzoni2006} an event-driven numerical method is proposed to solve the non convergence issue. However it is reliable only if the switching times can be precisely estimated, a shortcoming not encountered  in Moreau's time-stepping method. 
 \end{remark}
 
+The figure \ref{fig:SIMU_CS} displays the current throw the inductor.
+
+ \begin{figure}[h]
+ \input{simuCS}  
+  \label{fig:SIMU_CS}
+ \end{figure}
+
+ In \cite{maffezzoni2006}, it has been chosen that the NR iterations failed when the system change of
+ state at $t=t_s$, the correct state just after the commutation is never reach. More precisely, the
+ iteration enter in a infinite loop between two unrealizable sates. \\
+ Using our formulation, the solving of the non-smooth problem find the correct state, thank the
+ implicit time integration of the complementarity unknowns.
 
 
 
+ 
 
 \section{Results on the buck converter}
 \label{section4}
