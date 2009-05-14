@@ -178,7 +178,7 @@ the diode is depicted on figure \cite{fig:DIODE}.
 \end{figure}
 
 
-Three models of diodes are depicted in figure \ref{figdiodes}: the smooth exponential model in figure \ref{figdiodes} (a), ideal diodes with possible residual current $-a$ and voltage $-b$ in figure \ref{figdiodes} (b), and the ``hybrid'' model which considers the two modes separately with an associated script in figure \ref{figdiodes} (c). The piecewise-linear model in figure  \ref{figdiodes} (b) is chosen in this paper. The drawbacks of the Shockley law is that it introduces stiffness in the dynamical equations. The hybrid model becomes rapidly unusable if the number $m$ of diodes increases, since the number of modes to be described in the associated script varies as $2^{m}$. This will be shown on the converter example. On the contrary the ideal model of figure  \ref{figdiodes} (b) yields, when introduced in the dynamics, complementarity problems or equivalently inclusions into normal cones, that yield time-stepping methods for which efficient solvers exist. Showing the efficiency of these methods is the object of this paper.
+Four models of diodes are depicted in figure \ref{figdiodes}: the smooth exponential model in figure \ref{figdiodes} (a), ideal diodes with possible residual current $-a$ and voltage $-b$ in figure \ref{figdiodes} (b), and the ``hybrid'' model which considers the two modes separately with an associated script in figure \ref{figdiodes} (c). The piecewise-linear model in figure  \ref{figdiodes} (b) is chosen in this paper. The drawbacks of the Shockley law is that it introduces stiffness in the dynamical equations. The hybrid model becomes rapidly unusable if the number $m$ of diodes increases, since the number of modes to be described in the associated script varies as $2^{m}$. This will be shown on the converter example. On the contrary the ideal model of figure  \ref{figdiodes} (b) yields, when introduced in the dynamics, complementarity problems or equivalently inclusions into normal cones, that yield time-stepping methods for which efficient solvers exist. Showing the efficiency of these methods is the object of this paper.
 
 \begin{figure}
  \begin{center}
@@ -418,11 +418,57 @@ Writing more compactly $y=Bu(t)+\lambda+h$ and $0=i(t)+C\lambda$, and using some
 \begin{equation}
 \lambda=\mbox{proj}[K; -Bu(t)-h]
 \end{equation}
-with $K=(\RR^{+})^{10}$. In the case of the MOSFET transistor, the inclusion is an equality as the multivalued part of the inclusion vanishes. 
+with $K=(\RR^{+})^{10}$. In the case of the MOSFET transistor, the inclusion is an equality as the multivalued part of the inclusion vanishes. detail
 
 
 
+\begin{ndrob}
+  The number of segments can be customize by the user according to the accuracy wished.
+\end{ndrob}
 
+\paragraph{MOS transitor a nonlinear and nonsmooth}. Like it was describe in~(\ref{eq:MOS_LEE_VAN}),
+  it consists in modeling the MOS considering two
+  domains, $V_{GS} > V_T$ and $V_{GD} > V_T$. In this case, the MOS design can be described with the
+  equations~(\ref{eq:MOS_CP1}). Like in the previous ideal model, $I_G$ is supposed equals to
+  zero, it leads to define $I_{DS} = I_D = -I_S$, the current through the MOS transistor.
+
+  \begin{equation}
+    \label{eq:MOS_CP1}
+    \left\{\begin{array}{c}
+  I_{DS} = I_1 + I_2\\
+  I_1 = \left\{ \begin{array}{ll}
+    \frac{K}{2}(V_{GS}-V_T)^2 & \textrm{if $V_{GS}>V_T$}\\
+    0 & \textrm{if $V_{GS} \leq V_T$}
+\end{array} \right.\\
+    
+  I_2 = \left\{ \begin{array}{ll}
+    \frac{-K}{2}(V_{GD}-V_T)^2& \textrm{if $V_{GS}>V_T$}\\
+    0 & \textrm{if $V_{GD} \leq V_T$}
+\end{array} \right.\\
+      \end{array}\right.
+  \end{equation}
+
+It is equivalent to the developing system :
+  
+\[I_{DS}= \left\{ \begin{array}{ll}
+0 & \textrm{if $V_{GS} < V_T \wedge V_{GD} < V_T$}\\
+\frac{K}{2}(V_{GS}-V_T)^2 & \textrm{if $V_{GS} > V_T \wedge V_{GD} < V_T$}\\
+K((V_{GS}-V_T)V_{DS} -\frac{1}{2}V_{DS}^2) & \textrm{if $V_{GS} > V_T \wedge V_{GD} > V_T$}\\
+\frac{-K}{2}(V_{GD}-V_T)^2 & \textrm{if $V_{GS} < V_T \wedge V_{GD} > V_T$}
+\end{array} \right.\]
+
+The system ~(\ref{eq:MOS_CP1}) can be reformulated by the complementarity system:
+  \begin{equation}
+    \label{eq:MOS_CP3}
+    \left\{\begin{array}{c}
+
+I_{DS}= \frac{K}{2}( \lambda _4 (V_{GS}-V_T)^2 - \lambda _2 (V_{GD}-V_T)^2)\\
+\left(\begin{array}{c} y_1\\y_2\\y_3\\y_4\end{array}\right) = \left(\begin{array}{c} 1 - \lambda _2\\V_T-V_{GD} + \lambda _1\\1-\lambda _4\\V_T-V_{GS} + \lambda
+  _3\end{array}\right)\\
+ 0 \leq \left(\begin{array}{c} \lambda _1\\ \lambda _2\\ \lambda _3\\ \lambda _4\end{array}\right) \perp \left(\begin{array}{c}
+    y_1\\y_2\\y_3\\y_4\end{array}\right) \geq 0 \\
+          \end{array}\right.
+  \end{equation}
 
 
 \subsection{The dynamical equations}
@@ -433,7 +479,29 @@ with $K=(\RR^{+})^{10}$. In the case of the MOSFET transistor, the inclusion is 
 
 Let us describe briefly how the dynamical equations are obtained for the two systems which are analyzed in this paper. There are basically three choices for the state variables, based on the charge approach, the flux approach, and the current-voltage approach. The latter is chosen here. An automatic circuit equation generation system has been developed at the INRIA, see the patent \cite{}. 
 
+There are a lot of methods to build a nonsmooth DAE formulation. Indeed, all smooth formulation 
+(STA or MNA) could be adapted by replacing the constitutive equations of the nonsmooth components
+with the corresponding inclusion rule. All this formulation are not equivalent for the OSNSP
+solving. Indeed, too much redundancy cause trouble with solver. Many formulations have been testing
+and we note that an adaptation of the MNA leads to a simulable formulation.
 
+\paragraph{The automatic circuit equation formulation} starts from the MNA. It adds some unknowns to
+get a semi-explicit system, and replaces the constitutive equations of the nonsmooth components with
+the corresponding inclusion rule. The figure \ref{fig:acef_algo} shows the main steps of the
+equations formulation.
+
+\begin{figure}[h]
+  \centering
+  \scalebox{0.5}{
+  \input{./figure/acef_algo.pstex_t}
+  }
+  \caption{Algorithm to get a SEDGE}
+  \label{fig:acef_algo}
+\end{figure}
+
+\paragraph{Remark :} Our implementation consists in using some object structures. For each component
+and equation a corresponding instance is built. The writing of the system in memory with correct value is ensured by the stamp method of each component. In the linear
+case, theses methods are called only once, in the nonlinear case theses could be called at any time to update the system.
 
 
 \subsubsection{The non-smooth DAE formulation}
@@ -506,9 +574,9 @@ This section is devoted to modelling and simulation of the circuit in figure \re
 
 \subsection{The dynamical system}
 \label{section31}
-The system of this section is getting using an algorithm of automatic circuit equation formulation.
-In a first step, the vector of unknowns is build, in a second step, the dynamical system is
-written, and, in a last step, the non-smooth law is added.
+The system of the circuit \ref{fig:figcircuit1} is getting using an algorithm of automatic circuit equation formulation.
+In a first step, the vector of unknowns is built, in a second step, the dynamical system is
+written, and, in a last step, the nonsmooth law is added.
 
 \subsubsection{The vector of unknowns}
 Applying the algorithm leads to the following vector of unknowns:
@@ -580,13 +648,10 @@ The figure \ref{fig:SIMU_CS} displays the current throw the inductor.
   \label{fig:SIMU_CS}
  \end{figure}
 
- In \cite{maffezzoni2006}, it has been chosen that the NR iterations failed when the system change of
- state at $t=t_s$, the correct state just after the commutation is never reach. More precisely, the
- iteration enter in a infinite loop between two unrealizable sates. \\
- Using our formulation, the solving of the non-smooth problem find the correct state, thank the
- implicit time integration of the complementarity unknowns.
-
-
+ In \cite{maffezzoni2006}, it has been chosen that the NR iterations failed when the state of the
+ diode and of the switch change at $t=t_s$. Indeed, the linearization performed at each NR iteration leads to an oscillation between two incorrect
+ states and never converge to the correct one. The NR iterations enter in a infinite loop without converge. \\
+ Using our formulation, because of the implicit time integration of the complementarity unknowns, the solving of the non-smooth problem find the correct state.
 
  
 
