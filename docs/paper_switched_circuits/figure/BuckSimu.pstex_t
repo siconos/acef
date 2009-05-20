@@ -10,6 +10,6 @@
   \selectfont}%
 \fi\endgroup%
 \begin{picture}(11686,6645)(1372,-7111)
-\put(6323,-3964){\makebox(0,0)[rb]{\smash{{\SetFigFont{10}{12.0}{\rmdefault}{\mddefault}{\updefault}(c): $I_L$}}}}
 \put(6323,-706){\makebox(0,0)[rb]{\smash{{\SetFigFont{10}{12.0}{\rmdefault}{\mddefault}{\updefault}(a): $V_{load}$}}}}
+\put(6323,-3964){\makebox(0,0)[rb]{\smash{{\SetFigFont{10}{12.0}{\rmdefault}{\mddefault}{\updefault}(b): $I_L$}}}}
 \end{picture}%

@@ -9,6 +9,7 @@
  \usepackage{psfrag}
 
 \usepackage{url}
+\usepackage[squaren,Gray]{SIunits}
 
 
 \setlength{\textwidth}{16cm}
@@ -682,8 +683,9 @@ filter with a cutoff frequency of 30 MHz.
 $x < -0.15V$ and 3 if $x > 0.15V$ .
 \paragraph{Ramp voltage:} the frequency is 600 kHz and the bounds are 0 and 0.75 VI = 2.25 V .
 The rise time is 1.655 us and the fall time is 10 ns.
-\paragraph{Other components:} $V_I$ = 3 V , L = 10 uH, C = 22 uF, load resistor R = 10 , compensator
-: R11 = 15.58 k, R12 = 227.8 k,R21 = 5.613 M, C11 = 20 pF, C21 = 1.9 pF
+\paragraph{Other components:} $V_I = 3 V , L = 10 \micro H, C = 22 \micro F,R_{load} = 10,$ compensator
+: $R_{11} = 15.58 \kilo \ohm , R_{12} = 227.8 \kilo \ohm ,R_{21} = 5.613 \mega \ohm, C_{11} = 20 \pico F, C_{21} =
+1.9 \pico F$
 The reference voltage Vref rises from 0 to 1.8 V in 0.1 ms at the beginning
 of the simulation.
 The output voltage Voutput is regulated to track the reference voltage Vref when
@@ -694,21 +696,24 @@ comparator drives the PMOS transistor which in turn provides more or less
 charge to the output depending on the error level. The operation of a buck
 converter involves both a relatively slow dynamics when the switching elements
 (MOS and diodes) are keeping their conducting state, and a fast dynamics when
-the states change. The order of magnitude are 50 ps for some switching details,
-1 us for a slow variation period and 100 us at least for a settling period of the
+the states change. The order of magnitude are $ 50 \pico s$ for some switching details,
+1 us for a slow variation period and $100 \micro s$ at least for a settling period of the
 whole circuit requiring a simulation.
 \subsection{The dynamical equations}
 \label{section41}
-
+The non-smooth DAE has been generated using the automatic circuit equation formulation describe in
+\ref{fig:acef_algo}. It leads to a dynamical system of 25 unknowns connected to a inclusion rule. The dimension of the inclusion
+rule depends on the MOS model. It could be 12 with a approximation of 2 segments, or 24 using the
+model \ref{eq:68}.  
 
 \subsection{Numerical results with {\sc siconos},  and comparisons}
 \label{section42}
-
+\subsubsection{Simulation with SICONOS}
  The start-up of the converter was simulated thanks to the SICONOS platform
 developed at INRIA. As initial conditions, all state variables are zeroed.
 The detailed analysis of the switching events requires to use a time step as
-small as 50 ps. The simulations are carried with a fixed time step, 4000000 steps
-are then computed for the 200 us long settling of the output voltage.
+small as $50 \pico s$. The simulations are carried with a fixed time step, 4000000 steps
+are then computed for the $200 \micro s$ long settling of the output voltage.
 The overall result is shown on the figure \ref{fig:figSimuBuck} .\\
 \textbf{The CPU time required to achieve the simulation is 60 seconds on a
 Pentium 4 processor clocked at 3 GHz.} It includes 19 seconds in the MLCP solvers, 40 seconds in
@@ -722,9 +727,141 @@ matrix product. The time to export the resulting data is not include.
   \label{fig:figSimuBuck}
 \end{figure}
 
+\begin{enumerate}
+  \item[--] The figure \ref{fig:figSimuBuck} (a) is the output potential, following the ramp $V_{ref}$.
+    \item[--] The figure \ref{fig:figSimuBuck} (b) is the current throw the inductor. Until $0.0001s$, $I_L$
+    is loading the capacitor C. After $0.0001s$, $I_L$ has to keep constant the capacitor charge.
+    \item[--] The figure \ref{fig:figSimuBuck} (c) zooms on the MOSP drain potential with standard
+    parameters.
+    \item[--] The figure  \ref{fig:figSimuBuck} (d) zooms on the MOSP drain potential with, $L=4\micro H,
+    C=10\micro F,
+    R_{11}=10\kilo \ohm, R_{21}=8\kilo \ohm ,C_{11}=10\pico F$, exhibiting a
+    sliding mode 
+  \end{enumerate}
+
+The simulation has been tested with many parameters values. The robustness of the non-smooth modelling and solving algorithms enables to perform with the same
+CPU time the simulation of such cases. 
+
+\subsubsection{Simulation with SPICE }
+\paragraph{Simulation conditions: convergence issues related to the MOS model}
+The simulation of this circuit was done with several versions of SPICE (the open source NGSPICE from Berkeley, SMASH from Dolphin and
+ELDO from Mentor Graphics) and two kinds of MOS models :
+\begin{description}
+\item[the MOS level 3 model :] this model was preferred to the MOS level 1 since it allowed the convergence
+of the SMASH simulator with the requirement to add a small capacitor between ground and node 2 (connection between
+the MOS transistors). This model takes more physical effects into account than the piecewise linear model used in SICONOS simulations,
+in particular the voltage-dependent capacitances. It is an important issue since these varying capacitances
+cause some convergence problems when node 2 switches between $V_I$ and ground.
+Adding a small capacitor of a few picoFarad between this node and ground helps to solve the problem
+but may yield artifacts (spikes) on the current of the~$V_I$~alim and the MOS transistors.
+\item[a simplified model (Sah model)] with fixed capacitances and a quadratic static characteristic :
+\[
+I_{DS} = \textrm{max}(0,V_{GS}-Vt_N)^2 - \textrm{max}(0,V_{GD}-Vt_N)^2 \qquad \textrm{for an NMOS}
+\]
+This model is very close to the piecewise linear model used in SICONOS simulations. The implementation in netlists was done thanks to 
+voltage-dependent current sources that are very likely not compiled by the various SPICE simulators tested.
+Thus the CPU time measured is increased with respect to a compiled version of the same model.
+An estimation of the CPU time with a compiled simplified model is given by multiplying the MOS level 3 CPU time
+by the ratio of the Newton-Raphson iterations required respectively during the simulations with each model.
+An additional correction should be done to reflect that the computation of the jacobian matrix entries
+linked to a compiled simplified model would require less time than with a MOS level 3 model. Even if the SPICE simulation
+includes other operations, jacobian matrix loading time is indeed known to be generally predominant.
+\end{description}
+
+
+\begin{itemize}
+\item Power MOSFETS intrinsic diodes are modelled by the classical Shockley equation with an emission
+coefficient $N~=~1$ :
+\[ I = I_S.({e^{\frac{q.V}{N.k.T}} - 1}) \qquad \textrm{when} \quad V > -5.N.\frac{k.T}{q} \]
+\[ I = -I_S \qquad  \textrm{when} \quad V < -5.N.\frac{k.T}{q} \]
+with
+\[
+\begin{array}{ll}
+V\,,\,I & \textrm{voltage across the diode and current through the diode}\\
+I_S & \textrm{saturation current, default value $10^{-14}$~A}\\
+q & \textrm{electron charge $1.6\,10^{-19}$~C}\\
+k & \textrm{Boltzmann constant $1.38\,10^{-23}\,J.K^{-1}$}\\
+T & \textrm{temperature in K}\\
+N & \textrm{emission coefficient}
+\end{array}
+\]
+\item The comparator is modelled as a non linear voltage controlled voltage source defined as $V_{out}~=~1.5~\cdot~(tanh(10~\cdot~V_{in}) + 1)$.
+Thus the 3~segment characteristic used as the non smooth model is regularized to help convergence of SPICE
+(see a comparison of the PWL comparator as used in SICONOS simulations with the SPICE one in figure \ref{fig-comparator-models}).
+\end{itemize}
+
+\begin{figure}[hbtp]
+\begin{center}
+\includegraphics[scale=1.0,angle=0]{./figure/comparators.eps}
+\end{center}
+\caption{Comparison of PWL and SPICE (tanh based) comparator models}
+\label{fig-comparator-models}
+\end{figure}
+
+\clearpage
+
+The power supply $V_I$ is raised from 0 in $50~ns$ at the beginning to help the convergence.\footnote{This is
+not required with the SICONOS algorithms that find a consistent initial solution from scratch.}
+The SPICE tolerance values used are $1~nA$ for currents, $1~\mu V$ for voltages and $0.00075$ for relative differences.
+The maximum number of Newton-Raphson iterations is set to 100 (the default values are 10 for NGSPICE, 20 for SMASH and
+13 for ELDO).
+
+Usually, SPICE simulators integrate time with a time step adjusted according to different strategies based on an estimation
+of the local truncation error (LTE) or the number of Newton-Raphson iterations required by previous steps.
+Since SICONOS simulations were carried with a fixed time step of~50~ps, simulators were forced to use this value as a maximum.
+Even when SPICE simulators use fixed time step, they may compute LTE to assess a solution found by the Newton-Raphson
+algorithm. This computation of LTE was disabled because it could impair the performance of SPICE with respect to SICONOS.
+\footnote{For NGSPICE, it implied a slight modification of the source code since no standard option is provided to do it.}
+
+\subsubsection{Simulation comparisons}
+The following tables displays the results with the standard and the sliding mode values of compensator components. An estimation of the CPU time with a compiled simplified model is added.
+\\
+\\
+\begin{tabular}{|l|c|r|r|r|r|}
+\hline
+\multicolumn{6}{|c|}{\textbf{standard compensator values}}\\
+\hline
+simulator & model & time steps & NR iterations & CPU time (s) & CPU time estimation (s)\\
+\hline
+NGSPICE & simple  & 4000000 & 8024814 & 632 & 357\\
+NGSPICE & level 3 & 4000000 & 8304237 & 370 & \\
+\hline
+SMASH   & simple  & 4000404 & 8073070 & 230 & 172\\
+SMASH   & level 3 & 4000323 & 8059868 & 172 & \\
+\hline
+ELDO    & simple  & 4000000 & 4547579 & 388 & 355\\
+ELDO    & level 3 & 4000000 & 4554452 & 356 & \\
+\hline
+\end{tabular}\\
+\begin{tabular}{|l|c|r|r|r|r|}
+\hline
+\multicolumn{6}{|c|}{\textbf{sliding mode compensator values}}\\
+\hline
+simulator & model & time steps & NR iterations & CPU time (s) & CPU time estimation (s)\\
+\hline
+NGSPICE & simple  & 4000000 & 8070324 & 638 & 358\\
+NGSPICE & level 3 & 4000000 & 8669053 & 385 & \\
+\hline
+SMASH   & simple  & 4000252 & 8239697 & 234 & 176\\
+SMASH   & level 3 & 4000131 & 8220181 & 176 & \\
+\hline
+ELDO    & simple  & 4000000 & 5861226 & 438 & 365\\
+ELDO    & level 3 & 4000000 & 5888994 & 367 & \\
+\hline
+\end{tabular}
+\\
+\\
+These results shall be compared to the 60~s~CPU time achieved with the non-smooth dynamics.
+Depending on the model and the SPICE simulator, the (estimated) CPU time is from~2.8~to~6.1
+larger than with SICONOS.\\
+
+Moreover, it was necessary to add a parasitic capacitor on the connection between the PMOS and NMOS
+transistors to allow the convergence of the SMASH simulator with both models of MOS
+and of the NGSPICE simulator with the MOS level 3 model.
+
+
 \section{Conclusions}
 \label{section5}
-
 
 
 In this paper we have presented numerical simulations of switched circuits obtained with a suitable time-stepping implicit method, named Moreau's time-stepping algorithm. This method is based on the non-smooth dynamical systems modelling approach, and relies heavily on complementarity problems (equivalently, inclusions into normal cones) solvers. The advantages of such a method are that it allows one to:
