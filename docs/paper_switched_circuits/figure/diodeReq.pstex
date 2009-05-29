@@ -1,7 +1,7 @@
 %!PS-Adobe-2.0 EPSF-2.0
-%%Title: /scratch/gforge/noselecs/docs/paper_switched_circuits/figure/diodeReq.fig
+%%Title: diodeReq.fig
 %%Creator: fig2dev Version 3.2 Patchlevel 4
-%%CreationDate: Tue May 12 18:31:24 2009
+%%CreationDate: Fri May 29 11:24:24 2009
 %%For: bonnefon@duparc (olivier bonnefon)
 %%BoundingBox: 0 0 149 114
 %%Magnification: 0.3000
@@ -116,7 +116,7 @@ n 3780 995 m 3750 845 l 3720 995 l 3750 965 l 3780 995 l
 % Polyline
 90.000 slw
 n 3360 1500 m 3750 4275 l
- 7875 3840 l gs col0 s gr 
+ 7875 4644 l gs col0 s gr 
 % here ends figure;
 $F2psEnd
 rs
