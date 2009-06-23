@@ -1,5 +1,5 @@
 \begin{picture}(0,0)%
-\includegraphics{./figure/acef_algo.pstex}%
+\includegraphics{acef_algo.pstex}%
 \end{picture}%
 \setlength{\unitlength}{3947sp}%
 %
@@ -9,15 +9,33 @@
   \fontfamily{#3}\fontseries{#4}\fontshape{#5}%
   \selectfont}%
 \fi\endgroup%
-\begin{picture}(5469,6174)(2389,-6448)
-\put(2626,-2986){\makebox(0,0)[lb]{\smash{{\SetFigFont{12}{14.4}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}$X=(x,z)$}%
+\begin{picture}(6971,6174)(2379,-6448)
+\put(5626,-5986){\makebox(0,0)[lb]{\smash{{\SetFigFont{17}{20.4}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}Build the system}%
 }}}}
-\put(2701,-3511){\makebox(0,0)[lb]{\smash{{\SetFigFont{12}{14.4}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}$z=(V_i,I_V,I_{NS})$}%
+\put(5551,-2686){\makebox(0,0)[lb]{\smash{{\SetFigFont{17}{20.4}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}Build the vector of unknowns.}%
+}}}}
+\put(2701,-5911){\makebox(0,0)[lb]{\smash{{\SetFigFont{12}{14.4}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}Semi-Explicit Non-smooth}%
+}}}}
+\put(3376,-6136){\makebox(0,0)[lb]{\smash{{\SetFigFont{12}{14.4}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}DAE}%
+}}}}
+\put(3751,-5386){\makebox(0,0)[lb]{\smash{{\SetFigFont{12}{14.4}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}Write the equations}%
+}}}}
+\put(2701,-4786){\makebox(0,0)[lb]{\smash{{\SetFigFont{12}{14.4}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}$z=(V_i,I_V,I_{\mathsf C ''})$}%
 }}}}
 \put(2626,-4486){\makebox(0,0)[lb]{\smash{{\SetFigFont{12}{14.4}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}$x=(I_{\mathsf L},U_{\mathsf C})$}%
 }}}}
+\put(2701,-3511){\makebox(0,0)[lb]{\smash{{\SetFigFont{12}{14.4}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}$z=(V_i,I_V,I_{NS})$}%
+}}}}
 \put(2626,-3211){\makebox(0,0)[lb]{\smash{{\SetFigFont{12}{14.4}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}$x=(I_{\mathsf L})$}%
 }}}}
-\put(2701,-4786){\makebox(0,0)[lb]{\smash{{\SetFigFont{12}{14.4}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}$z=(V_i,I_V,I_{\mathsf C ''})$}%
+\put(2626,-2986){\makebox(0,0)[lb]{\smash{{\SetFigFont{12}{14.4}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}$X=(x,z)$}%
+}}}}
+\put(3751,-2461){\makebox(0,0)[lb]{\smash{{\SetFigFont{12}{14.4}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}Splitting }%
+}}}}
+\put(2626,-1861){\makebox(0,0)[lb]{\smash{{\SetFigFont{12}{14.4}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}X : unknown from the MNA}%
+}}}}
+\put(3751,-1261){\makebox(0,0)[lb]{\smash{{\SetFigFont{12}{14.4}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}MNA}%
+}}}}
+\put(3226,-736){\makebox(0,0)[lb]{\smash{{\SetFigFont{12}{14.4}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}Netlist}%
 }}}}
 \end{picture}%

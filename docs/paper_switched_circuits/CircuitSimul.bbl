@@ -39,6 +39,12 @@ C.~Batlle, E.~Fossas, and A.~Miralles.
 \newblock {\em IEEE Transactions on Circuits and Systems--II: Express Briefs},
   52(8):447--451, August 2005.
 
+\bibitem{bedrosian1992}
+D.~Bedrosian and J.~Vlach.
+\newblock Analysis of switched networks.
+\newblock {\em Int. Journal of Circuit Theory and Applications}, 20:309--325,
+  1992.
+
 \bibitem{biolek2007}
 D.~Biolek and J.~Dobes.
 \newblock Computer simulation of continuous-time and switched circuits:
@@ -54,8 +60,8 @@ M.~K. Camlibel, W.P.M.H. Heemels, and J.M. Schumacher.
 
 \bibitem{chua1985}
 L.O. Chua and A.C. Dang.
-\newblock Canocical piecewise-linear analysis: Part ii -- tracing dirving-point
-  and transfer characteristics.
+\newblock Canonical piecewise-linear analysis: Part {II} -- tracing
+  driving-point and transfer characteristics.
 \newblock {\em IEEE Transactions on Circuits and Systems}, CAS-32(5):417--444,
   May 1985.
 
@@ -204,7 +210,7 @@ F.~Vasca, L.~Iannelli, M.K. Camlibel, and R.~Frasca.
 \bibitem{vlach1997}
 J.~Vlach and A.~Opal.
 \newblock Modern {CAD} methods for analysis of switched networks.
-\newblock {\em IEEE Transactions on Cricuits and Systems--I: Fundamental Theory
+\newblock {\em IEEE Transactions on Circuits and Systems--I: Fundamental Theory
   and Applications}, 44(8):759--762, August 1997.
 
 \bibitem{vlach1995a}
