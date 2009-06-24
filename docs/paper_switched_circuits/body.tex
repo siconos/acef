@@ -277,16 +277,25 @@ Let us describe briefly how the dynamical equations are obtained for the two sys
 with the corresponding inclusion rule. However these formulations are not equivalent in terms of the OSNSP one has to solve at each step. Indeed, too much redundancy causes trouble with the solver. Many formulations have been tested and it has been concluded that a suitable adaptation of the MNA leads to a suitable formulation, as shown by the simulation results. The automatic circuit equation formulation starts from the MNA. It adds some unknowns to get a semi-explicit system, and replaces the constitutive equations of the non-smooth components by
 the corresponding inclusion rule. The figure \ref{fig:acef_algo} shows the main steps of the equations formulation.
 
+\subsubsection{Software aspects}
+
+
+
+The figure \ref{fig-soft-aspect} shows the libraries and the data involved during the simulation. A
+Netlist is a circuit textual description used by many simulators like SPICE and ELDO. From a Netlist, the automatic generator builds a SEDAE discretized and simulated thanks
+SICONOS. The output of the simulation is a file containing the potential and current values.
+
 \begin{figure}[h]
-  \centering
-  \scalebox{0.7}{
-  \input{./figure/acef_algo.pstex_t}
-  }
-  \caption{Algorithm to get a SEDGE.}
-  \label{fig:acef_algo}
+\centerline{
+ \scalebox{0.9}{
+    \input{./figure/soft_aspect.pstex_t}
+ }
+}
+\caption{libraries and data}
+\label{fig-soft-aspect}
 \end{figure}
 
-Our implementation consists in using some object structures. For each component
+The implementation of the automatic generator consists in using some object structures. For each component
 and equation a corresponding instance is built. The writing of the system in the memory with a correct value is ensured by the stamp method of each component. In the linear
 case, theses methods are called only once, in the non-linear case they may be called at any time to update the system.
 
@@ -488,7 +497,7 @@ The overall result is shown on the figure \ref{fig:figSimuBuck}.
 \vskip 0.2cm
 {\bf Simulation time:} The CPU time required to achieve the simulation is 60 seconds on a
 Pentium 4 processor clocked at 3 GHz. It includes 19 seconds in the MLCP solvers, 40 seconds in
-matrix product. The time to export the resulting data is not included.
+matrix products. The time to export the resulting data is not included.
 \begin{figure}[h]
   \centering
    \scalebox{0.6}{
