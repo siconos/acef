@@ -1,10 +1,10 @@
 %!PS-Adobe-2.0 EPSF-2.0
 %%Title: shockleylaw.fig
-%%Creator: fig2dev Version 3.2 Patchlevel 5
-%%CreationDate: Tue May  5 17:19:08 2009
-%%For: brogliat@delassus (bernard brogliato)
-%%BoundingBox: 0 0 176 155
-%Magnification: 0.3500
+%%Creator: fig2dev Version 3.2 Patchlevel 4
+%%CreationDate: Wed Jun 24 15:48:21 2009
+%%For: acary@Macintosh-10.local (Vincent Acary)
+%%BoundingBox: 0 0 151 81
+%%Magnification: 0.3000
 %%EndComments
 /$F2psDict 200 dict def
 $F2psDict begin
@@ -45,8 +45,8 @@ $F2psDict /mtrx matrix put
 
 end
 save
-newpath 0 155 moveto 0 0 lineto 176 0 lineto 176 155 lineto closepath clip newpath
--37.5 172.4 translate
+newpath 0 81 moveto 0 0 lineto 151 0 lineto 151 81 lineto closepath clip newpath
+-32.2 97.4 translate
 1 -1 scale
 
 /cp {closepath} bind def
@@ -86,18 +86,16 @@ newpath 0 155 moveto 0 0 lineto 176 0 lineto 176 155 lineto closepath clip newpa
 $F2psBegin
 10 setmiterlimit
 0 slj 0 slc
- 0.02100 0.02100 sc
+ 0.01800 0.01800 sc
 %
 % Fig objects follow
 %
 % 
 % here starts figure with depth 50
 % Polyline
-0 slj
-0 slc
 7.500 slw
 gs  clippath
-9880 4455 m 10065 4455 l 10065 4395 l 9880 4395 l 9880 4395 l 10030 4425 l 9880 4455 l cp
+10065 4455 m 10065 4395 l 9880 4395 l 10030 4425 l 9880 4455 l cp
 eoclip
 n 1800 4425 m
  10050 4425 l gs col0 s gr gr
@@ -107,7 +105,7 @@ n 9880 4455 m 10030 4425 l 9880 4395 l 9910 4425 l 9880 4455 l
  cp gs 0.00 setgray ef gr  col0 s
 % Polyline
 gs  clippath
-3780 1145 m 3780 960 l 3720 960 l 3720 1145 l 3720 1145 l 3750 995 l 3780 1145 l cp
+3780 960 m 3720 960 l 3720 1145 l 3750 995 l 3780 1145 l cp
 eoclip
 n 3750 5400 m
  3750 975 l gs col0 s gr gr
@@ -160,5 +158,3 @@ n 3375 1271 m 3375 1273 l 3375 1276 l 3375 1283 l 3375 1294 l 3375 1309 l
 $F2psEnd
 rs
 showpage
-%%Trailer
-%EOF

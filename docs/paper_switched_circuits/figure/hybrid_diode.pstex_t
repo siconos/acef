@@ -1,5 +1,5 @@
 \begin{picture}(0,0)%
-\includegraphics{./figure/hybrid_diode.pstex}%
+\epsfig{file=hybrid_diode.pstex}%
 \end{picture}%
 \setlength{\unitlength}{1381sp}%
 %
@@ -9,7 +9,9 @@
   \fontfamily{#3}\fontseries{#4}\fontshape{#5}%
   \selectfont}%
 \fi\endgroup%
-\begin{picture}(9252,6105)(2686,-6127)
+\begin{picture}(9503,4476)(2701,-4573)
+\put(11251,-4186){\makebox(0,0)[lb]{\smash{{\SetFigFont{9}{10.8}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}$v(t)$}%
+}}}}
 \put(3301,-4111){\makebox(0,0)[lb]{\smash{{\SetFigFont{9}{10.8}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}0}%
 }}}}
 \put(2701,-361){\makebox(0,0)[lb]{\smash{{\SetFigFont{9}{10.8}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}$i(t)$}%
@@ -19,9 +21,5 @@
 \put(9301,-4111){\makebox(0,0)[lb]{\smash{{\SetFigFont{9}{10.8}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}0}%
 }}}}
 \put(8701,-361){\makebox(0,0)[lb]{\smash{{\SetFigFont{9}{10.8}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}$i(t)$}%
-}}}}
-\put(11251,-4186){\makebox(0,0)[lb]{\smash{{\SetFigFont{9}{10.8}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}$v(t)$}%
-}}}}
-\put(7126,-5986){\makebox(0,0)[lb]{\smash{{\SetFigFont{11}{13.2}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}(c)}%
 }}}}
 \end{picture}%

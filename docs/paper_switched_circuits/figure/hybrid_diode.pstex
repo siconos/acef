@@ -1,10 +1,10 @@
 %!PS-Adobe-2.0 EPSF-2.0
 %%Title: hybrid_diode.fig
-%%Creator: fig2dev Version 3.2 Patchlevel 5
-%%CreationDate: Tue May  5 17:16:56 2009
-%%For: brogliat@delassus (bernard brogliato)
-%%BoundingBox: 0 0 195 129
-%Magnification: 0.3500
+%%Creator: fig2dev Version 3.2 Patchlevel 4
+%%CreationDate: Wed Jun 24 15:48:58 2009
+%%For: acary@Macintosh-10.local (Vincent Acary)
+%%BoundingBox: 0 0 200 94
+%%Magnification: 0.3500
 %%EndComments
 /$F2psDict 200 dict def
 $F2psDict begin
@@ -45,8 +45,8 @@ $F2psDict /mtrx matrix put
 
 end
 save
-newpath 0 129 moveto 0 0 lineto 195 0 lineto 195 129 lineto closepath clip newpath
--56.4 146.3 translate
+newpath 0 94 moveto 0 0 lineto 200 0 lineto 200 94 lineto closepath clip newpath
+-56.7 113.7 translate
 1 -1 scale
 
 /cp {closepath} bind def
@@ -93,11 +93,9 @@ $F2psBegin
 % 
 % here starts figure with depth 50
 % Polyline
-0 slj
-0 slc
 7.500 slw
 gs  clippath
-3780 1145 m 3780 960 l 3720 960 l 3720 1145 l 3720 1145 l 3750 995 l 3780 1145 l cp
+3780 960 m 3720 960 l 3720 1145 l 3750 995 l 3780 1145 l cp
 eoclip
 n 3750 5400 m
  3750 975 l gs col0 s gr gr
@@ -107,17 +105,7 @@ n 3780 1145 m 3750 995 l 3720 1145 l 3750 1115 l 3780 1145 l
  cp gs 0.00 setgray ef gr  col0 s
 % Polyline
 gs  clippath
-3780 1145 m 3780 960 l 3720 960 l 3720 1145 l 3720 1145 l 3750 995 l 3780 1145 l cp
-eoclip
-n 3750 5400 m
- 3750 975 l gs col0 s gr gr
-
-% arrowhead
-n 3780 1145 m 3750 995 l 3720 1145 l 3750 1115 l 3780 1145 l 
- cp gs 0.00 setgray ef gr  col0 s
-% Polyline
-gs  clippath
-8080 4455 m 8265 4455 l 8265 4395 l 8080 4395 l 8080 4395 l 8230 4425 l 8080 4455 l cp
+8265 4455 m 8265 4395 l 8080 4395 l 8230 4425 l 8080 4455 l cp
 eoclip
 n 3225 4425 m
  8250 4425 l gs col0 s gr gr
@@ -132,7 +120,7 @@ n 9750 1650 m
 % Polyline
 7.500 slw
 gs  clippath
-11755 4455 m 11940 4455 l 11940 4395 l 11755 4395 l 11755 4395 l 11905 4425 l 11755 4455 l cp
+11940 4455 m 11940 4395 l 11755 4395 l 11905 4425 l 11755 4455 l cp
 eoclip
 n 9225 4425 m
  11925 4425 l gs col0 s gr gr
@@ -144,9 +132,18 @@ n 11755 4455 m 11905 4425 l 11755 4395 l 11785 4425 l 11755 4455 l
 90.000 slw
 n 3750 4425 m
  7875 4425 l gs col0 s gr 
+% Polyline
+7.500 slw
+gs  clippath
+3780 960 m 3720 960 l 3720 1145 l 3750 995 l 3780 1145 l cp
+eoclip
+n 3750 5400 m
+ 3750 975 l gs col0 s gr gr
+
+% arrowhead
+n 3780 1145 m 3750 995 l 3720 1145 l 3750 1115 l 3780 1145 l 
+ cp gs 0.00 setgray ef gr  col0 s
 % here ends figure;
 $F2psEnd
 rs
 showpage
-%%Trailer
-%EOF

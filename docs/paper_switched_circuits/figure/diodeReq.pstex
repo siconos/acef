@@ -1,9 +1,9 @@
 %!PS-Adobe-2.0 EPSF-2.0
 %%Title: diodeReq.fig
 %%Creator: fig2dev Version 3.2 Patchlevel 4
-%%CreationDate: Fri May 29 11:24:24 2009
-%%For: bonnefon@duparc (olivier bonnefon)
-%%BoundingBox: 0 0 149 114
+%%CreationDate: Wed Jun 24 15:48:46 2009
+%%For: acary@Macintosh-10.local (Vincent Acary)
+%%BoundingBox: 0 0 150 81
 %%Magnification: 0.3000
 %%EndComments
 /$F2psDict 200 dict def
@@ -45,8 +45,8 @@ $F2psDict /mtrx matrix put
 
 end
 save
-newpath 0 114 moveto 0 0 lineto 149 0 lineto 149 114 lineto closepath clip newpath
--32.2 127.5 translate
+newpath 0 81 moveto 0 0 lineto 150 0 lineto 150 81 lineto closepath clip newpath
+-32.2 94.7 translate
 1 -1 scale
 
 /cp {closepath} bind def

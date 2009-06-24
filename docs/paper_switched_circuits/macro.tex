@@ -426,6 +426,16 @@ to0pt{\kern0.55\wd0\vrule height0.5\ht0\hss}\box0}}
 \newcommand{\DP}[2]{\displaystyle \frac{\partial {#1}}{\partial {#2}}}
 
 
+\usepackage{pifont}
+\makeatletter
+\def\cqfd{\ifmmode\sqw\else{\ifhmode\unskip\fi\nobreak\hfil
+\penalty50\hskip1em\null\nobreak\hfil\ding{111}
+\parfillskip=0pt\finalhyphendemerits=0\endgraf}\fi}
+\makeatother
+\def\off{{\hbox{\tiny{\textsf{off}}}}}
+\def\on{{\hbox{\tiny{\textsf{on}}}}}
+\def\pwl{{\hbox{\tiny{\textsf{pwl}}}}}
+
 %%% Local Variables: 
 %%% mode: latex
 %%% TeX-master: "book"

@@ -63,7 +63,8 @@
 % should be used if it is desired that the figures are to be displayed in
 % draft mode.
 %
-\documentclass[journal,draft,onecolumn]{IEEEtran}
+\documentclass[journal,draftcls,onecolumn]{IEEEtran}
+%\documentclass[journal]{IEEEtran}
 %
 % If IEEEtran.cls has not been installed into the LaTeX system files,
 % manually specify the path to it like:
@@ -254,7 +255,7 @@
 
 
 % *** SUBFIGURE PACKAGES ***
-%\usepackage[tight,footnotesize]{subfigure}
+\usepackage[tight,footnotesize]{subfigure}
 % subfigure.sty was written by Steven Douglas Cochran. This package makes it
 % easy to put subfigures in your figures. e.g., "Figure 1a and 1b". For IEEE
 % work, it is a good idea to load it with the tight package option to reduce
@@ -369,7 +370,7 @@
 
 % *** PDF, URL AND HYPERLINK PACKAGES ***
 %
-%\usepackage{url}
+\usepackage{url}
 % url.sty was written by Donald Arseneau. It provides better support for
 % handling and breaking URLs. url.sty is already installed on most LaTeX
 % systems. The latest version can be obtained at:
@@ -407,9 +408,40 @@
 \newtheorem{problem}{Problem}
 \newtheorem{theorem}{Theorem}
 
+\usepackage{lastpage}
+
+
+
+\begingroup
+\count0=\time \divide\count0by60 % Hour
+\count2=\count0 \multiply\count2by-60 \advance\count2by\time
+% Min
+\def\2#1{\ifnum#1<10 0\fi\the#1}
+\xdef\isodayandtime{\the\year-\2\month-\2\day\space\2{\count0}:%
+\2{\count2}}
+\endgroup
+
+
+\usepackage{showlabels}
+
+
 
 \begin{document}
-%
+
+\begin{center}
+\vfill
+  \Huge Cover Letter
+
+  \texttt{file IEEEpaper.tex \\
+    \isodayandtime}
+\vfill
+\end{center}
+
+
+
+
+
+
 % paper title
 % can use linebreaks \\ within to get better formatting as desired
 \title{Time-stepping numerical simulation of switched circuits with the non-smooth dynamical systems approach}
@@ -451,8 +483,7 @@
 
 
 % The paper headers
-\markboth{Journal of \LaTeX\ Class Files,~Vol.~X, No.~X, January~20XX}%
-{Acary \MakeLowercase{\textit{et al.}}:Time-stepping numerical simulation of switched circuits with the non-smooth dynamical systems approach }
+\markboth{Acary \MakeLowercase{\textit{et al.}}: Switched circuits with the non-smooth dynamical systems approach --\hfill  \isodayandtime \hfill  }{}
 % The only time the second header will appear is for the odd numbered pages
 % after the title page when using the twoside option.
 % 
@@ -478,7 +509,6 @@
 
 % make the title area
 \maketitle
-
 
 \begin{abstract}
 
@@ -527,6 +557,9 @@ Appendix two text goes here.
 
 The authors would like to thank...
 
+Pascal Denoyelle
+
+ANR VAL-AMS
 
 % Can use something like this to put references on a page
 % by themselves when using endfloat and the captionsoff option.

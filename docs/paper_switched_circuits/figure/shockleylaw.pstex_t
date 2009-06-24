@@ -1,7 +1,7 @@
 \begin{picture}(0,0)%
-\includegraphics{./figure/shockleylaw.pstex}%
+\epsfig{file=shockleylaw.pstex}%
 \end{picture}%
-\setlength{\unitlength}{1381sp}%
+\setlength{\unitlength}{1184sp}%
 %
 \begingroup\makeatletter\ifx\SetFigFont\undefined%
 \gdef\SetFigFont#1#2#3#4#5{%
@@ -9,13 +9,11 @@
   \fontfamily{#3}\fontseries{#4}\fontshape{#5}%
   \selectfont}%
 \fi\endgroup%
-\begin{picture}(8337,7350)(1789,-7372)
-\put(2701,-361){\makebox(0,0)[lb]{\smash{{\SetFigFont{9}{10.8}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}$i(t)$}%
+\begin{picture}(8337,4476)(1789,-4573)
+\put(2701,-361){\makebox(0,0)[lb]{\smash{{\SetFigFont{8}{9.6}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}$i(t)$}%
 }}}}
-\put(9151,-4336){\makebox(0,0)[lb]{\smash{{\SetFigFont{9}{10.8}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}$v(t)$}%
+\put(9151,-4336){\makebox(0,0)[lb]{\smash{{\SetFigFont{8}{9.6}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}$v(t)$}%
 }}}}
-\put(3301,-4111){\makebox(0,0)[lb]{\smash{{\SetFigFont{9}{10.8}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}0}%
-}}}}
-\put(5476,-7186){\makebox(0,0)[lb]{\smash{{\SetFigFont{14}{16.8}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}(a)}%
+\put(3301,-4111){\makebox(0,0)[lb]{\smash{{\SetFigFont{8}{9.6}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}0}%
 }}}}
 \end{picture}%
