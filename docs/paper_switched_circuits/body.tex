@@ -51,7 +51,7 @@ Notice that a solution to the MCP satisfies the inclusion $-F(z) \in N_{[l,u]}(z
 The Mixed Linear Complementarity Problem (MLCP) is defined by a MCP for which $\mathsf F$ in (\ref{eq:MCP}) is affine, \textit{i.e.} $F = M z +q$ for some matrix $M \in RR^{ p \times p}$ and some vector $q\in\RR^m$.\cqfd
 \end{definition}
 
-\section{The non-smooth dynamical equations}
+\section{The non-smooth dynamical systems approach to electrical circuits.}
 \label{section2}
 
 \subsection{Non-smooth electronic devices modelling}
@@ -287,45 +287,6 @@ V_{output} \in N_{[V_{\min},V_{\max}]}(V_{+}-V_{-})
 Section \ref{section21} is devoted to present the electronic devices models and their mathematical representations to be inserted in the circuits dynamics in order to obtain a suitable formalism for subsequent time-discretization. In particular the OSNSP solver to be used strongly influences the modelling choice. In this section we focus on the dynamical equations which are suitable for the NSDS approach. 
 
 
-\subsubsection{Automatic generation of the dynamical equations}
-
-Let us describe briefly how the dynamical equations are obtained for the two systems which are analyzed in this paper. There are basically three choices for the state variables, based on the charge approach, the flux approach, and the current-voltage approach. The latter is chosen here. An automatic circuit equation generation system has been developed at the INRIA, see the patent \ref{}.  There are a lot of methods to build a non-smooth DAE formulation. Indeed, all smooth formulations (STA or MNA) could be adapted by replacing the constitutive equations of the non-smooth components
-with the corresponding inclusion rule. However these formulations are not equivalent in terms of the OSNSP one has to solve at each step. Indeed, too much redundancy causes trouble with the solver. Many formulations have been tested and it has been concluded that a suitable adaptation of the MNA leads to a suitable formulation, as shown by the simulation results. The automatic circuit equation formulation starts from the MNA. It adds some unknowns to get a semi-explicit system, and replaces the constitutive equations of the non-smooth components by
-the corresponding inclusion rule. The figure \ref{fig:acef_algo} shows the main steps of the equations formulation.
-
-\subsubsection{Software aspects}
-
-
-
-The figure \ref{fig-soft-aspect} shows the libraries and the data involved during the simulation. A
-Netlist is a circuit textual description used by many simulators like SPICE and ELDO. From a Netlist, the automatic generator builds a SEDAE discretized and simulated thanks
-SICONOS. The output of the simulation is a file containing the potential and current values.
-
-\begin{figure}[h]
-\centerline{
- \scalebox{0.9}{
-    \input{./figure/soft_aspect.pstex_t}
- }
-}
-\caption{libraries and data}
-\label{fig-soft-aspect}
-\end{figure}
-\begin{ndrva}
-  To do :
-  \begin{itemize}
-  \item Be more precise on the choice of variables. Introduce notation $I_{\mathsf L} \ldots$
-  \item Do we need to speak about the reduction to a semi-DAE ?
-  \end{itemize}
-\end{ndrva}
-
-
-Our implementation consists in using some object structures. For each component
-=======
-The implementation of the automatic generator consists in using some object structures. For each component
->>>>>>> .r216
-and equation a corresponding instance is built. The writing of the system in the memory with a correct value is ensured by the stamp method of each component. In the linear
-case, theses methods are called only once, in the non-linear case they may be called at any time to update the system.
-
 
 \subsubsection{The non-smooth DAE formulation}
 
@@ -448,7 +409,50 @@ If $\mathsf F$ is affine, the problem is called Mixed Linear Complementarity Pro
 
 A special case of a generalized box is the positive orthant of  $\RR^m$, that is $K=\RR_+^m$. In this case, standard theory and most of the numerical algorithms LCP apply in this MCLP case. 
 
+\section{Automatic circuit equation generation and Software implementation}
 
+\subsubsection{Automatic generation of the dynamical equations}
+
+\begin{ndrva}
+  To do :
+  \begin{itemize}
+  \item Be more precise on the choice of variables. Introduce notation $I_{\mathsf L} \ldots$
+  \item Do we need to speak about the reduction to a semi-DAE ?
+  \end{itemize}
+\end{ndrva}
+
+
+Let us describe briefly how the dynamical equations are obtained for the two systems which are analyzed in this paper. There are basically three choices for the state variables, based on the charge approach, the flux approach, and the current-voltage approach. The latter is chosen here. An automatic circuit equation generation system has been developed at the INRIA, see the patent \ref{}.  There are a lot of methods to build a non-smooth DAE formulation. Indeed, all smooth formulations (STA or MNA) could be adapted by replacing the constitutive equations of the non-smooth components
+with the corresponding inclusion rule. However these formulations are not equivalent in terms of the OSNSP one has to solve at each step. Indeed, too much redundancy causes trouble with the solver. Many formulations have been tested and it has been concluded that a suitable adaptation of the MNA leads to a suitable formulation, as shown by the simulation results. The automatic circuit equation formulation starts from the MNA. It adds some unknowns to get a semi-explicit system, and replaces the constitutive equations of the non-smooth components by
+the corresponding inclusion rule. The figure \ref{fig:acef_algo} shows the main steps of the equations formulation.
+
+
+
+\subsubsection{Software aspects}
+
+
+
+The figure \ref{fig-soft-aspect} shows the libraries and the data involved during the simulation. A
+Netlist is a circuit textual description used by many simulators like SPICE and ELDO. From a Netlist, the automatic generator builds a SEDAE discretized and simulated thanks
+SICONOS. The output of the simulation is a file containing the potential and current values.
+
+\begin{figure}[h]
+\centerline{
+ \scalebox{0.9}{
+    \input{./figure/soft_aspect.pstex_t}
+ }
+}
+\caption{libraries and data}
+\label{fig-soft-aspect}
+\end{figure}
+
+
+
+Our implementation consists in using some object structures. For each component
+The implementation of the automatic generator consists in using some object structures. For each component
+
+and equation a corresponding instance is built. The writing of the system in the memory with a correct value is ensured by the stamp method of each component. In the linear
+case, theses methods are called only once, in the non-linear case they may be called at any time to update the system.
 
 
 
@@ -520,7 +524,7 @@ The figure \ref{fig:SIMU_CS} depicts the current evolution through the inductor 
 
 
  \begin{figure}[h]
- \input{simuCS}  
+ \resizebox{\linewidth}{!}{\input{simuCS} }
   \label{fig:SIMU_CS}
 \caption{Current through the inductor.}
  \end{figure}
