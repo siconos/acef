@@ -726,36 +726,40 @@ algorithm. This computation of LTE was disabled because it could impair the perf
 The following tables displays the results with the standard and the sliding mode values of compensator components. An estimation of the CPU time with a compiled simplified model is added.
 \\
 \\
-\begin{tabular}{|l|c|r|r|r|r|}
+\begin{tabular}{|l|c|r|r|r|}
 \hline
-\multicolumn{6}{|c|}{\textbf{standard compensator values}}\\
+\multicolumn{5}{|c|}{\textbf{standard compensator values}}\\
 \hline
-simulator & model & time steps & NR iterations & CPU time (s) & CPU time estimation (s)\\
+simulator & model & time steps & NR iterations & CPU time (s) \\
 \hline
-NGSPICE & simple  & 4000000 & 8024814 & 632 & 357\\
-NGSPICE & level 3 & 4000000 & 8304237 & 370 & \\
+NGSPICE & simple  & 4000000 & 8024814 & 632 \\
+NGSPICE & level 3 & 4000000 & 8304237 & 370 \\
 \hline
-SMASH   & simple  & 4000404 & 8073070 & 230 & 172\\
-SMASH   & level 3 & 4000323 & 8059868 & 172 & \\
+%SMASH   & simple  & 4000404 & 8073070 & 230 \\
+%SMASH   & level 3 & 4000323 & 8059868 & 172 \\
+%\hline
+ELDO    & simple  & 4000000 & 4547579 & 388 \\
+ELDO    & level 3 & 4000000 & 4554452 & 356 \\
 \hline
-ELDO    & simple  & 4000000 & 4547579 & 388 & 355\\
-ELDO    & level 3 & 4000000 & 4554452 & 356 & \\
+SICONOS    & LCP  & 4000000 &  & 60 \\
 \hline
 \end{tabular}\\
-\begin{tabular}{|l|c|r|r|r|r|}
+\begin{tabular}{|l|c|r|r|r|}
 \hline
-\multicolumn{6}{|c|}{\textbf{sliding mode compensator values}}\\
+\multicolumn{5}{|c|}{\textbf{sliding mode compensator values}}\\
 \hline
-simulator & model & time steps & NR iterations & CPU time (s) & CPU time estimation (s)\\
+simulator & model & time steps & NR iterations & CPU time (s) \\
 \hline
-NGSPICE & simple  & 4000000 & 8070324 & 638 & 358\\
-NGSPICE & level 3 & 4000000 & 8669053 & 385 & \\
+NGSPICE & simple  & 4000000 & 8070324 & 638 \\
+NGSPICE & level 3 & 4000000 & 8669053 & 385 \\
 \hline
-SMASH   & simple  & 4000252 & 8239697 & 234 & 176\\
-SMASH   & level 3 & 4000131 & 8220181 & 176 & \\
+%SMASH   & simple  & 4000252 & 8239697 & 234 \\
+%SMASH   & level 3 & 4000131 & 8220181 & 176 \\
+%\hline
+ELDO    & simple  & 4000000 & 5861226 & 438 \\
+ELDO    & level 3 & 4000000 & 5888994 & 367 \\
 \hline
-ELDO    & simple  & 4000000 & 5861226 & 438 & 365\\
-ELDO    & level 3 & 4000000 & 5888994 & 367 & \\
+SICONOS    & LCP  & 4000000 &  & 60 \\
 \hline
 \end{tabular}
 \\
@@ -773,7 +777,13 @@ and of the NGSPICE simulator with the MOS level 3 model.
 
 As we pointed out above, the hybrid approach that consists of an exhaustive enumeration of all the system's modes, soon become inefficient and unusable mainly because the simulation duration grows exponentially fast. Let us illustrate this fact with the buck converter, loaded with several devices: a resistance, and a chain of transistors. The simulator is PLECS, a hybrid simulator developed by Plexim \footnote{http://www.plexim.com/}. 
 
-
+The CPU time required to achieve the simulation of 200 $\micro$s ranges between 596 s to 4 hours,
+depending on the values of the resistors, capacitors and inductor. This should be compared to the 60
+s of the SICONOS simulation, obtained independently from theses components values. Moreover, the
+PLECS simulation perform only 168038 steps comparing the 4000000 perform during the SICONOS
+simulation. It could be conclude that the computation of one step of simulation using SICONOS is 250
+faster than using PLECS. This demonstrates the robustness and efficiency of the time-stepping scheme
+and the one step solving algorithms of SICONOS.
 
 
 \section{Conclusions}
