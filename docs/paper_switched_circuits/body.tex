@@ -449,7 +449,7 @@ where $x \in \RR^n$ is corresponds to the current in the inductive branches and 
 
 
 The figure \ref{fig-soft-aspect} shows the libraries and the data involved during the simulation. A Netlist is a circuit textual description used by many simulators like SPICE and ELDO. From a Netlist, the automatic generator builds all the components defined in~(\ref{eq:SEDGE}). The opensource {\sc Siconos/Kernel} library performes the time-discretization following the Moreau'time stepping scheme~(\ref{eq:71-discrete}) and formulates at each time--step one instance of the inclusion problem~(\ref{eq:inclusion-global}-\ref{eq:inclusion-global3}). The numerical algorithms for the latter problem are in the opensource {\sc Siconos/Numerics} library. The output of the simulation is a file containing the potential and current values in the SPICE format.
-\begin{figure}[h]
+\begin{figure*}[h]
 \centerline{
  \scalebox{0.9}{
     \input{./figure/soft_aspect.pstex_t}
@@ -457,7 +457,7 @@ The figure \ref{fig-soft-aspect} shows the libraries and the data involved durin
 }
 \caption{libraries and data}
 \label{fig-soft-aspect}
-\end{figure}
+\end{figure*}
 
 The implementation is object-oriented and mainly on C++.
 
