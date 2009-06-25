@@ -1,5 +1,5 @@
 \begin{picture}(0,0)%
-\includegraphics{soft_aspect.pstex}%
+\epsfig{file=soft_aspect.pstex}%
 \end{picture}%
 \setlength{\unitlength}{3947sp}%
 %
@@ -9,5 +9,29 @@
   \fontfamily{#3}\fontseries{#4}\fontshape{#5}%
   \selectfont}%
 \fi\endgroup%
-\begin{picture}(7674,1899)(3214,-3148)
+\begin{picture}(8349,1899)(2539,-3148)
+\put(7351,-2986){\makebox(0,0)[lb]{\smash{{\SetFigFont{10}{12.0}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}Solvers for~(\ref{eq:inclusion-global}-\ref{eq:inclusion-global3})}%
+}}}}
+\put(2926,-1711){\makebox(0,0)[lb]{\smash{{\SetFigFont{10}{12.0}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}generator}%
+}}}}
+\put(2926,-1486){\makebox(0,0)[lb]{\smash{{\SetFigFont{10}{12.0}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}Equations}%
+}}}}
+\put(5026,-1711){\makebox(0,0)[lb]{\smash{{\SetFigFont{10}{12.0}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}Formulation (\ref{eq:SEDGE})}%
+}}}}
+\put(7426,-1636){\makebox(0,0)[lb]{\smash{{\SetFigFont{10}{12.0}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}Time-discretization}%
+}}}}
+\put(7801,-1786){\makebox(0,0)[lb]{\smash{{\SetFigFont{10}{12.0}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}of~(\ref{eq:71-discrete})}%
+}}}}
+\put(9901,-1486){\makebox(0,0)[lb]{\smash{{\SetFigFont{10}{12.0}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}Simulation}%
+}}}}
+\put(10051,-1711){\makebox(0,0)[lb]{\smash{{\SetFigFont{10}{12.0}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}output}%
+}}}}
+\put(3001,-2911){\makebox(0,0)[lb]{\smash{{\SetFigFont{10}{12.0}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}Netlist}%
+}}}}
+\put(4951,-1486){\makebox(0,0)[lb]{\smash{{\SetFigFont{10}{12.0}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}Semi-Explicit DAE}%
+}}}}
+\put(7351,-1411){\makebox(0,0)[lb]{\smash{{\SetFigFont{10}{12.0}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}{\sc Siconos/Kernel}}%
+}}}}
+\put(7276,-2686){\makebox(0,0)[lb]{\smash{{\SetFigFont{10}{12.0}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}{\sc Siconos/Numerics}}%
+}}}}
 \end{picture}%

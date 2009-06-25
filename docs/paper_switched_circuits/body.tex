@@ -1,9 +1,6 @@
 
 
 \section{Introduction}
-
-
-
 It is well know that conventional accurate analog simulation tools, which are based on the Newton-Raphson nonlinear solver, can have serious drawbacks when they are used for the integration of non-smooth circuits, containing switches and piecewise linear components (like ideal diodes and transistors). This is especially true when the number of events becomes too large, or when sliding modes exist, which is common in practice. Then analog (SPICE-like) tools  may become very time consuming, or provide very poor results with chattering \cite{galias2006}, or even fail \cite{maffezzoni2006,yuan2003,mayaram2000,chung1994,biolek2007}. The same applies to ``hybrid'' integrators that consider an exhaustive enumeration of all the system's modes, which have a very limited scope of application because of the exponential growth of the number of modes that have to be simulated separately. Along the same lines, event-driven schemes can hardly simulate systems with large number of events, because they soon become quite time-consuming and do not allow for accumulations of events \cite{acary-brogliato2008}. 
 
 It is therefore clear that other types of numerical schemes have to be applied for highly non-smooth switching circuits. Since a numerical method always relies on a specific modelling approach, a logical path is to first reconsider the models of non-smooth components (diodes, switches, transistors, {\em etc}) so that efficient numerical solvers can be applied. The non-smooth dynamical systems (NSDS) approach, which is the one chosen in this paper, appears to be a suitable framework for the simulation of non-smooth circuits, allowing one to efficiently simulate systems with very large number of events, and sliding mode trajectories. It consists of modelling non-smooth components as piecewise linear functions, with possible vertical branches (inducing some unilaterality in the system, hence possible state jumps, when these branches are infinite). The time-discretization of such non-smooth systems then yields various types of so-called one-step-non-smooth-problems (OSNSP), for instance complementarity problems or quadratic programs with equality-inequality constraints, which require specific solvers. The NSDS approach may then take advantage of the quite important works that have been led by the Nonlinear Programming community concerning the development of efficient solvers for complementarity problems \cite{facchinei} and optimization tools \cite{hiriart1992}, and also by the Contact Mechanics community \cite{acary-brogliato2008}, where Moreau and Jean developed the so-called Non-Smooth Contact Dynamics (NSCD) method within the theoretical framework of Moreau's sweeping process \cite{moreau1988,jean1999,moreau1999}. The numerical method that is used in this paper, owes a lot to the NSCD method of mechanics, and will be named {\em Moreau's time-stepping scheme}. As alluded to above, non-smooth components are often represented with piecewise-linear functions, or with complementarity relations, or with inclusions into normal cones. The piecewise-linear modelling approach in non-smooth electrical circuits has been pioneered by Chua et al  in \cite{chua1978,chua1983,chua1985}, and complementarity problems have been introduced in \cite{bokhoven1978,stevens1981,vandenberghe1989}, followed by the works of Leenaerts and van Bokhoven \cite{leenaerts1999,leenaerts-bokhoven1998}, Vlach et al \cite{bedrosian1992,vlach1997,vlach1995a,vlach1995b}. Camlibel et al \cite{frasca2008,camlibel2002} studied the convergence of backward Euler methods, and comparisons with other (analog and hybrid) integrators are proposed in \cite{vasca2009}. Glocker et al \cite{glocker2005,moller2007} led interesting developments showing the analogy between mechanics and electricity for various types of non-smooth components, and also proposed a time-stepping method inspired by Moreau's algorithm for contact mechanics (consequently quite close to the algorithm used in this paper). Variational inequalities of the second kind and electrical superpotentials  were recently introduced in electronics in \cite{adly2007,goelevenJOTA,addi2009} to study the existence and uniqueness of solutions for static circuits, or the equilibria of dynamical circuits with non-smooth devices. Other works may be found in \cite{enge2005,batlle2005,giaouris2008}.
@@ -290,26 +287,25 @@ Section \ref{section21} is devoted to present the electronic devices models and 
 
 \subsubsection{The non-smooth DAE formulation}
 
-
-The extended MNA formulation with non-smooth components represented as inclusions and equalities, and nonlinear behavior can  be written compactly as:
+The formulation of the global behavior of the circuit with non-smooth components represented as inclusions and equalities, and the smooth non linear behaviors of the network represented Differential Algebraic Equations (DAE) can  be written compactly as:
 \begin{equation}
   \label{eq:71}
- \left\{ \begin{array}{l l l}
-    \begin{array}{l}
-  M(X,t) \dot X = F(X,t) + U(t)
-\end{array}
-& & ]\text{ Differential Algebraic Equations (DAEs)}\\[2mm]
-  \begin{array}{l}
+ \left\{ \begin{array}{r l}
+     \left.\begin{array}{l}
+       M(X,t) \dot X = F(X,t) + U(t)\\
+     \end{array}\right]
+   & \text{DAE}\\[2mm]
+  \left.\begin{array}{l}
     0 = H(X,\lambda,t)\\
     y = G(X,\lambda,t) 
-  \end{array} &  & \bigg]\begin{array}{l}
+  \end{array} \right]&  \begin{array}{l}
    \text{Input/output relations }\\
    \text{on non-smooth components}
   \end{array}  \\[2mm]
   \begin{array}{l}
   0 \in \Phi(y,\lambda,t) + N_K(\lambda)
 \end{array}
-&  & ] \text{ "Inclusion rule"}\\ 
+& \text{ "Inclusion rule"}\\ 
 \end{array}\right.
 \end{equation}
 with $X \in \RR^n $ is  the state which is composed of the potentials, and the currents in inductive, voltage--defined and nonsmooth branches. The vectors $y,\lambda \in \RR^m$ are the slack variable expressing the nonsmooth multi-valued models of components. The functions $M : \RR^n\times\RR \rightarrow \RR^{p \times n}$, $H : \RR^n\times \RR^m\times\RR \rightarrow \RR^{n-p}$, $G : \RR^n\times \RR^m\times\RR \rightarrow \RR^{m}$ and  $\Phi : \RR^m\times \RR^m\times\RR \rightarrow \RR^{m}$ are assumed to be  continuously differentiable functions. More details will be given on the choice of state variables and the structure of the functions in Section~\ref{sec:acef}. One recognizes two basic ingredients: the DAE part, that is coupled to the non-smooth electronic devices represented by generalized equations as those developed in section \ref{section21}. See section \ref{section3} for a concrete example of (\ref{eq:71}). 
@@ -335,7 +331,7 @@ Starting from the dynamics in (\ref{eq:71}) the Moreau's time-stepping scheme  i
 \end{array} \\
 \end{array}\right.
 \end{equation}
-for a time--step $h>0$ and with the usual following notation. For a function $f(t)$, $ f_{k+1} \approx f(t+1)$ and $f_{k+\theta} = \theta f_{k+1} + (1-\theta) f_{k}$. The Moreau's time stepping is made of a $\theta$-method for $\theta \in [0,1]$ for the assumed sufficiently smooth terms. and a fully implicit scheme for the inclusion rule which can be nonsmooth. This choice is led by two fundamental reasons. The first reason is the respect of the inclusion rule and its intrinsic unilateral character.  As it has been shown in \cite{Moreau1977},  only a fully implicit scheme can satisfied the unilateral constraints in discrete time. The second reason is the possible nonsmoothness of the evolution  which  can be only  numerically integrated by implicit low order schemes in a consistent way \cite{acary2008}.
+for a time--step $h>0$ and with the usual following notation. For a function $f(t)$, $ f_{k+1} \approx f(t+1)$ and $f_{k+\theta} = \theta f_{k+1} + (1-\theta) f_{k}$. The Moreau's time stepping is made of a $\theta$-method for $\theta \in [0,1]$ for the assumed sufficiently smooth terms. and a fully implicit scheme for the inclusion rule which can be nonsmooth. This choice is led by two fundamental reasons. The first reason is the respect of the inclusion rule and its intrinsic unilateral character.  As it has been shown in \cite{Moreau1977},  only a fully implicit scheme can satisfied the unilateral constraints in discrete time. The second reason is the possible nonsmoothness of the evolution  which  can be only  numerically integrated by implicit low order schemes in a consistent way \cite{acary-brogliato2008}.
 
 For the numerical purposes, let us rewrite the problem~(\ref{eq:71-discrete}) in a global inclusion form
 \begin{equation}
@@ -368,6 +364,7 @@ We will see in the next section that the non linearity of $\mathsf F$ can be dir
   \label{eq:inclusion-global-linearized}
     0 \ni \mathsf \nabla_z\mathsf F(z^{\alpha})(z^{\alpha+1}-z^{\alpha}) + \mathsf F(z^{\alpha})  +N_{C}(z^{\alpha+1}).
 \end{equation}
+for a given $z^0$.
 At each time--step, $k$ and at each Newton iteration $\alpha$, the problem appears to be affine in $z$.
 
 
@@ -409,31 +406,49 @@ A special case of a generalized box is the positive orthant of  $\RR^m$, that is
 
 \section{Automatic circuit equation generation and Software implementation}
 
-\subsubsection{Automatic generation of the dynamical equations}
+In this section, the choice of state variables and formulation of the equations of motion are motivated by the compromise between the automatic character of the equation formulation and the efficiency of the numerical algorithm. The efficiency is based partly on the number of slack variables and partly on the conditioning of the formulation. Finally, some insights are given on the software implementation of the methods.
+
+\subsection{Automatic generation of the dynamical equations}
 \label{sec:acef}
-\begin{ndrva}
-  To do :
-  \begin{itemize}
-  \item Be more precise on the choice of variables. Introduce notation $I_{\mathsf L} \ldots$
-  \item Do we need to speak about the reduction to a semi-DAE ?
-  \end{itemize}
-\end{ndrva}
-
-
-Let us describe briefly how the dynamical equations are obtained for the two systems which are analyzed in this paper. There are basically three choices for the state variables, based on the charge approach, the flux approach, and the current-voltage approach. The latter is chosen here. An automatic circuit equation generation system has been developed at the INRIA, see the patent \ref{}.  There are a lot of methods to build a non-smooth DAE formulation. Indeed, all smooth formulations (STA or MNA) could be adapted by replacing the constitutive equations of the non-smooth components
-with the corresponding inclusion rule. However these formulations are not equivalent in terms of the OSNSP one has to solve at each step. Indeed, too much redundancy causes trouble with the solver. Many formulations have been tested and it has been concluded that a suitable adaptation of the MNA leads to a suitable formulation, as shown by the simulation results. The automatic circuit equation formulation starts from the MNA. It adds some unknowns to get a semi-explicit system, and replaces the constitutive equations of the non-smooth components by
-the corresponding inclusion rule. The figure \ref{fig:acef_algo} shows the main steps of the equations formulation.
 
 
 
-\subsubsection{Software aspects}
+Let us describe briefly how the dynamical equations are obtained for the two systems which are analyzed in this paper. There are basically three choices for the state variables, based on the charge approach, the flux approach, and the current-voltage approach. The latter is chosen here.  
+
+ There are a lot of methods to build a smooth DAE formulation of standard electrical circuits. To cite of few of them, the Sparse Tableau Analysis(STA) and the modified Nodal Analysis(MNA) are the most widespread. An automatic circuit equation generation system extending the MNA has been developed at the INRIA, see the patent \ref{brevet}. A straightforward extension of the MNA (or the STA) can be performed by directly replacing the constitutive equations of the non-smooth components with the corresponding inclusion rule yielding the system~(\ref{eq:71}) is obtained.  Nevertheless, the fact that $M(X,t)$ is not a square matrix and the use of many superfluous variables and algebraic equations has the following drawbacks : a) the numerical efficiency of the algorithms are weakened by the larger size of the problem and b) the OSNSP solvers can be in trouble due to the redundancy of constraints, which is difficult to circumvent in the numerical procedure (mainly due to the machine accuracy constraint). Many alternate formulations have been tested and it has been concluded that a suitable adaptation of the MNA leads to the suitable following formulation
+\begin{equation}
+  \label{eq:SEDGE}
+{  \begin{array}{r l}
+      \left.\begin{array}{cl}
+        \dot x 
+               & = f_1(x,z,t) + U(t) \\
+            0   & =  f_2(x,z,t)
+      \end{array}\right]
+    &
+    \begin{array}{l}
+      \text{ Semi-Explicit DAE}
+    \end{array}
+    \\[2mm]
+  \left.\begin{array}{cl}
+0 &= h(x,z,\lambda,t)\quad\quad\,\\
+y &= g(x,z,\lambda,t)\\
+  \end{array}\right] & \begin{array}{l}
+   \text{Input/output relations }\\
+   \text{on nonsmooth components}
+  \end{array} \\[5mm]
+  \left.\begin{array}{l}
+  0 \in \Phi(y,\lambda,t) + N_K(\lambda)\quad\quad
+\end{array}\right.
+& \text{ "Inclusion rule"}\\ \\
+\end{array}}
+\end{equation}
+where $x \in \RR^n$ is corresponds to the current in the inductive branches and the voltages in the capacitive branches $z\in \RR^p$ collects all the node potentials, the current in the voltage--defined and non smooth branches and the currents in a subset of the capacitive branches. The choice and the construction of the latter subset of branches ids described in details in \ref{brevet}.  The automatic circuit equation formulation starts from the MNA and it  adds some unknowns to get a semi-explicit system, and replaces the constitutive equations of the non-smooth components by the corresponding inclusion rule. Starting from (\ref{eq:SEDGE}), the numerical algorithm as explained in \ref{section24} and \ref{Sec:ONSNP-solvers} is used.
+
+\subsection{Software aspects}
 
 
 
-The figure \ref{fig-soft-aspect} shows the libraries and the data involved during the simulation. A
-Netlist is a circuit textual description used by many simulators like SPICE and ELDO. From a Netlist, the automatic generator builds a SEDAE discretized and simulated thanks
-SICONOS. The output of the simulation is a file containing the potential and current values.
-
+The figure \ref{fig-soft-aspect} shows the libraries and the data involved during the simulation. A Netlist is a circuit textual description used by many simulators like SPICE and ELDO. From a Netlist, the automatic generator builds all the components defined in~(\ref{eq:SEDGE}). The opensource {\sc Siconos/Kernel} library performes the time-discretization following the Moreau'time stepping scheme~(\ref{eq:71-discrete}) and formulates at each time--step one instance of the inclusion problem~(\ref{eq:inclusion-global}-\ref{eq:inclusion-global3}). The numerical algorithms for the latter problem are in the opensource {\sc Siconos/Numerics} library. The output of the simulation is a file containing the potential and current values in the SPICE format.
 \begin{figure}[h]
 \centerline{
  \scalebox{0.9}{
@@ -444,6 +459,7 @@ SICONOS. The output of the simulation is a file containing the potential and cur
 \label{fig-soft-aspect}
 \end{figure}
 
+The implementation is object-oriented and mainly on C++.
 
 
 Our implementation consists in using some object structures. For each component
