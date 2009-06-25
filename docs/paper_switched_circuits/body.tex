@@ -32,7 +32,7 @@ The following standard mathematical programming problems will be used throughout
 
 If $K=X$ is a convex set, the inclusion~(\ref{eq:vi}) and the VI~(\ref{eq:vi}) are equivalent.
 
-\begin{definition}[Mixed Complementarity Problem (MCP)\cite{Dirkse.ferris1995}]
+\begin{definition}[Mixed Complementarity Problem (MCP)\cite{Dirkse.Ferris1995}]
   The Mixed Complementarity Problem(MCP) is defined as follows. Given a function $\mathsf F : \RR^p \rightarrow \RR^p$, lower and
   upper bounds $l, u \in (\RR \cup \{+\infty, -\infty\})^p$, find $z \in \RR^{p}$, $w,
   v \in \RR^{p}_{+}$, such that:
@@ -300,21 +300,19 @@ The extended MNA formulation with non-smooth components represented as inclusion
 \end{array}
 & & ]\text{ Differential Algebraic Equations (DAEs)}\\[2mm]
   \begin{array}{l}
-    0_m = H(X,\lambda,t)\\
+    0 = H(X,\lambda,t)\\
     y = G(X,\lambda,t) 
   \end{array} &  & \bigg]\begin{array}{l}
    \text{Input/output relations }\\
    \text{on non-smooth components}
-  \end{array}  \\[5mm]
+  \end{array}  \\[2mm]
   \begin{array}{l}
   0 \in \Phi(y,\lambda,t) + N_K(\lambda)
 \end{array}
 &  & ] \text{ "Inclusion rule"}\\ 
 \end{array}\right.
 \end{equation}
-with the state $X$ defined as  $X =[V,I_{\mathsf L}, I_{\mathsf V}, I_{\mathsf{NS}}]^T \ in \RR^n$ and the slack variables $y \in \RR^m$, $\lambda \in \RR^m$.
-
-One recognizes two basic ingredients: the DAE part, that is coupled to the non-smooth electronic devices represented by generalized equations as those developed in section \ref{section21}. See section \ref{section3} for a concrete example of (\ref{eq:71}). 
+with $X \in \RR^n $ is  the state which is composed of the potentials, and the currents in inductive, voltage--defined and nonsmooth branches. The vectors $y,\lambda \in \RR^m$ are the slack variable expressing the nonsmooth multi-valued models of components. The functions $M : \RR^n\times\RR \rightarrow \RR^{p \times n}$, $H : \RR^n\times \RR^m\times\RR \rightarrow \RR^{n-p}$, $G : \RR^n\times \RR^m\times\RR \rightarrow \RR^{m}$ and  $\Phi : \RR^m\times \RR^m\times\RR \rightarrow \RR^{m}$ are assumed to be  continuously differentiable functions. More details will be given on the choice of state variables and the structure of the functions in Section~\ref{sec:acef}. One recognizes two basic ingredients: the DAE part, that is coupled to the non-smooth electronic devices represented by generalized equations as those developed in section \ref{section21}. See section \ref{section3} for a concrete example of (\ref{eq:71}). 
 
 
 \subsection{Moreau's time-stepping scheme}
@@ -337,14 +335,14 @@ Starting from the dynamics in (\ref{eq:71}) the Moreau's time-stepping scheme  i
 \end{array} \\
 \end{array}\right.
 \end{equation}
-for a time--step $h>0$ and with the usual following notation. For a function $f(t)$, $ f_{k+1} \approx f(t+1)$ and $f_{k+\theta} = \theta f_{k+1} + (1-\theta) f_{k}$. The Moreau's time stepping is made of a $\theta$-method for $\theta \in [0,1]$ for the assumed sufficiently smooth terms. and a fully implicit scheme for the inclusion rule which can be nonsmooth. This choice is led by two fundamental reasons. The first reason is the respect of the inclusion rule and its intrinsic unilateral character.  As it has been shown in \cite{} ,  only a fully implicit scheme can satisfied the unilateral constraints in discrete. The second reason is the possible nonsmoothness of the evolution  which  can be only  numerically integrated by  implicit low order schemes in a consistent way \cite{}.
+for a time--step $h>0$ and with the usual following notation. For a function $f(t)$, $ f_{k+1} \approx f(t+1)$ and $f_{k+\theta} = \theta f_{k+1} + (1-\theta) f_{k}$. The Moreau's time stepping is made of a $\theta$-method for $\theta \in [0,1]$ for the assumed sufficiently smooth terms. and a fully implicit scheme for the inclusion rule which can be nonsmooth. This choice is led by two fundamental reasons. The first reason is the respect of the inclusion rule and its intrinsic unilateral character.  As it has been shown in \cite{Moreau1977},  only a fully implicit scheme can satisfied the unilateral constraints in discrete time. The second reason is the possible nonsmoothness of the evolution  which  can be only  numerically integrated by implicit low order schemes in a consistent way \cite{acary2008}.
 
 For the numerical purposes, let us rewrite the problem~(\ref{eq:71-discrete}) in a global inclusion form
 \begin{equation}
   \label{eq:inclusion-global}
     0 \ni \mathsf F(z) +N_{C}(z)
 \end{equation}
-where  the variable $z = [X_{k+1}, y_{k+1}, s_{k+1}]^T \in \RR^{n\times m\times m}$ and the function $\mathsf F : \RR^{n\times m\times m} \rightarrow \RR^{n \times m \times m \times m} $ is defined by
+where  the variable $z = [X_{k+1}, y_{k+1}, \lambda_{k+1}]^T \in \RR^{n+2m}$ and the function $\mathsf F : \RR^{n+2n} \rightarrow \RR^{n+2m} $ is defined by
 \begin{equation}
   \label{eq:inclusion-global2}
   \mathsf F(z) =
@@ -363,7 +361,7 @@ where  the variable $z = [X_{k+1}, y_{k+1}, s_{k+1}]^T \in \RR^{n\times m\times 
 The normal cone $N_C$ is the normal cone  to the following convex set
 \begin{equation}
   \label{eq:inclusion-global3}
-  C =  \RR^{n}\times \RR^ m \times \RR^ m \times K
+  C =  \RR^{n} \times \RR^ m \times K \subset \RR^{n+2m}
 \end{equation}
 We will see in the next section that the non linearity of $\mathsf F$ can be directly treated by the numerical one--step solver. Another approach is to performed an outer Newton linearization of this problem by searching the solution as the limit for $\alpha$ of the following linearized problem
 \begin{equation}
@@ -412,7 +410,7 @@ A special case of a generalized box is the positive orthant of  $\RR^m$, that is
 \section{Automatic circuit equation generation and Software implementation}
 
 \subsubsection{Automatic generation of the dynamical equations}
-
+\label{sec:acef}
 \begin{ndrva}
   To do :
   \begin{itemize}
