@@ -1,9 +1,9 @@
 %!PS-Adobe-2.0 EPSF-2.0
 %%Title: diodeReq.fig
 %%Creator: fig2dev Version 3.2 Patchlevel 4
-%%CreationDate: Wed Jun 24 15:48:46 2009
+%%CreationDate: Tue Jun 30 15:47:59 2009
 %%For: acary@Macintosh-10.local (Vincent Acary)
-%%BoundingBox: 0 0 150 81
+%%BoundingBox: 0 0 114 81
 %%Magnification: 0.3000
 %%EndComments
 /$F2psDict 200 dict def
@@ -45,7 +45,7 @@ $F2psDict /mtrx matrix put
 
 end
 save
-newpath 0 81 moveto 0 0 lineto 150 0 lineto 150 81 lineto closepath clip newpath
+newpath 0 81 moveto 0 0 lineto 114 0 lineto 114 81 lineto closepath clip newpath
 -32.2 94.7 translate
 1 -1 scale
 
@@ -95,16 +95,6 @@ $F2psBegin
 % Polyline
 7.500 slw
 gs  clippath
-10065 4305 m 10065 4245 l 9880 4245 l 10030 4275 l 9880 4305 l cp
-eoclip
-n 1800 4275 m
- 10050 4275 l gs col0 s gr gr
-
-% arrowhead
-n 9880 4305 m 10030 4275 l 9880 4245 l 9910 4275 l 9880 4305 l 
- cp gs 0.00 setgray ef gr  col0 s
-% Polyline
-gs  clippath
 3780 810 m 3720 810 l 3720 995 l 3750 845 l 3780 995 l cp
 eoclip
 n 3750 5250 m
@@ -117,6 +107,17 @@ n 3780 995 m 3750 845 l 3720 995 l 3750 965 l 3780 995 l
 90.000 slw
 n 3360 1500 m 3750 4275 l
  7875 4644 l gs col0 s gr 
+% Polyline
+7.500 slw
+gs  clippath
+8115 4305 m 8115 4245 l 7930 4245 l 8080 4275 l 7930 4305 l cp
+eoclip
+n 1800 4275 m
+ 8100 4275 l gs col0 s gr gr
+
+% arrowhead
+n 7930 4305 m 8080 4275 l 7930 4245 l 7960 4275 l 7930 4305 l 
+ cp gs 0.00 setgray ef gr  col0 s
 % here ends figure;
 $F2psEnd
 rs

@@ -9,11 +9,11 @@
   \fontfamily{#3}\fontseries{#4}\fontshape{#5}%
   \selectfont}%
 \fi\endgroup%
-\begin{picture}(8315,4476)(1789,-4423)
+\begin{picture}(6324,4476)(1789,-4423)
 \put(3301,-3961){\makebox(0,0)[lb]{\smash{{\SetFigFont{8}{9.6}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}0}%
 }}}}
-\put(9151,-4186){\makebox(0,0)[lb]{\smash{{\SetFigFont{8}{9.6}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}$v(t)$}%
-}}}}
 \put(2701,-211){\makebox(0,0)[lb]{\smash{{\SetFigFont{8}{9.6}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}$i(t)$}%
+}}}}
+\put(7126,-3061){\makebox(0,0)[lb]{\smash{{\SetFigFont{8}{9.6}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}$v(t)$}%
 }}}}
 \end{picture}%
