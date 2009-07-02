@@ -26,6 +26,9 @@ componentDIO::componentDIO(dataDIO *d)
   mIndiceStartZns=-1;
   mIndiceStartLambda=-1;
   mType = ACE_TYPE_DIO;
+  mThreshold=0.8;
+  cout<<"*********************************************************************"<<endl;
+  cout<<"*************************WARNING, DIODE THRESHOLD IS : "<<mThreshold<<endl;
   
 
   
@@ -64,9 +67,15 @@ void componentDIO::stamp(){
     if (mNodePos)
       algo::spls->mD1x->setValue(mIndiceStartLambda,mNodePos-1,-1);
   }
+  algo::spls->mD1s->setValue(mIndiceStartLambda,mThreshold);
   
 }
 
 componentDIO::~componentDIO(){
   
+}
+void componentDIO::print (){
+  componentNLINEAR::print();
+   printf("diode threshold : %lf \n",mThreshold);
+  ;
 }

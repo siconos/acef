@@ -37,11 +37,13 @@ Y=Vn-Vp
 // 
 class componentDIO : public componentNLINEAR {
  dataDIO mData;
+  ACE_DOUBLE mThreshold;
 public:
   componentDIO(dataDIO *d);
   virtual void  addUnknowns ();
   virtual void  stamp ();
   virtual ~componentDIO();
+  virtual void print ();
 protected:
 private:
 };

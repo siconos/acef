@@ -22,6 +22,7 @@ public:
   void stampTime();
   virtual void  addUnknowns ();
   virtual void  addEquations ();
+  double * mpCurValue;
 protected:
 private:
 };

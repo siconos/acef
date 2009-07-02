@@ -16,7 +16,7 @@ static ofstream* ACE_LOG_FILE=0;
 static ofstream* ACE_LOG1_FILE=0;
 int ACE_CUR_STEP=0;
 int ACE_CMP_ADAT[ACE_NB_ADAPT_STEP+1];
-int  ACE_MOS_NB_HYP=3;
+int  ACE_MOS_NB_HYP=5;
 ACE_DOUBLE ACE_MOS_POWER_SUPPLY=3.0;
 
 using namespace std;
@@ -57,6 +57,7 @@ void ACE_INIT_TIME(){
   ACE_times[ACE_TIMER_TEST_9].setName("test_9  ");
   ACE_times[ACE_TIMER_TEST_10].setName("test_10  ");
   ACE_times[ACE_TIMER_TEST_11].setName("test_11  ");
+  ACE_times[ACE_TIMER_LS_STEP].setName("LS step  ");
   
   
   

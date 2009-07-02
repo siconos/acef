@@ -14,6 +14,7 @@ componentVSRC::componentVSRC(dataVSRC *d)
   mNodePos=mData.nodePos;
   mNodeNeg=mData.nodeNeg;
   mName = mData.name;
+  mpCurValue = mData.pCurValue;
   mType = ACE_TYPE_VSRC;
   mCurrentValue=0;
   if (ACE_IS_NULL(mData.value))
@@ -43,9 +44,11 @@ void componentVSRC::stamp(){
 
 void componentVSRC::stampTimer(){
   ACE_DOUBLE newValue;
-  ParserGetSourceValue("Vsource",mData.id,&newValue);
-  mEquation->mCoefs[algo::spls->mRS]-=newValue - mCurrentValue;
+  //  ParserGetSourceValue("Vsource",mData.id,&newValue);
+  //  getVSRCValue(mData.id,&newValue);
+  newValue = (*mpCurValue);
 
+  mEquation->mCoefs[algo::spls->mRS]-=newValue - mCurrentValue;
   mCurrentValue = newValue;
 }
 

@@ -2,7 +2,11 @@
   			algo.h 
 
 **************************************************************************/
+/**The algo class.
+ */
 
+/**
+*/
 #ifndef ALGO_H
 #define ALGO_H
 #include "ace.h"
@@ -14,6 +18,9 @@ class linearSystem;
 class algo {
 public:
   static linearSystem *spls;
+  /*
+   * file : a netlist.
+   */
   algo(char * file);
   virtual ~algo();
   void perform();

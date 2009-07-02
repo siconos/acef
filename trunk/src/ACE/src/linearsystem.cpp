@@ -94,6 +94,7 @@ linearSystem::linearSystem(){
   mMLCP=0;
 
   mTheta = 0.5;
+  mThetazs =1.0;
   mThetap = 0.5;
   mH = 1;
   mHori=1;
@@ -591,6 +592,7 @@ void linearSystem::readInitialValue(){
 	cout<<"set value from netlist :v_"<<i<<"="<<aux<<endl;
       }
     }
+    mxti->setValueIfNotNull(0,2);
     //DIODEBRIDGE :     mxti->setValueIfNotNull(1,10.0/2000);
 //         mxti->setValueIfNotNull(3,1/200);
 //         mznsti->setValueIfNotNull(0,-0.01);
@@ -641,17 +643,17 @@ void linearSystem::buildMLCP(){
 	  mW[i]->PLUInverseInPlace();
 	}
       
-	//*mB3zs = *mB2zs + mH*mTheta*prod(*mB2x,prod(*mW,*mA2zs)) ;
+	//*mB3zs = *mB2zs + mH*mThetazs*prod(*mB2x,prod(*mW,*mA2zs)) ;
 	ACEprod(*mW[i],*mA2zs,*mMatBuf1,true);
 	ACEprod(*mB2x,*mMatBuf1,*mB3zs[i],true);
-	scal(mH*mTheta,*mB3zs[i],*mB3zs[i]);
-	scal(mH*mTheta,*mA2zs,*mHThetaA2zs[i]);
+	scal(mH*mThetazs,*mB3zs[i],*mB3zs[i]);
+	scal(mH*mThetazs,*mA2zs,*mHThetaA2zs[i]);
 	*mB3zs[i]+=*mB2zs;
       
 	if (mDimLambda){
-	  //*mD3zs = *mD2zs+mH*mTheta*prod(*mD2x,prod(*mW,*mA2zs));
+	  //*mD3zs = *mD2zs+mH*mThetazs*prod(*mD2x,prod(*mW,*mA2zs));
 	  ACEprod(*mD2x,*mMatBuf1,*mD3zs[i],true);
-	  scal(mH*mTheta,*mD3zs[i],*mD3zs[i]);
+	  scal(mH*mThetazs,*mD3zs[i],*mD3zs[i]);
 	  *mD3zs[i]+=*mD2zs;
 
       
@@ -693,9 +695,9 @@ void linearSystem::buildMLCP(){
     if (mDimx){
       //*mB2xW=prod(*mB2x,*mW);
       ACEprod(*mB2x,*mW[i],*mB2xW[i],true);
-      //*mHThetaWA2zs=mH*mTheta*prod(*mW,*mA2zs);
+      //*mHThetaWA2zs=mH*mThetazs*prod(*mW,*mA2zs);
       ACEprod(*mW[i],*mA2zs,*mHThetaWA2zs[i],true);
-      scal(mH*mTheta,*mHThetaWA2zs[i],*mHThetaWA2zs[i]);
+      scal(mH*mThetazs,*mHThetaWA2zs[i],*mHThetaWA2zs[i]);
     }
     //*mHWR=mH*prod(*mW,*mR);
     if (mDimLambda && mDimx){
@@ -759,15 +761,30 @@ void linearSystem::preparStep(){
 
 void linearSystem::preparMLCP(){
   if (mDimx && mDimLambda){//both
-    //(*mxfree) = (*mxti) + mH*((1-mTheta)*(prod(*mA2x,*mxti)+prod(*mA2zs,*mzsti) + (*mA2sti))+mThetap*(*mA2s));
+    //(*mxfree) = (*mxti) + mH*[(1-mTheta)*(prod(*mA2x,*mxti))+(1-mThetazs)prod(*mA2zs,*mzsti) + (1-mThetap)*(*mA2sti)+mThetap*(*mA2s)];
+
     //mxfree->display();
+//     ACEprod(*mA2zs,*mzsti,*mxfree,true);
+//     scal((1-mThetazs)/(1-mTheta),*mxfree,*mxfree);
+//     ACEprod(*mA2x,*mxti,*mxfree,false);
+//     scal((1-mTheta),*mxfree,*mxfree);
+//     *mxfree+=mThetap*(*mA2s);
+//     *mxfree+=(1-mThetap)*(*mA2sti);
+//     scal(mH,*mxfree,*mxfree);
+//     *mxfree+=*mxti;
     ACEprod(*mA2zs,*mzsti,*mxfree,true);
-    ACEprod(*mA2x,*mxti,*mxfree,false);
-    *mxfree+=*mA2sti;
-    scal((1-mTheta),*mxfree,*mxfree);
+    scal((1.0-mThetazs),*mxfree,*mxfree);
+
+    
+    ACEprod(*mA2x,*mxti,*mxbuf,true);
+    scal((1.0-mTheta),*mxbuf,*mxbuf);
+    *mxfree+=*mxbuf;
+    
     *mxfree+=mThetap*(*mA2s);
+    //    *mxfree+=(1.0-mThetap)*(*mA2sti);
     scal(mH,*mxfree,*mxfree);
     *mxfree+=*mxti;
+
     //mxfree->display();
 
 
@@ -779,7 +796,7 @@ void linearSystem::preparMLCP(){
     *mQfree+=*mB2s;
     
   } else if(mDimx){//only x
-    (*mxfree) = (*mxti) + mH*(1-mTheta)*prod(*mA2x,*mxti)+mH*(1-mTheta)*prod(*mA2zs,*mzsti)+mH*(*mA2s);
+    (*mxfree) = (*mxti) + mH*(1-mTheta)*prod(*mA2x,*mxti)+mH*(1-mThetazs)*prod(*mA2zs,*mzsti)+mH*(*mA2s);
     (*mQfree) = prod(*mB2xW[ACE_CUR_STEP],*mxfree) + (*mB2s);
   }else if (mDimLambda){//only lambda
     (*mPfree) = (*mD2s);
@@ -814,7 +831,6 @@ void linearSystem::computeZnstiFromX_Zs(){
     return;
   if (mDimx){
     //(*mznsti)=prod(*mC1x,*mxti)+prod(*mC1zs,*mzsti)+prod(*mC1l,*(mMLCP->mZ1))+(*mC1s);
-    ACE_times[ACE_TIMER_PROD_MAT].start();
     if (ACE_MAT_TYPE==SPARSE)
       ACEprod(*mC1l,*mPAux,*mznsti,true);
     else
@@ -823,7 +839,6 @@ void linearSystem::computeZnstiFromX_Zs(){
     if (mDimzs)
       ACEprod(*mC1zs,*mzsti,*mznsti,false);
     ACEprod(*mC1x,*mxti,*mznsti,false);
-    ACE_times[ACE_TIMER_PROD_MAT].stop();    
     *mznsti+=*mC1s;
   }  else{
     if (mDimzs)
@@ -833,12 +848,16 @@ void linearSystem::computeZnstiFromX_Zs(){
   }
 }
 bool linearSystem::step(){
+#ifdef ACE_PROFIL_STEP
   ACE_times[ACE_TIMER_LS_STEP].start();
+#endif
   mStepCmp++;
   mAllStepCmp++;
 
   if (mTcurrent+mH >= mTstop){
+#ifdef ACE_PROFIL_STEP
     ACE_times[ACE_TIMER_LS_STEP].stop();
+#endif
     return false;
   }
   int aux = mPourMille;
@@ -855,7 +874,9 @@ bool linearSystem::step(){
   //  mMLCP->printInPutABCDab();
   bool res = mMLCP->solve();
   //  mMLCP->printOutPut();
+#ifdef ACE_PROFIL_STEP
   ACE_times[ACE_TIMER_COMPUTE_VAR].start();
+#endif
   if (res){
     //*mzsti=*(mMLCP->mZ2);
     if (ACE_MAT_TYPE == SPARSE)
@@ -877,17 +898,17 @@ bool linearSystem::step(){
       }
       //cout<<"mHThetaWA2zs "<<(*mHThetaWA2zs);
       //cout<<"mW "<<(*mW);
-      ACE_times[ACE_TIMER_PROD_MAT].start();
       ACEprod(*mHThetaWA2zs[ACE_CUR_STEP],*mzsti,*mxti,false);
       ACEprod(*mW[ACE_CUR_STEP],*mxfree,*mxti,false);
-      ACE_times[ACE_TIMER_PROD_MAT].stop();
     }
     computeZnstiFromX_Zs();
   }else{
     ACE_GET_LOG_STREAM()<<"linearSystem::step number,"<< mStepCmp<<" solver failled!!!"<<endl;
   }
+#ifdef ACE_PROFIL_STEP
   ACE_times[ACE_TIMER_COMPUTE_VAR].stop();
   ACE_times[ACE_TIMER_LS_STEP].stop();
+#endif
   return res;
 }
 void linearSystem::printLog(){
@@ -1596,8 +1617,11 @@ void printHeaderCSV(ostream& os){
 }
 void linearSystem::printStep(ostream& os,aceVector * pVx,aceVector *pVzs){
 //   int i;
+//   return;
    bool printALL = true;
    ACE_DOUBLE curDate = getCurrentTime();
+   // if (curDate > 0.0001984 || curDate < 0.0001963)
+   //  return;
    if (!printALL){
      if (curDate==0.0)
        printHeaderCSV(os);
@@ -1610,10 +1634,19 @@ void linearSystem::printStep(ostream& os,aceVector * pVx,aceVector *pVzs){
   dataPrint * pPrint;
   double aux;
   ParserInitPrintElem();
-  os<<getCurrentTime();
-  //  os <<"\t"<<mxti->getValue(4); // for buck with out inverter
+  //  os<<mStepCmp;
+     os<<1000000*getCurrentTime();
+    os <<"\t"<<mxti->getValue(4); //IL for buck with out inverter
+    os <<"\t"<<mznsti->getValue(0); //IDp
+    os <<"\t"<<mznsti->getValue(1); //IDn
+    os <<"\t"<<mznsti->getValue(2); //IDmosp
+    os <<"\t"<<mznsti->getValue(3); //IDmosn
+  //  os<<endl;
   //os <<"\t"<<mxti->getValue(14); // for buck with inverter
 //   return;
+
+//   os <<"\t"<<mxti->getValue(0); // for LRD
+//   os <<"\t"<<mznsti->getValue(0); // for LRD
   while(ParserGetPrintElem((void**)&pPrint)){
     os<<"\t\t";
     aux = pVzs->getValue(pPrint->node1-1);

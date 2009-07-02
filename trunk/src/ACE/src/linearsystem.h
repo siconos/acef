@@ -223,6 +223,7 @@ public:
  
 
   ACE_DOUBLE mTheta;
+  ACE_DOUBLE mThetazs;
   ACE_DOUBLE mThetap;
   ACE_DOUBLE mH;
   ACE_DOUBLE mHori;

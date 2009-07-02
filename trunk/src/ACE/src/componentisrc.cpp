@@ -31,12 +31,15 @@ void componentISRC::stamp(){
 
 void componentISRC::stampTimer(){
   ACE_DOUBLE newValue;
-  ACE_CHECK_IERROR(ParserGetSourceValue("Isource",mData.id,&newValue),"componentISRC::stampTimer");
+  ACE_times[ACE_TIMER_TEST_7].start();
+  // ParserGetSourceValue("Isource",mData.id,&newValue);
+  getISRCValue(mData.id,&newValue);
+
   //KCL
   algo::spls->KCL(mData.nodeNeg)->mCoefs[algo::spls->mRS]-=newValue - mCurrentValue;
   algo::spls->KCL(mData.nodePos)->mCoefs[algo::spls->mRS]+=newValue - mCurrentValue;
-
   mCurrentValue = newValue;
+  ACE_times[ACE_TIMER_TEST_7].stop();
 }
 
 

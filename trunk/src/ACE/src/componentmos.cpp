@@ -16,7 +16,7 @@ componentMOS::componentMOS(dataMOS1 *d,int NbHyp)
   ACE_CHECK_IERROR(d,"componentMOS::componentMOS : Mos data null");
   ACE_CHECK_IERROR(NbHyp>=0,"componentMOS::componentMOS : NbHyp <0");
   mType = ACE_TYPE_MOS;
-
+  cout<<"Mos nbhyp "<<NbHyp<<endl;
   mData =(*d);
   mNodeD=mData.drain;
   mNodeG=mData.gate;

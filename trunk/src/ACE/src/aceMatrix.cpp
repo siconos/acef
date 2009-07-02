@@ -125,12 +125,20 @@ void ACEprod(const aceMatrix& A, const aceMatrix& B, aceMatrix& C, bool init)
 //   if (init && ACE_MAT_TYPE == DENSE && &A!=&C && &B!=&C)
 //     gemm(A,B,C);
 //   else
+
+  //ACE_times[ACE_TIMER_PROD_MAT].start();
     prod(A,B,C,init);
+    //ACE_times[ACE_TIMER_PROD_MAT].stop();
 }
 void ACEprod(const aceMatrix& A, const aceVector& x, aceVector& b, bool init)
 {
 //   if (init && ACE_MAT_TYPE == DENSE)
 //     gemv(A,x,b);
 //   else
+
+
+  //ACE_times[ACE_TIMER_PROD_MAT].start();
     prod(A,x,b,init);
+    //    ACE_times[ACE_TIMER_PROD_MAT].stop();
+
 }

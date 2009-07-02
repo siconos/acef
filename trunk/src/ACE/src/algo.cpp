@@ -318,15 +318,11 @@ void algo::performSemiExplicit(){
  spls->printEquations();
  
  //compute matrix: x'=A1x * mx + A1zs * mZs + A1zns * mZns;
- ACE_times[ACE_TIMER_TEST_1].start();
  spls->computedxdt();
- ACE_times[ACE_TIMER_TEST_1].stop();
  stampAfterInvertion();
   ACE_MESSAGE("final equation ;\n");
   spls->printEquations();
- ACE_times[ACE_TIMER_TEST_2].start();
  spls->buildLinearSystem();
- ACE_times[ACE_TIMER_TEST_2].stop();
   spls->printA1();
   spls->printB1();
   spls->printC1();
@@ -514,10 +510,10 @@ void algo::simulate(){
     //   (*mSimuStream)<<endl<<endl;
     
     
-    ACE_times[ACE_TIMER_SIMULATION].start();
     preparStep(spls->getCurrentTime());
     spls->ExtractAndCompute2Sources();
     spls->preparStep();
+    ACE_times[ACE_TIMER_SIMULATION].start();
     while(spls->step()){
       //    if (ACE_MUET_LEVEL != ACE_MUET)
       //      spls->printStep();

@@ -141,15 +141,18 @@ bool mlcp::solveWithNumerics(){
   mQ1->VectorToFortran(mProblem.q+mDlin);
   /*  for (int i=0;i<mDlin+mDlcp;i++)
       mProblem.q[i]=-mProblem.q[i];*/
-
+#ifdef ACE_PROFIL_STEP
   ACE_times[ACE_TIMER_SOLVE_NUMERICS].start();
-//   printf("\nbegin\n");
-//   displayMLCP(&mProblem);
-//   printf("\nend\n");
-//    printInPut();
+#endif
+//    printf("\nbegin\n");
+//    displayMLCP(&mProblem);
+//    printf("\nend\n");
+//   printInPut();
 
   info=mlcp_driver( &mProblem, mu , mw , &mOptions,&mNumericsOptions);
+#ifdef ACE_PROFIL_STEP
   ACE_times[ACE_TIMER_SOLVE_NUMERICS].stop();
+#endif
   
   mZ1->FortranToVector(mv);
   mZ2->FortranToVector(mu);
@@ -225,7 +228,7 @@ bool mlcp::initSolver(){
   mOptions.dSize = 9;
   mOptions.dparam = (double*) malloc(10*sizeof(double));
   mOptions.filterOn = 0;
-  mOptions.iparam[5]=15;/*Number of registered configurations*/
+  mOptions.iparam[5]=10;/*Number of registered configurations*/
   mOptions.iparam[7]=0;
   //If adaptive time stepping, then mlcp formulation will change
   if(ACE_WITH_ADAPTATIVE_TIME_STEPPING)
@@ -249,13 +252,13 @@ bool mlcp::initSolver(){
     mOptions.iparam[1]= mNumericsOptions.verboseMode;/*VERBOSE*/
     mOptions.iparam[6]= mNumericsOptions.verboseMode;/*VERBOSE*/
     mOptions.iparam[8]=0;/*update prb*/
-    mOptions.dparam[0]=1e-12;
-    mOptions.dparam[1]=1e-12;
-    mOptions.dparam[2]=1e-12;
+    mOptions.dparam[0]=1e-10;
+    mOptions.dparam[1]=1e-10;
+    mOptions.dparam[2]=1e-10;
     mOptions.dparam[6]=1e-12;
 
   }else if (ACE_SOLVER_TYPE == ACE_SOLVER_PATH){
-    strcpy(mOptions.solverName,"PATH");
+    strcpy(mOptions.solverName,"DIRECT_PATH");
     mOptions.iparam[0]= mNumericsOptions.verboseMode;/*VERBOSE*/
     mOptions.iparam[6]= mNumericsOptions.verboseMode;/*VERBOSE*/
     mOptions.dparam[0]=1e-12;
