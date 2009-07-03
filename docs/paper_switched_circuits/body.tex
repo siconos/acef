@@ -286,15 +286,19 @@ The piecewise-linear model in (\ref{eq:pwl}) has $s$ segments. Multiple choices 
 
 
 
-\paragraph{Non-smooth comparator} The comparator device as depicted in figure~\ref{Fig:Comparator} is a relay multifunction that is multivalued at 0. Other models can be chosen, see figure~\ref{fig-comparator-models}. Similarly to the Zener diode the multivalued comparator is represented as:
+\paragraph{Non-smooth comparator} The comparator device as depicted in figure~\ref{Fig:Comparator} is modelled as a piecewise-linear function whose value is $V_{min}$ if
+$x < -\epsilon \volt$ and 3 if $x > \epsilon \volt$. Setting $\epsilon$ to $0$ leads to a relay
+function that is multivalued at 0. In this case, similarly to the Zener diode the multivalued comparator is represented as:
 \begin{equation}
 V_{output} \in N_{[V_{\min},V_{\max}]}(V_{+}-V_{-}) 
 \end{equation}
-where $V_{\min}$ and $V_{\max}$ are the saturation thresholds.
+where $V_{\min}$ and $V_{\max}$ are the saturation thresholds. 
 \begin{figure}[!ht]
   \centering
-  $ toto$
-  \caption{Comparator multi-valued model.}\label{Fig:Comparator}
+  \resizebox{\linewidth}{!}{
+    \input{./figure/comparator.pstex_t}
+ }
+  \caption{Comparator model.}\label{Fig:Comparator}
 \end{figure}
 
 \subsection{The dynamical equations}
