@@ -1,7 +1,7 @@
 
 
 \section{Introduction}
-It is well know that conventional accurate analog simulation tools, which are based on the Newton-Raphson nonlinear solver, can have serious drawbacks when they are used for the integration of non-smooth circuits, containing switches and piecewise linear components (like ideal diodes and transistors). This is especially true when the number of events becomes too large, or when sliding modes exist, which is common in practice. Then analog (SPICE-like) tools  may become very time consuming, or provide very poor results with chattering \cite{galias2006}, or even fail \cite{maffezzoni2006,yuan2003,mayaram2000,chung1994,biolek2007}. The same applies to ``hybrid'' integrators that consider an exhaustive enumeration of all the system's modes, which have a very limited scope of application because of the exponential growth of the number of modes that have to be simulated separately. Along the same lines, event-driven schemes can hardly simulate systems with large number of events, because they soon become quite time-consuming and do not allow for accumulations of events \cite{acary-brogliato2008}. 
+It is well know that conventional accurate analog simulation tools, which are based on the Newton-Raphson nonlinear solver, can have serious drawbacks when they are used for the integration of non-smooth circuits, containing switches and piecewise linear components (like ideal diodes and transistors). This is especially true when the number of events becomes too large, or when sliding modes exist, which is common in practice. Then analog ({\sc Spice}-like) tools  may become very time consuming, or provide very poor results with chattering \cite{galias2006}, or even fail \cite{maffezzoni2006,yuan2003,mayaram2000,chung1994,biolek2007}. The same applies to ``hybrid'' integrators that consider an exhaustive enumeration of all the system's modes, which have a very limited scope of application because of the exponential growth of the number of modes that have to be simulated separately. Along the same lines, event-driven schemes can hardly simulate systems with large number of events, because they soon become quite time-consuming and do not allow for accumulations of events \cite{acary-brogliato2008}. 
 
 It is therefore clear that other types of numerical schemes have to be applied for highly non-smooth switching circuits. Since a numerical method always relies on a specific modelling approach, a logical path is to first reconsider the models of non-smooth components (diodes, switches, transistors, {\em etc}) so that efficient numerical solvers can be applied. The non-smooth dynamical systems (NSDS) approach, which is the one chosen in this paper, appears to be a suitable framework for the simulation of non-smooth circuits, allowing one to efficiently simulate systems with very large number of events, and sliding mode trajectories. It consists of modelling non-smooth components as piecewise linear functions, with possible vertical branches (inducing some unilaterality in the system, hence possible state jumps, when these branches are infinite). The time-discretization of such non-smooth systems then yields various types of so-called one-step-non-smooth-problems (OSNSP), for instance complementarity problems or quadratic programs with equality-inequality constraints, which require specific solvers. The NSDS approach may then take advantage of the quite important works that have been led by the Nonlinear Programming community concerning the development of efficient solvers for complementarity problems \cite{facchinei} and optimization tools \cite{hiriart1992}, and also by the Contact Mechanics community \cite{acary-brogliato2008}, where Moreau and Jean developed the so-called Non-Smooth Contact Dynamics (NSCD) method within the theoretical framework of Moreau's sweeping process \cite{moreau1988,jean1999,moreau1999}. The numerical method that is used in this paper, owes a lot to the NSCD method of mechanics, and will be named {\em Moreau's time-stepping scheme}. As alluded to above, non-smooth components are often represented with piecewise-linear functions, or with complementarity relations, or with inclusions into normal cones. The piecewise-linear modelling approach in non-smooth electrical circuits has been pioneered by Chua et al  in \cite{chua1978,chua1983,chua1985}, and complementarity problems have been introduced in \cite{bokhoven1978,stevens1981,vandenberghe1989}, followed by the works of Leenaerts and van Bokhoven \cite{leenaerts1999,leenaerts-bokhoven1998}, Vlach et al \cite{bedrosian1992,vlach1997,vlach1995a,vlach1995b}. Camlibel et al \cite{frasca2008,camlibel2002} studied the convergence of backward Euler methods, and comparisons with other (analog and hybrid) integrators are proposed in \cite{vasca2009}. Glocker et al \cite{glocker2005,moller2007} led interesting developments showing the analogy between mechanics and electricity for various types of non-smooth components, and also proposed a time-stepping method inspired by Moreau's algorithm for contact mechanics (consequently quite close to the algorithm used in this paper). Variational inequalities of the second kind and electrical superpotentials  were recently introduced in electronics in \cite{adly2007,goelevenJOTA,addi2009} to study the existence and uniqueness of solutions for static circuits, or the equilibria of dynamical circuits with non-smooth devices. Other works may be found in \cite{enge2005,batlle2005,giaouris2008}.
 
@@ -497,7 +497,8 @@ where $x \in \RR^n$ corresponds to the current in the inductive branches and the
 \label{fig-soft-aspect}
 \end{figure*}
 
-The figure \ref{fig-soft-aspect} shows the libraries and the data involved during the simulation. A Netlist is a circuit textual description used by many simulators like SPICE and ELDO. From a Netlist, the automatic generator builds all the components defined in~(\ref{eq:SEDGE}). The opensource {\sc Siconos/Kernel} library performs the time-discretization following the Moreau time stepping scheme~(\ref{eq:71-discrete}) and formulates at each time--step one instance of the inclusion problem~(\ref{eq:inclusion-global}-\ref{eq:inclusion-global3}). The numerical algorithms for the latter problem are in the opensource {\sc Siconos/Numerics} library. The output of the simulation is a file containing the potential and current values in the SPICE format.
+The figure \ref{fig-soft-aspect} shows the libraries and the data involved during the simulation. A
+Netlist is a circuit textual description used by many simulators like {\sc Spice} and {\sc Eldo}. From a Netlist, the automatic generator builds all the components defined in~(\ref{eq:SEDGE}). The opensource {\sc Siconos/Kernel} library performs the time-discretization following the Moreau time stepping scheme~(\ref{eq:71-discrete}) and formulates at each time--step one instance of the inclusion problem~(\ref{eq:inclusion-global}-\ref{eq:inclusion-global3}). The numerical algorithms for the latter problem are in the opensource {\sc Siconos/Numerics} library. The output of the simulation is a file containing the potential and current values in the {\sc Spice} format.
 
 
 The implementation is object-oriented and mainly on C++. For each electrical component, group of equations and inclusions in (\ref{eq:71-discrete}), a corresponding instance of a class is built. The system are updated in memory at each iteration by the stamp method of each component. In the linear case, these methods are called only once, in the non-linear case they may be called at any time to update the system. The open-source platform is under GPL license and can be freely used. The equation generator is under private license and can be obtained freely on demand for an academic use.  
@@ -565,14 +566,20 @@ V_{1}(t)=\frac{1}{2}(\tau_{1}(t)-1)R_\off I_{d}(t)-\frac{1}{2}(\tau_{1}(t)+1) R_
 \subsection{Numerical results with {\sc Siconos}}
 \label{section32}
 
-The figure \ref{fig:SIMU_CS} depicts the current evolution through the inductor $L$. In \cite{maffezzoni2006}, it has been shown that the Newton-Raphson algorithm fails when the state of the diode and of the switch changes at $t=t_s$ in figure \ref{fig:SIMU_CS}. Indeed, the linearization performed at each Newton-Raphson iteration leads to an oscillation between two incorrect states and never converges to the correct one. The Newton-Raphson iterations enter into a infinite loop without converging.  Using the NSDS approach the OSNSP solver converges and computes the correct state. 
+The figure \ref{fig:SICONOS_SIMU_CS} depicts the current evolution through the inductor $L$. In \cite{maffezzoni2006}, it has been shown that the Newton-Raphson algorithm fails when the state of the diode and of the switch changes at $t=t_s$ in figure \ref{fig:SICONOS_SIMU_CS}. Indeed, the linearization performed at each Newton-Raphson iteration leads to an oscillation between two incorrect states and never converges to the correct one. The Newton-Raphson iterations enter into a infinite loop without converging.  Using the NSDS approach the OSNSP solver converges and computes the correct state. 
 
 
- \begin{figure}[h]
- \resizebox{\linewidth}{!}{\input{simuCS} }
-  \label{fig:SIMU_CS}
-\caption{Current through the inductor.}
- \end{figure}
+\begin{figure*}[!ht]
+  \subfigure[{\sc Siconos} simulation ]{\label{fig:SICONOS_SIMU_CS}
+        \resizebox{0.5\linewidth}{!}{\input{./figure/CS_Siconos.tex }}
+  }\hspace{-2mm}
+  \subfigure[Eldo simulation ]  
+  {\label{fig:ELDO_SIMU_CS} 
+        \resizebox{0.5\linewidth}{!}{\input{./figure/eldo.tex}}
+  } 
+ \caption{Switched circuit simulations.}
+\label{figSimuCS}
+\end{figure*}
 
 
 \begin{remark}
@@ -580,7 +587,7 @@ In \cite{maffezzoni2006} an event-driven numerical method is proposed to solve t
 \end{remark}
 
 \subsection{Numerical results with {\sc Eldo}}
-Eldo does not provide any nonsmooth switch model. But it furnishes the 'VSWITCH' one described in
+{\sc Eldo} does not provide any nonsmooth switch model. But it furnishes the 'VSWITCH' one described in
 \ref{eq:eldo_switch}, where  $R_S$ is the controlled resistor value of the switch, and $V_{C}$ the voltage
 control. Setting $V_{off}$ to $0$, and choosing a small value for $V_{on}$ lead to a close model of the nonsmooth one.
 
@@ -591,27 +598,19 @@ control. Setting $V_{off}$ to $0$, and choosing a small value for $V_{on}$ lead 
     V_{off} \\ (V_{C}(R_\off\;-R_\on\;)+ R_\on\; V_{off}- \\ \qquad R_\off\;V_{on})/(V_{off}-V_{on})& \mbox{if}\;V_{off}<V_{C} < V_{on} \end{cases}
   \end{equation}
 Simulations has been run using different set of parameters, we note that the
-behavior of Eldo depends on these values. For example, using a Backward Euler and $V_{on}=1e-4
+behavior of {\sc Eldo} depends on these values. For example, using a Backward Euler and $V_{on}=1e-4
 \volt$, $V_{off}=0 \volt$,
-$R_\off\; = 1000 \ohm$, $R_\on\;=0.001\ohm$ cause troubles during the Eldo
+$R_\off\; = 1000 \ohm$, $R_\on\;=0.001\ohm$ cause troubles during the {\sc Eldo}
 simulation:
 \begin{enumerate}
 \item [--] If the time step is not fixed, then the switch model \ref{eq:eldo_switch} is violated during the
   simulation.
   \item[--] If the time step is fixed to $0.1 \micro s$, the switch model is correctly handle, but
-  some messages like 'Newton no-convergence' appear during the simulation. The figure \ref{fig:ELDO}
-  shows the Eldo simulation. The values are very close to the {\sc Siconos} simulation, except for the steps corresponding to the
+  some messages like 'Newton no-convergence' appear during the simulation. The figure \ref{fig:ELDO_SIMU_CS}
+  shows the {\sc Eldo} simulation. The values are very close to the {\sc Siconos} simulation, except for the steps corresponding to the
   no-convergence messages, in this case, the resulting current value is absurd. 
 \end{enumerate}
 
-\begin{figure}[hbtp]
-  \centering
-  \resizebox{\linewidth}{!}{
-  \input{./figure/eldo.tex}
-  }
-  \caption{Eldo simulation}
-  \label{fig:ELDO}
-\end{figure}
 
 This example demonstrates that analog tools can fail to simulate a switched circuit.
 
@@ -684,14 +683,28 @@ The overall result is shown on the figure \ref{fig:figSimuBuck}.
 {\bf Simulation time:} The CPU time required to achieve the simulation is $60 \second$ on a
 Pentium 4 processor clocked at 3 GHz. It includes $19 \second$ in the MLCP solvers, $40 \second$ in
 matrix products. The time to export the resulting data is not included.
+
+
 \begin{figure*}[!ht]
-  \centering
-   \resizebox{\linewidth}{!}{
-  \input{./figure/BuckSimu.pstex_t}
-  }
-  \caption{Buck converter simulation.}
-  \label{fig:figSimuBuck}
+  \subfigure[$V_{load}$ ]{\label{fig:SICONOS_SIMU_BUCK_VLOAD}
+        \resizebox{0.5\linewidth}{!}{\input{./figure/Vload.tex }}
+  }\hspace{-2mm}
+  \subfigure[$I_L$]  
+  {\label{fig:SICONOS_SIMU_BUCK_IL} 
+        \resizebox{0.5\linewidth}{!}{\input{./figure/Il.tex}}
+  } \\
+  \subfigure[pMOS drain potential]  
+  {\label{fig:SICONOS_SIMU_BUCK_MOS} 
+        \resizebox{0.5\linewidth}{!}{\input{./figure/MOSPdrain.tex}}
+  }\hspace{-2mm}
+  \subfigure[$V_{ramp}$ and $V_{error}$]  
+  {\label{fig:SICONOS_SIMU_BUCK_IL} 
+        \resizebox{0.5\linewidth}{!}{\input{./figure/VrampVerror.tex}}
+  } 
+ \caption{{\sc Siconos} buck simulation.}
+\label{fig:figSimuBuck}
 \end{figure*}
+
 
 \begin{enumerate}
   \item[--] The figure \ref{fig:figSimuBuck} (a) is the output potential, following the ramp $V_{ref}$.
@@ -699,23 +712,28 @@ matrix products. The time to export the resulting data is not included.
     is loading the capacitor C. After $0.0001s$, $I_L$ has to keep constant the capacitor charge.
     \item[--] The figure \ref{fig:figSimuBuck} (c) zooms on the pMOS drain potential with standard
     parameters.
-    \item[--] The figure  \ref{fig:figSimuBuck} (d) zooms on the pMOS drain potential with, $L=4\micro H,
-    C=10\micro F,
-    R_{11}=10\kilo \ohm, R_{21}=8\kilo \ohm ,C_{11}=10\pico F$, exhibiting a
-    sliding mode that is smoothly simulated. 
+    \item[--] The figure  \ref{fig:figSimuBuck} (d) zooms on the $V_error$ and $V_ramp$ voltages.
+
+
+%      the pMOS drain potential with, $L=4\micro H,
+%    C=10\micro F,
+%    R_{11}=10\kilo \ohm, R_{21}=8\kilo \ohm ,C_{11}=10\pico F$, exhibiting a
+%    sliding mode that is smoothly simulated. 
   \end{enumerate}
 
 The simulation has been tested with many parameters values. The robustness of the non-smooth modelling and solving algorithms enables to perform with the same CPU time the simulation of such cases. The method has been tested with variations in the MOSFET transistors piecewise-linear approximations (6 or 2 segments), and with the multivalued and the regularized comparator models. No significant changes on the numerical results were noticed, indicating that the main objective is the reduction of the variables number (the MLCP size).  
 
 
 
-\subsubsection{Simulation with SPICE }
+\subsubsection{Simulation with {\sc Spice} }
 
 \paragraph{Simulation conditions: convergence issues related to the MOS model}
-The simulation of this circuit was done with several versions of SPICE (the open source NGSPICE from Berkeley, SMASH from Dolphin \footnote{http://www.dolphin.fr/medal/smash/smash$\_$overview.php} and ELDO from Mentor Graphics) and two kinds of MOS models :
+The simulation of this circuit was done with several versions of {\sc Spice} (the open source {\sc Ngspice} from
+Berkeley, {\sc Smash} from Dolphin \footnote{http://www.dolphin.fr/medal/smash/smash$\_$overview.php} and
+{\sc Eldo} from Mentor Graphics) and two kinds of MOS models :
 \begin{description}
 \item \textbf{the MOS level 3 model :} this model was preferred to the MOS level 1 since it allowed the convergence
-of the SMASH simulator with the requirement to add a small capacitor between ground and node 2 (connection between
+of the {\sc Smash} simulator with the requirement to add a small capacitor between ground and node 2 (connection between
 the MOS transistors). This model takes more physical effects into account than the piecewise linear model used in {\sc Siconos} simulations,
 in particular the voltage-dependent capacitances. It is an important issue since these varying capacitances
 cause some convergence problems when node 2 switches between $V_I$ and ground.
@@ -726,12 +744,12 @@ but may yield artifacts (spikes) on the current of the~$V_I$~alim and the MOS tr
 I_{DS} = \textrm{max}(0,V_{GS}-Vt_N)^2 - \textrm{max}(0,V_{GD}-Vt_N)^2 \qquad \textrm{for an nMOS}
 \]
 This model is very close to the piecewise linear model used in {\sc Siconos} simulations. The implementation in netlists was done thanks to 
-voltage-dependent current sources that are very likely not compiled by the various SPICE simulators tested.
+voltage-dependent current sources that are very likely not compiled by the various {\sc Spice} simulators tested.
 Thus the CPU time measured is increased with respect to a compiled version of the same model.
 An estimation of the CPU time with a compiled simplified model is given by multiplying the MOS level 3 CPU time
 by the ratio of the Newton-Raphson iterations required respectively during the simulations with each model.
 An additional correction should be done to reflect that the computation of the jacobian matrix entries
-linked to a compiled simplified model would require less time than with a MOS level 3 model. Even if the SPICE simulation
+linked to a compiled simplified model would require less time than with a MOS level 3 model. Even if the {\sc Spice} simulation
 includes other operations, jacobian matrix loading time is indeed known to be generally predominant.
 \end{description}
 
@@ -752,15 +770,15 @@ T & \textrm{temperature in K}\\
 N & \textrm{emission coefficient}
 \end{array}
 \]
-\item The comparator is modelled as a non linear voltage controlled voltage source defined as $V_{out}~=~1.5~\cdot~(tanh(10~\cdot~V_{in}) + 1)$. Thus the 3~segment characteristic used as the non-smooth model is regularized to help convergence of SPICE
-(see a comparison of the piecewise-linear comparator as used in {\sc Siconos} simulations with the SPICE one in figure \ref{fig-comparator-models}).
+\item The comparator is modelled as a non linear voltage controlled voltage source defined as $V_{out}~=~1.5~\cdot~(tanh(10~\cdot~V_{in}) + 1)$. Thus the 3~segment characteristic used as the non-smooth model is regularized to help convergence of {\sc Spice}
+(see a comparison of the piecewise-linear comparator as used in {\sc Siconos} simulations with the {\sc Spice} one in figure \ref{fig-comparator-models}).
 \end{itemize}
 
 \begin{figure}[hbtp]
 \begin{center}
 \includegraphics[scale=0.6,angle=0]{./figure/comparators.eps}
 \end{center}
-\caption{Comparison of piecewise-linear and SPICE (tanh based) comparator models.}
+\caption{Comparison of piecewise-linear and {\sc Spice} (tanh based) comparator models.}
 \label{fig-comparator-models}
 \end{figure}
 
@@ -768,15 +786,16 @@ N & \textrm{emission coefficient}
 
 The power supply $V_I$ is raised from 0 in $50~\nano\second$ at the beginning to help the convergence.\footnote{This is
 not required with the {\sc Siconos} algorithms that finds a consistent initial solution from scratch.}
-The SPICE tolerance values used are $1\nano\ampere$ for currents, $1\micro\volt$ for voltages and $0.00075$ for relative differences.
-The maximum number of Newton-Raphson iterations is set to $100$ (the default values are $10$ for NGSPICE and $13$ for ELDO).
+The {\sc Spice} tolerance values used are $1\nano\ampere$ for currents, $1\micro\volt$ for voltages and $0.00075$ for relative differences.
+The maximum number of Newton-Raphson iterations is set to $100$ (the default values are $10$ for
+{\sc Ngspice} and $13$ for {\sc Eldo}).
 
-Usually, SPICE simulators integrate time with a time step adjusted according to different strategies based on an estimation
+Usually, {\sc Spice} simulators integrate time with a time step adjusted according to different strategies based on an estimation
 of the local truncation error (LTE) or the number of Newton-Raphson iterations required by previous steps.
 Since {\sc Siconos} simulations were carried with a fixed time step of~50~ps, simulators were forced to use this value as a maximum.
-Even when SPICE simulators use fixed time step, they may compute LTE to assess a solution found by the Newton-Raphson
-algorithm. This computation of LTE was disabled because it could impair the performance of SPICE with respect to {\sc Siconos}.
-\footnote{For NGSPICE, it implied a slight modification of the source code since no standard option is provided to do it.}
+Even when {\sc Spice} simulators use fixed time step, they may compute LTE to assess a solution found by the Newton-Raphson
+algorithm. This computation of LTE was disabled because it could impair the performance of {\sc Spice} with respect to {\sc Siconos}.
+\footnote{For {\sc Ngspice}, it implied a slight modification of the source code since no standard option is provided to do it.}
 
 \subsubsection{Simulation comparisons}
 The following tables displays the results with the standard and the sliding mode values of compensator components. An estimation of the CPU time with a compiled simplified model is added.
@@ -798,27 +817,27 @@ simulator & model &
 \hline
 \multicolumn{4}{|c|}{\textbf{standard compensator values}}\\
 \hline
-NGSPICE & simple   & 8024814 & 632 \\
-NGSPICE & level 3  & 8304237 & 370 \\
+{\sc Ngspice} & simple   & 8024814 & 632 \\
+{\sc Ngspice} & level 3  & 8304237 & 370 \\
 \hline
 %SMASH   & simple  & 4000404 & 8073070 & 230 \\
 %SMASH   & level 3 & 4000323 & 8059868 & 172 \\
 %\hline
-ELDO    & simple   & 4547579 & 388 \\
-ELDO    & level 3  & 4554452 & 356 \\
+{\sc Eldo}    & simple   & 4547579 & 388 \\
+{\sc Eldo}    & level 3  & 4554452 & 356 \\
 \hline
 {\sc Siconos}    & LCP   & --  & 60 \\
 \hline
 \multicolumn{4}{|c|}{\textbf{sliding mode compensator values}}\\
 \hline
-NGSPICE & simple   & 8070324 & 638 \\
-NGSPICE & level 3  & 8669053 & 385 \\
+{\sc Ngspice} & simple   & 8070324 & 638 \\
+{\sc Ngspice} & level 3  & 8669053 & 385 \\
 \hline
 %SMASH   & simple  & 4000252 & 8239697 & 234 \\
 %SMASH   & level 3 & 4000131 & 8220181 & 176 \\
 %\hline
-ELDO    & simple   & 5861226 & 438 \\
-ELDO    & level 3  & 5888994 & 367 \\
+{\sc Eldo}    & simple   & 5861226 & 438 \\
+{\sc Eldo}    & level 3  & 5888994 & 367 \\
 \hline
 {\sc Siconos}    & LCP   & -- & 60 \\
 \hline
@@ -829,12 +848,12 @@ ELDO    & level 3  & 5888994 & 367 \\
 \\
 \\
 These results shall be compared to the 60~s~CPU time achieved with the non-smooth dynamics.
-Depending on the model and the SPICE simulator, the (estimated) CPU time is from~2.8~to~6.1
+Depending on the model and the {\sc Spice} simulator, the (estimated) CPU time is from~2.8~to~6.1
 larger than with {\sc Siconos}. \\
 
 Moreover, it was necessary to add a parasitic capacitor on the connection between the pMOS and nMOS
-transistors to allow the convergence of the SMASH simulator with both models of MOS
-and of the NGSPICE simulator with the MOS level 3 model.
+transistors to allow the convergence of the {\sc Smash} simulator with both models of MOS
+and of the {\sc Ngspice} simulator with the MOS level 3 model.
 
 
 \subsubsection{Simulation with PLECS}
