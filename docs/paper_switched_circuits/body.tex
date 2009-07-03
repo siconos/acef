@@ -512,9 +512,6 @@ This section is devoted to the  modelling and the simulation of the circuit in f
   \caption{A simple switched circuit.}
   \label{fig:figcircuit1}
 \end{figure}
-\begin{ndrva}
-  Add the current and the ramp on this Figure.
-\end{ndrva}
 \subsection{The dynamical system}
 \label{section31}
 
@@ -576,6 +573,42 @@ The figure \ref{fig:SIMU_CS} depicts the current evolution through the inductor 
 \begin{remark}
 In \cite{maffezzoni2006} an event-driven numerical method is proposed to solve the non convergence issue. However it is reliable only if the switching times can be precisely estimated, a shortcoming not encountered  with the NSDS and the  Moreau's time-stepping method. 
 \end{remark}
+
+\subsection{Numerical results with {\sc Eldo}}
+Eldo does not provide any nonsmooth switch model. But it furnishes the 'VSWITCH' one described in
+\ref{eq:eldo_switch}, where  $R_S$ is the controlled resistor value of the switch, and $V_{C}$ the voltage
+control. Setting $V_{off}$ to $0$, and choosing a small value for $V_{on}$ lead to a close model of the nonsmooth one.
+
+
+  \begin{equation}
+    \label{eq:eldo_switch}
+    R_S=\begin{cases}R_\on\; & \mbox{if}\;V_{C} \geq V_{on} \\   R_\off\;  & \mbox{if}\;V_{C} \leq
+    V_{off} \\ (V_{C}(R_\off\;-R_\on\;)+ R_\on\; V_{off}- \\ \qquad R_\off\;V_{on})/(V_{off}-V_{on})& \mbox{if}\;V_{off}<V_{C} < V_{on} \end{cases}
+  \end{equation}
+Simulations has been run using different set of parameters, we note that the
+behavior of Eldo depends on these values. For example, using a Backward Euler and $V_{on}=1e-4
+\volt$, $V_{off}=0 \volt$,
+$R_\off\; = 1000 \ohm$, $R_\on\;=0.001\ohm$ cause troubles during the Eldo
+simulation:
+\begin{enumerate}
+\item [--] If the time step is not fixed, then the switch model \ref{eq:eldo_switch} is violated during the
+  simulation.
+  \item[--] If the time step is fixed to $0.1 \micro s$, the switch model is correctly handle, but
+  some messages like 'Newton no-convergence' appear during the simulation. The figure \ref{fig:ELDO}
+  shows the Eldo simulation. The values are very close to the {\sc Siconos} simulation, except for the steps corresponding to the
+  no-convergence messages, in this case, the resulting current value is absurd. 
+\end{enumerate}
+
+\begin{figure}[hbtp]
+  \centering
+  \resizebox{\linewidth}{!}{
+  \input{./figure/eldo.tex}
+  }
+  \caption{Eldo simulation}
+  \label{fig:ELDO}
+\end{figure}
+
+This example demonstrates that analog tools can fail to simulate a switched circuit.
 
 \section{Results on the buck converter}
 \label{section4}
