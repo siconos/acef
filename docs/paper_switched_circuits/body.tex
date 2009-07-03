@@ -647,11 +647,14 @@ The piecewise linear model uses $6$ segments given by the following data:$ c_1 =
 filter with a cutoff frequency of $30 \mega\hertz$.
 \paragraph{Comparator} is modelled as a piecewise-linear function whose value is $0$ if
 $x < -0.15\volt$ and 3 if $x > 0.15\volt$ .
-\paragraph{Ramp voltage:} the frequency is $600 \kilo\hertz$ and the bounds are $0$ and $0.75 V_I = 2.25 \volt$ .
+\paragraph{Ramp voltage} the frequency is $600 \kilo\hertz$ and the bounds are $0$ and $0.75 V_I = 2.25 \volt$ .
 The rise time is $1.655 \nano\second$ and the fall time is $10 \nano\second$.
-\paragraph{Other components:} $V_I = 3 \volt , L = 10 \micro\henry, C = 22 \micro \farad, R_{load} = 10\ohm,$ compensator
-: $R_{11} = 15.58 \kilo \ohm , R_{12} = 227.8 \kilo \ohm ,R_{21} = 5.613 \mega \ohm, C_{11} = 20 \pico \farad, C_{21} =
+\paragraph{Standard values for other components} $V_I = 3 \volt , L = 10 \micro\henry, C = 22 \micro \farad, R_{load} =
+10\ohm , R_{11} = 15.58 \kilo \ohm , R_{12} = 227.8 \kilo \ohm ,R_{21} = 5.613 \mega \ohm, C_{11} = 20 \pico \farad, C_{21} =
 1.9 \pico \farad$.
+\paragraph{Values exhibiting a sliding mode}$L = 4 \micro \henry, C =
+10 \micro \farad, R_{11} = 10 \kilo \ohm , R_{21}= 8 \mega \ohm, C_{11} = 10 \pico \farad$.
+
 The reference voltage Vref rises from 0 to 1.8 V in 0.1 ms at the beginning
 of the simulation.
 The output voltage Voutput is regulated to track the reference voltage $V_{ref}$ when
@@ -701,8 +704,19 @@ matrix products. The time to export the resulting data is not included.
   {\label{fig:SICONOS_SIMU_BUCK_IL} 
         \resizebox{0.5\linewidth}{!}{\input{./figure/VrampVerror.tex}}
   } 
- \caption{{\sc Siconos} buck simulation.}
+ \caption{{\sc Siconos} buck simulation using standard parameters.}
 \label{fig:figSimuBuck}
+\end{figure*}
+\begin{figure*}[!ht]
+    \subfigure[$V_{comp}$ and $V_{drain}$]  
+  {\label{fig:SICONOS_SIMU_BUCK_SLIDING_MOS_COMP} 
+        \resizebox{0.5\linewidth}{!}{\input{./figure/VcompVdrainSliding.tex}}
+  } \hspace{-2mm}
+  \subfigure[$V_{ramp}$ and $V_{error}$ ]{\label{fig:SICONOS_SIMU_BUCK_SLIDING_VERROR}
+        \resizebox{0.5\linewidth}{!}{\input{./figure/VrampVerrorSliding.tex }}
+  }
+  \caption{{\sc Siconos} buck simulation using sliding mode parameters.}
+\label{fig:figSimuBuck_Sliding}
 \end{figure*}
 
 
@@ -712,14 +726,15 @@ matrix products. The time to export the resulting data is not included.
     is loading the capacitor C. After $0.0001s$, $I_L$ has to keep constant the capacitor charge.
     \item[--] The figure \ref{fig:figSimuBuck} (c) zooms on the pMOS drain potential with standard
     parameters.
-    \item[--] The figure  \ref{fig:figSimuBuck} (d) zooms on the $V_error$ and $V_ramp$ voltages.
-
-
-%      the pMOS drain potential with, $L=4\micro H,
-%    C=10\micro F,
-%    R_{11}=10\kilo \ohm, R_{21}=8\kilo \ohm ,C_{11}=10\pico F$, exhibiting a
-%    sliding mode that is smoothly simulated. 
+    \item[--] The figure  \ref{fig:figSimuBuck} (d) zooms on the $V_{error}$ and $V_{ramp}$ voltages.
+    \item[--] The figure  \ref{fig:figSimuBuck_Sliding} (a) using sliding mode parameters, shows the stabilization of the comparator output to an unsaturated value. It also shows
+      the stabilization of the current through the pMOS allowing the $V_{error}$ signal to follow the $V_{ramp}$
+    signal.    
+    \item[--] The figure \ref{fig:figSimuBuck_Sliding} (b) using sliding mode parameters, shows on the $V_{error}$ and $V_{ramp}$ voltages.
   \end{enumerate}
+
+
+
 
 The simulation has been tested with many parameters values. The robustness of the non-smooth modelling and solving algorithms enables to perform with the same CPU time the simulation of such cases. The method has been tested with variations in the MOSFET transistors piecewise-linear approximations (6 or 2 segments), and with the multivalued and the regularized comparator models. No significant changes on the numerical results were noticed, indicating that the main objective is the reduction of the variables number (the MLCP size).  
 
@@ -739,9 +754,9 @@ in particular the voltage-dependent capacitances. It is an important issue since
 cause some convergence problems when node 2 switches between $V_I$ and ground.
 Adding a small capacitor of a few picoFarad between this node and ground helps to solve the problem
 but may yield artifacts (spikes) on the current of the~$V_I$~alim and the MOS transistors.
-\item\textbf{a simplified model (Sah model)} with fixed capacitances and a quadratic static characteristic :
+\item\textbf{a nMOS simplified model (Sah model)} with fixed capacitances and a quadratic static characteristic :
 \[
-I_{DS} = \textrm{max}(0,V_{GS}-Vt_N)^2 - \textrm{max}(0,V_{GD}-Vt_N)^2 \qquad \textrm{for an nMOS}
+I_{DS} = \textrm{max}(0,V_{GS}-Vt_N)^2 - \textrm{max}(0,V_{GD}-Vt_N)^2 
 \]
 This model is very close to the piecewise linear model used in {\sc Siconos} simulations. The implementation in netlists was done thanks to 
 voltage-dependent current sources that are very likely not compiled by the various {\sc Spice} simulators tested.
@@ -856,15 +871,19 @@ transistors to allow the convergence of the {\sc Smash} simulator with both mode
 and of the {\sc Ngspice} simulator with the MOS level 3 model.
 
 
-\subsubsection{Simulation with PLECS}
+\subsubsection{Simulation with {\sc Plecs}}
 
-As we pointed out above, the hybrid approach that consists of an exhaustive enumeration of all the system's modes, soon become inefficient and unusable mainly because the simulation duration grows exponentially fast. Let us illustrate this fact with the buck converter, loaded with several devices: a resistance, and a chain of transistors. The simulator is PLECS, a hybrid simulator developed by Plexim \footnote{http://www.plexim.com/}. 
+As we pointed out above, the hybrid approach that consists of an exhaustive enumeration of all the
+system's modes, soon become inefficient and unusable mainly because the simulation duration grows
+exponentially fast. Let us illustrate this fact with the buck converter, loaded with several
+devices: a resistance, and a chain of transistors. The simulator is {\sc Plecs}, a hybrid simulator developed by Plexim \footnote{http://www.plexim.com/}. 
 
 The CPU time required to achieve the simulation of $200 \micro\second$ ranges between $596 \second$ to $4$ hours,
-depending on the values of the resistors, capacitors and inductors. This should be compared to the $60\second$ of the {\sc Siconos} simulation, obtained independently of these components values. Moreover, the
-PLECS simulation performs only $168038$ steps comparing the $4.10^{6}$ steps performed during the {\sc Siconos}
+depending on the values of the resistors, capacitors and inductors. This should be compared to the
+$60\second$ of the {\sc Siconos} simulation, obtained independently of these components values.
+Moreover, the {\sc Plecs} simulation performs only $168038$ steps comparing the $4.10^{6}$ steps performed during the {\sc Siconos}
 simulation. It can be concluded that the computation of one step of simulation using {\sc Siconos} is $250$
-faster than using PLECS. This demonstrates the robustness and efficiency of the time-stepping scheme
+faster than using {\sc Plecs}. This demonstrates the robustness and efficiency of the time-stepping scheme
 and the one step solving algorithms of {\sc Siconos}.
 
 
