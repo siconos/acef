@@ -290,6 +290,7 @@ The piecewise-linear model in (\ref{eq:pwl}) has $s$ segments. Multiple choices 
 $x < -\epsilon \volt$ and 3 if $x > \epsilon \volt$. Setting $\epsilon$ to $0$ leads to a relay
 function that is multivalued at 0. In this case, similarly to the Zener diode the multivalued comparator is represented as:
 \begin{equation}
+  \label{eq_MV_comp}
 V_{output} \in N_{[V_{\min},V_{\max}]}(V_{+}-V_{-}) 
 \end{equation}
 where $V_{\min}$ and $V_{\max}$ are the saturation thresholds. 
@@ -730,7 +731,7 @@ matrix products. The time to export the resulting data is not included.
     \item[--] The figure  \ref{fig:figSimuBuck_Sliding} (a) using sliding mode parameters, shows the stabilization of the comparator output to an unsaturated value. It also shows
       the stabilization of the current through the pMOS allowing the $V_{error}$ signal to follow the $V_{ramp}$
     signal.    
-    \item[--] The figure \ref{fig:figSimuBuck_Sliding} (b) using sliding mode parameters, shows on the $V_{error}$ and $V_{ramp}$ voltages.
+    \item[--] The figure \ref{fig:figSimuBuck_Sliding} (b) using sliding mode parameters, shows the $V_{error}$ and $V_{ramp}$ voltages.
   \end{enumerate}
 
 
@@ -869,6 +870,42 @@ larger than with {\sc Siconos}. \\
 Moreover, it was necessary to add a parasitic capacitor on the connection between the pMOS and nMOS
 transistors to allow the convergence of the {\sc Smash} simulator with both models of MOS
 and of the {\sc Ngspice} simulator with the MOS level 3 model.
+
+\subsubsection{Sliding mode using a multi-valued comparator}
+\begin{figure*}[!ht]
+    \subfigure[$V_{comp}$ and $V_{drain}$]  
+  {\label{fig:SICONOS_SIMU_BUCK_SLIDING_MV_MOS_COMP} 
+        \resizebox{0.5\linewidth}{!}{\input{./figure/VcompVdrainSliding_mv.tex}}
+  } \hspace{-2mm}
+  \subfigure[$V_{ramp}$ and $V_{error}$ ]{\label{fig:SICONOS_SIMU_BUCK_SLIDING_VERROR}
+        \resizebox{0.5\linewidth}{!}{\input{./figure/VrampVerrorSlidingMV.pstex_t }}
+  }
+  \caption{{\sc Siconos} buck simulation using sliding mode parameters and multivalued comparator.}
+\label{fig:figSimuBuck_Sliding_mv}
+\end{figure*}
+
+\begin{figure*}[!ht]
+    \subfigure[$V_{comp}$ and $V_{drain}$]  
+  {\label{fig:ELDO_SIMU_BUCK_SLIDING_MV_MOS_COMP} 
+        \resizebox{0.5\linewidth}{!}{\input{./figure/VcompVdrainSlidingMV_eldo.pstex_t}}
+  } \hspace{-2mm}
+  \subfigure[$V_{ramp}$ and $V_{error}$ ]{\label{fig:SICONOS_SIMU_BUCK_SLIDING_VERROR}
+        \resizebox{0.5\linewidth}{!}{\input{./figure/VrampVerrorSlidingMV_eldo.pstex_t }}
+  }
+  \caption{{\sc Eldo} buck simulation using sliding mode parameters and $V_{out}~=~1.5~\cdot~(tanh(10000~\cdot~V_{in}) + 1)$ for the comparator.}
+\label{fig:figSimuBuck_Sliding_mv_eldo}
+\end{figure*}
+This paragraph focuses on the simulation with sliding parameters and using a multi-valued model for the comparator. The rise
+time of the ramp voltage has been increased to $3.2 \nano \second$. The model used in {\sc Siconos}
+consists in setting the $\epsilon$ gap to $0$ in the model depicted in ~\ref{eq_MV_comp}. The figure
+~\ref{fig:figSimuBuck_Sliding_mv} shows the {\sc Siconos} simulation using a fully implicit time-stepping. It could be note that
+the comparator output is stabilized to an unsaturated value. Simulation using {\sc Eldo} has been
+run using the model $V_{out}~=~1.5~\cdot~(tanh(10000~\cdot~V_{in}) + 1)$ for the comparator. The MOS
+level 3 leads to 'Newton no-convergence' messages, so the MOS SAh model has been used to run the simulation displayed in the figure ~\ref{fig:figSimuBuck_Sliding_mv_eldo}.
+It could be note that it does not handle the stabilization of the comparator output. 
+
+
+
 
 
 \subsubsection{Simulation with {\sc Plecs}}
