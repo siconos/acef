@@ -30,7 +30,7 @@ The following standard mathematical programming problems will be used throughout
 If $K=\Omega$ is a convex set, the inclusion~(\ref{eq:inclusion}) and the VI~(\ref{eq:vi}) are equivalent.
 
 \begin{definition}[Mixed Complementarity Problem (MCP)\cite{Dirkse.Ferris1995}]
-  The Mixed Complementarity Problem(MCP) is defined as follows. Given a function $\mathsf F : \RR^p \rightarrow \RR^p$, lower and
+  The Mixed Complementarity Problem (MCP) is defined as follows. Given a function $\mathsf F : \RR^p \rightarrow \RR^p$, lower and
   upper bounds $l, u \in (\RR \cup \{+\infty, -\infty\})^p$, find $z \in \RR^{p}$, $w,
   v \in \RR^{p}_{+}$, such that:
   \begin{equation}\label{eq:MCP}\left\{
@@ -57,13 +57,13 @@ for some matrix $M \in \RR^{ p \times p}$ and some vector $q\in\RR^m$, the MCP~(
 
 
 
-\section{The non-smooth dynamical systems approach to electrical circuits.}
+\section{The non-smooth dynamical systems approach.}
 \label{section2}
 
 \subsection{Non-smooth electronic devices modelling}
 \label{section21}
 
-The NSDS approach for the  modelling of piecewise linear components in electrical circuits has been described in detail  in several of the above cited publications \cite{acary-brogliato2008,glocker2005,moreau1988,jean1999,moreau1999}, and will just be recalled here for the sake of readability. The NSDS approach is a package that consists of: a) non-smooth models, b) Moreau's time-stepping algorithm, c) OSNSP solvers. The current-voltage law of non-smooth electronic devices  may all be represented as inclusions into a normal cone to a convex set $K$, \textit{i.e.} $0 \in \Phi(y,\lambda,t) + N_{K}(\lambda)$, where $\Phi(\cdot)$ is a function, $y$ and $\lambda$ are implicitly defined from $0=H(X,\lambda,t)$ and $y=G(X,\lambda,t)$ for some functions $H(\cdot)$ and $G(\cdot)$, and $X$ is the state vector of the circuit, composed of branch voltages and currents. A crucial point for simulation efficiency, however, is to keep as less slack variables, $\lambda$ and $y$ as possible in the device representation. In addition some efficient OSNSP solvers (as they will be described in Section~\ref{Sec:ONSNP-solvers}) use directly such inclusions into a normal cone to a convex set, or the equivalent VI formulation. This is the case for the direct MCP solver that we used in our simulations. Finally, it is noteworthy that the inclusion modelling of the devices allows for nonlinear characteristics which may not be represented by complementarity relations. 
+The NSDS approach for the  modelling of piecewise linear components in electrical circuits has been described in detail  in several of the above cited publications \cite{acary-brogliato2008,glocker2005,moreau1988,jean1999,moreau1999}, and will just be recalled here for the sake of readability. The NSDS approach is a package that consists of: a) non-smooth models, b) Moreau's time-stepping algorithm, c) OSNSP solvers. The current-voltage laws of non-smooth electronic devices  may all be represented as inclusions into a normal cone to a convex set $K$, \textit{i.e.} $0 \in \Phi(y,\lambda,t) + N_{K}(\lambda)$, where $\Phi(\cdot)$ is a function, $y$ and $\lambda$ are implicitly defined from $0=H(X,\lambda,t)$ and $y=G(X,\lambda,t)$ for some functions $H(\cdot)$ and $G(\cdot)$, and $X$ is the state vector of the circuit, composed of branch voltages and currents. A crucial point for simulation efficiency, however, is to keep as less slack variables, $\lambda$ and $y$ as possible in the device representation. In addition some efficient OSNSP solvers (as they will be described in Section~\ref{Sec:ONSNP-solvers}) use directly such inclusions into a normal cone to a convex set, or the equivalent VI formulation. This is the case for the direct MCP solver that we used in our simulations. Finally, it is noteworthy that the inclusion modelling of the devices allows for nonlinear characteristics which may not be represented by complementarity relations. 
 
  Let us illustrate this on the above four examples (ideal diode, switch, transistor, comparator).
 
@@ -156,7 +156,7 @@ that is consistent with the MLCP formulation in (\ref{eq:MLCP}). The function $\
     [-1,1] \text{ if } x =0
   \end{cases}.
 \end{equation}
-The piecewise-linear model yields a condition number of the resulting MLCP matrix close to $R_\off/R_\on$, that causes trouble with the numerical algorithms that are used to solve the OSNSP. Inclusion as in (\ref{includiode}) will be preferred as they can be directly used in the numerical algorithm for MCP, yielding well-posed and well-conditioned MCPs. 
+The piecewise-linear model yields a condition number of the resulting MLCP matrix close to $R_\off/R_\on$, that causes trouble with the numerical algorithms that are used to solve the OSNSP. Inclusions as in (\ref{includiode}) will be preferred as they can be directly used in the numerical algorithm for MCP, yielding well-posed and well-conditioned MCPs. 
 
 
 
@@ -210,11 +210,11 @@ f(x) = \left\{ \begin{array}{ll}
 x^2 & \textrm{if $x \geq 0$}
 \end{array} \right.
 \]
-The piecewise and quadratic nature of this function is approximated by the following $s$ segments piecewise linear function in \cite{leenaerts-bokhoven1998}: 
+The piecewise and quadratic nature of this function is approximated by the following $s$ segments piecewise linear function \cite{leenaerts-bokhoven1998}: 
 \begin{equation}\label{eq:pwl}
   f_\pwl(x) = \alpha_i x + \beta_i, \text{ for } a_i \leq x \leq a_{i+1}, \quad i = -1\ldots s+1
 \end{equation}
-with $a_1 = -\infty$ and $a_{s+1} = +\infty$.
+with $a_1 = -\infty$ and $a_{s+1} = +\infty$. The complete model of the piecewise-linear nMOS transistor with $s$ segments in (\ref{eq:pwl}) can be recast under the following mixed linear complementarity form \cite{leenaerts-bokhoven1998}:
 \begin{figure}
   \centering
   \input{./figure/nMOS.pstex_t}
@@ -222,7 +222,7 @@ with $a_1 = -\infty$ and $a_{s+1} = +\infty$.
   \label{fig:NMOS}
 \end{figure}
 
-The complete model of the piecewise-linear nMOS transistor with $s$ segments in (\ref{eq:pwl}) can be recast under the following mixed linear complementarity form \cite{leenaerts-bokhoven1998}:
+
 \begin{equation}
   \label{eq:68}
   \begin{array}{l}
@@ -266,7 +266,7 @@ i(t) =
    I_S(t) \\
   \end{array}\right].
 \end{equation}
-The parameters are give as follows: $b = \frac{K}{2}$, $h_i = b(V_T+a_i), i =1\ldots 5 $. The values of $c_i$ are computed from the linear approximation $\alpha_i$ and $\beta_i$ in (\ref{eq:pwl}). Using some basic convex analysis, one obtains the compact formulation of (\ref{eq:68}) (\ref{eq:69}): 
+The parameters are given as follows: $b = \frac{K}{2}$, $h_i = b(V_T+a_i), i =1\ldots 5 $. The values of $c_i$ are computed from the linear approximation $\alpha_i$ and $\beta_i$ in (\ref{eq:pwl}). Using some basic convex analysis, one obtains the compact formulation of (\ref{eq:68}) (\ref{eq:69}): 
 %%
 \begin{equation}
 \left\{\begin{array}{l}
@@ -276,11 +276,17 @@ y(t)=Bu(t)+\lambda(t)+h(t) \\[2mm]
 \end{array}\right.
 \end{equation}
 %%
-with $K=(\RR^{+})^{2(s-1)}$. In the case of the MOSFET transistor, the inclusion is an equality as expected since its piecewise-linear characteristic is single valued. The pMOS transistor is represented in the same way, changing the values of the $h_{i}(t)$, $i(t)$ to $-i(t)$ and $b$ to $-b$. 
+with $K=(\RR^{+})^{2(s-1)}$. In the case of the MOSFET transistor, the inclusion is an equality as
+expected since its piecewise-linear characteristic is single valued. The pMOS transistor is
+represented in the same way, changing the values of the $h_{i}(t)$ functions, $i(t)$ to $-i(t)$ and $b$ to $-b$. 
 
 
 \begin{remark}
-The piecewise-linear model in (\ref{eq:pwl}) has $s$ segments. Multiple choices are possible in order to adjust the number of slack variables and consequently the size of the OSNSP-MLCP to be solved at each step with respect to the accuracy. As we will show in section \ref{section4} the numerical results are very little influenced by the reduction of number of segments. In practice one should therefore be very careful about choosing a reasonable piecewise-linear approximation of the devices so that the MLCP size does not increase too much. 
+The piecewise-linear model in (\ref{eq:pwl}) has $s$ segments. Multiple choices are possible in
+order to adjust the number of slack variables and consequently the size of the OSNSP-MLCP to be
+solved at each step with respect to the accuracy. In practice one should therefore be very careful
+about choosing a reasonable piecewise-linear approximation of the devices so that the MLCP size does
+not increase too much. In this work we have chosen a model using $6$ segments.
 \end{remark}
 
 
@@ -312,7 +318,8 @@ Section \ref{section21} is devoted to present the electronic devices models and 
 
 \subsubsection{The non-smooth DAE formulation}
 
-The formulation of the global behavior of the circuit with non-smooth components represented as inclusions and equalities, and the smooth non linear behaviors of the network represented Differential Algebraic Equations (DAE) can  be written compactly as:
+The circuit with non-smooth components represented as inclusions and equalities, and the smooth non
+linear behavior of the network represented as Differential Algebraic Equations (DAE) can  be written compactly as:
 \begin{equation}
   \label{eq:71}
  \left\{ \begin{array}{r l}
@@ -333,7 +340,9 @@ The formulation of the global behavior of the circuit with non-smooth components
 & \text{\small "Inclusion rule"}\\ 
 \end{array}\right.
 \end{equation}
-with $X \in \RR^n $ is  the state which is composed of the potentials, and the currents in inductive, voltage--defined and nonsmooth branches. The vectors $y,\lambda \in \RR^m$ are the slack variable expressing the nonsmooth multi-valued models of components. The functions $M : \RR^n\times\RR \rightarrow \RR^{p \times n}$, $H : \RR^n\times \RR^m\times\RR \rightarrow \RR^{n-p}$, $G : \RR^n\times \RR^m\times\RR \rightarrow \RR^{m}$ and  $\Phi : \RR^m\times \RR^m\times\RR \rightarrow \RR^{m}$ are assumed to be  continuously differentiable functions. More details will be given on the choice of state variables and the structure of the functions in Section~\ref{sec:acef}. One recognizes two basic ingredients: the DAE part, that is coupled to the non-smooth electronic devices represented by generalized equations as those developed in section \ref{section21}. See section \ref{section3} for a concrete example of (\ref{eq:71}). 
+where $X \in \RR^n $ is  the state composed of the potentials, and the currents in inductive,
+voltage--defined and non--smooth branches. The vectors $y,\lambda \in \RR^m$ are the slack variable
+expressing the nons--mooth multi-valued models of the components. The functions $M : \RR^n\times\RR \rightarrow \RR^{p \times n}$, $H : \RR^n\times \RR^m\times\RR \rightarrow \RR^{n-p}$, $G : \RR^n\times \RR^m\times\RR \rightarrow \RR^{m}$ and  $\Phi : \RR^m\times \RR^m\times\RR \rightarrow \RR^{m}$ are assumed to be  continuously differentiable functions. More details will be given on the choice of state variables and the structure of the functions in Section~\ref{sec:acef}. One recognizes two basic ingredients: the DAE part, that is coupled to the non-smooth electronic devices represented by generalized equations as those developed in section \ref{section21}. See section \ref{section3} for a concrete example of (\ref{eq:71}). 
 
 
 \subsection{Moreau's time-stepping scheme}
@@ -357,7 +366,15 @@ Starting from the dynamics in (\ref{eq:71}) the Moreau's time-stepping scheme  i
 \end{array} \\
 \end{array}\right.
 \end{equation}
-for a time--step $h>0$ and with the usual following notation. For a function $f(t)$, $ f_{k+1} \approx f(t_{k+1})$ and $f_{k+\theta} = \theta f_{k+1} + (1-\theta) f_{k}$. The Moreau's time stepping is made of a $\theta$-method for $\theta \in [0,1]$ for the assumed sufficiently smooth terms, and a fully implicit scheme for the inclusion rule which can be non--smooth. This choice is led by two fundamental reasons. The first reason is the respect of the inclusion rule and its intrinsic unilateral character.  As it has been shown in \cite{Moreau1977},  only a fully implicit scheme can satisfy the unilateral constraints in discrete time. The second reason is the possible nonsmoothness of the evolution  which  can be only  numerically integrated by implicit low order schemes in a consistent way \cite{acary-brogliato2008}.
+for a time--step $h>0$ and with the usual following notation. For a function $f(t)$, $ f_{k+1}
+\approx f(t_{k+1})$ and $f_{k+\theta} = \theta f_{k+1} + (1-\theta) f_{k}$. The Moreau's time
+stepping algorithm is made of a $\theta$-method with $\theta \in [0,1]$ for the assumed sufficiently
+smooth terms, and a fully implicit scheme for the inclusion rule which can be non--smooth. This
+choice is led by two fundamental reasons. The first reason is the respect of the inclusion rule and
+its intrinsic multi--valued and unilateral character.  As it has been shown in \cite{Moreau1977},
+only a fully implicit scheme can satisfy the unilateral constraints in discrete time. The second
+reason is the possible non--smoothness of the evolution  which  can be numerically integrated in a
+consistent way by implicit low order schemes only \cite{acary-brogliato2008}.
 
 For the numerical purposes, let us rewrite the problem~(\ref{eq:71-discrete}) in a global inclusion form
 \begin{equation}
@@ -385,7 +402,7 @@ The normal cone $N_C$ is the normal cone  to the following convex set
   \label{eq:inclusion-global3}
   C =  \RR^{n} \times \RR^ m \times K \subset \RR^{n+2m}
 \end{equation}
-We will see in the next section that the non linearity of $\mathsf F$ can be directly treated by the numerical one--step solver. Another approach is to perform an outer Newton linearization of this problem by searching the solution as the limit for $\alpha$ of the following linearized problem
+We will see in the next section that the non linearity of $\mathsf F(.)$ can be directly treated by the numerical one--step solver. Another approach is to perform an outer Newton linearization of this problem by searching the solution as the limit for $\alpha$ of the following linearized problem
 \begin{equation}
   \label{eq:inclusion-global-linearized}
     0 \in \mathsf \nabla_z\mathsf F(z^{\alpha})(z^{\alpha+1}-z^{\alpha}) + \mathsf F(z^{\alpha})  +N_{C}(z^{\alpha+1}).
@@ -407,7 +424,7 @@ In practice, the convex set is finitely represented by
   \label{eq:K-finite}
   K = \{\lambda\in \RR^m, h(\lambda) = 0, g (\lambda) \geq 0 \},
 \end{equation}
-where the functions $h :  \RR^m \rightarrow \RR^m$, $g :  \RR^m \rightarrow \RR^m$ are assumed to be smooth with non vanishing Jacobians. In this case, general algorithms for VI can be used. To cite a few, the minimization of the so-called  regularized gap function \cite{Fukushima1992,Zhu.Marcotte1993,Zhu.Marcotte1994}  or generalized Newton methods \cite[Chapter 7\& 8]{facchinei} can be used. If $F$ is affine (possibly after the linearization step described in (\ref{eq:inclusion-global-linearized}) ) and the function $h$ and $g$ are also affine, the VI is said to be an affine VI for which the standard pivoting algorithms for LCP\cite{Cottle.Pang.ea1992} has been extended in \cite{Cao.Ferris1996}.
+where the functions $h :  \RR^m \rightarrow \RR^m$, $g :  \RR^m \rightarrow \RR^m$ are assumed to be smooth with non vanishing Jacobians. In this case, general algorithms for VI can be used. To cite a few, the minimization of the so-called  regularized gap function \cite{Fukushima1992,Zhu.Marcotte1993,Zhu.Marcotte1994}  or generalized Newton methods \cite[Chapter 7\& 8]{facchinei} can be used. If $F(.)$ is affine (possibly after the linearization step described in (\ref{eq:inclusion-global-linearized}) ) and the functions $h(.)$ and $g(.)$ are also affine, the VI is said to be an affine VI for which the standard pivoting algorithms for LCP\cite{Cottle.Pang.ea1992} has been extended in \cite{Cao.Ferris1996}.
 
 \subsubsection{$K$ is a generalized box}
 Let us consider the case that $K$ is a generalized box in $\overline{\RR}^m =\RR \cup \{+\infty, -\infty\}^m$, that is
@@ -424,13 +441,14 @@ In this case, the problem (\ref{eq:inclusion-global}-\ref{eq:inclusion-global3})
 0_n & 0_m & 0_m & b  
 \end{array}]^T$.
  
-The MCP (\ref{eq:MCP}) can be solved by a large family  of solvers based on Newton--type Methods and interior-points techniques. In contrast to the interior-point methods, it is not difficult to find comparisons of numerical methods based on Newton's method for solving MCP. We refer to the paper of \cite{Billups.ea1997} for an impressive comparison of the following implementation of solvers: MILES \cite{Rutherford1993}, PATH \cite{Dirkse.Ferris1995}, NE/SQP \cite{Gabriel.Pang1992,Pang.Gabriel1993}, QPCOMP \cite{Billups.Ferris1995}, SMOOTH \cite{Chen.Mangasarian1996}, PROXI \cite{Billups1995}, SEMISMOOTH \cite{Deluca.ea1996}, SEMICOMP \cite{Billups1995}. All of these comparisons, which have been made in the framework of the MCP~(\ref{eq:MCP}) show that the PROXI, PATH and SMOOTH are superior on a large sample of test problems.  For a comparison of the variants of the SEMISMOOTH algorithm,  we refer to \cite{DeLuca.Facchinei.ea2000}.
+The MCP (\ref{eq:MCP}) can be solved by a large family  of solvers based on Newton--type Methods and interior-points techniques. In contrast to the interior-point methods, it is not difficult to find comparisons of numerical methods based on Newton's method for solving MCP. We refer to \cite{Billups.ea1997} for an impressive comparison of the following: MILES \cite{Rutherford1993}, PATH \cite{Dirkse.Ferris1995}, NE/SQP \cite{Gabriel.Pang1992,Pang.Gabriel1993}, QPCOMP \cite{Billups.Ferris1995}, SMOOTH \cite{Chen.Mangasarian1996}, PROXI \cite{Billups1995}, SEMISMOOTH \cite{Deluca.ea1996}, SEMICOMP \cite{Billups1995}. All of these comparisons, which have been made in the framework of the MCP~(\ref{eq:MCP}) show that the PROXI, PATH and SMOOTH are superior on a large sample of test problems.  For a comparison of the variants of the SEMISMOOTH algorithm,  we refer to \cite{DeLuca.Facchinei.ea2000}.
 
-If $\mathsf F$ is affine, the MLCP is equivalent to a box-constrained Affine VI. For this problem, standard pivoting algorithm such the Lemke's Method has been extended in~\cite{Sargent1978}.  
+If $\mathsf F(.)$ is affine, the MLCP is equivalent to a box-constrained Affine VI. For this
+problem, the standard pivoting algorithm such the Lemke's Method has been extended in~\cite{Sargent1978}.  
 
 A special case of a generalized box is the positive orthant of  $\RR^m$, that is $K=\RR_+^m$. Standard theory and most of the numerical algorithms for LCPs apply in this MCLP case. 
 
-When the circuit is simple and of low size in terms of number of state variables, it is sometimes possible to write the DAE as an ODE and performs the explicit substitution of $X$ by $y$ and $\lambda$ in the formulation~(\ref{eq:71-discrete}). If the cone is also simply defined by a positive orthant, we arrive then at a standard LCP \cite{denoyelle2006}. Unfortunately, the LCP formulation is not amenable for more complicated cases  where an automatic circuit equation formulation (see the next section) is used.  
+When the circuit is simple and of low size in terms of the number of state variables, it is sometimes possible to write the DAE as an ODE and perform the explicit substitution of $X$ by $y$ and $\lambda$ in the formulation~(\ref{eq:71-discrete}). If the cone is also simply defined by a positive orthant, we arrive then at a standard LCP \cite{denoyelle2006}. Unfortunately, the LCP formulation is not amenable for more complicated cases  where an automatic circuit equation formulation (see the next section) is used.  
 
 \section{Automatic circuit equation generation and Software implementation}
 
@@ -494,12 +512,12 @@ where $x \in \RR^n$ corresponds to the current in the inductive branches and the
     \input{./figure/soft_aspect.pstex_t}
  }
 }
-\caption{libraries and data}
+\caption{libraries and data.}
 \label{fig-soft-aspect}
 \end{figure*}
 
 The figure \ref{fig-soft-aspect} shows the libraries and the data involved during the simulation. A
-Netlist is a circuit textual description used by many simulators like {\sc Spice} and {\sc Eldo}. From a Netlist, the automatic generator builds all the components defined in~(\ref{eq:SEDGE}). The opensource {\sc Siconos/Kernel} library performs the time-discretization following the Moreau time stepping scheme~(\ref{eq:71-discrete}) and formulates at each time--step one instance of the inclusion problem~(\ref{eq:inclusion-global}-\ref{eq:inclusion-global3}). The numerical algorithms for the latter problem are in the opensource {\sc Siconos/Numerics} library. The output of the simulation is a file containing the potential and current values in the {\sc Spice} format.
+Netlist is a circuit textual description used by many simulators like {\sc Spice} and {\sc Eldo}. From a Netlist, the automatic generator builds all the components defined in~(\ref{eq:SEDGE}). The opensource {\sc Siconos/Kernel} library performs the time-discretization following the Moreau time--stepping scheme~(\ref{eq:71-discrete}) and formulates at each time--step one instance of the inclusion problem~(\ref{eq:inclusion-global}-\ref{eq:inclusion-global3}). The numerical algorithms for the latter problem are in the opensource {\sc Siconos/Numerics} library. The output of the simulation is a file containing the potential and current values in the {\sc Spice} format.
 
 
 The implementation is object-oriented and mainly on C++. For each electrical component, group of equations and inclusions in (\ref{eq:71-discrete}), a corresponding instance of a class is built. The system are updated in memory at each iteration by the stamp method of each component. In the linear case, these methods are called only once, in the non-linear case they may be called at any time to update the system. The open-source platform is under GPL license and can be freely used. The equation generator is under private license and can be obtained freely on demand for an academic use.  
@@ -540,7 +558,7 @@ non-smooth law of the other branch. The two non-smooth devices are the diode and
       V_3=e(t)\\
 \end{array}\right.
 \end{equation}
-for the input/output relations on nonsmooth componenents, we get
+For the input/output relations on nonsmooth componenents, we get
 \begin{equation}
  \left\{ \begin{array}{l}
 V_{1}(t)=\frac{1}{2}(\tau_{1}(t)-1)R_\off I_{d}(t)-\frac{1}{2}(\tau_{1}(t)+1) R_\on I_{d}(t) \\ 
@@ -556,7 +574,7 @@ V_{1}(t)=\frac{1}{2}(\tau_{1}(t)-1)R_\off I_{d}(t)-\frac{1}{2}(\tau_{1}(t)+1) R_
   %  y_4(t) = -V_1(t)+\lambda_3(t) \\
   \end{array} \right.
 \end{equation}
- and finally, the inclusion rule is written as
+ Finally, the inclusion rule is written as
 \begin{equation}
   \left\{\begin{array}{l}
       V_{1}(t) \in - N_{[-1,1]}(\tau_{1}(t)) \\   V_{3}(t)-V_{2}(t) \in -N_{[-1,1]}(\tau_{2}(t))
@@ -588,32 +606,34 @@ In \cite{maffezzoni2006} an event-driven numerical method is proposed to solve t
 \end{remark}
 
 \subsection{Numerical results with {\sc Eldo}}
-{\sc Eldo} does not provide any nonsmooth switch model. But it furnishes the 'VSWITCH' one described in
-\ref{eq:eldo_switch}, where  $R_S$ is the controlled resistor value of the switch, and $V_{C}$ the voltage
-control. Setting $V_{off}$ to $0$, and choosing a small value for $V_{on}$ lead to a close model of the nonsmooth one.
+{\sc Eldo} does not provide any non--smooth switch model. But it furnishes the 'VSWITCH' one described in
+(\ref{eq:eldo_switch}), where  $R_S$ is the controlled resistor value of the switch, and $V_{C}$ the voltage
+control. Setting $V_{off}$ to $0$, and choosing a small value for $V_{on}$ lead to:
 
 
   \begin{equation}
     \label{eq:eldo_switch}
-    R_S=\begin{cases}R_\on\; & \mbox{if}\;V_{C} \geq V_{on} \\   R_\off\;  & \mbox{if}\;V_{C} \leq
-    V_{off} \\ (V_{C}(R_\off\;-R_\on\;)+ R_\on\; V_{off}- \\ \qquad R_\off\;V_{on})/(V_{off}-V_{on})& \mbox{if}\;V_{off}<V_{C} < V_{on} \end{cases}
+    R_S(t)=\begin{cases}R_\on\; & \mbox{if}\;V_{C}(t) \geq V_{on} \\   R_\off\;  & \mbox{if}\;V_{C}(t) \leq
+%    V_{off} \\ (V_{C}(R_\off\;-R_\on\;)+ R_\on\; V_{off}- \\ \qquad R_\off\;V_{on})/(V_{off}-V_{on})& \mbox{if}\;V_{off}<V_{C}(t) < V_{on} \end{cases}
+    V_{off} \\ (V_{C}(R_\off\;-R_\on\;)+ R_\on\; V_{off}- \\ \qquad R_\off\;V_{on})/(V_{off}-V_{on})& \mbox{else}\; \end{cases}
   \end{equation}
-Simulations has been run using different set of parameters, we note that the
+  Witch is close to \ref{switchmodel1} for the chosen parameters. \\Simulations have been done using
+  different sets of parameters. It is noteworthy that the
 behavior of {\sc Eldo} depends on these values. For example, using a Backward Euler and $V_{on}=1e-4
 \volt$, $V_{off}=0 \volt$,
 $R_\off\; = 1000 \ohm$, $R_\on\;=0.001\ohm$ cause troubles during the {\sc Eldo}
 simulation:
 \begin{enumerate}
-\item [--] If the time step is not fixed, then the switch model \ref{eq:eldo_switch} is violated during the
+\item [--] If the time step is not fixed, then the switch model (\ref{eq:eldo_switch}) is violated during the
   simulation.
-  \item[--] If the time step is fixed to $0.1 \micro s$, the switch model is correctly handle, but
+  \item[--] If the time step is fixed to $0.1 \micro s$, the switch model is correctly handled, but
   some messages like 'Newton no-convergence' appear during the simulation. The figure \ref{fig:ELDO_SIMU_CS}
   shows the {\sc Eldo} simulation. The values are very close to the {\sc Siconos} simulation, except for the steps corresponding to the
-  no-convergence messages, in this case, the resulting current value is absurd. 
+  no-convergence messages. In this case, the resulting current value is absurd. 
 \end{enumerate}
 
 
-This example demonstrates that analog tools can fail to simulate a switched circuit.
+This academic example demonstrates that analog tools can fail to simulate a switched circuit.
 
 \section{Results on the buck converter}
 \label{section4}
@@ -628,12 +648,12 @@ This example demonstrates that analog tools can fail to simulate a switched circ
 \caption{Buck converter}
 \label{fig-Buck-converter}
 \end{figure*}
-The components are modelled with either linear, or piecewise linear, or set-valued relations yielding a non-smooth dynamical system of the linear time invariant complementarity systems class. The features of th models are given thereafter.
+The components are modelled with either linear, or piecewise linear, or set-valued relations yielding a non-smooth dynamical system of the linear time invariant complementarity systems class. The features of the models are given thereafter.
 
 \paragraph{Power MOSFETS pMOS/nMOS} they are described as an assembly of a
 piecewise-linear current source $I_{DS} = f(V_{GS}, V_{DS})$ and the intrinsic diode
 (DpMOS and DnMOS) with an ideal characteristic.
-The capacitances were not taken into account. The diodes threshold is
+The capacitances were not taken into account. The diodes residual voltage is
 $1\volt$. 
 The MOSFETs transconductance KP was set to $10 \ampere\volt^{-2}$ and
 their threshold voltage to respectively $V_T = -2 \volt$ for the pMOS and $V_T= 2 \volt$ for
@@ -641,13 +661,19 @@ the nMOS. One can notice that the sum of their absolute values largely
 exceeds the supply voltage $V_{I} = 3 \volt$ , thus providing non-overlapping
 conduction times. The other physical parameters as chosen as follows : $\mu = 750~cm^2.V^{-1}.s^{-1}$ for a nMOS and $\mu=250~cm^2.V^{-1}.s^{-1}$ for a pMOS, $\epsilon_{Ox} = \epsilon_{r~SiO_2} \cdot \epsilon_0$ with $\epsilon_{r~SiO_2} \approx 3.9$, $t_{OX} \approx 4 nm$ $W = 130\nano \meter$ $L=180 nm$. 
 
-The piecewise linear model uses $6$ segments given by the following data:$ c_1 = 0.09 , c_2=0.2238 , c_3=0.4666 , c_4=1.1605 , c_5=2.8863,  a_1 = 0 , a_2=0.1, a_3=0.2487 , a_4=0.6182 , a_5=1.5383$. The relative error between $f(\cdot)$ and $f_\pwl(\cdot)$ is kept below $0.1$ for $0.1 \leq x < 3.82$. The absolute error is less than $2 \cdot 10^{-3}$ for $0 \leq x < 0.1$ and $0$ for negative $x$. In practice, the values of $V_G,V_S,V_D,V_T$ in logic integrated circuits allow  a good approximation of $f(\cdot)$ by $f_\pwl(\cdot)$. Obviously it is possible to describe the function $f(\cdot)$ with less segments, however a study of the results accuracy and computation time as a function of the number of segments is outside the scope of this paper. 
+The piecewise linear model uses $6$ segments given by the following data:$ c_1 = 0.09 , c_2=0.2238 ,
+c_3=0.4666 , c_4=1.1605 , c_5=2.8863,  a_1 = 0 , a_2=0.1, a_3=0.2487 , a_4=0.6182 , a_5=1.5383$. The
+relative error between $f(\cdot)$ and $f_\pwl(\cdot)$ is kept below $0.1$ for $0.1 \leq x < 3.82$.
+The absolute error is less than $2 \cdot 10^{-3}$ for $0 \leq x < 0.1$ and $0$ for negative $x$. In
+practice, the values of $V_G,V_S,V_D,V_T$ in logic integrated circuits allow  a good approximation
+of $f(\cdot)$ by $f_\pwl(\cdot)$. A study of the results accuracy and computation time as a function
+of the number of segments is outside the scope of this paper.
 
 
 \paragraph{Compensator amplifier} is modelled as a $1.10^5$ gain and an output low-pass
 filter with a cutoff frequency of $30 \mega\hertz$.
 \paragraph{Comparator} is modelled as a piecewise-linear function whose value is $0$ if
-$x < -0.15\volt$ and 3 if $x > 0.15\volt$ .
+$x < -0.15\volt$ and 3 if $x > 0.15\volt$.
 \paragraph{Ramp voltage} the frequency is $600 \kilo\hertz$ and the bounds are $0$ and $0.75 V_I = 2.25 \volt$ .
 The rise time is $1.655 \nano\second$ and the fall time is $10 \nano\second$.
 \paragraph{Standard values for other components} $V_I = 3 \volt , L = 10 \micro\henry, C = 22 \micro \farad, R_{load} =
@@ -666,27 +692,28 @@ comparator drives the pMOS transistor which in turn provides more or less
 charge to the output depending on the error level. The operation of a buck
 converter involves both a relatively slow dynamics when the switching elements
 (MOS and diodes) are keeping their conducting state, and a fast dynamics when
-the states change. The order of magnitude are $ 50 \pico \second$ for some switching details,
+the states change. The orders of magnitude are $ 50 \pico \second$ for some switching details,
 $1 \micro \second$ for a slow variation period and $100 \micro \second$ at least for a settling period of the
 whole circuit requiring a simulation.
 
 \subsection{The dynamical equations}
 \label{section41}
-The non-smooth DAE has been generated using the automatic circuit equation formulation described in Section~\ref{sec:acef}. It leads to a dynamical system with 25 states coupled to an inclusion rule. The dimension of the inclusion
-rule depends on the MOS model in (\ref{eq:68}), from $12$ with an approximation of 2 segments, up to $24$.  
+The non-smooth DAE has been generated using the automatic circuit equation formulation described in
+Section~\ref{sec:acef}. It leads to a dynamical system with 25 states coupled to an inclusion rule.
+The dimension of the inclusion rule is $24$.  
 
 \subsection{Numerical results with {\sc Siconos},  and comparisons}
 \label{section42}
 \subsubsection{Simulation with {\sc Siconos}}
- The start-up of the converter was simulated thanks to the {\sc Siconos}. As initial conditions, all state variables are zeroed.
+ The start-up of the converter was simulated thanks to {\sc Siconos}. As initial conditions, all state variables are zeroed.
 The detailed analysis of the switching events requires to use a time step as
-small as $50 \pico \second$. The simulations are carried with a fixed time step, $4.10^{6}$ steps are then computed for the $200 \micro \second$ long settling of the output voltage. The OSNSP solver is our own implementation of a semi-smooth newton method based on the Fischer-Bursmeister reformulation\cite{Deluca.ea1996}.
+small as $50 \pico \second$. The simulations are carried with a fixed time step, $4.10^{6}$ steps are then computed for the $200 \micro \second$ long settling of the output voltage. The OSNSP solver is our own implementation of a semi-smooth Newton method based on the Fischer-Bursmeister reformulation\cite{Deluca.ea1996}.
 The overall result is shown on the figure \ref{fig:figSimuBuck}.  
 
 
 {\bf Simulation time:} The CPU time required to achieve the simulation is $60 \second$ on a
 Pentium 4 processor clocked at 3 GHz. It includes $19 \second$ in the MLCP solvers, $40 \second$ in
-matrix products. The time to export the resulting data is not included.
+matrices products. The time to export the resulting data is not included.
 
 
 \begin{figure*}[!ht]
@@ -724,7 +751,7 @@ matrix products. The time to export the resulting data is not included.
 \begin{enumerate}
   \item[--] The figure \ref{fig:figSimuBuck} (a) is the output potential, following the ramp $V_{ref}$.
     \item[--] The figure \ref{fig:figSimuBuck} (b) is the current through the inductor. Until $0.0001s$, $I_L$
-    is loading the capacitor C. After $0.0001s$, $I_L$ has to keep constant the capacitor charge.
+    is loading the capacitor C. After $0.0001s$, $I_L$ has to keep the capacitor charge constant.
     \item[--] The figure \ref{fig:figSimuBuck} (c) zooms on the pMOS drain potential with standard
     parameters.
     \item[--] The figure  \ref{fig:figSimuBuck} (d) zooms on the $V_{error}$ and $V_{ramp}$ voltages.
@@ -737,7 +764,8 @@ matrix products. The time to export the resulting data is not included.
 
 
 
-The simulation has been tested with many parameters values. The robustness of the non-smooth modelling and solving algorithms enables to perform with the same CPU time the simulation of such cases. The method has been tested with variations in the MOSFET transistors piecewise-linear approximations (6 or 2 segments), and with the multivalued and the regularized comparator models. No significant changes on the numerical results were noticed, indicating that the main objective is the reduction of the variables number (the MLCP size).  
+The simulation has been tested with many parameters values. The robustness of the non-smooth
+modelling and solving algorithms enables one to perform with the same CPU time the simulation of such cases.  
 
 
 
@@ -748,20 +776,20 @@ The simulation of this circuit was done with several versions of {\sc Spice} (th
 Berkeley, {\sc Smash} from Dolphin \footnote{http://www.dolphin.fr/medal/smash/smash$\_$overview.php} and
 {\sc Eldo} from Mentor Graphics) and two kinds of MOS models :
 \begin{description}
-\item \textbf{the MOS level 3 model :} this model was preferred to the MOS level 1 since it allowed the convergence
+\item \textbf{The MOS level 3 model :} this model was preferred to the MOS level 1 since it allowed the convergence
 of the {\sc Smash} simulator with the requirement to add a small capacitor between ground and node 2 (connection between
-the MOS transistors). This model takes more physical effects into account than the piecewise linear model used in {\sc Siconos} simulations,
+the MOS transistors). This model takes more physical effects into account than the piecewise-linear model used in {\sc Siconos} simulations,
 in particular the voltage-dependent capacitances. It is an important issue since these varying capacitances
 cause some convergence problems when node 2 switches between $V_I$ and ground.
 Adding a small capacitor of a few picoFarad between this node and ground helps to solve the problem
 but may yield artifacts (spikes) on the current of the~$V_I$~alim and the MOS transistors.
-\item\textbf{a nMOS simplified model (Sah model)} with fixed capacitances and a quadratic static characteristic :
+\item\textbf{An nMOS simplified model (Sah model)} with fixed capacitances and a quadratic static characteristic :
 \[
 I_{DS} = \textrm{max}(0,V_{GS}-Vt_N)^2 - \textrm{max}(0,V_{GD}-Vt_N)^2 
 \]
-This model is very close to the piecewise linear model used in {\sc Siconos} simulations. The implementation in netlists was done thanks to 
+This model is very close to the piecewise-linear model used in {\sc Siconos} simulations. The implementation in netlists was done thanks to 
 voltage-dependent current sources that are very likely not compiled by the various {\sc Spice} simulators tested.
-Thus the CPU time measured is increased with respect to a compiled version of the same model.
+Thus the measured CPU time is increased with respect to a compiled version of the same model.
 An estimation of the CPU time with a compiled simplified model is given by multiplying the MOS level 3 CPU time
 by the ratio of the Newton-Raphson iterations required respectively during the simulations with each model.
 An additional correction should be done to reflect that the computation of the jacobian matrix entries
@@ -778,7 +806,7 @@ coefficient $N~=~1$ :
 with
 \[
 \begin{array}{ll}
-V\,,\,I & \textrm{voltage across the diode and current through the diode}\\
+V\,,\,I & \textrm{voltage and current through the diode}\\
 I_S & \textrm{saturation current, default value $10^{-14}$~A}\\
 q & \textrm{electron charge $1.6\,10^{-19}$~C}\\
 k & \textrm{Boltzmann constant $1.38\,10^{-23}\,J.K^{-1}$}\\
@@ -786,8 +814,8 @@ T & \textrm{temperature in K}\\
 N & \textrm{emission coefficient}
 \end{array}
 \]
-\item The comparator is modelled as a non linear voltage controlled voltage source defined as $V_{out}~=~1.5~\cdot~(tanh(10~\cdot~V_{in}) + 1)$. Thus the 3~segment characteristic used as the non-smooth model is regularized to help convergence of {\sc Spice}
-(see a comparison of the piecewise-linear comparator as used in {\sc Siconos} simulations with the {\sc Spice} one in figure \ref{fig-comparator-models}).
+\item The comparator is modelled as a non linear voltage controlled voltage source defined as $V_{out}~=~1.5~\cdot~(tanh(10~\cdot~V_{in}) + 1)$. Thus the 3-segment characteristic used as the non-smooth model is regularized to help convergence of {\sc Spice}
+(see a comparison of the piecewise-linear comparator as used in {\sc Siconos} simulations with the {\sc Spice} one on figure \ref{fig-comparator-models}).
 \end{itemize}
 
 \begin{figure}[hbtp]
@@ -801,12 +829,12 @@ N & \textrm{emission coefficient}
 
 
 The power supply $V_I$ is raised from 0 in $50~\nano\second$ at the beginning to help the convergence.\footnote{This is
-not required with the {\sc Siconos} algorithms that finds a consistent initial solution from scratch.}
+not required with the {\sc Siconos} algorithms that find a consistent initial solution from scratch.}
 The {\sc Spice} tolerance values used are $1\nano\ampere$ for currents, $1\micro\volt$ for voltages and $0.00075$ for relative differences.
 The maximum number of Newton-Raphson iterations is set to $100$ (the default values are $10$ for
 {\sc Ngspice} and $13$ for {\sc Eldo}).
 
-Usually, {\sc Spice} simulators integrate time with a time step adjusted according to different strategies based on an estimation
+Usually, {\sc Spice} simulators integrate with a time step adjusted according to different strategies based on an estimation
 of the local truncation error (LTE) or the number of Newton-Raphson iterations required by previous steps.
 Since {\sc Siconos} simulations were carried with a fixed time step of~50~ps, simulators were forced to use this value as a maximum.
 Even when {\sc Spice} simulators use fixed time step, they may compute LTE to assess a solution found by the Newton-Raphson
@@ -814,7 +842,7 @@ algorithm. This computation of LTE was disabled because it could impair the perf
 \footnote{For {\sc Ngspice}, it implied a slight modification of the source code since no standard option is provided to do it.}
 
 \subsubsection{Simulation comparisons}
-The following tables displays the results with the standard and the sliding mode values of compensator components. An estimation of the CPU time with a compiled simplified model is added.
+The table \ref{tab:buck} displays the results with the standard and the sliding mode values of compensator components. An estimation of the CPU time with a compiled simplified model is added.
 \\
 \\
 \begin{table}
@@ -863,11 +891,9 @@ simulator & model &
 \end{table}
 \\
 \\
-These results shall be compared to the 60~s~CPU time achieved with the non-smooth dynamics.
+These results shall be compared to the 60~s~CPU time achieved with the NSDS method.
 Depending on the model and the {\sc Spice} simulator, the (estimated) CPU time is from~2.8~to~6.1
-larger than with {\sc Siconos}. \\
-
-Moreover, it was necessary to add a parasitic capacitor on the connection between the pMOS and nMOS
+larger than with {\sc Siconos}. Moreover, it was necessary to add a parasitic capacitor on the connection between the pMOS and nMOS
 transistors to allow the convergence of the {\sc Smash} simulator with both models of MOS
 and of the {\sc Ngspice} simulator with the MOS level 3 model.
 
@@ -898,11 +924,11 @@ and of the {\sc Ngspice} simulator with the MOS level 3 model.
 This paragraph focuses on the simulation with sliding parameters and using a multi-valued model for the comparator. The rise
 time of the ramp voltage has been increased to $3.2 \nano \second$. The model used in {\sc Siconos}
 consists in setting the $\epsilon$ gap to $0$ in the model depicted in ~\ref{eq_MV_comp}. The figure
-~\ref{fig:figSimuBuck_Sliding_mv} shows the {\sc Siconos} simulation using a fully implicit time-stepping. It could be note that
+~\ref{fig:figSimuBuck_Sliding_mv} shows the {\sc Siconos} simulation using a fully implicit time-stepping. It could be noted that
 the comparator output is stabilized to an unsaturated value. Simulation using {\sc Eldo} has been
-run using the model $V_{out}~=~1.5~\cdot~(tanh(10000~\cdot~V_{in}) + 1)$ for the comparator. The MOS
+done using the model $V_{out}~=~1.5~\cdot~(tanh(10000~\cdot~V_{in}) + 1)$ for the comparator. The MOS
 level 3 leads to 'Newton no-convergence' messages, so the MOS SAh model has been used to run the simulation displayed in the figure ~\ref{fig:figSimuBuck_Sliding_mv_eldo}.
-It could be note that it does not handle the stabilization of the comparator output. 
+It is noteworthy that it does not handle the stabilization of the comparator output on the sliding surface. 
 
 
 
@@ -921,9 +947,14 @@ $60\second$ of the {\sc Siconos} simulation, obtained independently of these com
 Moreover, the {\sc Plecs} simulation performs only $168038$ steps comparing the $4.10^{6}$ steps performed during the {\sc Siconos}
 simulation. It can be concluded that the computation of one step of simulation using {\sc Siconos} is $250$
 faster than using {\sc Plecs}. This demonstrates the robustness and efficiency of the time-stepping scheme
-and the one step solving algorithms of {\sc Siconos}.
+and the OSNSP algorithms of {\sc Siconos}.
 
-
+\begin{remark}
+  On both figures \ref{fig:SICONOS_SIMU_BUCK_SLIDING_MV_MOS_COMP} and
+  \ref{fig:SICONOS_SIMU_BUCK_SLIDING_VERROR} it is seen that the sliding surface is attained in
+  finite time after an accumulation of switches. This is a classical phenomenon in much non-smooth
+  systems, see Filippov's example in \cite{Acary.Brogliato2009}.
+\end{remark}
 \section{Conclusions}
 \label{section5}
 
@@ -947,7 +978,7 @@ In this paper we have presented numerical simulations of switched circuits obtai
 \end{itemize}
 
 
-The major drawback of the used method is its low order, so that its accuracy may be less good on smooth portions of the trajectoires. In this paper it is first shown that Moreau's time stepping scheme allows one to integrate an academic example on which Newton-Raphson based methods fail. Then the buck converter system is simulated. Comparisons with other analog simulators are presented. The simulations have been led with the {\sc Siconos} software package of the INRIA, an open source platform dedicated to non-smooth multivalued dynamical systems. 
+The major drawback of the used method is its low order, so that its accuracy may be less good on smooth portions of the trajectoires. In this paper it is first shown that Moreau's time-stepping scheme allows one to integrate an academic example on which Newton-Raphson based methods fail. Then the buck converter system is simulated. Comparisons with other analog simulators are presented. The simulations have been led with the {\sc Siconos} software package of the INRIA, an open source platform dedicated to non-smooth multivalued dynamical systems. 
 
 
 
