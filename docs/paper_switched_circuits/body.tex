@@ -286,7 +286,8 @@ The piecewise-linear model in (\ref{eq:pwl}) has $s$ segments. Multiple choices 
 order to adjust the number of slack variables and consequently the size of the OSNSP-MLCP to be
 solved at each step with respect to the accuracy. In practice one should therefore be very careful
 about choosing a reasonable piecewise-linear approximation of the devices so that the MLCP size does
-not increase too much. In this work we have chosen a model using $6$ segments.
+not increase too much. In this work we have chosen a model using $6$ segments. A study of the results accuracy and computation time as a function
+of the number of segments is outside the scope of this paper.
 \end{remark}
 
 
@@ -615,9 +616,10 @@ control. Setting $V_{off}$ to $0$, and choosing a small value for $V_{on}$ lead 
     \label{eq:eldo_switch}
     R_S(t)=\begin{cases}R_\on\; & \mbox{if}\;V_{C}(t) \geq V_{on} \\   R_\off\;  & \mbox{if}\;V_{C}(t) \leq
 %    V_{off} \\ (V_{C}(R_\off\;-R_\on\;)+ R_\on\; V_{off}- \\ \qquad R_\off\;V_{on})/(V_{off}-V_{on})& \mbox{if}\;V_{off}<V_{C}(t) < V_{on} \end{cases}
-    V_{off} \\ (V_{C}(R_\off\;-R_\on\;)+ R_\on\; V_{off}- \\ \qquad R_\off\;V_{on})/(V_{off}-V_{on})& \mbox{else}\; \end{cases}
+    V_{off} \\ (V_{C}(t)(R_\off\;-R_\on\;)+ R_\on\; V_{off}- \\ \qquad
+    R_\off\;V_{on})/(V_{off}-V_{on})& \mbox{otherwise}\; \end{cases}
   \end{equation}
-  Witch is close to \ref{switchmodel1} for the chosen parameters. \\Simulations have been done using
+  which is close to \eqref{switchmodel1} for the chosen parameters. \\Simulations have been done using
   different sets of parameters. It is noteworthy that the
 behavior of {\sc Eldo} depends on these values. For example, using a Backward Euler and $V_{on}=1e-4
 \volt$, $V_{off}=0 \volt$,
@@ -666,8 +668,7 @@ c_3=0.4666 , c_4=1.1605 , c_5=2.8863,  a_1 = 0 , a_2=0.1, a_3=0.2487 , a_4=0.618
 relative error between $f(\cdot)$ and $f_\pwl(\cdot)$ is kept below $0.1$ for $0.1 \leq x < 3.82$.
 The absolute error is less than $2 \cdot 10^{-3}$ for $0 \leq x < 0.1$ and $0$ for negative $x$. In
 practice, the values of $V_G,V_S,V_D,V_T$ in logic integrated circuits allow  a good approximation
-of $f(\cdot)$ by $f_\pwl(\cdot)$. A study of the results accuracy and computation time as a function
-of the number of segments is outside the scope of this paper.
+of $f(\cdot)$ by $f_\pwl(\cdot)$. 
 
 
 \paragraph{Compensator amplifier} is modelled as a $1.10^5$ gain and an output low-pass
@@ -895,7 +896,9 @@ These results shall be compared to the 60~s~CPU time achieved with the NSDS meth
 Depending on the model and the {\sc Spice} simulator, the (estimated) CPU time is from~2.8~to~6.1
 larger than with {\sc Siconos}. Moreover, it was necessary to add a parasitic capacitor on the connection between the pMOS and nMOS
 transistors to allow the convergence of the {\sc Smash} simulator with both models of MOS
-and of the {\sc Ngspice} simulator with the MOS level 3 model.
+and of the {\sc Ngspice} simulator with the MOS level 3 model. All the {\sc Siconos} simulations
+presented in this paper have been obtained in one-shot from the dynamical equations automatically
+generated from the Netlist, without any further parameter tuning.
 
 \subsubsection{Sliding mode using a multi-valued comparator}
 \begin{figure*}[!ht]
@@ -915,7 +918,7 @@ and of the {\sc Ngspice} simulator with the MOS level 3 model.
   {\label{fig:ELDO_SIMU_BUCK_SLIDING_MV_MOS_COMP} 
         \resizebox{0.5\linewidth}{!}{\input{./figure/VcompVdrainSlidingMV_eldo.pstex_t}}
   } \hspace{-2mm}
-  \subfigure[$V_{ramp}$ and $V_{error}$ ]{\label{fig:SICONOS_SIMU_BUCK_SLIDING_VERROR}
+  \subfigure[$V_{ramp}$ and $V_{error}$ ]{\label{fig:ELDO_SIMU_BUCK_SLIDING_VERROR}
         \resizebox{0.5\linewidth}{!}{\input{./figure/VrampVerrorSlidingMV_eldo.pstex_t }}
   }
   \caption{{\sc Eldo} buck simulation using sliding mode parameters and $V_{out}~=~1.5~\cdot~(tanh(10000~\cdot~V_{in}) + 1)$ for the comparator.}
@@ -952,7 +955,7 @@ and the OSNSP algorithms of {\sc Siconos}.
 \begin{remark}
   On both figures \ref{fig:SICONOS_SIMU_BUCK_SLIDING_MV_MOS_COMP} and
   \ref{fig:SICONOS_SIMU_BUCK_SLIDING_VERROR} it is seen that the sliding surface is attained in
-  finite time after an accumulation of switches. This is a classical phenomenon in much non-smooth
+  finite time after an accumulation of switches. This is a classical phenomenon in non-smooth
   systems, see Filippov's example in \cite{Acary.Brogliato2009}.
 \end{remark}
 \section{Conclusions}
