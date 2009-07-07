@@ -533,7 +533,7 @@ This section is devoted to the  modelling and the simulation of the circuit in f
 \begin{figure}[h]
   \centering
    \resizebox{\linewidth}{!}{
-  \input{./figure/CS.pstex_t}
+  \input{./figure/CS_circuit.pstex_t}
   }
   \caption{A simple switched circuit.}
   \label{fig:figcircuit1}
@@ -578,7 +578,7 @@ V_{1}(t)=\frac{1}{2}(\tau_{1}(t)-1)R_\off I_{d}(t)-\frac{1}{2}(\tau_{1}(t)+1) R_
  Finally, the inclusion rule is written as
 \begin{equation}
   \left\{\begin{array}{l}
-      V_{1}(t) \in - N_{[-1,1]}(\tau_{1}(t)) \\   V_{3}(t)-V_{2}(t) \in -N_{[-1,1]}(\tau_{2}(t))
+      V_{1}(t) \in - N_{[-1,1]}(\tau_{1}(t)) \\   100(V_{3}(t)-V_{2}(t)) \in -N_{[-1,1]}(\tau_{2}(t))
     \end{array} 
 \right.
 \end{equation}
@@ -586,7 +586,7 @@ V_{1}(t)=\frac{1}{2}(\tau_{1}(t)-1)R_\off I_{d}(t)-\frac{1}{2}(\tau_{1}(t)+1) R_
 \subsection{Numerical results with {\sc Siconos}}
 \label{section32}
 
-The figure \ref{fig:SICONOS_SIMU_CS} depicts the current evolution through the inductor $L$. In \cite{maffezzoni2006}, it has been shown that the Newton-Raphson algorithm fails when the state of the diode and of the switch changes at $t=t_s$ in figure \ref{fig:SICONOS_SIMU_CS}. Indeed, the linearization performed at each Newton-Raphson iteration leads to an oscillation between two incorrect states and never converges to the correct one. The Newton-Raphson iterations enter into a infinite loop without converging.  Using the NSDS approach the OSNSP solver converges and computes the correct state. 
+The {\sc Siconos} simulation has been doing using a time step fixed to $0.1 \micro \second$. The figure \ref{fig:SICONOS_SIMU_CS} depicts the current evolution through the inductor $L$. In \cite{maffezzoni2006}, it has been shown that the Newton-Raphson algorithm fails when the state of the diode and of the switch changes at $t=t_s$ in figure \ref{fig:SICONOS_SIMU_CS}. Indeed, the linearization performed at each Newton-Raphson iteration leads to an oscillation between two incorrect states and never converges to the correct one. The Newton-Raphson iterations enter into a infinite loop without converging. Using the NSDS approach the OSNSP solver converges and computes the correct state. 
 
 
 \begin{figure*}[!ht]
@@ -621,18 +621,12 @@ control. Setting $V_{off}$ to $0$, and choosing a small value for $V_{on}$ lead 
   \end{equation}
   which is close to \eqref{switchmodel1} for the chosen parameters. \\Simulations have been done using
   different sets of parameters. It is noteworthy that the
-behavior of {\sc Eldo} depends on these values. For example, using a Backward Euler and $V_{on}=1e-4
-\volt$, $V_{off}=0 \volt$,
+behavior of {\sc Eldo} depends on these values. For example, using a Backward Euler with the time step fixed to $0.1 \micro \second$ and $V_{on}=1e-4\volt$, $V_{off}=0 \volt$,
 $R_\off\; = 1000 \ohm$, $R_\on\;=0.001\ohm$ cause troubles during the {\sc Eldo}
-simulation:
-\begin{enumerate}
-\item [--] If the time step is not fixed, then the switch model (\ref{eq:eldo_switch}) is violated during the
-  simulation.
-  \item[--] If the time step is fixed to $0.1 \micro s$, the switch model is correctly handled, but
-  some messages like 'Newton no-convergence' appear during the simulation. The figure \ref{fig:ELDO_SIMU_CS}
+simulation, some messages like 'Newton no-convergence' appear. The figure \ref{fig:ELDO_SIMU_CS}
   shows the {\sc Eldo} simulation. The values are very close to the {\sc Siconos} simulation, except for the steps corresponding to the
-  no-convergence messages. In this case, the resulting current value is absurd. 
-\end{enumerate}
+  no-convergence messages. In this case, the resulting current value is absurd. \\
+
 
 
 This academic example demonstrates that analog tools can fail to simulate a switched circuit.
