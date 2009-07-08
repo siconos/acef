@@ -586,7 +586,14 @@ V_{1}(t)=\frac{1}{2}(\tau_{1}(t)-1)R_\off I_{d}(t)-\frac{1}{2}(\tau_{1}(t)+1) R_
 \subsection{Numerical results with {\sc Siconos}}
 \label{section32}
 
-The {\sc Siconos} simulation has been doing using a time step fixed to $0.1 \micro \second$. The figure \ref{fig:SICONOS_SIMU_CS} depicts the current evolution through the inductor $L$. In \cite{maffezzoni2006}, it has been shown that the Newton-Raphson algorithm fails when the state of the diode and of the switch changes at $t=t_s$ in figure \ref{fig:SICONOS_SIMU_CS}. Indeed, the linearization performed at each Newton-Raphson iteration leads to an oscillation between two incorrect states and never converges to the correct one. The Newton-Raphson iterations enter into a infinite loop without converging. Using the NSDS approach the OSNSP solver converges and computes the correct state. 
+The time step has been fixed to $0.1 \micro \second$. The figure \ref{fig:SICONOS_SIMU_CS} depicts
+the current evolution through the inductor $L$. In \cite{maffezzoni2006}, it has been shown that the
+Newton-Raphson algorithm fails when the state of the diode and of the switch changes at $t=t_s$ in
+figure \ref{fig:SICONOS_SIMU_CS}. Indeed, the linearization performed at each Newton-Raphson
+iteration leads to an oscillation between two incorrect states and never converges to the correct
+one. The Newton-Raphson iterations enter into a infinite loop without converging. Using the NSDS
+approach the OSNSP solver converges and computes the correct state. For such a simple system, any
+OSNSP solver gives a correct solution. We have used indifferently PATH and SEMISMOOTH methods.
 
 
 \begin{figure*}[!ht]
@@ -702,7 +709,10 @@ The dimension of the inclusion rule is $24$.
 \subsubsection{Simulation with {\sc Siconos}}
  The start-up of the converter was simulated thanks to {\sc Siconos}. As initial conditions, all state variables are zeroed.
 The detailed analysis of the switching events requires to use a time step as
-small as $50 \pico \second$. The simulations are carried with a fixed time step, $4.10^{6}$ steps are then computed for the $200 \micro \second$ long settling of the output voltage. The OSNSP solver is our own implementation of a semi-smooth Newton method based on the Fischer-Bursmeister reformulation\cite{Deluca.ea1996}.
+small as $50 \pico \second$. The simulations are carried with a fixed time step, $4.10^{6}$ steps
+are then computed for the $200 \micro \second$ long settling of the output voltage. The OSNSP
+solvers used are PATH, and a semi-smooth Newton method based on the Fischer-Bursmeister
+reformulation\cite{Deluca.ea1996} that is our own implementation.
 The overall result is shown on the figure \ref{fig:figSimuBuck}.  
 
 
@@ -724,7 +734,7 @@ matrices products. The time to export the resulting data is not included.
         \resizebox{0.5\linewidth}{!}{\input{./figure/MOSPdrain.tex}}
   }\hspace{-2mm}
   \subfigure[$V_{ramp}$ and $V_{error}$]  
-  {\label{fig:SICONOS_SIMU_BUCK_IL} 
+  {\label{fig:SICONOS_SIMU_BUCK_VERROR} 
         \resizebox{0.5\linewidth}{!}{\input{./figure/VrampVerror.tex}}
   } 
  \caption{{\sc Siconos} buck simulation using standard parameters.}
@@ -900,7 +910,7 @@ generated from the Netlist, without any further parameter tuning.
   {\label{fig:SICONOS_SIMU_BUCK_SLIDING_MV_MOS_COMP} 
         \resizebox{0.5\linewidth}{!}{\input{./figure/VcompVdrainSliding_mv.tex}}
   } \hspace{-2mm}
-  \subfigure[$V_{ramp}$ and $V_{error}$ ]{\label{fig:SICONOS_SIMU_BUCK_SLIDING_VERROR}
+  \subfigure[$V_{ramp}$ and $V_{error}$ ]{\label{fig:SICONOS_SIMU_BUCK_SLIDING_VERROR_MV}
         \resizebox{0.5\linewidth}{!}{\input{./figure/VrampVerrorSlidingMV.pstex_t }}
   }
   \caption{{\sc Siconos} buck simulation using sliding mode parameters and multivalued comparator.}
