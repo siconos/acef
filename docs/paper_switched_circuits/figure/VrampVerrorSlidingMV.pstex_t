@@ -1,0 +1,16 @@
+\begin{picture}(0,0)%
+\includegraphics{VrampVerrorSlidingMV.pstex}%
+\end{picture}%
+\setlength{\unitlength}{3947sp}%
+%
+\begingroup\makeatletter\ifx\SetFigFont\undefined%
+\gdef\SetFigFont#1#2#3#4#5{%
+  \reset@font\fontsize{#1}{#2pt}%
+  \fontfamily{#3}\fontseries{#4}\fontshape{#5}%
+  \selectfont}%
+\fi\endgroup%
+\begin{picture}(5837,3532)(1281,-4000)
+\put(6388,-710){\makebox(0,0)[rb]{\smash{{\SetFigFont{10}{12.0}{\rmdefault}{\mddefault}{\updefault}$V_{error}$}}}}
+\put(6388,-835){\makebox(0,0)[rb]{\smash{{\SetFigFont{10}{12.0}{\rmdefault}{\mddefault}{\updefault}$V_{ramp}$}}}}
+\put(4413,-3960){\makebox(0,0)[b]{\smash{{\SetFigFont{10}{12.0}{\rmdefault}{\mddefault}{\updefault}time $\micro$ s}}}}
+\end{picture}%
