@@ -711,8 +711,8 @@ The dimension of the inclusion rule is $24$.
 The detailed analysis of the switching events requires to use a time step as
 small as $50 \pico \second$. The simulations are carried with a fixed time step, $4.10^{6}$ steps
 are then computed for the $200 \micro \second$ long settling of the output voltage. The OSNSP
-solvers used are PATH, and a semi-smooth Newton method based on the Fischer-Bursmeister
-reformulation\cite{Deluca.ea1996} that is our own implementation.
+solvers used are PATH with a convergence tolerance of $1e-7$, and a semi-smooth Newton method based on the Fischer-Bursmeister
+reformulation\cite{Deluca.ea1996} that is our own implementation using a convergence tolerance of $1e-12$.
 The overall result is shown on the figure \ref{fig:figSimuBuck}.  
 
 
