@@ -63,7 +63,6 @@
 % should be used if it is desired that the figures are to be displayed in
 % draft mode.
 %
-%\documentclass[journal,draftcls,onecolumn]{IEEEtran}
 \documentclass[journal]{IEEEtran}
 %
 % If IEEEtran.cls has not been installed into the LaTeX system files,
@@ -137,16 +136,13 @@
   % or other class option (dvipsone, dvipdf, if not using dvips). graphicx
   % will default to the driver specified in the system graphics.cfg if no
   % driver is specified.
-  % \usepackage[dvips]{graphicx}
+   \usepackage[dvips]{graphicx}
   % declare the path(s) where your graphic files are
-  % \graphicspath{{../eps/}}
+   \graphicspath{{./figure/}}
   % and their extensions so you won't have to specify these with
   % every instance of \includegraphics
   % \DeclareGraphicsExtensions{.eps}
 \fi
- \usepackage[dvips]{graphicx,epsfig}
-\graphicspath{{./figure/}{.}}
-\usepackage{color}
 % graphicx was written by David Carlisle and Sebastian Rahtz. It is
 % required if you want graphics, photos, etc. graphicx.sty is already
 % installed on most LaTeX systems. The latest version and documentation can
@@ -196,7 +192,7 @@
 
 % *** SPECIALIZED LIST PACKAGES ***
 %
-\usepackage{algorithmic}
+%\usepackage{algorithmic}
 % algorithmic.sty was written by Peter Williams and Rogerio Brito.
 % This package provides an algorithmic environment fo describing algorithms.
 % You can use the algorithmic environment in-text or within a figure
@@ -392,8 +388,11 @@
 % correct bad hyphenation here
 \hyphenation{op-tical net-works semi-conduc-tor}
 
+
 \input{macro.tex}
 \usepackage[squaren,Gray]{SIunits}
+\usepackage{color}
+\usepackage{epsfig}
 
 \newtheorem{definition}{Definition}
 \newtheorem{proposition}{Proposition}
@@ -408,44 +407,13 @@
 \newtheorem{problem}{Problem}
 \newtheorem{theorem}{Theorem}
 
-\usepackage{lastpage}
-
-
-
-\begingroup
-\count0=\time \divide\count0by60 % Hour
-\count2=\count0 \multiply\count2by-60 \advance\count2by\time
-% Min
-\def\2#1{\ifnum#1<10 0\fi\the#1}
-\xdef\isodayandtime{\the\year-\2\month-\2\day\space\2{\count0}:%
-\2{\count2}}
-\endgroup
-
-
-%\usepackage{showlabels}
-
 
 
 \begin{document}
-
-\begin{center}
-\vfill
-  \Huge Cover Letter
-
-  \texttt{file IEEEpaper.tex \\
-    \isodayandtime}
-\vfill
-\end{center}
-
-
-
-
-
-
+%
 % paper title
 % can use linebreaks \\ within to get better formatting as desired
-\title{Time-stepping numerical simulation of switched circuits with the non-smooth dynamical systems approach}
-%
+\title{Time-stepping numerical simulation of switched circuits with the nonsmooth dynamical systems approach}
 %
 % author names and IEEE memberships
 % note positions of commas and nonbreaking spaces ( ~ ) LaTeX will not break
@@ -456,11 +424,13 @@
 % was not built to handle multiple paragraphs
 %
 
-\author{Vincent Acary, Olivier Bonnefon, Bernard Brogliato}% <-this % stops a space
+\author{Vincent~Acary,
+        Olivier~Bonnefon,
+        and~Bernard~Brogliato% <-this % stops a space
 \thanks{INRIA, Bipop team-project, Inovallée de  Montbonnot, 655 avenue de l'Europe
 38334 Saint Ismier cedex, France}%
-\thanks{Vincent.Acary@inrialpes.fr, Olivier.Bonnefon@inrialpes.fr, Bernard.Brogliato@inrialpes.fr}% <-this % stops a space
-% }
+\thanks{Vincent.Acary@inrialpes.fr, Olivier.Bonnefon@inrialpes.fr, Bernard.Brogliato@inrialpes.fr}%
+}
 
 % note the % following the last \IEEEmembership and also \thanks - 
 % these prevent an unwanted space from occurring between the last author name
@@ -483,7 +453,7 @@
 
 
 % The paper headers
-\markboth{Acary \MakeLowercase{\textit{et al.}}: Switched circuits with the non-smooth dynamical systems approach --\hfill  \isodayandtime \hfill  }{}
+\markboth{Acary \MakeLowercase{\textit{et al.}}: Switched circuits with the nonsmooth dynamical systems approach }{}
 % The only time the second header will appear is for the odd numbered pages
 % after the title page when using the twoside option.
 % 
@@ -507,14 +477,15 @@
 %\IEEEspecialpapernotice{(Invited Paper)}
 
 
+
+
 % make the title area
 \maketitle
-
 \begin{abstract}
 The numerical integration of switching circuits is known to be a tough 
 issue when the number of switches is high, or when sliding modes exist. 
 Then classical analog simulators may behave poorly, or even fail. In 
-this paper it is shown on two examples that the non-smooth dynamical 
+this paper it is shown on two examples that the nonsmooth dynamical 
 systems (NSDS) approach, which is made of 1) a specific modelling of the 
 piecewise-linear electronic devices (ideal diodes, Zener diodes, 
 transistors), 2) the Moreau's time-stepping scheme, and 3) specific 
@@ -523,7 +494,7 @@ and hybrid simulators. An academic example constructed in [Maffezzoni et al, IEE
 Vol 25, No 11, November 2006],  so that the Newton-Raphson scheme does not converge, and the buck 
 converter, are used to make extensive comparisons between the NSDS 
 method and other methods of the SPICE family and a hybrid-like method. 
-The NSDS method, implemented in the {\sc siconos} platform developed at 
+The NSDS method, implemented in the {\sc Siconos} platform developed at 
 INRIA, proves to be on these two examples much faster and more robust 
 with respect to the models parameters variations.
 \end{abstract}
@@ -533,40 +504,152 @@ with respect to the models parameters variations.
 % then you can use LaTeX's standard command \boldmath at the very start
 % of the abstract to achieve this. Many IEEE journals frown on math
 % in the abstract anyway.
-
 % Note that keywords are not normally used for peerreview papers.
 \begin{IEEEkeywords}
 Switching circuits, complementarity problems, backward Euler algorithm, power converters, complementarity dynamical systems, analog simulation, multivalued systems, unilateral state constraints. IEEE EDICS: CAD160A0
 \end{IEEEkeywords}
 
 
-\input{body.tex}
+
 
 
 
 % For peer review papers, you can put extra information on the cover
 % page as needed:
-\ifCLASSOPTIONpeerreview
-\begin{center} \bfseries EDICS Category: 3-BBND \end{center}
-\fi
+% \ifCLASSOPTIONpeerreview
+% \begin{center} \bfseries EDICS Category: 3-BBND \end{center}
+% \fi
 %
 % For peerreview papers, this IEEEtran command inserts a page break and
 % creates the second title. It will be ignored for other modes.
 \IEEEpeerreviewmaketitle
 
+\input{body.tex}
 
 
+
+
+
+% An example of a floating figure using the graphicx package.
+% Note that \label must occur AFTER (or within) \caption.
+% For figures, \caption should occur after the \includegraphics.
+% Note that IEEEtran v1.7 and later has special internal code that
+% is designed to preserve the operation of \label within \caption
+% even when the captionsoff option is in effect. However, because
+% of issues like this, it may be the safest practice to put all your
+% \label just after \caption rather than within \caption{}.
+%
+% Reminder: the "draftcls" or "draftclsnofoot", not "draft", class
+% option should be used if it is desired that the figures are to be
+% displayed while in draft mode.
+%
+%\begin{figure}[!t]
+%\centering
+%\includegraphics[width=2.5in]{myfigure}
+% where an .eps filename suffix will be assumed under latex, 
+% and a .pdf suffix will be assumed for pdflatex; or what has been declared
+% via \DeclareGraphicsExtensions.
+%\caption{Simulation Results}
+%\label{fig_sim}
+%\end{figure}
+
+% Note that IEEE typically puts floats only at the top, even when this
+% results in a large percentage of a column being occupied by floats.
+
+
+% An example of a double column floating figure using two subfigures.
+% (The subfig.sty package must be loaded for this to work.)
+% The subfigure \label commands are set within each subfloat command, the
+% \label for the overall figure must come after \caption.
+% \hfil must be used as a separator to get equal spacing.
+% The subfigure.sty package works much the same way, except \subfigure is
+% used instead of \subfloat.
+%
+%\begin{figure*}[!t]
+%\centerline{\subfloat[Case I]\includegraphics[width=2.5in]{subfigcase1}%
+%\label{fig_first_case}}
+%\hfil
+%\subfloat[Case II]{\includegraphics[width=2.5in]{subfigcase2}%
+%\label{fig_second_case}}}
+%\caption{Simulation results}
+%\label{fig_sim}
+%\end{figure*}
+%
+% Note that often IEEE papers with subfigures do not employ subfigure
+% captions (using the optional argument to \subfloat), but instead will
+% reference/describe all of them (a), (b), etc., within the main caption.
+
+
+% An example of a floating table. Note that, for IEEE style tables, the 
+% \caption command should come BEFORE the table. Table text will default to
+% \footnotesize as IEEE normally uses this smaller font for tables.
+% The \label must come after \caption as always.
+%
+%\begin{table}[!t]
+%% increase table row spacing, adjust to taste
+%\renewcommand{\arraystretch}{1.3}
+% if using array.sty, it might be a good idea to tweak the value of
+% \extrarowheight as needed to properly center the text within the cells
+%\caption{An Example of a Table}
+%\label{table_example}
+%\centering
+%% Some packages, such as MDW tools, offer better commands for making tables
+%% than the plain LaTeX2e tabular which is used here.
+%\begin{tabular}{|c||c|}
+%\hline
+%One & Two\\
+%\hline
+%Three & Four\\
+%\hline
+%\end{tabular}
+%\end{table}
+
+
+% Note that IEEE does not put floats in the very first column - or typically
+% anywhere on the first page for that matter. Also, in-text middle ("here")
+% positioning is not used. Most IEEE journals use top floats exclusively.
+% Note that, LaTeX2e, unlike IEEE journals, places footnotes above bottom
+% floats. This can be corrected via the \fnbelowfloat command of the
+% stfloats package.
+
+
+
+% \section{Conclusion}
+% The conclusion goes here.
+
+
+
+
+
+% if have a single appendix:
+%\appendix[Proof of the Zonklar Equations]
+% or
+%\appendix  % for no appendix heading
+% do not use \section anymore after \appendix, only \section*
+% is possibly needed
+
+% use appendices with more than one appendix
+% then use \section to start each appendix
+% you must declare a \section before using any
+% \subsection or using \label (\appendices by itself
+% starts a section numbered zero.)
+%
+
+
+% \appendices
+% \section{Proof of the First Zonklar Equation}
+% Appendix one text goes here.
+
+% you can choose not to have a title for an appendix
+% if you want by leaving the argument blank
+% \section{}
+% Appendix two text goes here.
 
 
 % use section* for acknowledgement
 \section*{Acknowledgment}
 
-
-The authors would like to thank...
-
-Pascal Denoyelle
-
-ANR VAL-AMS
+The authors would like to warmly thank Pascal Denoyelle for his contribution in the earlier version of this work. The authors acknowledges Michail Ferris (University Wisconsin--Madison) for providing us with the PATH solver. Olivier Bonnefon has been granted by the ANR project VAL-AMS (ANR-06-SETI-018-01).
 
 % Can use something like this to put references on a page
 % by themselves when using endfloat and the captionsoff option.
@@ -590,11 +673,10 @@ ANR VAL-AMS
 % BibTeX documentation can be easily obtained at:
 % http://www.ctan.org/tex-archive/biblio/bibtex/contrib/doc/
 % The IEEEtran BibTeX style support page is at:
-% Http://www.michaelshell.org/tex/ieeetran/bibtex/
+% http://www.michaelshell.org/tex/ieeetran/bibtex/
 \bibliographystyle{IEEEtranS}
 % argument is your BibTeX string definitions and bibliography database(s)
 \bibliography{IEEEabrv,CircuitSimulation}
-%
 % <OR> manually copy in the resultant .bbl file
 % set second argument of \begin to the number of references
 % (used to reserve space for the reference number labels box)
