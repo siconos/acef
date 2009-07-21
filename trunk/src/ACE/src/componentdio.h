@@ -30,12 +30,12 @@ Y=Vn-Vp
 #define COMPONENTDIO_H
 #include "ace.h"
 
-#include "componentnlinear.h"
+#include "component_linear_ns.h"
 
 // Class componentDIO
 // 
 // 
-class componentDIO : public componentNLINEAR {
+class componentDIO : public component_LINEAR_NS {
  dataDIO mData;
   ACE_DOUBLE mThreshold;
 public:

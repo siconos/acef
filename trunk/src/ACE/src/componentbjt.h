@@ -126,12 +126,12 @@ Y= |0 1 0 |*lambda+ |-alpha  0   alpha|(Vc,Vb,Ve)+|0  betha  | Zns +CST
 #define COMPONENTBJT_H
 #include "ace.h"
 
-#include "componentnlinear.h"
+#include "component_linear_ns.h"
 
 // Class componentBJT
 // 
 // 
-class componentBJT : public componentNLINEAR {
+class componentBJT : public component_LINEAR_NS {
  dataBJT mData;
   int mNodeB;
   int mNodeC;

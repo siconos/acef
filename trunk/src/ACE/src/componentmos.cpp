@@ -11,7 +11,7 @@ Convention:
 
 
 componentMOS::componentMOS(dataMOS1 *d,int NbHyp)
-:componentNLINEAR(){
+:component_LINEAR_NS(){
 
   ACE_CHECK_IERROR(d,"componentMOS::componentMOS : Mos data null");
   ACE_CHECK_IERROR(NbHyp>=0,"componentMOS::componentMOS : NbHyp <0");

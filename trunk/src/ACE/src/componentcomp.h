@@ -44,12 +44,12 @@ Zns = Vplus + (d11,d12)\lambda
 #ifndef COMPONENTCOMP_H
 #define COMPONENTCOMP_H
 #include "ace.h"
-#include "componentnlinear.h"
+#include "component_linear_ns.h"
 
 // Class componentCOMP
 // 
 // 
-class componentCOMP : public componentNLINEAR {
+class componentCOMP : public component_LINEAR_NS {
 public:
   dataCOMP mData;
   ACE_DOUBLE mV2;

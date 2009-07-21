@@ -6,7 +6,7 @@
 #include "algo.h"
 
 componentRELAY::componentRELAY(dataCOMP *d)
-:componentNLINEAR(){
+:component_LINEAR_NS(){
   ACE_CHECK_IERROR(d,"componentRELAY::componentRELAY : Diode data null");
   mData =(*d);
   mNodePos=mData.nodePos;
@@ -95,7 +95,7 @@ void componentRELAY::stamp(){
   algo::spls->mC1s->setValue(mIndiceStartZns,mV1);
 }
 void componentRELAY::print(){
-  componentNLINEAR::print();
+  component_LINEAR_NS::print();
   printf("NodeS %d offset %f V1 %f V2 %f\n",mNodeS,mOffset,mV1,mV2);
   
 }

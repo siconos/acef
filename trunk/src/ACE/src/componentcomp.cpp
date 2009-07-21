@@ -6,7 +6,7 @@
 #include "algo.h"
 
 componentCOMP::componentCOMP(dataCOMP *d)
-:componentNLINEAR(){
+:component_LINEAR_NS(){
   ACE_CHECK_IERROR(d,"componentCOMP::componentCOMP : Diode data null");
   mData =(*d);
   mNodePos=mData.nodePos;
@@ -80,7 +80,7 @@ void componentCOMP::stamp(){
   algo::spls->mC1s->setValue(mIndiceStartZns,mV2);
 }
 void componentCOMP::print(){
-  componentNLINEAR::print();
+  component_LINEAR_NS::print();
   printf("NodeS %d epsilon %f V1 %f V2 %f\n",mNodeS,mEpsilon,mV1,mV2);
   
 }

@@ -6,7 +6,7 @@
 #ifndef COMPONENTRELAY_H
 #define COMPONENTRELAY_H
 #include "ace.h"
-#include "componentnlinear.h"
+#include "component_linear_ns.h"
 
 // Class componentRELAY
 // 
@@ -52,7 +52,7 @@ V2>V1 : coef=-1\n
 
 
  */
-class componentRELAY : public componentNLINEAR {
+class componentRELAY : public component_LINEAR_NS {
 public:
   dataCOMP mData;
   ACE_DOUBLE mV2;

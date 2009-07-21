@@ -48,12 +48,12 @@ Vd\\
 #define COMPONENTMOS_H
 #include "ace.h"
 
-#include "componentnlinear.h"
+#include "component_linear_ns.h"
 
 // Class componentMOS
 // 
 // 
-class componentMOS : public componentNLINEAR {
+class componentMOS : public component_LINEAR_NS {
  dataMOS1 mData;
   int mNodeD;
   int mNodeG;

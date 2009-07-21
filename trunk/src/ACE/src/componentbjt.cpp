@@ -59,7 +59,7 @@ Convention:
 
 
 componentBJT::componentBJT(dataBJT *d)
-:componentNLINEAR(){
+:component_LINEAR_NS(){
 
   ACE_CHECK_IERROR(d,"componentBJT::componentBJT : Bjt data null");
   mType = ACE_TYPE_BJT;

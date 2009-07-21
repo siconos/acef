@@ -14,7 +14,7 @@ stamp() to write : Ax'=Bx+CZs+DZns+s
 
 
 componentDIO::componentDIO(dataDIO *d)
-:componentNLINEAR(){
+:component_LINEAR_NS(){
   ACE_CHECK_IERROR(d,"componentDIO::componentDIO : Diode data null");
   mData =(*d);
   mNodePos=mData.nodePos;
@@ -75,7 +75,7 @@ componentDIO::~componentDIO(){
   
 }
 void componentDIO::print (){
-  componentNLINEAR::print();
+  component_LINEAR_NS::print();
    printf("diode threshold : %lf \n",mThreshold);
   ;
 }
