@@ -26,7 +26,7 @@ componentDIO::componentDIO(dataDIO *d)
   mIndiceStartZns=-1;
   mIndiceStartLambda=-1;
   mType = ACE_TYPE_DIO;
-  mThreshold=0.8;
+  mThreshold=ACE_DIODE_THRESHOLD;
   cout<<"*********************************************************************"<<endl;
   cout<<"*************************WARNING, DIODE THRESHOLD IS : "<<mThreshold<<endl;
   

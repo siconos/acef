@@ -18,6 +18,7 @@ int ACE_CUR_STEP=0;
 int ACE_CMP_ADAT[ACE_NB_ADAPT_STEP+1];
 int  ACE_MOS_NB_HYP=5;
 ACE_DOUBLE ACE_MOS_POWER_SUPPLY=3.0;
+ACE_DOUBLE ACE_DIODE_THRESHOLD=0;
 
 using namespace std;
 
@@ -30,9 +31,32 @@ ofstream& ACE_GET_LOG1_STREAM(){
 }
 
 void ACE_INIT(){
+  ifstream foption("./ace.opt");
+  char opt_name[128];
   ACE_INIT_TIME();
   ACE_LOG_FILE = new ofstream("ACE.log");
   ACE_LOG1_FILE = new ofstream("ACE1.log");
+  if (foption.is_open()){
+    while(! foption.eof()){
+      foption >> opt_name ;
+      if (!strcmp("DIO_TH",opt_name))
+	foption >> ACE_DIODE_THRESHOLD;
+      else if (!strcmp("MOS_NB_HYP",opt_name))
+	foption>>ACE_MOS_NB_HYP;
+      else if (!strcmp("MOS_POWER",opt_name))
+	foption>>ACE_MOS_POWER_SUPPLY;
+      else if (!strcmp("ACE_ATOL",opt_name))
+	foption>>ACE_ATOL_LOCAL;
+      else if (!strcmp("ACE_RTOL",opt_name))
+	foption>>ACE_RTOL_LOCAL;
+      else
+	ACE_WARNING("UNKNOWN OPTION\n");
+    
+    }
+    foption.close();
+  }else
+      ACE_WARNING("NONE OPTION FILE\n");
+  
 }
 void ACE_STOP(){
   delete ACE_LOG_FILE;

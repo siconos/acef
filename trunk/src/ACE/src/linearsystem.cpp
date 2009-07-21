@@ -93,9 +93,9 @@ linearSystem::linearSystem(){
   mQfree=0;
   mMLCP=0;
 
-  mTheta = 0.5;
+  mTheta = 1.0;
   mThetazs =1.0;
-  mThetap = 0.5;
+  mThetap = 1.0;
   mH = 1;
   mHori=1;
   mTstart=0;
@@ -1634,19 +1634,16 @@ void linearSystem::printStep(ostream& os,aceVector * pVx,aceVector *pVzs){
   dataPrint * pPrint;
   double aux;
   ParserInitPrintElem();
-  //  os<<mStepCmp;
-     os<<1000000*getCurrentTime();
-    os <<"\t"<<mxti->getValue(4); //IL for buck with out inverter
-    os <<"\t"<<mznsti->getValue(0); //IDp
-    os <<"\t"<<mznsti->getValue(1); //IDn
-    os <<"\t"<<mznsti->getValue(2); //IDmosp
-    os <<"\t"<<mznsti->getValue(3); //IDmosn
-  //  os<<endl;
-  //os <<"\t"<<mxti->getValue(14); // for buck with inverter
-//   return;
+  os<<getCurrentTime();
+  /*buck output*/
+  //    os<<1000000*getCurrentTime();
+//     os <<"\t"<<mxti->getValue(4); //IL for buck with out inverter
+//     os <<"\t"<<mznsti->getValue(0); //IDp
+//     os <<"\t"<<mznsti->getValue(1); //IDn
+//     os <<"\t"<<mznsti->getValue(2); //IDmosp
+//     os <<"\t"<<mznsti->getValue(3); //IDmosn
 
-//   os <<"\t"<<mxti->getValue(0); // for LRD
-//   os <<"\t"<<mznsti->getValue(0); // for LRD
+    
   while(ParserGetPrintElem((void**)&pPrint)){
     os<<"\t\t";
     aux = pVzs->getValue(pPrint->node1-1);
@@ -1870,6 +1867,7 @@ void  linearSystem::computeAndAcceptStep(){
     printStep(*mSimuStream,mxti,mzsti);
     return;
   }
+  
   mAdaptiveStepEvaluation=true;
   ACE_DOUBLE timeSav = mTcurrent;
   if (mStepCmp%2==0 ){

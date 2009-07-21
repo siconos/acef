@@ -248,7 +248,7 @@ bool mlcp::initSolver(){
   }else if (ACE_SOLVER_TYPE == ACE_SOLVER_FB){
     strcpy(mOptions.solverName,"DIRECT_FB");
 
-    mOptions.iparam[0]=20000;
+    mOptions.iparam[0]=200000;
     mOptions.iparam[1]= mNumericsOptions.verboseMode;/*VERBOSE*/
     mOptions.iparam[6]= mNumericsOptions.verboseMode;/*VERBOSE*/
     mOptions.iparam[8]=0;/*update prb*/
