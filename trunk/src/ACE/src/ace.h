@@ -27,6 +27,7 @@
 
 class unknown;
 class equation;
+class component_NONE_LINEAR_NS;
 class component;
 #include "SiconosAlgebra.hpp"
 
@@ -51,6 +52,7 @@ class component;
 #define ACE_TYPE_VCCS 11
 #define ACE_TYPE_BJT 12
 #define ACE_TYPE_RELAY 13
+#define ACE_TYPE_MOS_NL 14
 
 
 
@@ -79,6 +81,7 @@ extern ACE_DOUBLE ACE_ATOL_LOCAL;
 extern ACE_DOUBLE ACE_RTOL_LOCAL;
 
 /*option for the MOS component*/
+extern int ACE_USE_NL_MOS;
 extern int  ACE_MOS_NB_HYP;
 extern ACE_DOUBLE ACE_MOS_POWER_SUPPLY;
 
@@ -135,6 +138,7 @@ extern int ACE_CUR_STEP;
 
 typedef std::vector<unknown *> unknowns;
 typedef std::vector<equation *> equations;
+typedef std::vector<component_NONE_LINEAR_NS *> component_NLs;
 typedef std::vector<component *> components;
 
 typedef std::vector<component *>::iterator componentsIt;

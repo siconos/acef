@@ -15,7 +15,9 @@ class component_NONE_LINEAR_NS : public component_NS {
   public:
   component_NONE_LINEAR_NS():component_NS()
   {}
+  virtual void computeNL(SiconosVector& SICONOS_X,SiconosVector& SICONOS_Lambda,SiconosVector& SICONOS_H){;}
+  virtual void computeJacNL(SiconosVector& SICONOS_X,SiconosVector& SICONOS_Lambda,SiconosMatrix& SICONOS_D){;}
 };
 
-#endif //component_NONE_LINEAR_NS
+#endif //COMPONENT_NONE_LINEAR_NS_H
 

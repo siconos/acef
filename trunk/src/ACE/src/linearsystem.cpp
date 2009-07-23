@@ -522,6 +522,9 @@ linearSystem::~linearSystem(){
   n=mTEN.size();
   for (i=0;i<n;i++)
     delete mTEN[i];
+  n=mNL.size();
+  for (i=0;i<n;i++)
+    delete mNL[i];
   n=mIND.size();
   for (i=0;i<n;i++)
     delete mIND[i];
@@ -1054,6 +1057,15 @@ equationTEN* linearSystem::addTenEquation(){
    mTEN.push_back(eq);
    return eq;
 }
+equation_NL* linearSystem::addNonLinearEquation(){
+   equation_NL* eq = new equation_NL();
+   mNbEquations++;
+   mNL.push_back(eq);
+   eq->mLine = mNbEquations - mNbDynEquations-1;
+   return eq;
+}
+
+
 
 void linearSystem::addKCLinDyn(int j){
   ACE_CHECK_IERROR(j <= mNbNodes,"linearSystem::addKCLinDyn");
@@ -1707,6 +1719,9 @@ void linearSystem::printEquations(ostream& os ){
   n=mTEN.size();
   for (i=0;i<n;i++)
     mTEN[i]->print();
+  n=mNL.size();
+  for (i=0;i<n;i++)
+    mNL[i]->print();
 }
 
 void linearSystem::printABCDs(ostream& os ){

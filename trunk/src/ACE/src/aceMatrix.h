@@ -17,8 +17,8 @@ public:
   friend ostream & operator<<(ostream &f, const aceMatrix &Mat);
   void MatrixToFortran(double * t);
   void FortranToMatrix(double * t);
-  void MatrixToPath(int * I,int * J,double * t);
-  void PathToMatrix(int * I,int * J,double * t);
+  //  void MatrixToPath(int * I,int * J,double * t);
+  //  void PathToMatrix(int * I,int * J,double * t);
   void set(const aceMatrix& M);
   static aceMatrix * load(char *file,UBLAS_TYPE typ);
   int getDimRow(){return dimRow;}

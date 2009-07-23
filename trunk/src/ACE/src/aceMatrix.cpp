@@ -114,12 +114,12 @@ void aceMatrix::FortranToMatrix(double * t){
       setValue(i,j,t[j*dimRow+i]);
     }
 }
-void aceMatrix::MatrixToPath(int * I,int * J,double * t){
-  ;
-}
-void aceMatrix::PathToMatrix(int * I,int * J,double * t){
-  ;
-}
+// void aceMatrix::MatrixToPath(int * I,int * J,double * t){
+//   ;
+// }
+// void aceMatrix::PathToMatrix(int * I,int * J,double * t){
+//   ;
+// }
 void ACEprod(const aceMatrix& A, const aceMatrix& B, aceMatrix& C, bool init)
 {
 //   if (init && ACE_MAT_TYPE == DENSE && &A!=&C && &B!=&C)

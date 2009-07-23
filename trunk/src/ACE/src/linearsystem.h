@@ -11,6 +11,7 @@
 #include "equationind.h"
 #include "equationvd.h"
 #include "equationten.h"
+#include "equation_nl.h"
 #include "aceMatrix.h"
 #include "aceVector.h"
 #include "mlcp.h"
@@ -39,6 +40,7 @@ public:
   equationIND* addIndEquation();
   equationVD* addVdEquation(char* name =0);
   equationTEN* addTenEquation();
+  equation_NL* addNonLinearEquation();
   virtual int getIndexUnknown (int type,int node);
   virtual int getDynIndexUnknown (int type,int node){;};
 
@@ -137,6 +139,7 @@ public:
   equations mIND;
   equations mCAP;
   equations mTEN;
+  equations mNL;
 
   //siconos obj
   // Ax'=Bx+CZs+DZns+s

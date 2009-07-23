@@ -15,6 +15,7 @@ public:
   ACE_DOUBLE* mCoefs;
   int mLine;
   bool mIsDyn;
+  bool mIsLinear;
   bool mAvailable;
   int mSize;
   char *mName;

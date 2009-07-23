@@ -31,6 +31,9 @@ public:
   void simulate();
   void parseComponents();
 
+  void computeNonLinearEquations(SiconosVector& SICONOS_X,SiconosVector& SICONOS_Lambda,SiconosVector& SICONOS_H); 
+  void computeNonLinearJacL_H(SiconosVector& SICONOS_X,SiconosVector& SICONOS_Lambda,SiconosMatrix& SICONOS_D);
+
 
 
 
@@ -44,6 +47,7 @@ public:
   components mArbs;
   components mDios;
   components mMos;
+  component_NLs mMos_NL;
   components mBjt;
   components mComps;
   components mRelays;

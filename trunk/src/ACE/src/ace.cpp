@@ -16,6 +16,7 @@ static ofstream* ACE_LOG_FILE=0;
 static ofstream* ACE_LOG1_FILE=0;
 int ACE_CUR_STEP=0;
 int ACE_CMP_ADAT[ACE_NB_ADAPT_STEP+1];
+int ACE_USE_NL_MOS = 0;
 int  ACE_MOS_NB_HYP=5;
 ACE_DOUBLE ACE_MOS_POWER_SUPPLY=3.0;
 ACE_DOUBLE ACE_DIODE_THRESHOLD=0;
@@ -49,6 +50,8 @@ void ACE_INIT(){
 	foption>>ACE_ATOL_LOCAL;
       else if (!strcmp("ACE_RTOL",opt_name))
 	foption>>ACE_RTOL_LOCAL;
+      else if (!strcmp("ACE_USE_NL_MOS",opt_name))
+	foption>>ACE_USE_NL_MOS;
       else
 	ACE_WARNING("UNKNOWN OPTION\n");
     
@@ -166,6 +169,8 @@ void ACE_TYPE_TO_CHAR(int type,char* name){
       break;
     case ACE_TYPE_MOS:
       strcpy(name,"MOS");
+    case ACE_TYPE_MOS_NL:
+      strcpy(name,"MOS_NL");
       break;
     case ACE_TYPE_VCVS:
       strcpy(name,"VCVS");

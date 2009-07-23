@@ -22,6 +22,7 @@
 #include "componentrelay.h"
 #include "componentisrc.h"
 #include "componentmos.h"
+#include "componentmos_nl.h"
 #include "componentbjt.h"
 #include "graph.h"
 #include <fstream>
@@ -87,6 +88,9 @@ algo::~algo(){
   n = mDios.size();
   for(i=0;i<n;i++)
     delete mDios[i];
+  n = mMos_NL.size();
+  for(i=0;i<n;i++)
+    delete mMos_NL[i];
   n = mMos.size();
   for(i=0;i<n;i++)
     delete mMos[i];
@@ -131,22 +135,24 @@ void algo::parseComponents(){
    c->addEquations();
    
  }
- ParserInitComponentList("Mos1");
- dataMOS1 mos;
- while(ParserNextComponent(&mos)){
-   componentMOS *c=new componentMOS(&mos,ACE_MOS_NB_HYP);
-   mMos.push_back(c);
+ if (!ACE_USE_NL_MOS){
+   ParserInitComponentList("Mos1");
+   dataMOS1 mos;
+   while(ParserNextComponent(&mos)){
+     componentMOS *c=new componentMOS(&mos,ACE_MOS_NB_HYP);
+     mMos.push_back(c);
+     c->addUnknowns();
+     c->addEquations();
+   }
+ }
+ ParserInitComponentList("BJT");
+ dataBJT bjt;
+ while(ParserNextComponent(&bjt)){
+   componentBJT *c=new componentBJT(&bjt);
+   mBjt.push_back(c);
    c->addUnknowns();
    c->addEquations();
  }
-  ParserInitComponentList("BJT");
-  dataBJT bjt;
-  while(ParserNextComponent(&bjt)){
-    componentBJT *c=new componentBJT(&bjt);
-    mBjt.push_back(c);
-    c->addUnknowns();
-    c->addEquations();
-  }
 
  
 //get RESISTOR from parser
@@ -227,6 +233,17 @@ void algo::parseComponents(){
    componentISRC *c=new componentISRC(&dIsrc);
    mIsrcs.push_back(c);   
  }
+ if (ACE_USE_NL_MOS){
+   ParserInitComponentList("Mos1");
+   dataMOS1 mos;
+   while(ParserNextComponent(&mos)){
+     componentMOS_NL *c=new componentMOS_NL(&mos);
+     mMos_NL.push_back(c);
+     c->addUnknowns();
+     c->addEquations();
+   }
+ }
+
  printComponents();
 
 }
@@ -460,6 +477,9 @@ void algo::stamp(){
   n = mMos.size();
   for(i=0;i<n;i++)
     mMos[i]->stamp();
+  n = mMos_NL.size();
+  for(i=0;i<n;i++)
+    mMos_NL[i]->stamp();
   n = mVcvs.size();
   for(i=0;i<n;i++)
     mVcvs[i]->stamp();
@@ -597,6 +617,11 @@ void algo::printComponents(){
   for(i=0;i<n;i++)
     mMos[i]->print();
 
+  n=mMos_NL.size();
+  printf("-->%d MOS:\n",n);
+  for(i=0;i<n;i++)
+    mMos_NL[i]->print();
+
   n=mBjt.size();
   printf("-->%d BJT:\n",n);
   for(i=0;i<n;i++)
@@ -614,4 +639,15 @@ void algo::printComponents(){
   
 
   
+}
+void algo::computeNonLinearEquations(SiconosVector& SICONOS_X,SiconosVector& SICONOS_Lambda,SiconosVector& SICONOS_H){
+  int n=mMos_NL.size();
+  for(int i=0;i<n;i++)
+    mMos_NL[i]->computeNL(SICONOS_X,SICONOS_Lambda,SICONOS_H);
+
+}
+void algo::computeNonLinearJacL_H(SiconosVector& SICONOS_X,SiconosVector& SICONOS_Lambda,SiconosMatrix& SICONOS_D){
+  int n=mMos_NL.size();
+  for(int i=0;i<n;i++)
+    mMos_NL[i]->computeJacNL(SICONOS_X,SICONOS_Lambda,SICONOS_D);
 }

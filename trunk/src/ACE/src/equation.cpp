@@ -9,6 +9,7 @@ equation::equation(){
   mLine=-1;
   mCoefs=(ACE_DOUBLE *)0;
   mIsDyn = false;
+  mIsLinear = true;
   mAvailable=true;
   mSize = 0;
 
