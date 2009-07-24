@@ -3,5 +3,6 @@
 
 #include "ace.h"
 #include "algo.h"
+#include "acefRelation.h"
 
 #endif

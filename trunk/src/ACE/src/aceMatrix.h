@@ -2,6 +2,7 @@
 #define ACEMATRIX_H
 
 #include "SimpleMatrix.h"
+
 #include "aceVector.h"
 using namespace std;
 
@@ -24,8 +25,13 @@ public:
   int getDimRow(){return dimRow;}
   int getDimCol(){return dimCol;}
 
-  friend void ACEprod(const aceMatrix& A, const aceMatrix& B, aceMatrix& C, bool init = true);
-  friend void ACEprod(const aceMatrix& A, const aceVector& x, aceVector& b, bool init = true);
+  //  static void siconosProd(const SiconosMatrix& a, const SiconosVector& v1, SiconosVector& v2, bool b= true);
+
+  //  friend void ACEprod(const aceMatrix& A, const aceMatrix& B, aceMatrix& C, bool init = true);
+  //  friend void ACEprod(const aceMatrix& A, const aceVector& x, aceVector& b, bool init = true);
+  friend void ACEprod(const SimpleMatrix& A, const SimpleMatrix& B, SimpleMatrix& C, bool init = true);
+  friend void ACEprod(const SimpleMatrix& A, const SimpleVector& x, SimpleVector& b, bool init = true);
+  friend void ACEbidonF();
 
 };
 TYPEDEF_SPTR(aceMatrix);

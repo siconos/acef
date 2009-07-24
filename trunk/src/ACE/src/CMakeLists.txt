@@ -38,6 +38,7 @@ componentvcvs.h
 componentvsrc.h
 equationcap.h
 equation.h
+equation_nl.h
 equationind.h
 equationkcl.h
 equationten.h
@@ -47,7 +48,8 @@ graph.h
 linearsystem.h
 linearsystemDAE.h
 mlcp.h
-unknown.h)
+unknown.h
+acefRelation.h)
 
 #
 # Project directories 

@@ -80,6 +80,11 @@ extern int ACE_WITH_ADAPTATIVE_TIME_STEPPING;//0 or 1
 extern ACE_DOUBLE ACE_ATOL_LOCAL;
 extern ACE_DOUBLE ACE_RTOL_LOCAL;
 
+/*options discretization*/
+extern double ACE_THETA_X;
+extern double ACE_THETA_ZS;
+extern double ACE_THETA_P;
+
 /*option for the MOS component*/
 extern int ACE_USE_NL_MOS;
 extern int  ACE_MOS_NB_HYP;

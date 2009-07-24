@@ -4,6 +4,4 @@
 
 #include "Siconos/Spiceparser/Spiceparser.h"
 
-
-
 #endif //EXTERNAL_H

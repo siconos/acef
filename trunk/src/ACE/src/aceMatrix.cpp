@@ -2,7 +2,10 @@
 #include "ace.h"
 #include <fstream>
 
-
+// void aceMatrix::siconosProd(const SiconosMatrix& a, const SiconosVector& v1, SiconosVector& v2, bool b)
+// {
+//   //prod(a,v1,v2,b);
+// }
 aceMatrix::aceMatrix ( unsigned int row, unsigned int col, UBLAS_TYPE typ, unsigned int upper, unsigned int lower):
 SimpleMatrix(row,col,typ,upper,lower)
 {
@@ -120,17 +123,18 @@ void aceMatrix::FortranToMatrix(double * t){
 // void aceMatrix::PathToMatrix(int * I,int * J,double * t){
 //   ;
 // }
-void ACEprod(const aceMatrix& A, const aceMatrix& B, aceMatrix& C, bool init)
+void ACEprod(const SimpleMatrix& A, const SimpleMatrix& B, SimpleMatrix& C, bool init)
 {
 //   if (init && ACE_MAT_TYPE == DENSE && &A!=&C && &B!=&C)
 //     gemm(A,B,C);
 //   else
 
   //ACE_times[ACE_TIMER_PROD_MAT].start();
+
     prod(A,B,C,init);
     //ACE_times[ACE_TIMER_PROD_MAT].stop();
 }
-void ACEprod(const aceMatrix& A, const aceVector& x, aceVector& b, bool init)
+void ACEprod(const SimpleMatrix& A, const SimpleVector& x, SimpleVector& b, bool init)
 {
 //   if (init && ACE_MAT_TYPE == DENSE)
 //     gemv(A,x,b);
@@ -141,4 +145,7 @@ void ACEprod(const aceMatrix& A, const aceVector& x, aceVector& b, bool init)
     prod(A,x,b,init);
     //    ACE_times[ACE_TIMER_PROD_MAT].stop();
 
+}
+void ACEbidonF(){
+  printf("a");
 }

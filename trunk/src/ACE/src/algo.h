@@ -18,6 +18,7 @@ class linearSystem;
 class algo {
 public:
   static linearSystem *spls;
+  static algo *sAlgo;
   /*
    * file : a netlist.
    */

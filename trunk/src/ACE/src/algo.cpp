@@ -28,6 +28,7 @@
 #include <fstream>
 
 linearSystem * algo::spls;
+algo * algo::sAlgo;
 
 algo::algo(char * file){
   ACE_CHECK_IERROR(strlen(file) < ACE_CHAR_LENGTH && strlen(file) >3,"algo::algo: file name length!");

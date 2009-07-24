@@ -21,6 +21,11 @@ int  ACE_MOS_NB_HYP=5;
 ACE_DOUBLE ACE_MOS_POWER_SUPPLY=3.0;
 ACE_DOUBLE ACE_DIODE_THRESHOLD=0;
 
+double ACE_THETA_X=0.5;
+double ACE_THETA_ZS=1.0;
+double ACE_THETA_P=1.0;
+
+
 using namespace std;
 
 
@@ -52,6 +57,12 @@ void ACE_INIT(){
 	foption>>ACE_RTOL_LOCAL;
       else if (!strcmp("ACE_USE_NL_MOS",opt_name))
 	foption>>ACE_USE_NL_MOS;
+      else if (!strcmp("ACE_THETA_X",opt_name))
+	foption>>ACE_THETA_X;
+      else if (!strcmp("ACE_THETA_ZS",opt_name))
+	foption>>ACE_THETA_ZS;
+      else if (!strcmp("ACE_THETA_P",opt_name))
+	foption>>ACE_THETA_P;
       else
 	ACE_WARNING("UNKNOWN OPTION\n");
     

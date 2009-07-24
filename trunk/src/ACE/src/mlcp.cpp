@@ -265,7 +265,8 @@ bool mlcp::initSolver(){
     mOptions.dparam[5]=1e-12;
     mOptions.dparam[6]=1e-12;
   }else{
-    strcpy(mOptions.solverName,"DIRECT_ENUM");
+    //    strcpy(mOptions.solverName,"DIRECT_ENUM");
+    strcpy(mOptions.solverName,"ENUM");
     mOptions.iparam[0]= mNumericsOptions.verboseMode;/*VERBOSE*/
     mOptions.iparam[6]= mNumericsOptions.verboseMode;/*VERBOSE*/
     mOptions.dSize=6;

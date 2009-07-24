@@ -93,9 +93,9 @@ linearSystem::linearSystem(){
   mQfree=0;
   mMLCP=0;
 
-  mTheta = 1.0;
-  mThetazs =1.0;
-  mThetap = 1.0;
+  mTheta = ACE_THETA_X;
+  mThetazs =ACE_THETA_ZS;
+  mThetap = ACE_THETA_P;
   mH = 1;
   mHori=1;
   mTstart=0;
