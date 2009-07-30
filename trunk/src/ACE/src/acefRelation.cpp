@@ -9,7 +9,7 @@
 
 
 #ifdef WITH_KERNEL_RELATION
-#define SICONOS_DEBUG
+//#define SICONOS_DEBUG
 
 static int sOnlyOnce=1;
 acefRelation::acefRelation():
@@ -53,12 +53,19 @@ void acefRelation::initialize(SP::Interaction inter)
 
   double t0=0;
   mLastComputedSource =-1;
-  //  computeH(t0);
-  cout<<"zsti\n";
-  algo::spls->mzsti->display();
   for (int i=0;i <algo::spls->mzsti->size();i++)
     workL->setValue(i,algo::spls->mzsti->getValue(i));
   *lambda = *workL;
+
+#ifdef SICONOS_DEBUG
+    computeH(t0);
+    cout<<"zsti\n";
+    algo::spls->mzsti->display();
+#endif
+
+
+
+  
   computeG(t0);
   computeJacH(t0,0);
   computeJacH(t0,1);
@@ -86,12 +93,10 @@ void acefRelation::computeH(double t){
   *workX = *data[x];
   SP::SiconosVector lambda = getInteractionPtr()->getLambdaPtr(0);
   *workL = *lambda;
+  SP::SiconosVector Heval = getInteractionPtr()->getRelationPtr()->getHalphaPtr();
 
 #ifdef SICONOS_DEBUG
   std::cout<<"********         computeH at "<<t<<std::endl;
-#endif
-  SP::SiconosVector Heval = getInteractionPtr()->getRelationPtr()->getHalphaPtr();
-
   //  CX+DL+NonLinear(X,L);
   if (sOnlyOnce){
     cout<<"acefRelation mC\n";
@@ -104,6 +109,7 @@ void acefRelation::computeH(double t){
   workX->display();
   cout<<"acefRelation L\n";
   workL->display();
+#endif
   
   prod(*mC,*workX,*Heval);
   prod(*mD,*workL,*Heval,false);
@@ -120,6 +126,12 @@ void acefRelation::computeH(double t){
     algo::spls->extractInteractionSource();
     algo::spls->updateInteractionSource();
     mLastComputedSource = t;
+#ifdef SICONOS_DEBUG
+    std::cout<<"B2s D2s:\n";
+    algo::spls->mB2s->display();
+    algo::spls->mD2s->display();
+#endif
+
   }
   int s = algo::spls->mB2s->dimRow;
   int m = algo::spls->mD2s->dimRow;
@@ -144,6 +156,11 @@ void acefRelation::computeG(double t){
   SP::SiconosVector lambda = getInteractionPtr()->getLambdaPtr(0);
   *workL = *lambda;
   prod(*mB,*workL,*data[g_alpha],true);
+#ifdef SICONOS_DEBUG
+  std::cout<<"modif g_alpha : \n";
+  data[g_alpha]->display();
+#endif
+  
 }
 
   /** default function to compute jacobianH
@@ -151,17 +168,18 @@ void acefRelation::computeG(double t){
    *  \param index for jacobian (0: jacobian according to x, 1 according to lambda)
    */
 void acefRelation::computeJacH(double t, unsigned int index){
+  /*Because jacobian according to x is null (in current version, may be not in futur)*/
+  if (!index)
+    return;
 
   SP::SiconosVector lambda = getInteractionPtr()->getLambdaPtr(0);
   *workX = *data[x];
   *workL = *lambda;
+  algo::sAlgo->computeNonLinearJacL_H(*workX,*workL,*(JacH[index]));
 #ifdef SICONOS_DEBUG
   std::cout<<"computeJacH "<<index <<" at " <<" "<<t<<std::endl;
+  (JacH[index])->display();
 #endif
-  if (!index){
-    algo::sAlgo->computeNonLinearJacL_H(*workX,*workL,*(JacH[index]));
-  }else{
-  }
 
 }
 	

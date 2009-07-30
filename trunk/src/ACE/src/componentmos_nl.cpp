@@ -23,7 +23,11 @@ componentMOS_NL::componentMOS_NL(dataMOS1 *d)
   mK=mData.k;
   mMode = mData.mode;
   ACE_CHECK_IWARNING(mMode == 1 || mMode == -1,"componentMOS_NL mode value not 1 or -1.");
-  mVt=mData.vt;
+  mVt=mMode*mData.vt;
+  cout<<"mMode=\n"<<mMode;
+  cout<<"mVt=\n"<<mVt;
+  cout<<"mK=\n"<<mK;
+  cout<<"mB=\n"<<mB;
   
 
   mNodeNeg=mNodeD;
@@ -66,8 +70,8 @@ void componentMOS_NL::stamp(){
   int ind=0;
   int i=mI->mIndex;
   //stamp equations.
-  algo::spls->KCL(mNodeNeg)->mCoefs[i]-=mMode*1;
-  algo::spls->KCL(mNodePos)->mCoefs[i]+=mMode*1;
+  algo::spls->KCL(mNodeNeg)->mCoefs[i]-=1;
+  algo::spls->KCL(mNodePos)->mCoefs[i]+=1;
 
   //Y=C*zs+D*lambda+cst
 
@@ -78,7 +82,7 @@ void componentMOS_NL::stamp(){
   if (mNodeS){
     algo::spls->mD1zs->setValue(mIndiceStartLambda+3,mNodeS-1,mMode);
   } 
-  if (mNodeD){
+  if (mNodeG){
     algo::spls->mD1zs->setValue(mIndiceStartLambda+1,mNodeG-1,-mMode);
     algo::spls->mD1zs->setValue(mIndiceStartLambda+3,mNodeG-1,-mMode);
   }
@@ -144,18 +148,35 @@ void componentMOS_NL::computeNL(SiconosVector& SICONOS_X,SiconosVector& SICONOS_
   ACE_DOUBLE VGS=0;
   ACE_DOUBLE VGD=0;
   if (mNodeG){
-    VGS=-SICONOS_Lambda.getValue(mNodeG-1);
-    VGD=-SICONOS_Lambda.getValue(mNodeG-1);
+    VGS+=SICONOS_Lambda.getValue(mNodeG-1);
+    VGD+=SICONOS_Lambda.getValue(mNodeG-1);
+    //    cout<<"VG "<<VGS<<endl;
   }
-  if (mNodeS)
-    VGS+=SICONOS_Lambda.getValue(mNodeS-1);
-  if (mNodeD)
-    VGD+=SICONOS_Lambda.getValue(mNodeD-1);
-  
+  if (mNodeS){
+    VGS-=SICONOS_Lambda.getValue(mNodeS-1);
+    //   cout<<"VS "<<SICONOS_Lambda.getValue(mNodeS-1)<<endl;
+  }
+  if (mNodeD){
+    VGD-=SICONOS_Lambda.getValue(mNodeD-1);
+    //cout<<"VD "<<SICONOS_Lambda.getValue(mNodeD-1)<<endl;
+  }
   ACE_DOUBLE L2=SICONOS_Lambda.getValue(algo::spls->mB2zs->getDimRow()+mIndiceStartLambda+1);
   ACE_DOUBLE L4=SICONOS_Lambda.getValue(algo::spls->mB2zs->getDimRow()+mIndiceStartLambda+3);
-
-  SICONOS_H.setValue(mILaw->mLine,mB*(L4*(VGS-mVt)*(VGS-mVt) - L2*(VGD-mVt)*(VGD-mVt)));
+   ACE_DOUBLE IDS = SICONOS_Lambda.getValue(mI->mIndex-2*algo::spls->mDimx-1);
+//      ACE_DOUBLE aux=-IDS;
+//    ACE_DOUBLE val;
+//    cout<<"-IDS: "<<-IDS<<endl;
+   
+//    if (mMode*(VGS-mMode*mVt)>0)
+//      aux+=mMode*mB*(VGS-mMode*mVt)*(VGS-mMode*mVt);
+//    if (mMode*(VGD-mMode*mVt)>0)
+//      aux-=mMode*mB*(VGD-mMode*mVt)*(VGD-mMode*mVt);
+  
+//    printf("L2=%e, L4=%e\n",L2,L4);
+//    val = -IDS+mMode*mB*(L4*(VGS-mMode*mVt)*(VGS-mMode*mVt) - L2*(VGD-mMode*mVt)*(VGD-mMode*mVt));
+//    printf("LCPval=%e, f=%e\n",val,aux);
+  
+  SICONOS_H.setValue(mILaw->mLine,-IDS+mMode*mB*(L4*(VGS-mMode*mVt)*(VGS-mMode*mVt) - L2*(VGD-mMode*mVt)*(VGD-mMode*mVt)));
   
 
   
@@ -164,30 +185,32 @@ void componentMOS_NL::computeJacNL(SiconosVector& SICONOS_X,SiconosVector& SICON
   ACE_DOUBLE VGS=0;
   ACE_DOUBLE VGD=0;
   if (mNodeG){
-    VGS=-SICONOS_Lambda.getValue(mNodeG-1);
-    VGD=-SICONOS_Lambda.getValue(mNodeG-1);
+    VGS+=SICONOS_Lambda.getValue(mNodeG-1);
+    VGD+=SICONOS_Lambda.getValue(mNodeG-1);
   }
   if (mNodeS)
-    VGS+=SICONOS_Lambda.getValue(mNodeS-1);
+    VGS-=SICONOS_Lambda.getValue(mNodeS-1);
   if (mNodeD)
-    VGD+=SICONOS_Lambda.getValue(mNodeD-1);
-  
+    VGD-=SICONOS_Lambda.getValue(mNodeD-1);
+  int dimzs  = algo::spls->mDimzs - algo::spls->mV0zs;
+  //-I_{DS}
+  SICONOS_D.setValue(mILaw->mLine,mI->mIndex-2*algo::spls->mDimx-1,-1);
  //dh/dl2
-  SICONOS_D.setValue(mILaw->mLine,algo::spls->mDimzs+mIndiceStartLambda+1,-mB*(VGD-mVt)*(VGD-mVt));
+  SICONOS_D.setValue(mILaw->mLine,dimzs +mIndiceStartLambda+1,-mMode*mB*(VGD-mMode*mVt)*(VGD-mMode*mVt));
  //dh/dl4
-  SICONOS_D.setValue(mILaw->mLine,algo::spls->mDimzs+mIndiceStartLambda+3,mB*(VGS-mVt)*(VGS-mVt));
+  SICONOS_D.setValue(mILaw->mLine,dimzs+mIndiceStartLambda+3,mMode*mB*(VGS-mMode*mVt)*(VGS-mMode*mVt));
   ACE_DOUBLE L2=SICONOS_Lambda.getValue(algo::spls->mB2zs->getDimRow()+mIndiceStartLambda+1);
   ACE_DOUBLE L4=SICONOS_Lambda.getValue(algo::spls->mB2zs->getDimRow()+mIndiceStartLambda+3);
  if (mNodeG)
    SICONOS_D.setValue(mILaw->mLine,mNodeG-1 ,
-		      -mK*(L4*(VGS-mVt)
-			   -L2*(VGD-mVt)));
+		     mMode*mK*(L4*(VGS-mMode*mVt)
+			   -L2*(VGD-mMode*mVt)));
  if (mNodeS)
    SICONOS_D.setValue(mILaw->mLine,mNodeS-1 ,
-		      mK*(L4*(VGS-mVt)));
+		      -mMode*mK*(L4*(VGS-mMode*mVt)));
  if (mNodeD)
    SICONOS_D.setValue(mILaw->mLine,mNodeD-1 ,
-		      -mK*(L2*(VGD-mVt)));
+		      mMode*mK*(L2*(VGD-mMode*mVt)));
 }
 
 

@@ -326,7 +326,10 @@ void linearSystem::alloc2Matrix(){
 
 }
 void linearSystem::set2matrix(){
-  alloc2Matrix();
+  if (!mDimzns)
+    return;
+  
+  //  alloc2Matrix();
   if (mDimLambda){
     //(*mD2s)=(*mD1s)+prod(*mD1zns,*mC1s);
     ACEprod(*mD1zns,*mC1s,*mD2s,false);
@@ -595,7 +598,7 @@ void linearSystem::readInitialValue(){
 	cout<<"set value from netlist :v_"<<i<<"="<<aux<<endl;
       }
     }
-    mxti->setValueIfNotNull(0,2);
+    // mxti->setValueIfNotNull(0,2);
     //DIODEBRIDGE :     mxti->setValueIfNotNull(1,10.0/2000);
 //         mxti->setValueIfNotNull(3,1/200);
 //         mznsti->setValueIfNotNull(0,-0.01);
@@ -830,7 +833,7 @@ void linearSystem::preparMLCP(){
 
 }
 void linearSystem::computeZnstiFromX_Zs(){
-  if (mDimLambda==0)
+  if (mDimzns==0)
     return;
   if (mDimx){
     //(*mznsti)=prod(*mC1x,*mxti)+prod(*mC1zs,*mzsti)+prod(*mC1l,*(mMLCP->mZ1))+(*mC1s);
@@ -1383,7 +1386,7 @@ void linearSystem::extractSources(){
   extractDynamicSystemSource();
 }
 void linearSystem::updateDynamicSystemSource(){
-  if (mDimx && mDimLambda){
+  if (mDimx && mDimzns){
     //(*mA2s)=(*mA1s)+prod(*mA1zns,*mC1s);
     ACEprod(*mA1zns,*mC1s,*mA2s,false);
     //prod(*mA1zns,*mC1s,*mA2s);
@@ -1393,7 +1396,7 @@ void linearSystem::updateDynamicSystemSource(){
 }
 void linearSystem::updateInteractionSource(){
   
-  if (mDimLambda && mB2s){
+  if (mB2s && mDimzns){
     //(*mB2s)=(*mB1s)+prod(*mB1zns,*mC1s);
     ACEprod(*mB1zns,*mC1s,*mB2s,false);
   }
@@ -1499,7 +1502,7 @@ void linearSystem::extractNonDynBockInVect(aceVector * V){
       line++;
   }
 
-  ACE_CHECK_IERROR(mNbNonDynEquations == line,"linearSystem::extractNonDynBockInMat number equation!");
+  ACE_CHECK_IERROR(mNbNonDynEquations - mNL.size() == line,"linearSystem::extractNonDynBockInMat number equation!");
 }
 //copy in m the double contains in none dynamique equation from IndexBegin to IndexEnd
 void linearSystem::extractNonDynBockInMat(aceMatrix * m, int IndexBegin, int IndexEnd){
@@ -1541,7 +1544,7 @@ void linearSystem::extractNonDynBockInMat(aceMatrix * m, int IndexBegin, int Ind
       line++;
   }
 
-  ACE_CHECK_IERROR(mNbNonDynEquations == line,"linearSystem::extractNonDynBockInMat number equation!");
+  ACE_CHECK_IERROR(mNbNonDynEquations  - mNL.size() == line,"linearSystem::extractNonDynBockInMat number equation!");
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -1646,14 +1649,14 @@ void linearSystem::printStep(ostream& os,aceVector * pVx,aceVector *pVzs){
   dataPrint * pPrint;
   double aux;
   ParserInitPrintElem();
-  os<<getCurrentTime();
+    os<<getCurrentTime();
   /*buck output*/
-  //    os<<1000000*getCurrentTime();
-//     os <<"\t"<<mxti->getValue(4); //IL for buck with out inverter
-//     os <<"\t"<<mznsti->getValue(0); //IDp
-//     os <<"\t"<<mznsti->getValue(1); //IDn
-//     os <<"\t"<<mznsti->getValue(2); //IDmosp
-//     os <<"\t"<<mznsti->getValue(3); //IDmosn
+//       os<<1000000*getCurrentTime();
+//      os <<"\t"<<mxti->getValue(4); //IL for buck with out inverter
+//      os <<"\t"<<mznsti->getValue(0); //IDp
+//      os <<"\t"<<mznsti->getValue(1); //IDn
+//      os <<"\t"<<mznsti->getValue(2); //IDmosp
+//      os <<"\t"<<mznsti->getValue(3); //IDmosn
 
     
   while(ParserGetPrintElem((void**)&pPrint)){
