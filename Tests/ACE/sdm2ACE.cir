@@ -229,7 +229,9 @@ Vh2b h2b 0  pulse (-5  5  250n 1n  1n  238n  500n)
 .options method=trap ITL4=100 ABSTOL=1p VNTOL=1u RELTOL=0.001
 
 .save V(spg1,sng1) V(q1)
-.tran 1n 25u 0 1n
+*.tran 1n 25u 0 1n
+
+.tran 0.1n 0.4m 0 1n
 .print tran V(q1)
 *.plot tran   V(Q1)
 *.plot tran v(spg1, sng1)

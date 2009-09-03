@@ -1,0 +1,26 @@
+RLCD
+
+
+VIN	1	0	AC	1	SIN(0	1	10)
+
+.MODEL DIODEDEF D N=0.25
+
+C1 1 2 1mF
+L1 2 3 1mH
+R1 3 4 1000
+D1 4 0 DIODEDEF 
+D2 5 3 DIODEDEF 
+R2 5 0 500
+
+
+.options method=trapezoidal
+
+
+.tran 0.001 1.25
+.print tran v(1) V(2)-V(1) 
+.control
+set width = 140
+set nobreak
+.endc
+
+.END

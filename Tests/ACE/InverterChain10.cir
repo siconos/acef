@@ -25,7 +25,7 @@ inverterchain10
 
 valim vdd 0 1.8
 
-Vin_inv inv0 0 PULSE (0 1.8 1n 0.5n 0.5n 20n 40n)
+Vin_inv inv0 0 PULSE (0 1.8 50n 0.5n 0.5n 2n 5n)
 
  .ic v(inv1) = 1.8
  .ic v(inv2) = 0.0
@@ -40,6 +40,7 @@ Vin_inv inv0 0 PULSE (0 1.8 1n 0.5n 0.5n 20n 40n)
 
 
 .tran 0.1n 100n
-
+*.tran 50ps 0.0002
+.print tran v(inv10) v(inv0)
 
 .end

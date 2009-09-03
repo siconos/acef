@@ -1,19 +1,21 @@
 BuckConverterRegul2
 
+
 ValimI 1 0 3
 
 * power mosfets : no cross conduction thanks to sum of Vt 
 .model nmos nmos level=1 tox=100e-09 vto=2.0 kp=10.0
 .model pmos pmos level=1 tox=100e-09 vto=-2.0 kp=10.0
-mosnswitch 9 7 0 0 nmos w=0.0001 l=0.0001
-mospswitch 10 7 1 1 pmos w=0.0001 l=0.0001
+mosnswitch 2 7 0 0 nmos w=0.0001 l=0.0001
+mospswitch 2 7 1 1 pmos w=0.0001 l=0.0001
 
-Vmesnswitch 9 2 0
-Vmespswitch 10 2 0
 
 L1 2 3 10u
 C1 3 0 22u
 Rload 3 0 10.0
+
+*Vbruit 33 0 PULSE(0 -1.8 0.1e-3 0.1e-4 0.1e-4 5e-9 )
+*Vramp 6 0 PULSE(0 2.25 0 1.660e-6 5e-9 1e-9 1.6667e-6)
 
 * these values of L1,C1 give a sliding mode
 * L1 2 3 4u
@@ -25,8 +27,9 @@ Dnswitch 0 2 DIODEDEF
 Dpswitch 2 1 DIODEDEF
 
 Vramp 6 0 PULSE(0 2.25 0 1.660e-6 5e-9 1e-9 1.6667e-6)
+*Vramp 6 0 PULSE(0 2.25 0 3e-6 5e-9 1e-9 3e-6)
 
-Vref 4 0 PULSE(0 1.8 0 0.1e-3)
+Vref 4 0 PULSE(0 1.8 0 1e-4)
 
 * first set of compensator parameters R11 R21 C11
 R11 3 12 15.58E3
@@ -48,14 +51,15 @@ Camp 5 0 5.305E-9
 
 * comparator
 *Bcomp 7 0 V=1.5*(tanh(10.0*V(6,5)) + 1.0)
-.comp 6 5 7 Vmin=0 Vmax=3 Vepsilon=0.1
+.comp 6 5 7 Vmin=0 Vmax=3 Vepsilon=0.15
 
 .options method=trap RELTOL=0.04
 
 .save  v(3) v(2) 
 
-.tran 0.00000000005 0.000002
-.print tran  v(3) v(3,2) 
+.tran 50ps 0.0002
+*.tran 50ps 50000000ps
+.print tran  v(1) v(2) v(3) v(4) v(5) v(6) v(7) v(9) v(10) v(11) v(12) v(13) v(14) v(3,2)
 
 .control
 set width = 230
