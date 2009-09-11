@@ -17,6 +17,7 @@ static ofstream* ACE_LOG1_FILE=0;
 int ACE_CUR_STEP=0;
 int ACE_CMP_ADAT[ACE_NB_ADAPT_STEP+1];
 int ACE_USE_NL_MOS = 0;
+int ACE_USE_SMOOTH_MOS = 0;
 int  ACE_MOS_NB_HYP=5;
 ACE_DOUBLE ACE_MOS_POWER_SUPPLY=3.0;
 ACE_DOUBLE ACE_DIODE_THRESHOLD=0;
@@ -57,6 +58,8 @@ void ACE_INIT(){
 	foption>>ACE_RTOL_LOCAL;
       else if (!strcmp("ACE_USE_NL_MOS",opt_name))
 	foption>>ACE_USE_NL_MOS;
+      else if (!strcmp("ACE_USE_SMOOTH_MOS",opt_name))
+	foption>>ACE_USE_SMOOTH_MOS;
       else if (!strcmp("ACE_THETA_X",opt_name))
 	foption>>ACE_THETA_X;
       else if (!strcmp("ACE_THETA_ZS",opt_name))

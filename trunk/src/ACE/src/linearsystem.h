@@ -286,6 +286,7 @@ protected:
 
   ACE_DOUBLE mSerrorX;
   ACE_DOUBLE mSerrorZs;
+  ACE_DOUBLE mMaxError;
   int mNbToSmall;
   int mNbToBig;
   int mNbBacktrack;

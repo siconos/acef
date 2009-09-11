@@ -23,6 +23,7 @@
 #include "componentisrc.h"
 #include "componentmos.h"
 #include "componentmos_nl.h"
+#include "componentmos_nl2.h"
 #include "componentbjt.h"
 #include "graph.h"
 #include <fstream>
@@ -234,7 +235,7 @@ void algo::parseComponents(){
    componentISRC *c=new componentISRC(&dIsrc);
    mIsrcs.push_back(c);   
  }
- if (ACE_USE_NL_MOS){
+ if (ACE_USE_NL_MOS && !ACE_USE_SMOOTH_MOS){
    ParserInitComponentList("Mos1");
    dataMOS1 mos;
    while(ParserNextComponent(&mos)){
@@ -243,8 +244,18 @@ void algo::parseComponents(){
      c->addUnknowns();
      c->addEquations();
    }
+ }else if (ACE_USE_SMOOTH_MOS){
+   ParserInitComponentList("Mos1");
+   dataMOS1 mos;
+   while(ParserNextComponent(&mos)){
+     componentMOS_NL2 *c=new componentMOS_NL2(&mos);
+     mMos_NL.push_back(c);
+     c->addUnknowns();
+     c->addEquations();
+   }
  }
 
+ 
  printComponents();
 
 }

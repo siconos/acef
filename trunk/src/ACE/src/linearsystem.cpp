@@ -124,6 +124,7 @@ linearSystem::linearSystem(){
   mSerrorZs=0;
   mNbBacktrack=0;
 
+  mMaxError=0;
 
 
   mLogFrequency=0;
@@ -599,10 +600,11 @@ void linearSystem::readInitialValue(){
       }
     }
     // mxti->setValueIfNotNull(0,2);
-    //DIODEBRIDGE :     mxti->setValueIfNotNull(1,10.0/2000);
-//         mxti->setValueIfNotNull(3,1/200);
-//         mznsti->setValueIfNotNull(0,-0.01);
-//         mznsti->setValueIfNotNull(3,-0.01);
+    //DIODEBRIDGE :
+    mxti->setValueIfNotNull(1,10.0/2000);
+    //    mxti->setValueIfNotNull(3,1/200);
+    //    mznsti->setValueIfNotNull(0,-0.01);
+    //    mznsti->setValueIfNotNull(3,-0.01);
     //    printStep(*mSimuStream,mzsti);
     //    mzsti->setValueIfNotNull(2,-5e-2);
     /*for each x of type TENSION, compute the initial value with V init*/
@@ -924,10 +926,10 @@ void linearSystem::printLog(){
   ACE_GET_LOG_STREAM()<<"linearSystem::stopSimu, adaptive to big step: "<<mNbToBig<<endl;
   ACE_GET_LOG_STREAM()<<"linearSystem::stopSimu, total error voltage step: "<<mSerrorZs<<endl;
   ACE_GET_LOG_STREAM()<<"linearSystem::stopSimu, total error X step: "<<mSerrorX<<endl;
-  ACE_GET_LOG_STREAM()<<"linearSystem::stopSimu,  h, error somme, number of step, average: "<<mH<<" "<<mSommeError<<" "<<mStepCmp<<" "<<mSommeError/mStepCmp<<endl;
+  ACE_GET_LOG_STREAM()<<"linearSystem::stopSimu,  h, error somme, number of step, average, max error: "<<mH<<" "<<mSommeError<<" "<<mStepCmp<<" "<<mSommeError/mStepCmp<<" "<<mMaxError<<endl;
   ACE_GET_LOG_STREAM()<<"linearSystem::stopSimu,  log10(average), log10(h)"<<log10(mSommeError/mStepCmp)<<" "<<log10(mH)<<endl;
   if (ACE_WITH_ADAPTATIVE_TIME_STEPPING){
-    ACE_GET_LOG1_STREAM()<<log10(mSommeError/mStepCmp)<<"\t"<<log10(ACE_RTOL_LOCAL)<<endl;
+    ACE_GET_LOG1_STREAM()<<log10(mSommeError/mStepCmp)<<" and \t"<<log10(ACE_RTOL_LOCAL)<<endl;
   }else{
     ACE_GET_LOG1_STREAM()<<log10(mSommeError/mStepCmp)<<"\t"<<log10(mH)<<endl;
   }
@@ -1644,7 +1646,7 @@ void linearSystem::printStep(ostream& os,aceVector * pVx,aceVector *pVzs){
      return;
    }
 
-   //     ACE_DOUBLE v = computeAnalyticSolution(getCurrentTime());
+   //ACE_DOUBLE v = computeAnalyticSolution(getCurrentTime());
 
   dataPrint * pPrint;
   double aux;
@@ -1664,10 +1666,13 @@ void linearSystem::printStep(ostream& os,aceVector * pVx,aceVector *pVzs){
     aux = pVzs->getValue(pPrint->node1-1);
     if (pPrint->node2 >0)
       aux -=  pVzs->getValue(pPrint->node2-1);
-    // mSommeError += fabs(v-aux);
+//     cout<<"error :"<<fabs(v-aux)<<endl;
+//     mSommeError += fabs(v-aux);
+//     if (fabs(v-aux)>mMaxError )
+//       mMaxError = fabs(v-aux);
     
-      os << aux ;
-      //      os << aux << "\t"<<v;
+    os << aux ;
+    //            os << aux << "\t"<<v;
   }
   os<<endl;
 }

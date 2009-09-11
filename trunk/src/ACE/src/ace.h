@@ -53,6 +53,7 @@ class component;
 #define ACE_TYPE_BJT 12
 #define ACE_TYPE_RELAY 13
 #define ACE_TYPE_MOS_NL 14
+#define ACE_TYPE_MOS_NL2 15
 
 
 
@@ -87,6 +88,7 @@ extern double ACE_THETA_P;
 
 /*option for the MOS component*/
 extern int ACE_USE_NL_MOS;
+extern int ACE_USE_SMOOTH_MOS;
 extern int  ACE_MOS_NB_HYP;
 extern ACE_DOUBLE ACE_MOS_POWER_SUPPLY;
 
@@ -117,6 +119,7 @@ extern int ACE_CUR_STEP;
 #define ACE_SOLVER_NUMERICS_DIRECT_PATH 5
 #define ACE_SOLVER_FB 6
 #define ACE_SOLVER_NUMERICS_PATH_ENUM 7
+#define ACE_SOLVER_NUMERICS_DIRECT_PATH_ENUM 8
 
 #include "acetime.h"
 
