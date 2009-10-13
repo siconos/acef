@@ -1,0 +1,155 @@
+%%
+%% This is file `squelette-rr.tex',
+%% generated with the docstrip utility.
+%%
+%% The original source files were:
+%%
+%% RR.dtx  (with options: `sample')
+%% ********************************************************************
+%% Copyright (C) 1997-1999 2004 2006 2007 INRIA/APICS
+%% This file may be distributed and/or modified under the
+%% conditions of the LaTeX Project Public License, either version 1.3
+%% of this license or (at your option) any later version.
+%% The latest version of this license is in
+%%    http://www.latex-project.org/lppl.txt
+%% and version 1.3 or later is part of all distributions of LaTeX
+%% version 2003/12/01 or later.
+%% 
+\documentclass[a4paper]{article}
+\usepackage{RR}
+
+%\usepackage{hyperref}
+%\usepackage[frenchb]{babel} % optionnel
+%\usepackage[OT1]{fontenc}
+%%
+%% date de publication du rapport
+\RRdate{\today}
+%%
+%% Cas d'une version deux
+%% \RRversion{2}
+%% date de publication de la version 2
+%% \RRdater{Novembre  2006}
+
+%%
+\RRauthor{
+Vincent Acary\thanks[sfn]{Electronic mail: \tt firstname.lastname@inrialpes.fr}%
+\and  Olivier~Bonnefon\thanksref{sfn}
+\and Bernard~Brogliato\thanksref{sfn}
+}
+%%
+%% Ceci apparait sur chaque page paire.
+\authorhead{V. Acary \textit{et. al.}}
+%%
+\RRtitle{}
+%% English title
+\RRetitle{The nonsmooth dynamical systems approach for the analog simulation of switched circuits within the Siconos framework}
+%%
+\titlehead{ The nonsmooth dynamical systems approach  for switched circuits}
+%%
+
+%\RRnote{This is a second note}
+%%
+\RRresume{L'int\'egration num\'erique en temps des circuits commut\'es est connue pour \^etre un probl\`eme difficile lorsque le nombre de commutations est \'el\'ev\'e, ou si des modes glissants apparaissent. Dans ces cas, les simulateurs analogues classiques se comportent mal, ou parfois m\^eme \'echoues. Dans ce rapport, on d\'emontre sur des exemples, que l'approche des syst\`emes dynamiques non r\'eguliers, constitu\'ee de 1) une mod\'elisation sp\'ecifique des composants \'electroniques d\'efinis par morceaux (diode id\'eal, diode Zener, transistors) , 2) du sch\'ema \`a pas de temps de Moreau et 3) d'algorithmes de r\'esolution it\'eratifs d\'epasse les capacit\'es des simulateurs classiques SPICE et des simulateurs hybrides. Un exemple acad\'emique construit dans  [Maffezzoni et al, IEEE Trans. on CADICS, Vol 25, No 11, November 2006] de sorte \`a faire \'echouer la convergence du sch\'ema de Newton--Raphson et un convertisseur de puissance de type ``buck'' sont utilis\'es pour des comparaisons fouill\'ees entre l'approche  des syst\`emes dynamiques non r\'eguliers et les autres m\'ethodes. L'approche des syst\`emes dynamiques non r\'eguliers, mis en \oe uvre dans la plate--forme Siconos d\'evelopp\'ee \`a l'INRIA, d\'emontre sur ces deux exemples qu'elle est beaucoup efficace et robuste par rapport aux variations de param\`etres des mod\`eles.
+}
+\RRabstract{The numerical integration of switching circuits is known to be a tough 
+issue when the number of switches is high, or when sliding modes exist. 
+Then classical analog simulators may behave poorly, or even fail. In 
+this paper it is shown on two examples that the nonsmooth dynamical 
+systems (NSDS) approach, which is made of 1) a specific modelling of the 
+piecewise-linear electronic devices (ideal diodes, Zener diodes, 
+transistors), 2) the Moreau's time-stepping scheme, and 3) specific 
+iterative one-step solvers, supersedes simulators of the SPICE family 
+and hybrid simulators. An academic example constructed in [Maffezzoni et al, IEEE Trans. on CADICS,
+Vol 25, No 11, November 2006],  so that the Newton-Raphson scheme does not converge, and the buck 
+converter, are used to make extensive comparisons between the NSDS 
+method and other methods of the SPICE family and a hybrid-like method. 
+The NSDS method, implemented in the {\sc Siconos} platform developed at 
+INRIA, proves to be on these two examples much faster and more robust 
+with respect to the models parameters variations.
+}
+%%
+\RRmotcle{Circuits commut\'es, probl\`eme de compl\'ementarit\'e, algorithme d'Euler implicite, convertisseurs de puissance, syst\`emes dynamiques de compl\'ementarit\'e, simulation analogique, syst\`emes multivalu\'es, contraintes unilat\'erales sur l'\'etat.}
+\RRkeyword{Switching circuits, complementarity problems, backward Euler algorithm, power converters, complementarity dynamical systems, analog simulation, multivalued systems, unilateral state constraints.}
+%%
+ \RRprojet{Bipop}  % cas d'un seul projet
+%%\RRprojets{Apics et Op\'era}
+%%
+ \RRtheme{\THNum} % cas d'un seul theme
+%%\RRtheme{\THCom \THCog \THSym \THNum \THBio} % cas de 5 themes
+%%
+%% \URLorraine % pour ceux qui sont \`a l'est
+%% \URRennes  % pour ceux qui sont \`a l'ouest
+ \URRhoneAlpes % pour ceux qui sont dans les montagnes
+%% \URRocq % pour ceux qui sont au centre de la France
+%% \URFuturs % pour ceux qui sont dans le virtuel
+%%\URSophia % pour ceux qui sont au Sud.
+%%
+
+
+%\usepackage{color}
+\usepackage{a4wide}
+\usepackage{graphicx,array}
+\usepackage{amssymb,amsmath}
+\usepackage{subfigure}
+\usepackage{cases}
+%\usepackage{mathptmx}
+\graphicspath{{./figure/}}
+\usepackage[squaren,Gray]{SIunits}
+\usepackage{url}
+%\usepackage{showlabels}
+\usepackage{psfrag}
+\input{macro.tex}
+\usepackage{color}
+\usepackage{epsfig}
+
+\newtheorem{definition}{Definition}
+\newtheorem{proposition}{Proposition}
+\newtheorem{lemma}{Lemma}
+\newtheorem{claim}{Claim}
+\newtheorem{remark}{Remark}
+\newtheorem{assumption}{Assumption}
+\newtheorem{example}{Example}
+\newtheorem{conjecture}{Conjecture}
+\newtheorem{corollary}{Corollary}
+\newtheorem{OP}{OP}
+\newtheorem{problem}{Problem}
+\newtheorem{theorem}{Theorem}
+
+
+\usepackage{fancyhdr}\usepackage{lastpage}
+% \fancyfoot[L]{}
+% \fancyfoot[C]{}
+% \fancyfoot[R]{\texttt{file p.tex -- \isodayandtime}}
+
+
+% \begingroup
+% \count0=\time \divide\count0by60 % Hour
+% \count2=\count0 \multiply\count2by-60 \advance\count2by\time
+% % Min
+% \def\2#1{\ifnum#1<10 0\fi\the#1}
+% \xdef\isodayandtime{\the\year-\2\month-\2\day\space\2{\count0}:%
+% \2{\count2}}
+% \endgroup
+% %%%% fin macro %%%%
+
+
+
+
+
+\begin{document}
+\RRNo{7061}
+%%
+\makeRR   % cas d'un rapport de recherche
+%% \makeRT % cas d'un rapport technique.
+\newpage
+\tableofcontents
+\newpage
+\input{body-rr.tex}
+\clearpage
+\bibliographystyle{plain}
+\bibliography{CircuitSimulation.bib}
+\clearpage
+\end{document}
+\endinput
+%%
+%% End of file `squelette-rr.tex'.
