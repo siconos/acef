@@ -66,7 +66,7 @@
                         % systems. The latest version can be obtained at:
                         % http://www.ctan.org/tex-archive/macros/latex/contrib/supported/cite/
 
-\usepackage{graphicx}  % Written by David Carlisle and Sebastian Rahtz
+%\usepackage{graphicx}  % Written by David Carlisle and Sebastian Rahtz
                         % Required if you want graphics, photos, etc.
                         % graphicx.sty is already installed on most LaTeX
                         % systems. The latest version and documentation can
@@ -78,7 +78,7 @@
                         % at: http://www.ctan.org/tex-archive/info/
 % NOTE: for dual use with latex and pdflatex, instead load graphicx like:
 %\ifx\pdfoutput\undefined
-%\usepackage{graphicx}
+\usepackage{graphicx}
 %\else
 %\usepackage[pdftex]{graphicx}
 %\fi
@@ -232,9 +232,9 @@
 % load natbib.sty under IEEEtran.cls, the following code must be placed
 % before natbib.sty can be loaded:
 %
-% \makeatletter
-% \let\NAT@parse\undefined
-% \makeatother
+\makeatletter
+\let\NAT@parse\undefined
+\makeatother
 %
 % Hyperref should be loaded differently depending on whether pdflatex
 % or traditional latex is being used:
@@ -340,17 +340,15 @@
 The numerical integration of switching circuits is known to be a tough 
 issue when the number of switches is high, or when sliding modes exist. 
 Then classical analog simulators may behave poorly, or even fail. In 
-this paper it is shown on two examples that the nonsmooth dynamical 
-systems (NSDS) approach, which is made of 1) a specific modelling of the 
+this paper it is shown on two examples that the nonsmooth  approach, which is made of 1) a specific modelling of the multivalued
 piecewise-linear electronic devices (ideal diodes, Zener diodes, 
 transistors), 2) the Moreau's time-stepping scheme, and 3) specific 
 iterative one-step solvers, supersedes simulators of the SPICE family 
 and hybrid simulators. An academic example constructed in [Maffezzoni et al, IEEE Trans. on CADICS,
-Vol 25, No 11, November 2006],  so that the Newton-Raphson scheme does not converge, and the buck 
-converter, are used to make extensive comparisons between the NSDS 
+Vol 25, No 11, November 2006],  so that the Newton-Raphson scheme does not converge, is used to make some comparisons between the nonsmooth
 method and other methods of the SPICE family and a hybrid-like method. 
-The NSDS method, implemented in the {\sc Siconos} platform developed at 
-INRIA, proves to be on these two examples much faster and more robust 
+The nonsmooth approach, implemented in the {\sc Siconos} platform developed at 
+INRIA, proves to be on this example much faster and more robust 
 with respect to the models parameters variations.
 \end{abstract}
 
@@ -371,7 +369,7 @@ with respect to the models parameters variations.
 % use section* for acknowledgement
 \section*{Acknowledgment}
 
-The authors would like to warmly thank Pascal Denoyelle for his contribution in the earlier version of this work. The authors acknowledges Michael Ferris (University Wisconsin--Madison) for providing us with the PATH solver. Olivier Bonnefon has been granted by the ANR project VAL-AMS (ANR-06-SETI-018-01).
+The authors would like to warmly thank Pascal Denoyelle~\cite{denoyelle2006} for his contribution in the earlier version of this work. The authors acknowledges Michael Ferris (University Wisconsin--Madison) for providing us with the PATH solver. Olivier Bonnefon has been granted by the ANR project VAL-AMS (ANR-06-SETI-018-01).
 
 % optional entry into table of contents (if used)
 %\addcontentsline{toc}{section}{Acknowledgment}
