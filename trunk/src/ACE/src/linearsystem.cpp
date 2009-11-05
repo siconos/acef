@@ -601,21 +601,27 @@ void linearSystem::readInitialValue(){
     }
     // mxti->setValueIfNotNull(0,2);
     //DIODEBRIDGE :
-    mxti->setValueIfNotNull(1,10.0/2000);
+    //mxti->setValueIfNotNull(1,10.0/2000);
+    
     //    mxti->setValueIfNotNull(3,1/200);
     //    mznsti->setValueIfNotNull(0,-0.01);
     //    mznsti->setValueIfNotNull(3,-0.01);
     //    printStep(*mSimuStream,mzsti);
     //    mzsti->setValueIfNotNull(2,-5e-2);
     /*for each x of type TENSION, compute the initial value with V init*/
+
+    
     for(i=0; i <(int) mx.size(); i++){
       unknown* u = mx[i];
       if (u->mType == ACE_TYPE_U ){
 	aux =  (u->mComponent->mNodeNeg>0)? mzsti->getValue(u->mComponent->mNodeNeg-1):0;
 	aux -= (u->mComponent->mNodePos>0)? mzsti->getValue(u->mComponent->mNodePos-1):0;
 	mxti->setValueIfNotNull(i,aux);
+	cout<<"set :";
+	u->print();
+	cout<<"to :"<<aux<<endl;
       }
-    }
+      }
 
   }
   catch(...)
@@ -1635,17 +1641,25 @@ void printHeaderCSV(ostream& os){
 void linearSystem::printStep(ostream& os,aceVector * pVx,aceVector *pVzs){
 //   int i;
 //   return;
-   bool printALL = true;
+   bool printALL = false;
    ACE_DOUBLE curDate = getCurrentTime();
-   // if (curDate > 0.0001984 || curDate < 0.0001963)
-   //  return;
-   if (!printALL){
+   if (printALL){
      if (curDate==0.0)
        printHeaderCSV(os);
      os <<curDate<<","<<mxti->getValue(4)<<"\n";
      return;
    }
-
+   int i;
+   os<<1000000*getCurrentTime()<<" ";
+   for (i=0;i<mxti->size();i++)
+     os<<mxti->getValue(i)<<" ";
+   for (i=0;i<mzsti->size();i++)
+     os<<mzsti->getValue(i)<<" ";
+   for (i=0;i<mznsti->size();i++)
+     os<<mznsti->getValue(i)<<" "; 
+    os<<endl;
+    return;
+    
    //ACE_DOUBLE v = computeAnalyticSolution(getCurrentTime());
 
   dataPrint * pPrint;

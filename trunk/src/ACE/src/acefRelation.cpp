@@ -15,12 +15,6 @@ static int sOnlyOnce=1;
 acefRelation::acefRelation():
   FirstOrderType2R()
 {
-  JacH.resize(2);
-  JacG.resize(2);
-  JacH[0].reset(new PluggedMatrix());
-  JacH[1].reset(new PluggedMatrix());
-  JacG[0].reset(new PluggedMatrix());
-  JacG[1].reset(new PluggedMatrix());
 }
 
 void acefRelation::initJac(SimpleMatrix* C,SimpleMatrix* D,SimpleMatrix* B){
@@ -32,24 +26,24 @@ void acefRelation::initJac(SimpleMatrix* C,SimpleMatrix* D,SimpleMatrix* B){
 void acefRelation::initialize(SP::Interaction inter)
 {
   FirstOrderType2R::initialize(inter);
-  unsigned int sizeY = getInteractionPtr()->getSizeOfY();
-  unsigned int sizeDS = getInteractionPtr()->getSizeOfDS();
-  SP::SiconosVector y = getInteractionPtr()->getYPtr(0);
-  SP::SiconosVector lambda = getInteractionPtr()->getLambdaPtr(0);
+  unsigned int sizeY = interaction()->getSizeOfY();
+  unsigned int sizeDS = interaction()->getSizeOfDS();
+  SP::SiconosVector y = interaction()->y(0);
+  SP::SiconosVector lambda = interaction()->lambda(0);
 
   
   
-  workL.reset(new SimpleVector(getInteractionPtr()->getSizeOfY()));
-  JacH[0]->resize(sizeY,sizeDS);
-  JacH[1]->resize(sizeY,sizeY);
+  workL.reset(new SimpleVector(interaction()->getSizeOfY()));
+  JacXH->resize(sizeY,sizeDS);
+  JacLH->resize(sizeY,sizeY);
 
-  JacG[0]->resize(sizeDS,sizeDS);
-  JacG[1]->resize(sizeDS,sizeY);
+  JacXG->resize(sizeDS,sizeDS);
+  JacLG->resize(sizeDS,sizeY);
 
   
-  *(JacH[0])=*mC;
-  *(JacH[1])=*mD;
-  *(JacG[1])=*mB;
+  *(JacXH)=*mC;
+  *(JacLH)=*mD;
+  *(JacLG)=*mB;
 
   double t0=0;
   mLastComputedSource =-1;
@@ -67,10 +61,8 @@ void acefRelation::initialize(SP::Interaction inter)
 
   
   computeG(t0);
-  computeJacH(t0,0);
-  computeJacH(t0,1);
-  computeJacG(t0,0);
-  computeJacG(t0,1);
+  computeJacH(t0);
+  computeJacG(t0);
   *data[r]=*data[g_alpha];
 #ifdef SICONOS_DEBUG
   std::cout<<"data[r (g_alpha)] init\n";
@@ -91,9 +83,9 @@ void acefRelation::initialize(SP::Interaction inter)
 void acefRelation::computeH(double t){
 
   *workX = *data[x];
-  SP::SiconosVector lambda = getInteractionPtr()->getLambdaPtr(0);
+  SP::SiconosVector lambda = interaction()->lambda(0);
   *workL = *lambda;
-  SP::SiconosVector Heval = getInteractionPtr()->getRelationPtr()->getHalphaPtr();
+  SP::SiconosVector Heval = interaction()->relation()->Halpha();
 
 #ifdef SICONOS_DEBUG
   std::cout<<"********         computeH at "<<t<<std::endl;
@@ -153,7 +145,7 @@ void acefRelation::computeH(double t){
 
 
 void acefRelation::computeG(double t){
-  SP::SiconosVector lambda = getInteractionPtr()->getLambdaPtr(0);
+  SP::SiconosVector lambda = interaction()->lambda(0);
   *workL = *lambda;
   prod(*mB,*workL,*data[g_alpha],true);
 #ifdef SICONOS_DEBUG
@@ -167,18 +159,20 @@ void acefRelation::computeG(double t){
    *  \param double : current time
    *  \param index for jacobian (0: jacobian according to x, 1 according to lambda)
    */
-void acefRelation::computeJacH(double t, unsigned int index){
+void acefRelation::computeJacXH(double t){
   /*Because jacobian according to x is null (in current version, may be not in futur)*/
-  if (!index)
-    return;
 
-  SP::SiconosVector lambda = getInteractionPtr()->getLambdaPtr(0);
+}
+void acefRelation::computeJacLH(double t){
+  /*Because jacobian according to x is null (in current version, may be not in futur)*/
+
+  SP::SiconosVector lambda = interaction()->lambda(0);
   *workX = *data[x];
   *workL = *lambda;
-  algo::sAlgo->computeNonLinearJacL_H(*workX,*workL,*(JacH[index]));
+  algo::sAlgo->computeNonLinearJacL_H(*workX,*workL,*(JacLH));
 #ifdef SICONOS_DEBUG
-  std::cout<<"computeJacH "<<index <<" at " <<" "<<t<<std::endl;
-  (JacH[index])->display();
+  std::cout<<"computeJacLH  at " <<" "<<t<<std::endl;
+  (JacLH)->display();
 #endif
 
 }
@@ -187,7 +181,10 @@ void acefRelation::computeJacH(double t, unsigned int index){
    *  \param double : current time
    *  \param index for jacobian: at the time only one possible jacobian => i = 0 is the default value .
    */
-void acefRelation::computeJacG(double t, unsigned int index){
+void acefRelation::computeJacLG(double t){
+
+}
+void acefRelation::computeJacXG(double t){
 
 }
 

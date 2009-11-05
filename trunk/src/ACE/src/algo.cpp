@@ -345,7 +345,6 @@ void algo::performSemiExplicit(){
  stamp();
 
  spls->printEquations();
- 
  //compute matrix: x'=A1x * mx + A1zs * mZs + A1zns * mZns;
  spls->computedxdt();
  stampAfterInvertion();
@@ -385,7 +384,7 @@ void algo::performWithOutInvert(){
   spls->preparForStamp();
   stamp();
   spls->printEquations();
-
+  
   //compute Ax'=Bx+CZs+DZns+s
   spls->buildABCDs();
 

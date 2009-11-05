@@ -35,15 +35,16 @@ public:
 
   /** default function to compute jacobianH
    *  \param double : current time
-   *  \param index for jacobian (0: jacobian according to x, 1 according to lambda)
    */
-  virtual void computeJacH(double, unsigned int);
+  virtual void computeJacXH(double);
+  virtual void computeJacLH(double);
 	
   /** default function to compute jacobianG according to lambda
    *  \param double : current time
    *  \param index for jacobian: at the time only one possible jacobian => i = 0 is the default value .
    */
-  virtual void computeJacG(double, unsigned int);
+  virtual void computeJacXG(double);
+  virtual void computeJacLG(double);
 	
 
 

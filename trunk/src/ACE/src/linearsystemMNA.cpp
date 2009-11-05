@@ -65,6 +65,8 @@ void linearSystemMNA::allocMemory(){
   allocC1Matrix();
   allocD1Matrix();
 
+  
+  alloc2Matrix();
 
 
 }
