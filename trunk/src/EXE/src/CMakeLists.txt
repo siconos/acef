@@ -35,9 +35,11 @@ INSTALL(FILES ${CMAKE_BINARY_DIR}/ACEF_EXEConfig.h DESTINATION include/Siconos/A
 SET(SiconosACEF_EXE_LINKER_LANGUAGE CXX)
 add_executable (acef main.cpp)
 add_executable (noselect mainSiconos.cpp)
+add_executable (noselectNL mainSiconosNL.cpp)
 
 target_link_libraries (acef SiconosACEF SiconosNumerics SiconosKernel SiconosSpiceparser)
 target_link_libraries (noselect SiconosACEF SiconosNumerics SiconosKernel SiconosSpiceparser)
+target_link_libraries (noselectNL SiconosACEF SiconosNumerics SiconosKernel SiconosSpiceparser)
 
 IF(PRINT_ENV)
   INCLUDE(CMakeLog)

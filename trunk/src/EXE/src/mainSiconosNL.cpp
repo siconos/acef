@@ -64,24 +64,17 @@ void (DAEeLDS) (double t, unsigned int N, double* e, unsigned int z, double*zz){
 /*main program*/
 int main(int argc, char **argv){
   if (argc<3){
-    printf("usage : noselect file.cir ENUM|SIMPLEX|PATH|DIRECT_ENUM|DIRECT_SIMPLEX|DIRECT_PATH [INV/NOINV/MNA]\n");
+    printf("usage : noselect file.cir ENUM|SIMPLEX|PATH|DIRECT_ENUM|DIRECT_SIMPLEX|DIRECT_PATH|PATH_ENUM|DIRECT_PATH_ENUM|DIRECT_FB \n");
     return 0;
   }
   ACE_FORMULATION=ACE_FORMULATION_SEMI_EXPLICT;
-  ACE_USE_NL_MOS = 0;
+  ACE_USE_NL_MOS = 1;
 
-  /*MOS Parameters*/
-  /*formulation with inversion ?*/
-  if (argc>3){
-    if (!strcmp(argv[3],"NOINV"))
-      ACE_FORMULATION=ACE_FORMULATION_WITHOUT_INVERT;
-    if (!strcmp(argv[3],"MNA"))
-      ACE_FORMULATION=ACE_FORMULATION_MNA;
-  }
-
-
+  string solverPathEnum = "PATH_ENUM" ;
+  string solverDirectPathEnum = "DIRECT_PATH_ENUM" ;
   string solverDirEnum = "DIRECT_ENUM" ;
   string solverDirPath = "DIRECT_PATH" ;
+  string solverDirFB = "DIRECT_FB" ;
   string solverDirSimplex = "DIRECT_SIMPLEX" ;
   string solverEnum = "ENUM" ;
   string solverSimplex = "SIMPLEX" ;
@@ -119,8 +112,15 @@ int main(int argc, char **argv){
     ACE_SOLVER_TYPE=ACE_SOLVER_NUMERICS_DIRECT_SIMPLEX;
   }else if(!strcmp(argv[2],"DIRECT_PATH")){
     ACE_SOLVER_TYPE=ACE_SOLVER_NUMERICS_DIRECT_PATH;
-  }else{
-    printf("param2 must be : ENUM|SIMPLEX|PATH|DIRECT_ENUM|DIRECT_SIMPLEX|DIRECT_PATH \n");
+  }else if(!strcmp(argv[2],"PATH_ENUM")){
+    ACE_SOLVER_TYPE=ACE_SOLVER_NUMERICS_PATH_ENUM;
+  }else if(!strcmp(argv[2],"DIRECT_PATH_ENUM")){
+    ACE_SOLVER_TYPE=ACE_SOLVER_NUMERICS_DIRECT_PATH_ENUM;
+  }else if(!strcmp(argv[2],"DIRECT_FB")){
+    ACE_SOLVER_TYPE=ACE_SOLVER_FB;
+  }else
+    {
+    printf("param2 must be : ENUM|SIMPLEX|PATH|DIRECT_ENUM|DIRECT_SIMPLEX|DIRECT_PATH|PATH_DIRECT|PATH_ENUM|DIRECT_PATH_ENUM|DIRECT_FB \n");
     return 0;
   }
 //   if (!strcmp(argv[3],"0"))
@@ -135,19 +135,37 @@ int main(int argc, char **argv){
 //   if (!strcmp(argv[4],"SPARSE"))
 //     ACE_MAT_TYPE=SPARSE;
 //   else
-    ACE_MAT_TYPE=DENSE;
-
-    /************************************************************/
-    /************************************************************/
-    /*Solver options*/
-    iparam[5] = 5; // nb config
-    if (ACE_SOLVER_TYPE == ACE_SOLVER_ENUM){
+  ACE_MAT_TYPE=DENSE;
+  
+  /************************************************************/
+  /************************************************************/
+  /*Solver options*/
+  iparam[5] = 5; // nb config
+  if (ACE_SOLVER_TYPE == ACE_SOLVER_ENUM){
     iparam[0] = 0; // verbose
-    dparam[0] = 0.0000001; // Tolerance
+    dparam[0] = 1e-7; // Tolerance
     solverName = &solverEnum;
+  }else if (ACE_SOLVER_TYPE == ACE_SOLVER_NUMERICS_PATH_ENUM){
+    iparam[0] = 0; // verbose
+    dparam[0] = 1e-12; // Tolerance
+    solverName = &solverPathEnum;
+  }else if (ACE_SOLVER_TYPE == ACE_SOLVER_NUMERICS_DIRECT_PATH_ENUM){
+
+    iparam[0] = 0; // enum verbose
+    iparam[5] = 2; // nb config
+    iparam[6] = 0; // direct verbose
+    if (ACE_USE_NL_MOS)
+      iparam[8] = 1; // direct update mlcp
+    dparam[0] = 0.0000001; // Tolerance
+    dparam[5] = 0.0000001; // Tolerance neg
+    dparam[5] = 1e-20; // Tolerance pos
+
+
+    
+    solverName = &solverDirectPathEnum;
   }else if(ACE_SOLVER_TYPE == ACE_SOLVER_SIMPLEX){
     iparam[0]= 1000000;
-    iparam[1]=1;
+    iparam[1]=0;
     dparam[0]=1e-12;
     dparam[1]=1e-12;
     dparam[2]=1e-9;
@@ -160,6 +178,8 @@ int main(int argc, char **argv){
     iparam[0] = 0; // enum verbose
     iparam[5] = 2; // nb config
     iparam[6] = 0; // direct verbose
+    if (ACE_USE_NL_MOS)
+      iparam[8] = 1; // direct update mlcp
     dparam[0] = 0.0000001; // Tolerance
     dparam[5] = 0.0000001; // Tolerance neg
     dparam[5] = 1e-20; // Tolerance pos
@@ -173,6 +193,9 @@ int main(int argc, char **argv){
     dparam[2]=1e-9;
     //direct options
     iparam[6] = 0; // direct verbose
+    if (ACE_USE_NL_MOS)
+      iparam[8] = 1; // direct update mlcp
+
     dparam[5] = 0.0000001; // Tolerance
     dparam[5] = 1e-20; // Tolerance pos
     solverName = &solverDirSimplex;
@@ -181,12 +204,30 @@ int main(int argc, char **argv){
     iparam[0]=0;//verbose
     //direct options
     iparam[6] = 0; // direct verbose
+    if (ACE_USE_NL_MOS)
+      iparam[8] = 1; // direct update mlcp
+
     solverName = &solverDirPath;
     dparam[0]=1e-12;
     dparam[5]=1e-12;
     dparam[6]=1e-12;
-  }
+  }else if (ACE_SOLVER_TYPE==ACE_SOLVER_FB){
 
+
+    iparam[0]=200000;
+    iparam[1]= 0;/*VERBOSE*/
+    iparam[6]= 0;/*VERBOSE*/
+    iparam[8]=0;/*update prb*/
+    dparam[0]=1e-10;
+    dparam[1]=1e-10;
+    dparam[2]=1e-10;
+    dparam[6]=1e-12;
+    if (ACE_USE_NL_MOS)
+      iparam[8] = 1; // direct update mlcp
+
+ 
+    solverName = &solverDirFB;
+  }
   ACE_times[ACE_TIMER_MAIN].start();
   ACE_INIT();
   /*build object from ACEF*/
@@ -203,18 +244,12 @@ int main(int argc, char **argv){
   int dimX=ACEFdimX;
   int s=sAlgo->spls->mB2zs->getDimRow();
   int m=sAlgo->spls->mD2l->getDimRow();
+  
   aceMatrix * DAE_M =0;
   aceMatrix * DAE_A =0;
   aceVector* DAE_X0 =0;
   aceVector* DAE_As =0;
   
-  if (ACE_FORMULATION==ACE_FORMULATION_WITHOUT_INVERT){
-    dimX += s;
-    DAE_M = new aceMatrix(dimX,dimX);
-    DAE_A = new aceMatrix(dimX,dimX);
-    DAE_X0 = new aceVector(dimX);
-    DAE_As = new aceVector(dimX);
-  }
   
   sAlgo->spls->allocForInitialValue();
   sAlgo->spls->readInitialValue();
@@ -227,31 +262,10 @@ int main(int argc, char **argv){
   SP::SiconosMatrix A2x =createSPtrSiconosMatrix(*(sAlgo->spls->mA2x));
   SP::SiconosVector Axti =createSPtrSiconosVector(*(sAlgo->spls->mxti));
   SP::SiconosVector A2s =createSPtrSiconosVector(*(sAlgo->spls->mA2s));
-  if (ACE_FORMULATION==ACE_FORMULATION_SEMI_EXPLICT){
-    //    aDS.reset(new FirstOrderLinearDS(*(sAlgo->spls->mxti),*(sAlgo->spls->mA2x),*(sAlgo->spls->mA2s)));
-    aDS.reset(new FirstOrderLinearDS(Axti,A2x,A2s));
-    aDS->setComputebFunction(&bLDS);
-  }else if (ACE_FORMULATION==ACE_FORMULATION_WITHOUT_INVERT){
-    DAE_As->setBlock(0,*(sAlgo->spls->mA2s));
-    DAE_As->setBlock(ACEFdimX,*(sAlgo->spls->mB2s));
-    DAE_X0->setBlock(0,*(sAlgo->spls->mxti));
-    DAE_X0->setBlock(ACEFdimX,*(sAlgo->spls->mzsti));
-    DAE_A->setBlock(0,0,*(sAlgo->spls->mA2x));
-    DAE_A->setBlock(ACEFdimX,0,*(sAlgo->spls->mB2x));
-    DAE_A->setBlock(0,ACEFdimX,*(sAlgo->spls->mA2zs));
-    DAE_A->setBlock(ACEFdimX,ACEFdimX,*(sAlgo->spls->mB2zs));
-    for (int ii =0; ii < ACEFdimX; ii++)
-      DAE_M->setValue(ii,ii,1);
-    SP::SiconosMatrix SP_DAE_A = createSPtrSiconosMatrix(*DAE_A);
-    SP::SiconosVector SP_DAE_X0 =createSPtrSiconosVector(*DAE_X0);
-    SP::SiconosVector SP_DAE_As =createSPtrSiconosVector(*DAE_As);
-    aDS.reset(new FirstOrderLinearDS(SP_DAE_X0,SP_DAE_A,SP_DAE_As));
-    SP::SiconosMatrix SP_DAE_M = createSPtrSiconosMatrix(*DAE_M);
-    aDS->setMPtr(SP_DAE_M);
-    aDS->setComputebFunction(&DAEbLDS);
-  }else{
-    ACE_INTERNAL_ERROR("main, ACE_FORMULATION not managed");
-  }
+
+  aDS.reset(new FirstOrderLinearDS(Axti,A2x,A2s));
+  aDS->setComputebFunction(&bLDS);
+  
   cout<<"FirstOrderLinearTIDS with :"<<endl;
   aDS->display();
   DynamicalSystemsSet  Inter_DS ;
@@ -261,41 +275,22 @@ int main(int argc, char **argv){
   aceMatrix* C= 0;
   aceMatrix* D= 0;
   aceMatrix* B= 0;
-  if (ACE_FORMULATION==ACE_FORMULATION_SEMI_EXPLICT){
-    C= new aceMatrix(s+m,dimX);
-    D= new aceMatrix(s+m,s+m);
-    B= new aceMatrix(dimX,s+m);
-    C->setBlock(0,0,*(sAlgo->spls->mB2x));
-    C->setBlock(s,0,*(sAlgo->spls->mD2x));
-    D->setBlock(0,0,*(sAlgo->spls->mB2zs));
-    D->setBlock(0,s,*(sAlgo->spls->mB2l));
-    D->setBlock(s,0,*(sAlgo->spls->mD2zs));
-    D->setBlock(s,s,*(sAlgo->spls->mD2l));
-    B->setBlock(0,0,*(sAlgo->spls->mA2zs));
-    B->setBlock(0,s,*(sAlgo->spls->mR));
-  }else  if (ACE_FORMULATION==ACE_FORMULATION_WITHOUT_INVERT){
-    C= new aceMatrix(m,dimX);
-    D= new aceMatrix(m,m);
-    B= new aceMatrix(dimX,m);
-    C->setBlock(0,0,*(sAlgo->spls->mD2x));
-    C->setBlock(0,ACEFdimX,*(sAlgo->spls->mD2zs));
+  C= new aceMatrix(s+m,dimX);
+  D= new aceMatrix(s+m,s+m);
+  B= new aceMatrix(dimX,s+m);
+  C->setBlock(0,0,*(sAlgo->spls->mB2x));
+  C->setBlock(s,0,*(sAlgo->spls->mD2x));
+  D->setBlock(0,0,*(sAlgo->spls->mB2zs));
+  D->setBlock(0,s,*(sAlgo->spls->mB2l));
+  D->setBlock(s,0,*(sAlgo->spls->mD2zs));
+  D->setBlock(s,s,*(sAlgo->spls->mD2l));
+  B->setBlock(0,0,*(sAlgo->spls->mA2zs));
+  B->setBlock(0,s,*(sAlgo->spls->mR));
 
-    D->setBlock(0,0,*(sAlgo->spls->mD2l));
-
-    B->setBlock(0,0,*(sAlgo->spls->mR));
-    B->setBlock(ACEFdimX,0,*(sAlgo->spls->mB2l));
-  }
-  SP::SiconosMatrix SP_C =  createSPtrSiconosMatrix(*C);
-  SP::SiconosMatrix SP_B =  createSPtrSiconosMatrix(*B);
-  SP::FirstOrderLinearR aR( new FirstOrderLinearR(SP_C,SP_B));
-  SP::SiconosMatrix SP_D =  createSPtrSiconosMatrix(*D);
-  aR->setDPtr(SP_D);
-  if (ACE_FORMULATION==ACE_FORMULATION_SEMI_EXPLICT){
-    aR->setComputeEFunction(&eLDS);
-  }else{
-    aR->setComputeEFunction(&DAEeLDS);
-  }
-  cout<<"FirstOrderLinearR with :"<<endl;
+  SP::acefRelation aR( new acefRelation());
+  aR->initJac(C,D,B);
+  algo::sAlgo=sAlgo;
+  cout<<"acefRelation with :"<<endl;
   aR->display();
 
   //*****BUILD THE NSLAW
@@ -321,28 +316,27 @@ int main(int argc, char **argv){
   
   //*****BUILD THE STEP INTEGRATOR
   SP::OneStepIntegrator  aMoreau ;
-  if (ACE_FORMULATION==ACE_FORMULATION_SEMI_EXPLICT){
-    aMoreau.reset( new Moreau(aDS,0.5));
-  }else{
-    aMoreau.reset( new Moreau2(aDS,0.5));
-  }
+  aMoreau.reset( new Moreau(aDS,0.5));
   aS->recordIntegrator(aMoreau);
   SP::NonSmoothSolver  mySolver( new NonSmoothSolver((*solverName),iparam,dparam,floatWorkingMem,intWorkingMem));
+  aS->setComputeResiduY(true);
+  aS->setUseRelativeConvergenceCriteron(false);
 
   //**** BUILD THE STEP NS PROBLEM
   SP::MLCP  aMLCP ;
-  if (ACE_FORMULATION==ACE_FORMULATION_SEMI_EXPLICT){
-    aMLCP.reset(new MLCP(mySolver,"MLCP"));
-  }else{
-    //    aMLCP.reset(new MLCP2(mySolver,"MLCP2"));
-  }
+  aMLCP.reset(new MLCP(mySolver,"MLCP"));
+  
   aS->recordNonSmoothProblem(aMLCP);
   aM->initialize(aS);
+  
   //  Alloc working mem for the solver
   if (ACE_SOLVER_TYPE==ACE_SOLVER_NUMERICS_DIRECT_ENUM ||
       ACE_SOLVER_TYPE==ACE_SOLVER_ENUM  ||
       ACE_SOLVER_TYPE==ACE_SOLVER_NUMERICS_DIRECT_SIMPLEX ||
-      ACE_SOLVER_TYPE==ACE_SOLVER_NUMERICS_DIRECT_PATH){
+      ACE_SOLVER_TYPE==ACE_SOLVER_NUMERICS_DIRECT_PATH||
+      ACE_SOLVER_TYPE==ACE_SOLVER_NUMERICS_DIRECT_PATH_ENUM||
+      ACE_SOLVER_TYPE==ACE_SOLVER_FB||
+      ACE_SOLVER_TYPE==ACE_SOLVER_NUMERICS_PATH_ENUM){
     int aux =mlcp_driver_get_iwork(aMLCP->getNumericsMLCP().get(),mySolver->numericsSolverOptions().get());
     intWorkingMem = (int*)malloc(aux*sizeof(int));
     mySolver->numericsSolverOptions()->iWork = intWorkingMem;
@@ -357,6 +351,7 @@ int main(int argc, char **argv){
   SP::SiconosVector  x = aDS->x();
   SP::SiconosVector  y = aI->y(0);
   SP::SiconosVector  lambda = aI->lambda(0);
+  long nbNSteps=0;
 
 
   unsigned int count = 0; // events counter. 
@@ -372,7 +367,7 @@ int main(int argc, char **argv){
 
   dataPrint * pPrint;
   ParserInitPrintElem();
-  pout<<"Index\ttime";
+  pout<<"\t time x0 x1 x2 x3 x4 ";
   while(ParserGetPrintElem((void**)&pPrint)){
     pout<<"\t\t";
     pout<<pPrint->name;
@@ -398,12 +393,19 @@ int main(int argc, char **argv){
   for(int k = 0 ; k < N ; k++){
     //  double new_v=10*cos(((double)k)*6.28/((double)N));
     //ParserSetIputFromId("Vsource",vin,new_v);
+    mySolver->numericsSolverOptions()->iparam[8] = k;
+    //cout <<"it: "<<k<<endl;
     if ((!Nfreq) || k % Nfreq == 0){
       cout<<"..."<<cmp<<endl;
       cmp++;
     }
+    pout<<(*x)(0)<<" "<<(*x)(1)<<" "<<(*x)(2)<<" "<<(*x)(3)<<" "<<(*x)(4)<<" ";
     // solve ... 
-    aS->computeOneStep();
+    //aS->computeOneStep();
+    aS->newtonSolve(1e-6, 20);
+    nbNSteps+=aS->getNewtonNbSteps();
+    //    aS->nextStep();
+
 
     //    if ((!NData) || k % NData == 0){
       ParserInitPrintElem();
@@ -428,8 +430,10 @@ int main(int argc, char **argv){
       //    }
 
     aS->nextStep();
-	
   }
+  ACE_GET_LOG_STREAM()<<" "<<nbNSteps<<" Steps";
+
+  printf("Nb of failed of direct solver:%d\n",mySolver->numericsSolverOptions()->iparam[7]);
   aMLCP->reset();
   pout.close();
   cout << "===== End of simulation. ==== " << endl; 

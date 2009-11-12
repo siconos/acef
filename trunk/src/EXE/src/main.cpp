@@ -2,13 +2,13 @@
 
 int main(int argc, char **argv){
   /*MOS Parameters*/
-  ACE_MOS_NB_HYP=2;
-  ACE_MOS_POWER_SUPPLY=5.0;
+  /*  ACE_MOS_NB_HYP=5;*/
+  ACE_MOS_POWER_SUPPLY=3.0;
   ACE_FORMULATION=ACE_FORMULATION_SEMI_EXPLICT;
   
 
   if (argc<6){
-    printf("usage : toto file.cir ENUM|SIMPLEX|PATH|FB 10 DENSE|SPARSE INV/NOINV/MNA [FIX/ADAPT]\n");
+    printf("usage : toto file.cir ENUM|SIMPLEX|PATH|FB 10 DENSE|SPARSE INV/NOINV/MNA/STAMP/SE1 [FIX/ADAPT]\n");
     return 0;
   }
   if (!strcmp(argv[2],"ENUM")){
@@ -20,7 +20,7 @@ int main(int argc, char **argv){
   }else if(!strcmp(argv[2],"FB")){
     ACE_SOLVER_TYPE = ACE_SOLVER_FB;
   }else{
-    printf("usage : toto file.cir ENUM|SIMPLEX|PATH|FB 10 DENSE|SPARSE INV/NOINV/MNA [FIX/ADAPT]\n");
+    printf("usage : toto file.cir ENUM|SIMPLEX|PATH|FB 10 DENSE|SPARSE INV/NOINV/MNA/STAMP/SE1 [FIX/ADAPT]\n");
     return 0;
   }
   if (!strcmp(argv[3],"0"))
@@ -41,6 +41,15 @@ int main(int argc, char **argv){
     ACE_FORMULATION=ACE_FORMULATION_WITHOUT_INVERT;
   if (!strcmp(argv[5],"MNA"))
     ACE_FORMULATION=ACE_FORMULATION_MNA;
+  if (!strcmp(argv[5],"MNA_V"))
+    ACE_FORMULATION=ACE_FORMULATION_MNA_V;
+  if (!strcmp(argv[5],"STAMP"))
+    ACE_FORMULATION=ACE_FORMULATION_STAMP_ONLY;
+  if (!strcmp(argv[5],"SE1")){
+        printf("SE1 not managed\n");
+        return 0;
+	//    ACE_FORMULATION=ACE_FORMULATION_SE1;
+  }
   
   if (argc > 6 && !strcmp(argv[6],"ADAPT")){
     ACE_RTOL_LOCAL=1e-7;
