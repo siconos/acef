@@ -33,6 +33,19 @@ int ParserNextComponent(void * data){
 int ParserGetSourceValue(char *type,void* id,double* value){
   return getSourceValue(type,id,value);
 }
+int ParserGetSourceValue2(int inttype,void* id,double* value){
+  return getSourceValue2(inttype,id,value);
+}
+
+//int getISRCValue(void* id,double* value){
+//  *value = ((ISRCinstance *) id)->currentValue;
+//  return 1;
+//}
+//int getVSRCValue(void* id,double* value){
+//  *value = ((VSRCinstance *) id)->currentValue;
+//  return 1;
+//}
+
 int ParserComputeSourcesValues(double time){
   return computeSourcesValues(time);
 }

@@ -28,6 +28,10 @@ void ParserPrintCircuit();
 //output : value.
 //if succes, return 1 else return 0 
 int ParserGetSourceValue(char *type,void* id,double* value);
+  int ParserGetSourceValue2(int inttype,void* id,double* value);
+  int getISRCValue(void* id,double* value);
+  int getVSRCValue(void* id,double* value);
+
 int ParserComputeSourcesValues(double time);
 
   /*Get .trans values*/
@@ -131,6 +135,7 @@ typedef struct {
   int nodeNeg;
   double value;
   void* id;
+  double* pCurValue;
 } dataVSRC;
 
 

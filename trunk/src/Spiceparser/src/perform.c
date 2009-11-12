@@ -220,6 +220,33 @@ int computeSourcesValues(double time){
   return 1;
 }
 
+
+int getSourceValue2(int inttype,void* id,double* value){
+  VSRCinstance *hereVSRC;
+  ISRCinstance *hereISRC;
+  if (inttype == 46){
+    hereVSRC = (VSRCinstance *) id;
+    *value = hereVSRC->currentValue;
+  }
+  else if (inttype == 27){
+    hereISRC = (ISRCinstance *) id;
+    *value = hereISRC->currentValue;
+  }else{
+    return 0;
+  }
+  /*printf("getSourceValue, val %f\n",*value);*/
+  return 1;
+}
+
+int getISRCValue(void* id,double* value){
+  *value = ((ISRCinstance *) id)->currentValue;
+  return 1;
+}
+int getVSRCValue(void* id,double* value){
+  *value = ((VSRCinstance *) id)->currentValue;
+  return 1;
+}
+
 int getSourceValue(char *type,void* id,double* value){
   VSRCinstance *hereVSRC;
   ISRCinstance *hereISRC;
@@ -278,6 +305,7 @@ void     fillResistorInfos(void *data, GENinstance *pInstance){
   p->nodeNeg = here->VSRCnegNode;
   p->value = here->VSRCdcValue;
   p->id = (void*)here;
+  p->pCurValue = &(here->currentValue);
 }
 void     fillVCVsourceInfos(void *data, GENinstance *pInstance){
   dataVCVS *p;
