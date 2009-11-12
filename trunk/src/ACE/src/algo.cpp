@@ -26,6 +26,15 @@
 #include "componentmos_nl2.h"
 #include "componentbjt.h"
 #include "graph.h"
+#include "node.h"
+#include "componentcomp_SE1.h"
+#include "componentrelay_SE1.h"
+#include "componentmos_SE1.h"
+#include "componentind_SE1.h"
+#include "componentres_SE1.h"
+#include "componentdio_SE1.h"
+#include "componentvsrc_SE1.h"
+#include "componentvcvs_SE1.h"
 #include <fstream>
 
 linearSystem * algo::spls;
@@ -33,7 +42,7 @@ algo * algo::sAlgo;
 
 algo::algo(char * file){
   ACE_CHECK_IERROR(strlen(file) < ACE_CHAR_LENGTH && strlen(file) >3,"algo::algo: file name length!");
-  if (ACE_FORMULATION == ACE_FORMULATION_SEMI_EXPLICT)
+  if (ACE_FORMULATION == ACE_FORMULATION_SEMI_EXPLICT || ACE_FORMULATION == ACE_FORMULATION_SE1)
     spls = new linearSystem();
   else if (ACE_FORMULATION == ACE_FORMULATION_WITHOUT_INVERT)
     spls = new linearSystemDAE();
@@ -262,12 +271,156 @@ void algo::parseComponents(){
 
 
 
+
+void algo::parseComponents_SE(){
+ 
+ //get INDUCTOR from parser
+ ParserInitComponentList("Inductor");
+ dataIND dInd;
+ while(ParserNextComponent(&dInd)){
+   componentIND_SE1* c = new componentIND_SE1(&dInd);
+   mInds.push_back(c);
+   c->addUnknowns();
+   c->addEquations();
+ }
+//BUILD Zns component
+//get INDUCTOR from parser
+ ParserInitComponentList("Diode");
+ dataDIO dIo;
+ while(ParserNextComponent(&dIo)){
+   componentDIO_SE1 *c=new componentDIO_SE1(&dIo);
+   mDios.push_back(c);
+   c->addUnknowns();
+   c->addEquations();
+   
+ }
+ if (!ACE_USE_NL_MOS){
+   ParserInitComponentList("Mos1");
+   dataMOS1 mos;
+   while(ParserNextComponent(&mos)){
+     componentMOS_SE1 *c=new componentMOS_SE1(&mos,ACE_MOS_NB_HYP);
+     mMos.push_back(c);
+     c->addUnknowns();
+     c->addEquations();
+   }
+ }
+ ParserInitComponentList("BJT");
+ dataBJT bjt;
+ while(ParserNextComponent(&bjt)){
+   cout<<"WARNING : not implemented for SE1"<<endl;
+   exit(0);
+   componentBJT *c=new componentBJT(&bjt);
+   mBjt.push_back(c);
+   c->addUnknowns();
+   c->addEquations();
+ }
+
+ 
+//get RESISTOR from parser
+ ParserInitComponentList("Resistor");
+ dataRES dRes;
+ while(ParserNextComponent(&dRes)){
+   componentRES_SE1 *c=new componentRES_SE1(&dRes);
+   mRess.push_back(c);   
+ }
+ ParserComputeSourcesValues(0.0);
+//get Vsource from parser
+ ParserInitComponentList("Vsource");
+ dataVSRC dVsrc;
+ while(ParserNextComponent(&dVsrc)){
+   componentVSRC_SE1 *c=new componentVSRC_SE1(&dVsrc);
+   c->addUnknowns();
+   c->addEquations();
+   mVsrcs.push_back(c);   
+ }
+
+ ParserInitComponentList("VCVS");
+ dataVCVS dVcvs;
+ while(ParserNextComponent(&dVcvs)){
+   componentVCVS_SE1 *c=new componentVCVS_SE1(&dVcvs);
+   c->addUnknowns();
+   c->addEquations();
+   mVcvs.push_back(c);   
+ }
+ 
+
+
+ ParserInitComponentList("Comparator");
+ dataCOMP dCOMP;
+ while(ParserNextComponent(&dCOMP)){
+   if (dCOMP.vepsilon == 0){
+     componentRELAY_SE1 *c=new componentRELAY_SE1(&dCOMP);
+     c->addUnknowns();
+     c->addEquations();
+     mRelays.push_back(c);   
+   }else{
+     componentCOMP_SE1 *c=new componentCOMP_SE1(&dCOMP);
+     c->addUnknowns();
+     c->addEquations();
+     mComps.push_back(c);
+   }
+ }
+ 
+ 
+ ParserInitComponentList("VCCS");
+ dataVCCS dVCCS;
+ while(ParserNextComponent(&dVCCS)){
+   cout<<"WARNING : not implemented for SE1"<<endl;
+   exit(0);
+   componentVCCS *c=new componentVCCS(&dVCCS);
+   c->addUnknowns();
+   c->addEquations();
+   mVccs.push_back(c);   
+ }
+ 
+//get Isource from parser
+ ParserInitComponentList("Isource");
+ dataISRC dIsrc;
+ while(ParserNextComponent(&dIsrc)){
+   cout<<"WARNING : not implemented for SE1"<<endl;
+   exit(0);
+   componentISRC *c=new componentISRC(&dIsrc);
+   mIsrcs.push_back(c);   
+ }
+ if (ACE_USE_NL_MOS && !ACE_USE_SMOOTH_MOS){
+   ParserInitComponentList("Mos1");
+   dataMOS1 mos;
+   while(ParserNextComponent(&mos)){
+     cout<<"WARNING : not implemented for SE1"<<endl;
+     exit(0);
+     componentMOS_NL *c=new componentMOS_NL(&mos);
+     mMos_NL.push_back(c);
+     c->addUnknowns();
+     c->addEquations();
+   }
+ }else if (ACE_USE_SMOOTH_MOS){
+   ParserInitComponentList("Mos1");
+   dataMOS1 mos;
+   while(ParserNextComponent(&mos)){
+     cout<<"WARNING : not implemented for SE1"<<endl;
+     exit(0);
+     componentMOS_NL2 *c=new componentMOS_NL2(&mos);
+     mMos_NL.push_back(c);
+     c->addUnknowns();
+     c->addEquations();
+   }
+ }
+
+ 
+ printComponents();
+
+}
+
+
+
+
 ////////////////////////////////////////////////////////////////////// ALGO
 void algo::perform(){
   ACE_times[ACE_TIMER_EQUATION].start();
   spls->mNbNodes = ParserGetNbElementsOfType("Node");
   spls->initKCL();
-  spls->addVUnknowns();
+  if (ACE_FORMULATION != ACE_FORMULATION_SE1)
+    spls->addVUnknowns();
 
   if (ACE_FORMULATION == ACE_FORMULATION_SEMI_EXPLICT)
     performSemiExplicit();
@@ -277,11 +430,110 @@ void algo::perform(){
     performMNA();
   else if (ACE_FORMULATION == ACE_FORMULATION_MNA_V || ACE_FORMULATION == ACE_FORMULATION_STAMP_ONLY )
     performMNA_V();
-  else
+  else if (ACE_FORMULATION == ACE_FORMULATION_SE1)
+    performSE();
+  else{
     ACE_INTERNAL_ERROR("algo::perform, ACE_FORMULATION wrong value.");
-  ACE_times[ACE_TIMER_EQUATION].stop();
+    ACE_times[ACE_TIMER_EQUATION].stop();
+  }
 }
-  
+
+
+void algo::performSE(){
+  //BUILD x VECTOR
+ //get CAPACITOR from parser
+ initGraph(spls->mNbNodes,ParserGetNbElementsOfType("Capacitor"));
+ ParserInitComponentList("Capacitor");
+ dataCAP dCap;
+ while(ParserNextComponent(&dCap)){
+   componentCAP *c=new componentCAP(&dCap);
+   mCaps.push_back(c);
+   
+   int np = dCap.nodePos;
+   int nn = dCap.nodeNeg;
+   unknown *uout;
+   if (!spls->isUnknown(ACE_TYPE_U,c,&uout)){
+     c->addTensionUnknown();
+     //     c->addTensionEquation();
+     if (np == 0){
+       equationKCL *eq=spls->KCL(nn);
+       ACE_CHECK_IERROR(eq->mAvailable,"algo::perform : KCL not available");
+       spls->addKCLinDyn(nn);
+       spls->mNodes[nn]->setCapa(c);
+     }else if(nn ==0){
+       equationKCL *eq=spls->KCL(np);
+       ACE_CHECK_IERROR(eq->mAvailable,"algo::perform : KCL not available");
+       spls->addKCLinDyn(np);
+       spls->mNodes[np]->setCapa(c);
+     }else{
+       //add only edge not connected on node 0.
+       graphAddEdge(np,nn,c);
+     }
+   }else{
+     c->mU=uout;
+   }
+  }
+ computeGraphMST();
+ 
+ int n1;
+ int n2;
+ componentCAP *c=0;
+ components Caux;
+ while (nextEdgeInMST(n1,n2,&c)){
+      
+      if (spls->KCL(n1)->mAvailable) {
+	spls->addKCLinDyn(n1);
+	spls->mNodes[n1]->setCapa(c);
+      }
+      else if (spls->KCL(n2)->mAvailable){
+	spls->addKCLinDyn(n2);
+	spls->mNodes[n2]->setCapa(c);
+      }else{
+	ACE_MESSAGE("algo::perform : Add unknown current in capacitor branche!!\n");
+	Caux.push_back(c);
+	//	c->addCurrentUnknown();
+	//	c->addCurrentEquation();
+	
+      }
+ }
+
+ while (nextEdgeOutMST(n1,n2,&c)){
+   Caux.push_back(c);
+   //   c->addCurrentUnknown();
+   //   c->addCurrentEquation();
+ }
+ stopGraph();
+ spls->addVUnknowns();
+ int n = Caux.size();
+ for(int i=0;i<n;i++){
+   ((componentCAP *) Caux[i])->addTensionEquation();
+   ((componentCAP *) Caux[i])->addCurrentUnknown();
+   ((componentCAP *) Caux[i])->addCurrentEquation();
+ }
+ 
+ parseComponents_SE();
+ 
+
+ spls->preparForStamp();
+ stamp();
+
+ spls->printEquations();
+ 
+ //compute matrix: x'=A1x * mx + A1zs * mZs + A1zns * mZns;
+ spls->computedxdt();
+ stampAfterInvertion();
+  ACE_MESSAGE("final equation ;\n");
+  spls->printEquations();
+ spls->buildLinearSystem();
+  spls->printA1();
+  spls->printB1();
+  spls->printC1();
+  spls->printD1();
+ spls->set2matrix();
+  spls->printSystem2();
+}
+
+
 void algo::performSemiExplicit(){
  //BUILD x VECTOR
  //get CAPACITOR from parser

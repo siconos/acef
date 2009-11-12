@@ -11,6 +11,9 @@ SimpleMatrix(row,col,typ,upper,lower)
 {
   ;
 }
+void aceMatrix::incValue(int lin, int col, double val){
+  setValue(lin,col,getValue(lin,col)+val);
+}
 
 void aceMatrix::set(const aceMatrix& M){
   unsigned int lin,col;

@@ -31,7 +31,8 @@ public:
   void preparStep(double time);
   void simulate();
   void parseComponents();
-
+  void parseComponents_SE();
+  
   void computeNonLinearEquations(SiconosVector& SICONOS_X,SiconosVector& SICONOS_Lambda,SiconosVector& SICONOS_H); 
   void computeNonLinearJacL_H(SiconosVector& SICONOS_X,SiconosVector& SICONOS_Lambda,SiconosMatrix& SICONOS_D);
 
@@ -61,6 +62,7 @@ protected:
   void performWithOutInvert();
   void performMNA();
   void performMNA_V();
+  void performSE();
 private:
     
 

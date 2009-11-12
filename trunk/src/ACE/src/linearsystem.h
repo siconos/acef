@@ -15,6 +15,7 @@
 #include "aceMatrix.h"
 #include "aceVector.h"
 #include "mlcp.h"
+#include "node.h"
 using namespace std;
 // Class linearSystem
 // 
@@ -30,7 +31,7 @@ public:
   bool isUnknown (int type, component* c,unknown **uout);
   void addKCLinDyn(int j);
 
-
+  nodes mNodes;
 
   unknown* addinx(int type, component* c);
   unknown* addinZs(int type, component* c);

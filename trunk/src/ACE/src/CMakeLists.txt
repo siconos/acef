@@ -49,7 +49,16 @@ linearsystem.h
 linearsystemDAE.h
 mlcp.h
 unknown.h
-acefRelation.h)
+acefRelation.h
+node.h
+componentcomp_SE1.h
+componentdio_SE1.h
+componentind_SE1.h
+componentmos_SE1.h
+componentres_SE1.h
+componentvcvs_SE1.h
+componentvsrc_SE1.h
+)
 
 #
 # Project directories 

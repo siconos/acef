@@ -594,9 +594,18 @@ void linearSystem::readInitialValue(){
 	if (ACE_FORMULATION == ACE_FORMULATION_MNA_V || ACE_FORMULATION == ACE_FORMULATION_STAMP_ONLY){
 	  mxti->setValueIfNotNull(i-1,aux);
 	}else{
-	  mzsti->setValueIfNotNull(i-1,aux);
+	  if (ACE_FORMULATION == ACE_FORMULATION_SE1){
+	    if (mNodes[i]->isVUnknown()){
+	      mzsti->setValueIfNotNull(mNodes[i]->getIndexInZs()-mV0zs,aux);
+	      cout<<"set value from netlist :v_"<<i<<"="<<aux<<endl;
+	    }else
+	      cout<<"Linearsystem: WARNING IC ignore :v_"<<i<<"="<<aux<<endl;
+
+	  }else{
+	    mzsti->setValueIfNotNull(i-1,aux);
+	    cout<<"set value from netlist :v_"<<i<<"="<<aux<<endl;
+	  }
 	}
-	cout<<"set value from netlist :v_"<<i<<"="<<aux<<endl;
       }
     }
     // mxti->setValueIfNotNull(0,2);
@@ -610,18 +619,19 @@ void linearSystem::readInitialValue(){
     //    mzsti->setValueIfNotNull(2,-5e-2);
     /*for each x of type TENSION, compute the initial value with V init*/
 
-    
-    for(i=0; i <(int) mx.size(); i++){
-      unknown* u = mx[i];
-      if (u->mType == ACE_TYPE_U ){
-	aux =  (u->mComponent->mNodeNeg>0)? mzsti->getValue(u->mComponent->mNodeNeg-1):0;
-	aux -= (u->mComponent->mNodePos>0)? mzsti->getValue(u->mComponent->mNodePos-1):0;
-	mxti->setValueIfNotNull(i,aux);
-	cout<<"set :";
-	u->print();
-	cout<<"to :"<<aux<<endl;
+    if (ACE_FORMULATION != ACE_FORMULATION_SE1){
+      for(i=0; i <(int) mx.size(); i++){
+	unknown* u = mx[i];
+	if (u->mType == ACE_TYPE_U ){
+	  aux =  (u->mComponent->mNodeNeg>0)? mzsti->getValue(u->mComponent->mNodeNeg-1):0;
+	  aux -= (u->mComponent->mNodePos>0)? mzsti->getValue(u->mComponent->mNodePos-1):0;
+	  mxti->setValueIfNotNull(i,aux);
+	  cout<<"set :";
+	  u->print();
+	  cout<<"to :"<<aux<<endl;
+	}
       }
-      }
+    }
 
   }
   catch(...)
@@ -990,9 +1000,18 @@ int linearSystem::getIndexUnknown (int type,int node) {
 void  linearSystem::addVUnknowns(){
   ACE_CHECK_IERROR(mZs.size()==0,"linearSystem::initAddVUnknowns mZs not empty");
   ACE_CHECK_IERROR(mNbNodes,"linearSystem::initAddVUnknowns no nodes");
- for(int i=0;i<mNbNodes;i++){
-   mZs.push_back(new unknown(ACE_TYPE_V,i));
- }
+  if (ACE_FORMULATION != ACE_FORMULATION_SE1){
+    for(int i=0;i<mNbNodes;i++){
+      mZs.push_back(new unknown(ACE_TYPE_V,i));
+    }
+  }else{
+    for(int i=0;i<mNbNodes;i++){
+      if (mNodes[i]->isVUnknown()){
+	mZs.push_back(new unknown(ACE_TYPE_V,i));
+	mNodes[i]->setIndexInZs(mZs.size()-1);
+      }
+    }
+  }
 }
 /**
  * 
@@ -1033,6 +1052,7 @@ void linearSystem::initKCL(){
   ACE_CHECK_IERROR(mKCL.size()==0,"linearSystem::initKCL with mKCL not empty!");
   for (int i=0;i<mNbNodes;i++){
     mKCL.push_back(new equationKCL(i));
+    mNodes.push_back(new node(i)); // Useful only for ACE_FORMULATION_SE1.
   }
   mKCL[0]->mAvailable=false;
   mNbEquations+=mNbNodes-1;
@@ -1677,9 +1697,16 @@ void linearSystem::printStep(ostream& os,aceVector * pVx,aceVector *pVzs){
     
   while(ParserGetPrintElem((void**)&pPrint)){
     os<<"\t\t";
-    aux = pVzs->getValue(pPrint->node1-1);
+    if (ACE_FORMULATION == ACE_FORMULATION_SE1)
+      aux = mNodes[pPrint->node1]->getValue(mxti,pVzs);
+    else
+      aux = pVzs->getValue(pPrint->node1-1);
     if (pPrint->node2 >0)
-      aux -=  pVzs->getValue(pPrint->node2-1);
+      if (ACE_FORMULATION == ACE_FORMULATION_SE1)
+	aux -= mNodes[pPrint->node2]->getValue(mxti,pVzs);
+      else
+	aux -=  pVzs->getValue(pPrint->node2-1);
+    
 //     cout<<"error :"<<fabs(v-aux)<<endl;
 //     mSommeError += fabs(v-aux);
 //     if (fabs(v-aux)>mMaxError )

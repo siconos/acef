@@ -29,6 +29,7 @@ class unknown;
 class equation;
 class component_NONE_LINEAR_NS;
 class component;
+class node;
 #include "SiconosAlgebra.hpp"
 
 #define ACE_INF 1e-17   
@@ -74,6 +75,10 @@ class component;
 #define ACE_FORMULATION_MNA_V 3
 //MNA_V
 #define ACE_FORMULATION_STAMP_ONLY 4
+
+//Semi-explicit index 1(?)
+#define ACE_FORMULATION_SE1 5
+
 //DAE, SEMI-EXPLICT, MNA
 extern int ACE_FORMULATION;
 //Adaptatve time stepping or SEMI-EXPLICT
@@ -147,6 +152,7 @@ extern int ACE_CUR_STEP;
 
 typedef std::vector<unknown *> unknowns;
 typedef std::vector<equation *> equations;
+typedef std::vector<node *> nodes;
 typedef std::vector<component_NONE_LINEAR_NS *> component_NLs;
 typedef std::vector<component *> components;
 

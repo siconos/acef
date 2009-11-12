@@ -24,6 +24,7 @@ public:
   static aceMatrix * load(char *file,UBLAS_TYPE typ);
   int getDimRow(){return dimRow;}
   int getDimCol(){return dimCol;}
+  void incValue(int lin, int col, double val);
 
   //  static void siconosProd(const SiconosMatrix& a, const SiconosVector& v1, SiconosVector& v2, bool b= true);
 
