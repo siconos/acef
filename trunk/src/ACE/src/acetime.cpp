@@ -4,7 +4,7 @@
 
 
 #include "acetime.h"
-
+#include "string.h"
 
 #define ACE_WITH_TIMER
 
