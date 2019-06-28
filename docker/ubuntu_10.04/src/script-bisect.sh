@@ -1,11 +1,11 @@
 #!/bin/bash -fx
-
+cd /home/acary/siconos
 current_last_commit=`git log -1 --format="%H"`
 echo $current_last_commit
 
 
 
-
+mkdir /home/acary/build
 cd /home/acary/build
 
 \rm -rf bisect
@@ -60,8 +60,9 @@ make -j8 install || exit 125
 # test part
 
 cd /home/acary/build/bisect/noselecs/Tests/ACE
+/home/acary/build/bisect/noselecs/trunk/src/EXE/build/src/noselect LC.cir ENUM
 
-/home/acary/build/bisect/noselecs/trunk/src/EXE/noselect LC.cir ENUM
+
 status=$?
 
 if [ $status -eq 0 ]

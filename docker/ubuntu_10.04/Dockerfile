@@ -7,7 +7,8 @@
 # 
 
 
-FROM ubuntu:10.04
+#FROM ubuntu:10.04
+FROM yamamuteki/ubuntu-lucid-i386
 RUN sed -i 's/archive/old-releases/g' /etc/apt/sources.list
 RUN apt-get -y update
 RUN apt-get -y install emacs vim git-core
