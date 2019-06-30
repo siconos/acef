@@ -1675,10 +1675,13 @@ void linearSystem::printStep(ostream& os,aceVector * pVx,aceVector *pVzs){
      os<<mxti->getValue(i)<<" ";
    for (i=0;i<mzsti->size();i++)
      os<<mzsti->getValue(i)<<" ";
-   for (i=0;i<mznsti->size();i++)
-     os<<mznsti->getValue(i)<<" "; 
-    os<<endl;
-    return;
+   if (mznsti)
+     {
+       for (i=0;i<mznsti->size();i++)
+	 os<<mznsti->getValue(i)<<" "; 
+     }
+   os<<endl;
+   return;
     
    //ACE_DOUBLE v = computeAnalyticSolution(getCurrentTime());
 
