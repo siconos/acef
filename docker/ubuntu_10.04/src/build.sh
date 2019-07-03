@@ -1,26 +1,30 @@
 #!/bin/bash -fx
 
-cd siconos
-git checkout 62bdcb90c124eb41f74c6694f292d107f9ad73f7 -b noselecs_v0
+cd /src/siconos
+# on host machine:
+# git clone git@gricad-gitlab.univ-grenoble-alpes.fr:nonsmooth/siconos.git
+git checkout --track origin/noselecs_v0
 
 # build numerics
 cd /src
 mkdir -p build/siconos/Numerics
 cd build/siconos/Numerics
-cmake /src/siconos/Numerics/
+cmake /src/siconos/Numerics/ -DWITH_CMAKE_BUILD_TYPE=Debug
 make -j8 install
 # build kernel
 cd /src
 mkdir -p build/siconos/Kernel
 cd build/siconos/Kernel
-cmake /src/siconos/Kernel/
+cmake /src/siconos/Kernel/ -DWITH_CMAKE_BUILD_TYPE=Debug
 make -j8
 cp Settings.cmake BuildSettings.cmake # it seems that a file is missing
 make install
 
 # build 
 cd /src/noselecs
-git checkout 7e9e845695097bb7a32c8a17e4aec2814a228fed -b noselecs_v0
+# on host machine:
+# git clone git@gricad-gitlab.univ-grenoble-alpes.fr:nonsmooth/siconos.git
+git checkout --track origin/noselecs_v0
 
 cd /src/noselecs/trunk/src/Spiceparser/
 ln -sf /src/siconos/Numerics/cmake .
