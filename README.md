@@ -1,10 +1,15 @@
-# noselecs
+# Siconos/ACEF
 
-Automatic circuit equation formulation migration to siconos (branch noselecs_v0)
+Automatic circuit equation formulation 
 
-First step : simulation with original code on ubuntu 10.04.
+
 
 **WORK IN PROGRESS**
+
+Old simulation code (tag:acef_v1.0) works on ubuntu 10.04.
+
+Start to update with a recent siconos
+
 
 ## Licence
 
